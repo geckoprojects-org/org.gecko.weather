@@ -1,0 +1,9 @@
+generated/
+bin/
+bin_test/
+/.gradle/
+/.metadata/
+/build/
+/cnf/cache
+/cnf/local
+/cnf/release

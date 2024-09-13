@@ -1,0 +1,10 @@
+Bundle-Name: Gecko Weather NetCDF Services
+Bundle-Description: Gecko Weather - Service to decode NetCDF format (Global radiation)
+
+-library: enable-emf
+-includeresource: \
+	data=data
+-buildpath: \
+	com.google.guava;version=latest,\
+	org.gecko.ucar.netcdf;version=snapshot,\
+	org.gecko.weather.model;version=snapshot

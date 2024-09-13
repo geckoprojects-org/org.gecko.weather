@@ -1,0 +1,59 @@
+# We include setups for
+#	OSGi-Test Support - gecko-osgitest
+#	DIMC Github-Configuration - gecko-dimc
+#	Jacoco Support - gecko-jacoco
+-library: \
+	geckoDIMC,\
+	geckoEMF,\
+	geckoEMFModels,\
+	geckoSearch,\
+	geckoOSGi-Test,\
+	geckoJacoco
+
+# Needed because we enabled library 'gecko-dimc'
+# Activate baselining
+mavenCentral: true
+dimcBaselining: true
+github-project: org.gecko.weather
+base-version: 1.0.0
+
+# Maven Central Group-Id
+# For Geckoprojects the groupid must start with org.geckoprojects
+-groupid: org.geckoprojects.weather
+
+javac.source: 17
+javac.target: 17
+
+-require-bnd "(version>=6.3.1)"
+
+-jpms-module-info:
+
+-plugin.2.Central: \
+    aQute.bnd.repository.maven.provider.MavenBndRepository; \
+        snapshotUrl="https://oss.sonatype.org/content/repositories/snapshots/"; \
+        releaseUrl=https://repo.maven.apache.org/maven2/; \
+        index=${.}/central.mvn; \
+        readOnly=true; \
+        poll.time=-1; \
+        name="Central"
+
+# Repository for the NetCDF library to decode satelite data        
+-plugin.3.Unidata: \
+    aQute.bnd.repository.maven.provider.MavenBndRepository; \
+        releaseUrl=https://artifacts.unidata.ucar.edu/repository/unidata-all/; \
+        index=${.}/unidata.mvn; \
+        readOnly=true; \
+        poll.time=-1; \
+        name="Unidata"
+        
+-plugin.0.Local: \
+	aQute.bnd.deployer.repository.LocalIndexedRepo; \
+		name = Local; \
+		pretty = true; \
+		local = ${build}/local
+
+-plugin.1.Temp: \
+	aQute.bnd.deployer.repository.LocalIndexedRepo; \
+		name = Temp; \
+		pretty = true; \
+		local = ${build}/cache/temp

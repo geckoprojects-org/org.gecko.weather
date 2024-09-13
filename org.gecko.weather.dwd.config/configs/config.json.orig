@@ -1,0 +1,15 @@
+{
+  ":configurator:resource-version": 1,
+  	"biz.aQute.scheduler.basic": 
+	{
+	},
+  	"EMFLuceneIndex~dwd-station": 
+  	{
+  	    "id": "dwd.station",
+  	    "directory.type": "ByteBuffer"
+	},
+	"DWD-MOSMIX-Station~Erfurt":
+	{
+		"stationId": "10554"
+	}
+}

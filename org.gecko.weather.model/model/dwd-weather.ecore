@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="weather" nsURI="http://cdc.dwd.de/common/weather" nsPrefix="dwdweather">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+    <details key="copyrightText" value="Copyright (c) 2012 - 2024 Data In Motion and others.&#xA;All rights reserved. &#xA;&#xA;This program and the accompanying materials are made&#xA;available under the terms of the Eclipse Public License 2.0&#xA;which is available at https://www.eclipse.org/legal/epl-2.0/&#xA;&#xA;SPDX-License-Identifier: EPL-2.0&#xA;&#xA;Contributors:&#xA;     Mark Hoffmann - initial API and implementation"/>
+    <details key="complianceLevel" value="17.0"/>
+    <details key="oSGiCompatible" value="true"/>
+    <details key="modelName" value="DWDWeather"/>
+    <details key="basePackage" value="org.gecko.weather.model"/>
+    <details key="resource" value="XMI"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="Station">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The DWD id"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="icaoCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Internation Civil Aviation Organization code"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="location" eType="#//GeoPosition"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="country" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WeatherReport">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timestamp" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="station" lowerBound="1"
+        eType="#//Station" eKeys="#//Station/id"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Measurement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="unit" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timestamp" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rawValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IntMeasurement" eSuperTypes="#//Measurement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FloatMeasurement" eSuperTypes="#//Measurement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DoubleMeasurement" eSuperTypes="#//Measurement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BasicMeasurement" eSuperTypes="#//Measurement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BoolMeasurement" eSuperTypes="#//Measurement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GeoArea">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="topLeft" eType="#//GeoPosition"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="xDim" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="yDim" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GeoPosition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="latitude" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="longitude" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="elevation" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EShort"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UVRadiationMeasurement" eSuperTypes="#//FloatMeasurement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="area" eType="#//GeoArea"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MOSMIXSWeatherReport" eSuperTypes="#//WeatherReport">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windDirection" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Wind direction: 0..360 Degrees (DD)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windSpeed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Wind speed: m/s (FF)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windGustLastHour" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Maximum wind gust within the last hour: m/s (FX1)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windGustLastThreeHours"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Maximum wind gust within the last 3 hours: m/s (FX3)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windGustMaxLast12Hours"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Maximum wind gust within the last 12 hours: m/s (FXh)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windGustProb25" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Probability of wind gusts >= 25kn within the last 12 hours: 0..100% (FXh25)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windGustProb40" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Probability of wind gusts >= 40kn within the last 12 hours: 0..100% (FXh40)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windGustProb55" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Probability of wind gusts >= 55kn within the last 12 hours: 0..100% (FXh55)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cloudCoverTotal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Total cloud cover: 0..100% (N)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cloudCoverBelow500" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Cloud cover below 500 ft.: 0..100% (N05)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cloudCoverEffective" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Effective cloud cover: 0..100% (Neff)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cloudCoverHigh" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="High cloud cover (>7 km): 0..100% (Nh)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cloudCoverMid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Midlevel cloud cover (2-7 km): 0..100% (Nm)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cloudCoverLow" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Low cloud cover (lower than 2 km): 0..100% (Nl)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="irRadianceGlobal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Global Irradiance: kJ/m2 (Rad1h)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="surfacePressure" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Surface pressure, reduced: Pa (PPPP)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="precipitationLarger02Last6"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Probability of precipitation > 0.2mm during the last 6 hours: 0..100% (R602)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="precipitationLarger50Last6"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Probability of precipitation > 5mm during the last 6 hours: 0..100% (R650)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="precipitationLarger02LastDay"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Probability of precipitation > 0.2mm during the last 24 hours: 0..100% (Rd02)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="precipitationLarger50LastDay"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Probability of precipitation > 5mm during the last 24 hours: 0..100% (Rd50)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="precipitationLarger00Last12"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Probability of precipitation > 0.0mm during the last 12 hours: 0..100% (Rh00)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="precipitationLarger02Last12"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Probability of precipitation > 0.2mm during the last 12 hours: 0..100% (Rh02)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="precipitationLarger10Last12"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Probability of precipitation > 1 mm during the last 12 hours: 0..100% (Rh10)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="precipitationLarger50Last12"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Probability of precipitation > 5mm during the last 12 hours: 0..100% (Rh50)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="precipitationSignificantWeatherTotal"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Total precipitation during the last hour consistent with significant weather: kg/m2 (RR1c)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="precipitationSignificantWeatherLast3"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Total precipitation during the last 3 hours  consistent with significant weather: kg/m2 (RR3c)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="snowRainEqLast1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Snow-Rain-Equivalent during the last hour: kg/m2 (RRS1c)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="snowRainEqLast3" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Snow-Rain-Equivalent during the 3 hours: kg/m2 (RRS3c)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sunshineDurationLast1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Sunshine duration during the last Hour: s (SunD1)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tempAboveSurface5" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Temperature 5cm above surface: Kelvin (T5cm)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tempAboveSurface200" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Temperature 2m above surface: Kelvin (TTT)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tempDewpointAboveSurface200"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Dewpoint 2m above surface: Kelvin (Td)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tempMinLast12" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Minimum temperature - within the last 12 hours: Kelvin (TN)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tempMaxLast12" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Maximum temperature - within the last 12 hours: Kelvin (TX)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="visibility" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Visibility: m (VV)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pastWeather" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Past weather during the last 6 hours: - (W1W2)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="significantWeather" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Significant Weather: - (ww)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fogPropLast1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Probability for fog within the last hour: 0..100% (wwM)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fogPropLast6" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Probability for fog within the last 6 hours: 0..100% (wwM6)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fogPropLast12" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Probability for fog within the last 12 hours: 0..100% (wwMh)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MeasurementWeatherReport" eSuperTypes="#//WeatherReport">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="measurements" upperBound="-1"
+        eType="#//Measurement" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

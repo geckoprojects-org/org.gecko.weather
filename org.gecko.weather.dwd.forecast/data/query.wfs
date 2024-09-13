@@ -1,0 +1,25 @@
+<GetFeature xmlns="http://www.opengis.net/wfs" service="WFS" version="1.1.0" outputFormat="application/json" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
+<Query typeName="CDC:OBS_DEU_PT1H_T2M" srsName="EPSG:4326" xmlns:CDC="CDC">
+	<Filter xmlns="http://www.opengis.net/ogc">
+		<And>
+			<And>
+				<PropertyIsGreaterThanOrEqualTo>
+					<PropertyName>ZEITSTEMPEL</PropertyName>
+					<Literal>2024-08-15T22:00:00.000Z</Literal>
+				</PropertyIsGreaterThanOrEqualTo>
+				<PropertyIsLessThanOrEqualTo>
+					<PropertyName>ZEITSTEMPEL</PropertyName>
+					<Literal>2024-08-15T22:59:00.000Z</Literal>
+				</PropertyIsLessThanOrEqualTo>
+			</And>
+			<BBOX>
+				<PropertyName>SDO_GEOM</PropertyName>
+				<Envelope xmlns="http://www.opengis.net/gml" srsName="EPSG:4326">
+					<lowerCorner>12.029342020703538 50.79734489233678</lowerCorner>
+					<upperCorner>12.46996380007253 51.0866479327326</upperCorner>
+				</Envelope>
+			</BBOX>
+		</And>
+	</Filter>
+</Query>
+</GetFeature>

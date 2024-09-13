@@ -1,0 +1,20 @@
+Bundle-Version: 1.0.0.SNAPSHOT
+Bundle-Name: Gecko Weather DWD Stations
+Bundle-Description: Gecko Weather - Station fetch and search DWD weather stations
+
+-library: \
+	enableSearch,\
+	enable-emf
+
+-buildpath: \
+	org.osgi.service.component;version=latest,\
+	org.osgi.util.promise;version=latest,\
+	biz.aQute.api.scheduler;version=latest,\
+	org.apache.felix.gogo.runtime;version=latest,\
+	org.apache.lucene.core;version=latest,\
+	org.apache.lucene.spatial;version=latest,\
+	org.gecko.search;version=latest,\
+	org.gecko.search.util;version=latest,\
+	org.gecko.emf.search;version=latest,\
+	org.gecko.weather.model;version=snapshot,\
+	org.gecko.weather.dwd.forecast;version=snapshot

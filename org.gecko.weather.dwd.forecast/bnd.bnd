@@ -1,0 +1,22 @@
+-library: \
+	enable-emf
+	
+-includeresource: \
+	data=data
+
+-buildpath: \
+	org.osgi.util.function;version=latest,\
+	org.osgi.util.promise;version=latest,\
+	org.osgi.service.cm;version=latest,\
+	biz.aQute.api.scheduler;version=latest,\
+	biz.aQute.scheduler.basic.provider;version=latest,\
+	org.apache.felix.gogo.runtime;version=latest,\
+	net.opengis.wfs.model;version=latest,\
+	net.opengis.kml.model;version=latest,\
+	de.dwd.cdc.forecast.model;version=latest,\
+	de.dwd.cdc.model;version=latest,\
+	de.dwd.cdc.common.model;version=latest,\
+	org.gecko.weather.model;version=snapshot
+	
+Bundle-Name: Gecko Weather DWD Forecast
+Bundle-Description: Gecko Weather Forecast Services for DWD data

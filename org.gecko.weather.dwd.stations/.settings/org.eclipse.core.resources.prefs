@@ -1,0 +1,9 @@
+eclipse.preferences.version=1
+encoding//src/org/gecko/weather/dwd/stations/StationIndex.java=UTF-8
+encoding//src/org/gecko/weather/dwd/stations/helper/StationIndexHelper.java=UTF-8
+encoding//src/org/gecko/weather/dwd/stations/impl/StationIndexService.java=UTF-8
+encoding//src/org/gecko/weather/dwd/stations/impl/StationSearchService.java=UTF-8
+encoding//src/org/gecko/weather/dwd/stations/impl/example/StationSearchComponent.java=UTF-8
+encoding/<project>=UTF-8
+encoding/bnd.bnd=UTF-8
+encoding/launch.bndrun=UTF-8
