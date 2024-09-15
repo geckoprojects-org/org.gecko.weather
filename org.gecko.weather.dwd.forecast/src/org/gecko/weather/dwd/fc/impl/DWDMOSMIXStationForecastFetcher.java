@@ -11,7 +11,7 @@
  * Contributors:
  *     Data In Motion - initial API and implementation
  */
-package org.gecko.weather.dwd.fc;
+package org.gecko.weather.dwd.fc.impl;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -25,6 +25,8 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.FeatureMapUtil.FeatureEList;
+import org.gecko.weather.dwd.fc.MOSMIXStationConfig;
+import org.gecko.weather.dwd.fc.WeatherReportIndex;
 import org.gecko.weather.dwd.fc.fetcher.DWDEMFFetcher;
 import org.gecko.weather.dwd.fc.util.DWDUtils;
 import org.gecko.weather.model.weather.GeoPosition;
@@ -59,7 +61,7 @@ import net.opengis.kml.PointType;
  * @since 30.08.2024
  */
 @CronExpression(name = "DWD-MOSMIX-L-Station-Forecast", cron = {Constants.CRON_EXPRESSION_HOURLY, Constants.CRON_EXPRESSION_REBOOT})
-@Component(name = "DWD-MOSMIX-Station", immediate = true, configurationPolicy = ConfigurationPolicy.REQUIRE)
+@Component(name = "DWD-MOSMIX-Station", configurationPolicy = ConfigurationPolicy.REQUIRE)
 public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> implements CronJob {
 	
 	@Reference
@@ -72,6 +74,8 @@ public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> impl
 	private WeatherFactory weatherFactory;
 	@Reference
 	private ResourceSet resourceSet;
+	@Reference
+	private WeatherReportIndex reportIndex;
 	private MOSMIXStationConfig config;
 	
 	@Activate
@@ -185,11 +189,12 @@ public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> impl
 			}
 //			});
 		}
-		System.out.println("MOSMIX Forecast: " + reports.length);
+		System.out.println("Indexing MOSMIX Forecast: ...");
 		for (int i = 0; i < reports.length; i++) {
 			MOSMIXSWeatherReport r = reports[i];
-			System.out.println("R " + r.getStation().getId() + " - " + r.getTimestamp().toString() + " wind " + r.getWindDirection() + " grad " + r.getWindSpeed() + " m/s");
+			reportIndex.indexReport(r);
 		}
+		System.out.println("Indexed MOSMIX Forecast: " + reports.length);
 	}
 
 	/* 

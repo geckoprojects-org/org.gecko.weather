@@ -1,8 +1,16 @@
 {
   ":configurator:resource-version": 1,
+  	"SimpleStorage~dwd-report": 
+  	{
+	},
   	"EMFLuceneIndex~dwd-station": 
   	{
   	    "id": "dwd.station",
+  	    "directory.type": "ByteBuffer"
+	},
+  	"EMFLuceneIndex~dwd-forecast": 
+  	{
+  	    "id": "dwd.forecast",
   	    "directory.type": "ByteBuffer"
 	}
 }

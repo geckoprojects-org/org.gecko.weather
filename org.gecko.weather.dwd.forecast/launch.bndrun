@@ -46,6 +46,8 @@
 	org.w3.xlink.model;version='[1.0.0,1.0.1)',\
 	slf4j.api;version='[1.7.36,1.7.37)',\
 	slf4j.simple;version='[1.7.36,1.7.37)',\
-	org.gecko.weather.dwd.forecast;version=snapshot
+	org.gecko.weather.dwd.forecast;version=snapshot,\
+	org.apache.felix.eventadmin;version='[1.6.4,1.6.5)',\
+	org.osgi.service.event;version='[1.4.1,1.4.2)'
 -runvm: -Xmx8g,\
 	-Xms4g

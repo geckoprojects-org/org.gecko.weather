@@ -11,7 +11,7 @@
  * Contributors:
  *     Data In Motion - initial API and implementation
  */
-package org.gecko.weather.dwd.fc;
+package org.gecko.weather.dwd.fc.impl;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;

@@ -131,7 +131,7 @@ public class DWDUtils {
 		return URL_BASE_DWD_WEATHER + String.format(URI_FORECAST_MOSMIX_SINGLE_STATION, stationId) + String.format(MOSMIX_SINGLE_LATEST_FILENAME, stationId);
 	}
 
-	private static Calendar normalizeToFullHours(Calendar date) {
+	public static Calendar normalizeToFullHours(Calendar date) {
 		requireNonNull(date);
 		Calendar c = Calendar.getInstance();
 		c.setTimeInMillis(date.getTimeInMillis());

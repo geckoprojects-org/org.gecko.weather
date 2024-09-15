@@ -14,6 +14,7 @@ Bundle-Description: Gecko Weather - Station fetch and search DWD weather station
 	org.apache.lucene.core;version=latest,\
 	org.apache.lucene.spatial;version=latest,\
 	org.gecko.search;version=latest,\
+	org.gecko.search.document;version=latest,\
 	org.gecko.search.util;version=latest,\
 	org.gecko.emf.search;version=latest,\
 	org.gecko.weather.model;version=snapshot,\

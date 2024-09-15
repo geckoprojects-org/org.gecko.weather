@@ -1,4 +1,5 @@
 -library: \
+	enableSearch,\
 	enable-emf
 	
 -includeresource: \
@@ -8,8 +9,12 @@
 	org.osgi.util.function;version=latest,\
 	org.osgi.util.promise;version=latest,\
 	org.osgi.service.cm;version=latest,\
+	org.osgi.service.component;version=latest,\
+	org.osgi.service.event;version=latest,\
 	biz.aQute.api.scheduler;version=latest,\
 	biz.aQute.scheduler.basic.provider;version=latest,\
+	org.apache.lucene.core;version=latest,\
+	org.gecko.emf.search,\
 	org.apache.felix.gogo.runtime;version=latest,\
 	net.opengis.wfs.model;version=latest,\
 	net.opengis.kml.model;version=latest,\
