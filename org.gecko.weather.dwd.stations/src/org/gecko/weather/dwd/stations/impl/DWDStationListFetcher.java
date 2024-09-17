@@ -19,15 +19,17 @@ import static java.util.Objects.requireNonNull;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import org.gecko.weather.dwd.fc.fetcher.DWDFetcher;
 import org.gecko.weather.dwd.stations.StationIndex;
 import org.gecko.weather.dwd.stations.StationSearch;
+import org.gecko.weather.dwd.stations.config.StationConfig;
 import org.gecko.weather.model.weather.GeoPosition;
 import org.gecko.weather.model.weather.Station;
 import org.gecko.weather.model.weather.WeatherFactory;
@@ -36,9 +38,11 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.condition.Condition;
+import org.osgi.service.metatype.annotations.Designate;
 
 import biz.aQute.scheduler.api.Constants;
 import biz.aQute.scheduler.api.CronExpression;
@@ -46,29 +50,33 @@ import biz.aQute.scheduler.api.CronJob;
 
 /**
  * Fetches the latest station lists:
- * https://www.dwd.de/DE/leistungen/cdc/cdc_ueberblick-klimadaten.html
- * Appends two station lists. The first is taken with higher priority.
- * All MOSMIX stations that are nit in the first list are appended.
+ * https://www.dwd.de/DE/leistungen/cdc/cdc_ueberblick-klimadaten.html Appends
+ * two station lists. The first is taken with higher priority. All MOSMIX
+ * stations that are nit in the first list are appended.
+ * 
  * @author Mark Hoffmann
  * @since 05.09.2024
  */
 @CronExpression(name = "DWD-Stations", cron = Constants.CRON_EXPRESSION_REBOOT)
-@Component(immediate = true)
+@Designate(ocd = StationConfig.class)
+@Component(immediate = true, configurationPid = "DWDStationFetcher", configurationPolicy = ConfigurationPolicy.OPTIONAL)
 public class DWDStationListFetcher extends DWDFetcher implements CronJob {
 
-	private static final String STATION_MOSMIX_URL = "https://www.dwd.de/DE/leistungen/met_verfahren_mosmix/mosmix_stationskatalog.cfg?view=nasPublication&nn=16102";
-	private static final String STATION_URL = "https://opendata.dwd.de/climate_environment/CDC/help/stations_list_CLIMAT_data.txt";
+	private static final Logger LOGGER = System.getLogger(DWDStationListFetcher.class.getName());
+
 	@Reference
 	private WeatherFactory weatherFactory;
 	@Reference
 	private StationIndex sis;
 	private volatile boolean mosmixDownload = false;
 	private BundleContext ctx;
+	private StationConfig config;
 	private ServiceRegistration<Condition> loadedCondition = null;
 
 	@Activate
-	public void activate(BundleContext ctx) {
+	public void activate(BundleContext ctx, StationConfig config) {
 		this.ctx = ctx;
+		this.config = config;
 	}
 
 	@Deactivate
@@ -78,72 +86,59 @@ public class DWDStationListFetcher extends DWDFetcher implements CronJob {
 		}
 	}
 
-	/* 
-	 * (non-Javadoc)
-	 * @see biz.aQute.scheduler.api.CronJob#run()
-	 */
 	@Override
 	public void run() throws Exception {
-		System.out.println("Running all station list ...");
+		LOGGER.log(Level.DEBUG, "Running all station list ...");
 		List<String> ids = new ArrayList<>();
 		InputStream data = doDownload();
 		try (InputStreamReader isr = new InputStreamReader(data); BufferedReader reader = new BufferedReader(isr)) {
-			List<Station> stations = reader.lines().
-					skip(1).
-					map(this::mapStationAll).
-					filter(Objects::nonNull).
-					collect(Collectors.toList());
-			stations.forEach((s)->{
-				try {
-					ids.add(s.getId());
-					sis.indexStation(s, true);
-//					System.out.println(String.format("DWD Station - ID: %s, Name: %s, Lat: %s, Lon: %s, Alt: %s", s.getId(), s.getName(), s.getLocation().getLatitude(), s.getLocation().getLongitude(), s.getLocation().getElevation()));
-				} catch (Exception e) {
-					System.out.println("Error indexing station " + s);
-				}
-			});
+			reader.lines() //
+					.skip(1) //
+					.map(this::mapStationAll) //
+					.filter(Objects::nonNull).forEach(s -> {
+						ids.add(s.getId());
+						indexStation(s);
+					});
 		}
-		System.out.println("Running MOSMIX station list ...");
+
+		LOGGER.log(Level.DEBUG, "Running MOSMIX station list ...");
 		data = doDownload();
 		try (InputStreamReader isr = new InputStreamReader(data); BufferedReader reader = new BufferedReader(isr)) {
-			List<Station> stations = reader.lines().
-					skip(2).
-					map(this::mapStationMOSMIX).
-					filter(s->!ids.remove(s.getId())).
-					filter(Objects::nonNull).
-					collect(Collectors.toList());
-			stations.forEach((s)->{
-				try {
-					sis.indexStation(s, true);
-//					System.out.println(String.format("DWD Station - ID: %s, Name: %s, Lat: %s, Lon: %s, Alt: %s", s.getId(), s.getName(), s.getLocation().getLatitude(), s.getLocation().getLongitude(), s.getLocation().getElevation()));
-				} catch (Exception e) {
-					System.out.println("Error indexing station " + s);
-				}
-			});
+			reader.lines() //
+					.skip(2) //
+					.map(this::mapStationMOSMIX) //
+					.filter(s -> !ids.remove(s.getId())).filter(Objects::nonNull) //
+					.forEach(this::indexStation);
 		}
-		System.out.println("Indexed all stations");
-		loadedCondition = ctx.registerService(Condition.class, Condition.INSTANCE, FrameworkUtil.asDictionary(Map.of(Condition.CONDITION_ID, StationSearch.CONDITION_STATION_SEARCH)));
+		LOGGER.log(Level.DEBUG, "Indexed all stations");
+		loadedCondition = ctx.registerService(Condition.class, Condition.INSTANCE,
+				FrameworkUtil.asDictionary(Map.of(Condition.CONDITION_ID, StationSearch.CONDITION_STATION_SEARCH)));
 
 	}
 
-	/* 
-	 * (non-Javadoc)
-	 * @see com.dimc.pm.dwd.service.DWDFetcher#getFetchUrl()
-	 */
+	private void indexStation(Station s) {
+		try {
+			sis.indexStation(s, true);
+			if (LOGGER.isLoggable(Level.DEBUG)) {
+				LOGGER.log(Level.DEBUG, "DWD Station - ID: {0}, Name: {1}, Lat: {2}, Lon: {3}, Alt: {4}", s.getId(),
+						s.getName(), s.getLocation().getLatitude(), s.getLocation().getLongitude(),
+						s.getLocation().getElevation());
+			}
+		} catch (Exception e) {
+			LOGGER.log(Level.WARNING, "Error indexing station {0}", s, e);
+		}
+	}
+
 	@Override
 	protected String getFetchUrl() {
 		if (mosmixDownload) {
 			mosmixDownload = false;
-			return STATION_MOSMIX_URL;
+			return config.stationMosmixUrl();
 		}
 		mosmixDownload = true;
-		return STATION_URL;
+		return config.stationUrl();
 	}
 
-	/* 
-	 * (non-Javadoc)
-	 * @see com.dimc.pm.dwd.service.DWDFetcher#getName()
-	 */
 	@Override
 	protected String getName() {
 		return "Stations";
@@ -170,10 +165,7 @@ public class DWDStationListFetcher extends DWDFetcher implements CronJob {
 			}
 			String latString = columns[2];
 			String lonString = columns[3];
-			if (nonNull(latString) && 
-					nonNull(lonString) && 
-					!latString.isBlank() && 
-					!lonString.isBlank()) {
+			if (nonNull(latString) && nonNull(lonString) && !latString.isBlank() && !lonString.isBlank()) {
 				GeoPosition location = weatherFactory.createGeoPosition();
 				double lat = Double.parseDouble(latString.trim());
 				location.setLatitude(lat);
@@ -190,7 +182,7 @@ public class DWDStationListFetcher extends DWDFetcher implements CronJob {
 			}
 			return station;
 		} catch (Exception e) {
-			System.out.println("Error: " + line);
+			LOGGER.log(Level.WARNING, "Error mapping station \"{0}\"", line, e);
 			return null;
 		}
 	}

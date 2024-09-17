@@ -18,50 +18,57 @@ import static java.util.Objects.requireNonNull;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.net.URL;
 
 import org.gecko.weather.dwd.fc.util.DWDUtils;
 
 /**
- * Abstract class for fetching and loading DWD. It also supports unzipping single files out of a zip archive.
+ * Abstract class for fetching and loading DWD. It also supports unzipping
+ * single files out of a zip archive.
+ * 
  * @author Mark Hoffmann
  * @since 05.09.2024
  */
 public abstract class DWDFetcher {
-	
+
+	private static final Logger LOGGER = System.getLogger(DWDFetcher.class.getName());
+
 	/**
 	 * Return the download url
+	 * 
 	 * @return the download url, must not be <code>null</code>
 	 */
-	protected abstract String getFetchUrl(); 
-	
+	protected abstract String getFetchUrl();
+
 	/**
 	 * Returns an identifier for the downloader / fetcher
+	 * 
 	 * @return an identifier
 	 */
 	protected abstract String getName();
-	
-	public InputStream doDownload() throws IOException {
+
+	public InputStream doDownload() throws IOException	 {
 		String urlString = getFetchUrl();
 		long start = System.currentTimeMillis();
 		try {
-			System.out.println(String.format("[%s] Downloading from URL: '%s'", getName(), urlString));
+			LOGGER.log(Level.INFO, "{0} Downloading from URL: {1}", getName(), urlString);
 			URL url = new URL(urlString);
-			BufferedInputStream bis = new BufferedInputStream(url.openStream());
-			return bis;
+			return new BufferedInputStream(url.openStream());
 		} finally {
-			System.out.println(String.format("[%s] Downloaded file (%s ms)", getName(), (System.currentTimeMillis() - start)));
+			LOGGER.log(Level.INFO, "{0} Downloading file {1}", getName(), (System.currentTimeMillis() - start));
 		}
 	}
 
 	public InputStream doUnzip(InputStream zippedSource) {
 		requireNonNull(zippedSource);
-		System.out.println(String.format("[%s] Unzipping the file", getName()));
+		LOGGER.log(Level.INFO, "{0} Unzip thefile: {1}", getName());
 		long start = System.currentTimeMillis();
 		try {
 			return DWDUtils.unzip(zippedSource);
 		} finally {
-			System.out.println(String.format("[%s] Unzipped from the file (%s ms)", getName(), (System.currentTimeMillis() - start)));
+			LOGGER.log(Level.INFO, "{0} Unzipped from the file {1}", getName(), (System.currentTimeMillis() - start));
 		}
 	}
 

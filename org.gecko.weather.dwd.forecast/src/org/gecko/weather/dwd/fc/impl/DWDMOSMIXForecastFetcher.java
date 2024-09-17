@@ -69,46 +69,27 @@ public class DWDMOSMIXForecastFetcher extends DWDEMFFetcher<KmlType> implements 
 	@Reference
 	private ResourceSet resourceSet;
 	
-	/* 
-	 * (non-Javadoc)
-	 * @see com.dimc.pm.dwd.service.KMZFetcher#getModelFileExtension()
-	 */
 	@Override
 	protected String getModelFileExtension() {
 		return "kml";
 	}
 	
-	/* 
-	 * (non-Javadoc)
-	 * @see com.dimc.pm.dwd.service.KMZFetcher#getName()
-	 */
 	@Override
 	protected String getName() {
 		return "MOSMIX";
 	}
-	/* 
-	 * (non-Javadoc)
-	 * @see com.dimc.pm.dwd.service.KMZFetcher#getFetchUrl()
-	 */
+
 	@Override
 	protected String getFetchUrl() {
 		return "file:///home/mark/tmp/MOSMIX_S_LATEST_240.kmz";
 //		return DWDUtils.buildMOSMIXForecastUrl();
 	}
 
-	/* 
-	 * (non-Javadoc)
-	 * @see com.dimc.pm.dwd.service.KMZFetcher#getResourceSet()
-	 */
 	@Override
 	protected ResourceSet getResourceSet() {
 		return resourceSet;
 	}
 	
-	/* 
-	 * (non-Javadoc)
-	 * @see com.dimc.pm.dwd.service.DWDFetcher#get(org.eclipse.emf.ecore.EObject)
-	 */
 	@Override
 	protected KmlType get(EObject content) {
 		return DWDUtils.getKML(content);
@@ -178,10 +159,6 @@ public class DWDMOSMIXForecastFetcher extends DWDEMFFetcher<KmlType> implements 
 		}
 	}
 
-	/* 
-	 * (non-Javadoc)
-	 * @see biz.aQute.scheduler.api.CronJob#run()
-	 */
 	@Override
 	public void run() throws Exception {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");

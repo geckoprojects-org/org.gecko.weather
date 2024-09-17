@@ -22,8 +22,6 @@
 	org.eclipse.emf.common;version='[2.29.0,2.29.1)',\
 	org.eclipse.emf.ecore;version='[2.35.0,2.35.1)',\
 	org.eclipse.emf.ecore.xmi;version='[2.36.0,2.36.1)',\
-	org.gecko.emf.osgi.api;version='[6.3.0,6.3.1)',\
-	org.gecko.emf.osgi.component.config;version='[6.3.0,6.3.1)',\
 	org.gecko.emf.osgi.component.minimal;version='[6.3.0,6.3.1)',\
 	org.gecko.emf.search;version='[1.4.0,1.4.1)',\
 	org.gecko.search;version='[1.4.0,1.4.1)',\
@@ -35,7 +33,6 @@
 	org.osgi.util.promise;version='[1.3.0,1.3.1)',\
 	biz.aQute.scheduler.basic.provider;version='[1.11.0,1.11.1)',\
 	org.gecko.weather.dwd.config;version=snapshot,\
-	org.gecko.weather.dwd;version=snapshot,\
 	de.dwd.cdc.common.model;version='[1.0.0,1.0.1)',\
 	de.dwd.cdc.forecast.model;version='[1.0.0,1.0.1)',\
 	net.opengis.kml.model;version='[1.0.0,1.0.1)',\
@@ -48,4 +45,7 @@
 	org.w3.smil.model;version='[1.0.0,1.0.1)',\
 	org.w3.xlink.model;version='[1.0.0,1.0.1)',\
 	slf4j.api;version='[1.7.36,1.7.37)',\
-	slf4j.simple;version='[1.7.36,1.7.37)'
+	slf4j.simple;version='[1.7.36,1.7.37)',\
+	org.apache.felix.eventadmin;version='[1.6.4,1.6.5)',\
+	org.gecko.weather.dwd.forecast;version=snapshot,\
+	org.osgi.service.event;version='[1.4.1,1.4.2)'

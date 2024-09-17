@@ -44,10 +44,6 @@ public class DWDMetElementsFetcher extends DWDEMFFetcher<MetElementDefinitionTyp
 	@Reference
 	private ResourceSet resourceSet;
 
-	/* 
-	 * (non-Javadoc)
-	 * @see biz.aQute.scheduler.api.CronJob#run()
-	 */
 	@Override
 	public void run() throws Exception {
 		InputStream data = doDownload();
@@ -57,49 +53,28 @@ public class DWDMetElementsFetcher extends DWDEMFFetcher<MetElementDefinitionTyp
 			System.out.println("Description: " + type.getDescription());
 			System.out.println("Unit: " + type.getUnitOfMeasurement());
 		}
-		
 	}
 
-	/* 
-	 * (non-Javadoc)
-	 * @see com.dimc.pm.dwd.service.KMZFetcher#getModelFileExtension()
-	 */
 	@Override
 	protected String getModelFileExtension() {
 		return "metelements";
 	}
 
-	/* 
-	 * (non-Javadoc)
-	 * @see com.dimc.pm.dwd.service.KMZFetcher#getFetchUrl()
-	 */
 	@Override
 	protected String getFetchUrl() {
 		return MET_URL;
 	}
 
-	/* 
-	 * (non-Javadoc)
-	 * @see com.dimc.pm.dwd.service.KMZFetcher#getResourceSet()
-	 */
 	@Override
 	protected ResourceSet getResourceSet() {
 		return resourceSet;
 	}
 
-	/* 
-	 * (non-Javadoc)
-	 * @see com.dimc.pm.dwd.service.KMZFetcher#getName()
-	 */
 	@Override
 	protected String getName() {
 		return "Met-Definition";
 	}
 	
-	/* 
-	 * (non-Javadoc)
-	 * @see com.dimc.pm.dwd.service.DWDFetcher#get(org.eclipse.emf.ecore.EObject)
-	 */
 	@Override
 	protected MetElementDefinitionType get(EObject content) {
 		return DWDUtils.getMetDefinitions(content);

@@ -67,47 +67,27 @@ public class DWDDMOForecastFetcher extends DWDEMFFetcher<KmlType> implements Cro
 	private PointforecastPackage forecastPackage;
 	@Reference
 	private ResourceSet resourceSet;
-	
-	/* 
-	 * (non-Javadoc)
-	 * @see com.dimc.pm.dwd.service.KMZFetcher#getModelFileExtension()
-	 */
+
 	@Override
 	protected String getModelFileExtension() {
 		return "kml";
 	}
 	
-	/* 
-	 * (non-Javadoc)
-	 * @see com.dimc.pm.dwd.service.KMZFetcher#getName()
-	 */
 	@Override
 	protected String getName() {
 		return "DMO";
 	}
 
-	/* 
-	 * (non-Javadoc)
-	 * @see com.dimc.pm.dwd.service.KMZFetcher#getFetchUrl()
-	 */
 	@Override
 	protected String getFetchUrl() {
 		return DWDUtils.buildDMOForecastUrl(Calendar.getInstance(), true);
 	}
 
-	/* 
-	 * (non-Javadoc)
-	 * @see com.dimc.pm.dwd.service.KMZFetcher#getResourceSet()
-	 */
 	@Override
 	protected ResourceSet getResourceSet() {
 		return resourceSet;
 	}
 	
-	/* 
-	 * (non-Javadoc)
-	 * @see com.dimc.pm.dwd.service.DWDFetcher#get(org.eclipse.emf.ecore.EObject)
-	 */
 	@Override
 	protected KmlType get(EObject content) {
 		return DWDUtils.getKML(content);
@@ -139,10 +119,6 @@ public class DWDDMOForecastFetcher extends DWDEMFFetcher<KmlType> implements Cro
 		}
 	}
 
-	/* 
-	 * (non-Javadoc)
-	 * @see biz.aQute.scheduler.api.CronJob#run()
-	 */
 	@Override
 	public void run() throws Exception {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");

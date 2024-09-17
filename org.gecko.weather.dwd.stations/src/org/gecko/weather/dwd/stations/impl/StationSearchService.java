@@ -16,13 +16,13 @@ package org.gecko.weather.dwd.stations.impl;
 import static java.util.Objects.requireNonNull;
 
 import java.io.IOException;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
-import org.apache.lucene.document.Document;
 import org.apache.lucene.document.LatLonPoint;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
@@ -51,6 +51,8 @@ import org.osgi.service.component.annotations.Reference;
 @Component
 public class StationSearchService implements StationSearch {
 
+	private static final Logger LOGGER = System.getLogger(StationSearchService.class.getName());
+
 	@Reference(target = "(id=dwd.station)")
 	private ComponentServiceObjects<IndexSearcher> searcherSO;
 
@@ -59,27 +61,36 @@ public class StationSearchService implements StationSearch {
 	@Reference
 	private ResourceSet resourceSet;
 
-	/* 
+	/*
 	 * (non-Javadoc)
-	 * @see org.gecko.weather.dwd.stations.StationSearch#searchStationByName(java.lang.String, boolean)
+	 * 
+	 * @see
+	 * org.gecko.weather.dwd.stations.StationSearch#searchStationByName(java.lang.
+	 * String, boolean)
 	 */
 	@Override
 	public List<Station> searchStationByName(String stationName, boolean exactMatch) {
 		return searchStationByName(stationName, exactMatch, 5);
 	}
 
-	/* 
+	/*
 	 * (non-Javadoc)
-	 * @see org.gecko.weather.dwd.stations.StationSearch#searchStationByName(java.lang.String, int)
+	 * 
+	 * @see
+	 * org.gecko.weather.dwd.stations.StationSearch#searchStationByName(java.lang.
+	 * String, int)
 	 */
 	@Override
 	public List<Station> searchStationByName(String stationName, int maxResults) {
 		return searchStationByName(stationName, false, maxResults);
 	}
 
-	/* 
+	/*
 	 * (non-Javadoc)
-	 * @see org.gecko.weather.dwd.stations.StationSearch#searchStationsById(java.lang.String)
+	 * 
+	 * @see
+	 * org.gecko.weather.dwd.stations.StationSearch#searchStationsById(java.lang.
+	 * String)
 	 */
 	@Override
 	public List<Station> searchStationsById(String id) {
@@ -87,28 +98,37 @@ public class StationSearchService implements StationSearch {
 		return executeTermSearch(new TermQuery(new Term(StationIndexHelper.STATION_ID, id)), 5);
 	}
 
-	/* 
+	/*
 	 * (non-Javadoc)
-	 * @see org.gecko.weather.dwd.stations.StationSearch#searchStationNearLocation(org.gecko.weather.modelweather.GeoPosition, int)
+	 * 
+	 * @see
+	 * org.gecko.weather.dwd.stations.StationSearch#searchStationNearLocation(org.
+	 * gecko.weather.modelweather.GeoPosition, int)
 	 */
 	@Override
-	public List<Station>searchStationNearLocation(GeoPosition location, int radius) {
+	public List<Station> searchStationNearLocation(GeoPosition location, int radius) {
 		requireNonNull(location);
-		return executeTermSearch(LatLonPoint.newDistanceQuery(StationIndexHelper.STATION_POSITION, location.getLatitude(), location.getLongitude(), radius), 5);
+		return executeTermSearch(LatLonPoint.newDistanceQuery(StationIndexHelper.STATION_POSITION,
+				location.getLatitude(), location.getLongitude(), radius), 5);
 	}
 
-	/* 
+	/*
 	 * (non-Javadoc)
-	 * @see org.gecko.weather.dwd.stations.StationSearch#searchStationNearLocation(org.gecko.weather.modelweather.GeoPosition, int, int)
+	 * 
+	 * @see
+	 * org.gecko.weather.dwd.stations.StationSearch#searchStationNearLocation(org.
+	 * gecko.weather.modelweather.GeoPosition, int, int)
 	 */
 	@Override
 	public List<Station> searchStationNearLocation(GeoPosition location, int radius, int maxresults) {
 		requireNonNull(location);
-		return executeTermSearch(LatLonPoint.newDistanceQuery(StationIndexHelper.STATION_POSITION, location.getLatitude(), location.getLongitude(), radius), maxresults);
+		return executeTermSearch(LatLonPoint.newDistanceQuery(StationIndexHelper.STATION_POSITION,
+				location.getLatitude(), location.getLongitude(), radius), maxresults);
 	}
 
 	/**
 	 * Executes the Lucene search
+	 * 
 	 * @param query the {@link Query}
 	 * @return the list of documents
 	 */
@@ -119,7 +139,8 @@ public class StationSearchService implements StationSearch {
 
 	/**
 	 * Search a station by name
-	 * @param name the station name to search for
+	 * 
+	 * @param name       the station name to search for
 	 * @param exactMatch <code>true</code> for an exact match
 	 * @param maxResults number of results, must be larger that 0
 	 * @return the list of matching stations
@@ -131,7 +152,7 @@ public class StationSearchService implements StationSearch {
 		}
 		name = name.toLowerCase();
 		Query query;
-		if(exactMatch) {
+		if (exactMatch) {
 			query = new TermQuery(new Term(StationIndexHelper.STATION_NAME, name));
 
 		} else {
@@ -139,18 +160,17 @@ public class StationSearchService implements StationSearch {
 			Query q2 = new WildcardQuery(new Term(StationIndexHelper.STATION_NAME_LC, "*" + name));
 			Query q3 = new WildcardQuery(new Term(StationIndexHelper.STATION_NAME_LC, "*" + name + "*"));
 			Query q4 = new FuzzyQuery(new Term(StationIndexHelper.STATION_NAME_LC, name));
-			query = new BooleanQuery.Builder().
-					add(new BoostQuery(q1, 1.8f), Occur.SHOULD).
-					add(new BoostQuery(q2, 1.8f), Occur.SHOULD).
-					add(new BoostQuery(q3, 1.2f), Occur.SHOULD).
-					add(new BoostQuery(q4, 0.5f), Occur.SHOULD).build();
+			query = new BooleanQuery.Builder().add(new BoostQuery(q1, 1.8f), Occur.SHOULD)
+					.add(new BoostQuery(q2, 1.8f), Occur.SHOULD).add(new BoostQuery(q3, 1.2f), Occur.SHOULD)
+					.add(new BoostQuery(q4, 0.5f), Occur.SHOULD).build();
 		}
 		return executeTermSearch(query, maxResults);
 	}
 
 	/**
 	 * Executes the Lucene search
-	 * @param query the {@link Query}
+	 * 
+	 * @param query      the {@link Query}
 	 * @param maxResults the number of maximum results
 	 * @return the list of documents
 	 */
@@ -163,24 +183,17 @@ public class StationSearchService implements StationSearch {
 				return Collections.emptyList();
 			}
 			IndexReader indexReader = searcher.getIndexReader();
-			return Arrays.asList(topDocs.scoreDocs).
-					stream().
-					map(sd -> sd.doc).
-					map(id -> {
-						Document d;
+			return Arrays.asList(topDocs.scoreDocs).stream()//
+					.map(sd -> sd.doc)//
+					.map(id -> {
 						try {
-							d = indexReader.storedFields().document(id);
-							return d;
+							return indexReader.storedFields().document(id);
 						} catch (IOException e) {
 							return null;
 						}
-					}).
-					filter(Objects::nonNull).
-					map(StationIndexHelper::mapDocument).
-					collect(Collectors.toList());
+					}).filter(Objects::nonNull).map(StationIndexHelper::mapDocument).toList();
 		} catch (Exception e) {
-			System.err.println("Exception while search for Station with query " + query);
-			e.printStackTrace();
+			LOGGER.log(Level.ERROR, "Exception while search for Station with query {0}", query, e);
 			return Collections.emptyList();
 		} finally {
 			searcherSO.ungetService(searcher);
