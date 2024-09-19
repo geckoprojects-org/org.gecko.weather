@@ -9,6 +9,17 @@ pipeline  {
     }
 
     stages {
+        stage('Unit & Integration Tests') {
+            steps {
+                script {
+                    try {
+                        sh './gradlew clean testOSGi --info --stacktrace -Dmaven.repo.local=${WORKSPACE}/.m2 --no-daemon'
+                    } finally {
+                        junit testResults: '**/generated/test-reports/testOSGi/TEST-*.xml', skipPublishingChecks: true
+                    }
+                }
+            }
+        }
         stage('Main branch release') {
             when { 
                 branch 'main' 
