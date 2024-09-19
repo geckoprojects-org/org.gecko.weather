@@ -29,21 +29,21 @@ import org.junit.jupiter.api.Test;
  * @author mark
  * @since 15.09.2024
  */
-public class ReportHelperTests {
-	
+class ReportHelperTests {
+
 	@Test
-	public void testCreateReportId() {
-		assertThrows(NullPointerException.class, ()->ReportHelper.createReportId(null));
+	void testCreateReportId() {
+		assertThrows(NullPointerException.class, () -> ReportHelper.createReportId(null));
 		WeatherReport report = WeatherFactory.eINSTANCE.createWeatherReport();
-		assertThrows(NullPointerException.class, ()->ReportHelper.createReportId(report));
+		assertThrows(NullPointerException.class, () -> ReportHelper.createReportId(report));
 		report.setTimestamp(new Date(0));
-		assertThrows(NullPointerException.class, ()->ReportHelper.createReportId(report));
+		assertThrows(NullPointerException.class, () -> ReportHelper.createReportId(report));
 		Station station = WeatherFactory.eINSTANCE.createStation();
 		report.setStation(station);
-		assertThrows(NullPointerException.class, ()->ReportHelper.createReportId(report));
+		assertThrows(NullPointerException.class, () -> ReportHelper.createReportId(report));
 		station.setId("ABC123");
 		assertEquals("ABC123-1970010101", ReportHelper.createReportId(report));
-		
+
 		long refTs = 1726394721073l;
 		station.setId("TEST");
 		report.setTimestamp(new Date(refTs));

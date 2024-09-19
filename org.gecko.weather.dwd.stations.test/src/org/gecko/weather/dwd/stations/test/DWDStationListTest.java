@@ -76,22 +76,20 @@ public class DWDStationListTest {
 				.contains("Erfurt", "QUERFURT", "ERFURT LVG", "ERFURT-STADT", "QUERFURT-LODERSL.");
 	}
 
-//	@Test
+	@Test
 	public void testSearchNear(@InjectService(cardinality = 0) ServiceAware<DWDFetcher> dwdAware,
 			@InjectService(cardinality = 0) ServiceAware<StationSearch> siAware) throws InterruptedException {
 
 		StationSearch stationSearch = siAware.waitForService(1000);
 		GeoPosition geoPosition = WeatherFactory.eINSTANCE.createGeoPosition();
-		geoPosition.setLatitude(50.92126987121617);
-		geoPosition.setLongitude(11.580468982385781);
-		List<Station> result = stationSearch.searchStationNearLocation(geoPosition, 5);
+		geoPosition.setLatitude(50.9281717);
+		geoPosition.setLongitude(11.5879359);
+		geoPosition.setElevation((short)10);
+		List<Station> result = stationSearch.searchStationNearLocation(geoPosition, 20000);
 		assertThat(result) //
 				.hasSize(5)//
 				.extracting(Station::getId) //
-				.contains("10554", "N6357", "G409", "P0560", "N748");
-		assertThat(result) //
-				.extracting(Station::getName) //
-				.contains("Erfurt", "QUERFURT", "ERFURT LVG", "ERFURT-STADT", "QUERFURT-LODERSL.");
+				.contains("G407", "N5417", "N924", "N992", "P0514");
 	}
 
 }

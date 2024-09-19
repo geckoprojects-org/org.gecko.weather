@@ -53,7 +53,7 @@ public interface StationSearch {
 	/**
 	 * Search for stations near the given location within a given radius
 	 * @param location the location to do a nearby search
-	 * @param radius the radius around this location to do a nearby search
+	 * @param radius the radius in meter around this location to do a nearby search
 	 * @return the matched documents
 	 */
 	public List<Station>searchStationNearLocation(GeoPosition location, int radius);
