@@ -150,12 +150,12 @@ public class StationSearchService implements StationSearch {
 		if (maxResults < 1) {
 			maxResults = 5;
 		}
-		name = name.toLowerCase();
 		Query query;
 		if (exactMatch) {
 			query = new TermQuery(new Term(StationIndexHelper.STATION_NAME, name));
 
 		} else {
+			name = name.toLowerCase();
 			Query q1 = new WildcardQuery(new Term(StationIndexHelper.STATION_NAME_LC, name + "*"));
 			Query q2 = new WildcardQuery(new Term(StationIndexHelper.STATION_NAME_LC, "*" + name));
 			Query q3 = new WildcardQuery(new Term(StationIndexHelper.STATION_NAME_LC, "*" + name + "*"));

@@ -17,7 +17,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
-import org.gecko.weather.dwd.fc.fetcher.DWDFetcher;
 import org.gecko.weather.dwd.stations.StationSearch;
 import org.gecko.weather.model.weather.GeoPosition;
 import org.gecko.weather.model.weather.Station;
@@ -36,14 +35,10 @@ import org.osgi.test.junit5.service.ServiceExtension;
 
 import biz.aQute.scheduler.api.CronJob;
 
-//import org.mockito.Mock;
-//import org.mockito.junit.jupiter.MockitoExtension;
-
 @RequireConfigurationAdmin
 @ExtendWith(ServiceExtension.class)
 @ExtendWith(ConfigurationExtension.class)
 @ExtendWith(BundleContextExtension.class)
-//@ExtendWith(MockitoExtension.class)
 @WithFactoryConfiguration(factoryPid = "DWDStationFetcher", location = "?", name = "fetcher", properties = {
 		@Property(key = "stationMosmixUrl", value = "file:data/mosmix_stationskatalog.csv"),
 		@Property(key = "stationUrl", value = "file:data/stations_list_CLIMAT_data.csv") })
@@ -51,24 +46,21 @@ import biz.aQute.scheduler.api.CronJob;
 		@Property(key = "id", value = "dwd.station"), @Property(key = "directory.type", value = "ByteBuffer") })
 public class DWDStationListTest {
 
-	
 	@BeforeAll
 	public static void beforeAll(@InjectService(cardinality = 0) ServiceAware<CronJob> dwdAware) throws Exception {
-		
-		CronJob fetcher = (CronJob) dwdAware.waitForService(1000);
+		CronJob fetcher = dwdAware.waitForService(1000);
 		assertThat(fetcher).isNotNull();
 		fetcher.run();
 	}
-	
-	
+
 	@Test
-	public void testSearchByName(@InjectService(cardinality = 0) ServiceAware<DWDFetcher> dwdAware,
-			@InjectService(cardinality = 0) ServiceAware<StationSearch> siAware) throws InterruptedException  {
+	public void testSearchByName(@InjectService(cardinality = 0) ServiceAware<StationSearch> siAware)
+			throws InterruptedException {
 
 		StationSearch stationSearch = siAware.waitForService(1000);
 		List<Station> result = stationSearch.searchStationByName("erfurt", false);
 		assertThat(result) //
-				.hasSize(5)//
+				.hasSize(5) //
 				.extracting(Station::getId) //
 				.contains("10554", "N6357", "G409", "P0560", "N748");
 		assertThat(result) //
@@ -77,19 +69,58 @@ public class DWDStationListTest {
 	}
 
 	@Test
-	public void testSearchNear(@InjectService(cardinality = 0) ServiceAware<DWDFetcher> dwdAware,
-			@InjectService(cardinality = 0) ServiceAware<StationSearch> siAware) throws InterruptedException {
+	public void testSearchByNameExact(@InjectService(cardinality = 0) ServiceAware<StationSearch> siAware)
+			throws InterruptedException {
+
+		StationSearch stationSearch = siAware.waitForService(1000);
+		List<Station> result = stationSearch.searchStationByName("erfurt", true);
+		assertThat(result).isEmpty();
+
+		result = stationSearch.searchStationByName("Erfurt", true);
+		assertThat(result) //
+				.hasSize(1) //
+				.extracting(Station::getName) //
+				.contains("Erfurt");
+	}
+
+	@Test
+	public void testSearchByNameMax(@InjectService(cardinality = 0) ServiceAware<StationSearch> siAware)
+			throws InterruptedException {
+
+		StationSearch stationSearch = siAware.waitForService(1000);
+		List<Station> result = stationSearch.searchStationByName("erfurt", 4);
+		assertThat(result) //
+				.hasSize(4) //
+				.extracting(Station::getId) //
+				.contains("10554", "N6357", "G409", "P0560");
+	}
+
+	@Test
+	public void testSearchNear(@InjectService(cardinality = 0) ServiceAware<StationSearch> siAware)
+			throws InterruptedException {
 
 		StationSearch stationSearch = siAware.waitForService(1000);
 		GeoPosition geoPosition = WeatherFactory.eINSTANCE.createGeoPosition();
 		geoPosition.setLatitude(50.9281717);
 		geoPosition.setLongitude(11.5879359);
-		geoPosition.setElevation((short)10);
+		geoPosition.setElevation((short) 10);
 		List<Station> result = stationSearch.searchStationNearLocation(geoPosition, 20000);
 		assertThat(result) //
-				.hasSize(5)//
+				.hasSize(5) //
 				.extracting(Station::getId) //
 				.contains("G407", "N5417", "N924", "N992", "P0514");
+	}
+
+	@Test
+	public void testSearchById(@InjectService(cardinality = 0) ServiceAware<StationSearch> siAware)
+			throws InterruptedException {
+
+		StationSearch stationSearch = siAware.waitForService(1000);
+		List<Station> result = stationSearch.searchStationsById("N992");
+		assertThat(result) //
+				.hasSize(1) //
+				.extracting(Station::getId) //
+				.contains("N992");
 	}
 
 }
