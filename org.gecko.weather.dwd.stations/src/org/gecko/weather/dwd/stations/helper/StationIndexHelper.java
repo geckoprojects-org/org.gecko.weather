@@ -47,6 +47,7 @@ public class StationIndexHelper {
 	public static final String STATION_LAT = "station_lat";
 	public static final String STATION_LON = "station_lon";
 
+	private StationIndexHelper() {}
 	
 	public static EObjectDocumentIndexObjectContext mapStationNew(Station station) {		
 		return mapStation(station, IndexActionType.ADD);
@@ -110,7 +111,7 @@ public class StationIndexHelper {
 	
 	private static Optional<Object> getValue(Document doc, String fieldName) {
 		IndexableField field = doc.getField(fieldName);
-		if (field != null && field instanceof StoredField) {
+		if (field instanceof StoredField) {
 			if (field.numericValue() != null) {
 				Number value = field.numericValue();
 				if (value instanceof Double) {

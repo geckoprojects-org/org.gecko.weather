@@ -105,7 +105,8 @@ public class StationSearchCommand {
 		List<Station> byLocation = stationSearch.searchStationNearLocation(position, meters);
 		System.out.println(String.format("- Found %s results: ", byLocation.size()));
 		byLocation.forEach(s -> {
-			String lat, lon = lat = lon = "n/a";
+			String lat = "n/a";
+			String lon = "n/a";
 			GeoPosition location = s.getLocation();
 			if (nonNull(location)) {
 				lat = Double.toString(location.getLatitude());

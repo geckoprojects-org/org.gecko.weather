@@ -41,7 +41,7 @@ public interface WeatherReportSearch {
 	 * @param stationId the station id, must not be <code>null</code>
 	 * @return the list of reports or an empty list
 	 */
-	<R extends WeatherReport> List<R> getReportsByStation(String stationId);
+	<R extends WeatherReport> List<R> getReportsByStation(String stationId, EClass type);
 	
 	/**
 	 * Returns all future reports for a given station, from now on
@@ -49,7 +49,7 @@ public interface WeatherReportSearch {
 	 * @param stationId the station id, must not be <code>null</code>
 	 * @return the list of reports or an empty list
 	 */
-	<R extends WeatherReport> List<R> getReportsByStationFromNow(String stationId);
+	<R extends WeatherReport> List<R> getReportsByStationFromNow(String stationId, EClass type);
 	
 	/**
 	 * Returns all future reports for a given station, from the given date on
@@ -58,7 +58,7 @@ public interface WeatherReportSearch {
 	 * @param startDate the start date, if <code>null</code>, the current date is taken
 	 * @return the list of reports or an empty list
 	 */
-	<R extends WeatherReport> List<R> getReportsByStationFromNow(String stationId, Date startDate);
+	<R extends WeatherReport> List<R> getReportsByStationFromNow(String stationId, Date startDate, EClass type);
 	
 	/**
 	 * Returns 2 reports around the given timestamp, the next before and the next after this timestamp

@@ -17,6 +17,8 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 
 import java.io.IOException;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
@@ -24,10 +26,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.LongRange;
+import org.apache.lucene.document.LongField;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause.Occur;
@@ -53,8 +53,10 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * This is a sample Search Service to retrieve the objects from the index
  */
-@Component
+@Component(service = WeatherReportSearch.class)
 public class WeatherReportSearchService implements WeatherReportSearch {
+
+	private static final Logger LOGGER = System.getLogger(WeatherReportSearchService.class.getName());
 
 	@Reference(target = "(id=dwd.forecast)")
 	private ComponentServiceObjects<IndexSearcher> searcherSO;
@@ -67,68 +69,62 @@ public class WeatherReportSearchService implements WeatherReportSearch {
 	@Reference
 	private WeatherFactory factory;
 
-	/* 
-	 * (non-Javadoc)
-	 * @see org.gecko.weather.dwd.fc.WeatherReportSearch#getReportById(java.lang.String)
-	 */
 	@Override
 	public <R extends WeatherReport> Optional<R> getReportById(String reportId) {
 		return cache.getReport(reportId);
 	}
 
-	/* 
-	 * (non-Javadoc)
-	 * @see org.gecko.weather.dwd.fc.WeatherReportSearch#getReportsByStation(java.lang.String)
-	 */
 	@Override
-	public <R extends WeatherReport> List<R> getReportsByStation(String stationId) {
-		// TODO Auto-generated method stub
-		return null;
+	public <R extends WeatherReport> List<R> getReportsByStation(String stationId, EClass type) {
+		requireNonNull(stationId, "Cannot search Reports without station id!");
+		if (isNull(type)) {
+			type = weatherPackage.getWeatherReport();
+		}
+		String typeUri = EcoreUtil.getURI(type).toString();
+		stationId = stationId.toLowerCase();
+		Query typeQuery = new TermQuery(new Term(ReportIndexHelper.REPORT_TYPE, typeUri));
+		Query stationQuery = new TermQuery(new Term(ReportIndexHelper.STATION_ID, stationId));
+		Query query = new BooleanQuery.Builder().
+				add(typeQuery, Occur.MUST).
+				add(stationQuery, Occur.MUST).build();
+		return executeTermSearch(query, 5);
 	}
 
-	/* 
-	 * (non-Javadoc)
-	 * @see org.gecko.weather.dwd.fc.WeatherReportSearch#getReportsByStationFromNow(java.lang.String)
-	 */
 	@Override
-	public <R extends WeatherReport> List<R> getReportsByStationFromNow(String stationId) {
-		// TODO Auto-generated method stub
-		return null;
+	public <R extends WeatherReport> List<R> getReportsByStationFromNow(String stationId, EClass type) {
+		return getReportsByStationFromNow(stationId, new Date(), type);
 	}
 
-	/* 
-	 * (non-Javadoc)
-	 * @see org.gecko.weather.dwd.fc.WeatherReportSearch#getReportsByStationFromNow(java.lang.String, java.util.Date)
-	 */
 	@Override
-	public <R extends WeatherReport> List<R> getReportsByStationFromNow(String stationId, Date startDate) {
-		// TODO Auto-generated method stub
-		return null;
+	public <R extends WeatherReport> List<R> getReportsByStationFromNow(String stationId, Date startDate, EClass type) {
+		requireNonNull(stationId, "Cannot search Reports without station id!");
+		if (isNull(type)) {
+			type = weatherPackage.getWeatherReport();
+		}
+		String typeUri = EcoreUtil.getURI(type).toString();
+		stationId = stationId.toLowerCase();
+		Query typeQuery = new TermQuery(new Term(ReportIndexHelper.REPORT_TYPE, typeUri));
+		Query stationQuery = new TermQuery(new Term(ReportIndexHelper.STATION_ID, stationId));
+		Query rangeQuery = LongField.newRangeQuery(ReportIndexHelper.REPORT_TIMESTAMP, startDate.getTime(), Long.MAX_VALUE);
+		Query query = new BooleanQuery.Builder().
+				add(typeQuery, Occur.MUST).
+				add(rangeQuery, Occur.MUST).
+				add(stationQuery, Occur.MUST).
+				build();
+		return executeTermSearch(query, 5);
 	}
 
-	/* 
-	 * (non-Javadoc)
-	 * @see org.gecko.weather.dwd.fc.WeatherReportSearch#getReportsByTime(java.util.Date, java.lang.String, org.eclipse.emf.ecore.EClass)
-	 */
 	@Override
 	public <R extends WeatherReport> List<R> getReportsByTime(Date timestamp, String stationId, EClass type) {
 		return searchReportsForTime(stationId, timestamp, type);
 	}
 
-	/* 
-	 * (non-Javadoc)
-	 * @see org.gecko.weather.dwd.fc.WeatherReportSearch#getReportsByTimeRange(java.util.Date, java.util.Date, java.lang.String, org.eclipse.emf.ecore.EClass)
-	 */
 	@Override
 	public <R extends WeatherReport> List<R> getReportsByTimeRange(Date fromTimestamp, Date toTimestamp,
 			String stationId, EClass type) {
 		return getReportsByTimeRange(fromTimestamp, toTimestamp, stationId, type, 10);
 	}
 
-	/* 
-	 * (non-Javadoc)
-	 * @see org.gecko.weather.dwd.fc.WeatherReportSearch#getReportsByTimeRange(java.util.Date, java.util.Date, java.lang.String, org.eclipse.emf.ecore.EClass, int)
-	 */
 	@Override
 	public <R extends WeatherReport> List<R> getReportsByTimeRange(Date fromTimestamp, Date toTimestamp,
 			String stationId, EClass type, int maxResults) {
@@ -184,7 +180,7 @@ public class WeatherReportSearchService implements WeatherReportSearch {
 		stationId = stationId.toLowerCase();
 		Query typeQuery = new TermQuery(new Term(ReportIndexHelper.REPORT_TYPE, typeUri));
 		Query stationQuery = new TermQuery(new Term(ReportIndexHelper.STATION_ID, stationId));
-		Query rangeQuery = LongRange.newWithinQuery(ReportIndexHelper.REPORT_TIMESTAMP_SORT, new long[] {startTime.getTime()}, new long[] {endTime.getTime()});
+		Query rangeQuery = LongField.newRangeQuery(ReportIndexHelper.REPORT_TIMESTAMP, startTime.getTime(), endTime.getTime());
 		Query query = new BooleanQuery.Builder().
 				add(typeQuery, Occur.MUST).
 				add(stationQuery, Occur.MUST).
@@ -212,20 +208,17 @@ public class WeatherReportSearchService implements WeatherReportSearch {
 					stream().
 					map(sd -> sd.doc).
 					map(id -> {
-						Document d;
 						try {
-							d = indexReader.storedFields().document(id);
-							return d;
+							return indexReader.storedFields().document(id);
 						} catch (IOException e) {
 							return null;
 						}
 					}).
 					filter(Objects::nonNull).
 					map(d->(R)ReportIndexHelper.mapDocument(d, resourceSet)).
-					collect(Collectors.toList());
+					toList();
 		} catch (Exception e) {
-			System.err.println("Exception while search for Station with query " + query);
-			e.printStackTrace();
+			LOGGER.log(Level.ERROR, "Exception while search for Station with query {0}", query, e);
 			return Collections.emptyList();
 		} finally {
 			searcherSO.ungetService(searcher);

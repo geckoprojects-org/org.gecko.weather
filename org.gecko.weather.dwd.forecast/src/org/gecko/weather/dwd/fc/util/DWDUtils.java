@@ -22,7 +22,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -32,6 +31,11 @@ import org.gecko.weather.model.weather.MOSMIXSWeatherReport;
 import org.gecko.weather.model.weather.Measurement;
 import org.gecko.weather.model.weather.WeatherFactory;
 import org.gecko.weather.model.weather.WeatherPackage;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
+import org.osgi.service.metatype.annotations.Designate;
+import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 
 import de.dwd.cdc.metelements.MetDefRoot;
 import de.dwd.cdc.metelements.MetElementDefinitionType;
@@ -43,10 +47,11 @@ import net.opengis.kml.KmlType;
  * @author Mark Hoffmann
  * @since 30.08.2024
  */
+@Designate(ocd = DWDUtils.DWDConfig.class)
+@Component(scope = ServiceScope.SINGLETON ,service = DWDUtils.class)
 public class DWDUtils {
 
 	public static final String URI_CDC_DWD = "https://opendata.dwd.de/climate_environment/CDC/";
-	public static final String URL_BASE_DWD_WEATHER = "https://opendata.dwd.de/weather/";
 	/*
 	 * https://www.dwd.de/DE/leistungen/met_verfahren_ptp_dmo/met_verfahren_ptp_dmo.html
 	 * Forecasts with more information in zipped kml
@@ -73,7 +78,19 @@ public class DWDUtils {
 	// fetch data earliest 
 	public static final int DMO_NIGHT_HOUR = 4;
 	public static final int DMO_NOON_HOUR = 16;
+	private String dwdBaseUrl;
 
+	@ObjectClassDefinition
+	@interface DWDConfig {
+		String dwdBaseUrl() default "https://opendata.dwd.de/weather/";
+	}
+	
+	@Activate
+	public void activate(DWDConfig config) {
+		dwdBaseUrl = config.dwdBaseUrl();
+	}
+	
+	
 	/** 
 	 * Validate, because we only have 4 values from the reference date:
 	 * if we are 0000 then we have two day before 1200 values
@@ -116,19 +133,19 @@ public class DWDUtils {
 	 * @param large - set to <code>true</code> to get the large data set
 	 */
 	public static String buildDMOForecastFile(Calendar fetchDate, boolean large) {
-		return buildDMOForecastFile(fetchDate, large, GregorianCalendar.getInstance());
+		return buildDMOForecastFile(fetchDate, large, Calendar.getInstance());
 	}
 
-	public static String buildDMOForecastUrl(Calendar fetchDate, boolean large) {
-		return URL_BASE_DWD_WEATHER + URI_FORECAST_DMO_ALL_STATION + buildDMOForecastFile(fetchDate, large);
+	public String buildDMOForecastUrl(Calendar fetchDate, boolean large) {
+		return dwdBaseUrl + URI_FORECAST_DMO_ALL_STATION + buildDMOForecastFile(fetchDate, large);
 	}
 
-	public static String buildMOSMIXForecastUrl() {
-		return URL_BASE_DWD_WEATHER + URI_FORECAST_MOSMIX_ALL_STATION + MOSMIX_ALL_LATEST_FILENAME;
+	public String buildMOSMIXForecastUrl() {
+		return dwdBaseUrl + URI_FORECAST_MOSMIX_ALL_STATION + MOSMIX_ALL_LATEST_FILENAME;
 	}
 	
-	public static String buildMOSMIXSingleForecastUrl(String stationId) {
-		return URL_BASE_DWD_WEATHER + String.format(URI_FORECAST_MOSMIX_SINGLE_STATION, stationId) + String.format(MOSMIX_SINGLE_LATEST_FILENAME, stationId);
+	public String buildMOSMIXSingleForecastUrl(String stationId) {
+		return dwdBaseUrl + String.format(URI_FORECAST_MOSMIX_SINGLE_STATION, stationId) + String.format(MOSMIX_SINGLE_LATEST_FILENAME, stationId);
 	}
 
 	public static Calendar normalizeToFullHours(Calendar date) {
@@ -582,10 +599,9 @@ public class DWDUtils {
 			return;
 //			throw new IllegalArgumentException("Unexpected value: " + measurementId);
 		}
-		if (nonNull(attr)) {
-			if (value.getClass() == attr.getEAttributeType().getInstanceClass()) {
-				report.eSet(attr, value);
-			}
+		if (nonNull(attr) && value.getClass() == attr.getEAttributeType().getInstanceClass()) {
+			report.eSet(attr, value);
 		}
+		
 	}
 }

@@ -32,7 +32,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Mark Hoffmann
  * @since 15.09.2024
  */
-@Component(name = "SimpleStorage", scope = ServiceScope.SINGLETON, configurationPolicy = ConfigurationPolicy.REQUIRE)
+@Component(name = "SimpleStorage", scope = ServiceScope.SINGLETON, configurationPolicy = ConfigurationPolicy.OPTIONAL)
 public class SimpleWeatherReportStorage implements WeatherReportStorageHandler {
 
 	private final Map<String, WeatherReport> cache = new ConcurrentHashMap<>();

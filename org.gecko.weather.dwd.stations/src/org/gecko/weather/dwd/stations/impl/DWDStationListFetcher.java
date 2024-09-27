@@ -59,7 +59,7 @@ import biz.aQute.scheduler.api.CronJob;
  */
 @CronExpression(name = "DWD-Stations", cron = Constants.CRON_EXPRESSION_REBOOT)
 @Designate(ocd = StationConfig.class)
-@Component(immediate = true, configurationPid = "DWDStationFetcher", configurationPolicy = ConfigurationPolicy.OPTIONAL)
+@Component(immediate = true, name = "DWDStationFetcher", configurationPolicy = ConfigurationPolicy.OPTIONAL)
 public class DWDStationListFetcher extends DWDFetcher implements CronJob {
 
 	private static final Logger LOGGER = System.getLogger(DWDStationListFetcher.class.getName());

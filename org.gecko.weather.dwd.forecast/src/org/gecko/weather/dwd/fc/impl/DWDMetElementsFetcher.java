@@ -14,6 +14,8 @@
 package org.gecko.weather.dwd.fc.impl;
 
 import java.io.InputStream;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -30,15 +32,16 @@ import de.dwd.cdc.metelements.MetElementsPackage;
 
 /**
  * Fetches the MetElementDefinitions
+ * 
  * @author mark
  * @since 05.09.2024
  */
 @CronExpression(name = "Meterological-Definitions", cron = Constants.CRON_EXPRESSION_REBOOT)
 //@Component(immediate = true)
 public class DWDMetElementsFetcher extends DWDEMFFetcher<MetElementDefinitionType> implements CronJob {
-	
-	private static final String MET_URL = DWDUtils.URL_BASE_DWD_WEATHER + "lib/MetElementDefinition.xml";
-	
+	private static final Logger LOGGER = System.getLogger(DWDMetElementsFetcher.class.getName());
+
+	private static final String MET_URL = "https://opendata.dwd.de/weather/lib/MetElementDefinition.xml";
 	@Reference
 	private MetElementsPackage metDefPackage;
 	@Reference
@@ -48,10 +51,9 @@ public class DWDMetElementsFetcher extends DWDEMFFetcher<MetElementDefinitionTyp
 	public void run() throws Exception {
 		InputStream data = doDownload();
 		MetElementDefinitionType defType = doLoad(data);
-		for (MetElementType type: defType.getMetElement()) {
-			System.out.println("Name: " + type.getShortName());
-			System.out.println("Description: " + type.getDescription());
-			System.out.println("Unit: " + type.getUnitOfMeasurement());
+		for (MetElementType type : defType.getMetElement()) {
+			LOGGER.log(Level.INFO, "Name: {0}\nDescription: {1}\nUnit: {2}", type.getShortName(), type.getDescription(),
+					type.getUnitOfMeasurement());
 		}
 	}
 
@@ -74,7 +76,7 @@ public class DWDMetElementsFetcher extends DWDEMFFetcher<MetElementDefinitionTyp
 	protected String getName() {
 		return "Met-Definition";
 	}
-	
+
 	@Override
 	protected MetElementDefinitionType get(EObject content) {
 		return DWDUtils.getMetDefinitions(content);

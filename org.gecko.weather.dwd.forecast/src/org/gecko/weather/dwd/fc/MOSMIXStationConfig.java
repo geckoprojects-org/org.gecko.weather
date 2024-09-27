@@ -13,11 +13,14 @@
  */
 package org.gecko.weather.dwd.fc;
 
+import org.osgi.service.metatype.annotations.ObjectClassDefinition;
+
 /**
  * COnfiguration fir the MOSMIX Station Fetcher
  * @author Mark Hoffmann
  * @since 09.09.2024
  */
+@ObjectClassDefinition(name = "MOSMIX Station Configuration")
 public @interface MOSMIXStationConfig {
 	
 	String stationId() default "NONE";

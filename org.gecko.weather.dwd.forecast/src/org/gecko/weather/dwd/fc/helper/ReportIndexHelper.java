@@ -127,7 +127,7 @@ public class ReportIndexHelper {
 	public static WeatherReport mapDocument(Document document, ResourceSet rs) {
 		final WeatherReport r = createInstance(document, rs);
 		getStringValue(document, REPORT_ID).ifPresent(r::setId);
-		getValue(document, REPORT_TIMESTAMP).map(Long.class::cast).ifPresent(ts->new Date(ts));
+		getValue(document, REPORT_TIMESTAMP).map(Long.class::cast).ifPresent(ts->r.setTimestamp(new Date(ts)));
 		Station s= WeatherFactory.eINSTANCE.createStation();
 		r.setStation(s);
 		getStringValue(document, STATION_ID).ifPresent(s::setId);
@@ -160,6 +160,8 @@ public class ReportIndexHelper {
 					return Optional.of((double)value);
 				} else if (value instanceof Float) {
 					return Optional.of((float)value);
+				} else if (value instanceof Long) {
+					return Optional.of((long)value);
 				} else {
 					return Optional.of((int)value);
 				}

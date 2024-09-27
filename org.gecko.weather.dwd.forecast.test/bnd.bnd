@@ -1,0 +1,22 @@
+Test-Cases: ${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.platform.commons.annotation.Testable;CONCRETE}
+
+-library: enableOSGi-Test,\
+	enable-emf
+
+# sets the usually required buildpath using the bnd library, you can extend it with the normal -buildpath to your liking
+-buildpath: \
+	org.osgi.framework;version=latest,\
+	org.gecko.weather.dwd.forecast;version=snapshot,\
+	org.osgi.service.cm,\
+	org.osgi.test.junit5.cm,\
+	biz.aQute.api.scheduler,\
+	org.gecko.emf.search,\
+	org.gecko.search.document,\
+	org.gecko.weather.model;version=snapshot
+	
+Private-Package: org.gecko.weather.dwd.forecast.test
+
+Bundle-Version: 1.0.0.SNAPSHOT
+
+# Sometimes without DynamicImport Mockito will not find certain classes
+#DynamicImport-Package: *
