@@ -44,6 +44,8 @@ header:
     - '**/*.csv'
     - '**/*.kml'
     - '**/*.wfs'
+    - '**/*.orig'
+    - '**/*.bak'
     - '**/.classpath'
     - 'LICENSE'
     - 'Jenkinsfile'
