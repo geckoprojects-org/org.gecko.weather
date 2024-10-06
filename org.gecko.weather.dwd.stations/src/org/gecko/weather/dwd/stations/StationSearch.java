@@ -16,7 +16,7 @@ package org.gecko.weather.dwd.stations;
 import java.util.List;
 
 import org.gecko.weather.model.weather.GeoPosition;
-import org.gecko.weather.model.weather.Station;
+import org.gecko.weather.model.weather.WeatherStation;
 
 /**
  * Station search service to search for DWD weather stations around a location
@@ -33,7 +33,7 @@ public interface StationSearch {
 	 * @param exactMatch <code>true</code>, if the given station name should match exactly as given
 	 * @return the matched documents
 	 */
-	public List<Station> searchStationByName(String stationName, boolean exactMatch);
+	public List<WeatherStation> searchStationByName(String stationName, boolean exactMatch);
 	
 	/**
 	 * Executes a search by station name
@@ -41,14 +41,14 @@ public interface StationSearch {
 	 * @param maxResults number of max results
 	 * @return the matched documents
 	 */
-	public List<Station> searchStationByName(String stationName, int maxResults);
+	public List<WeatherStation> searchStationByName(String stationName, int maxResults);
 	
 	/**
 	 * Executes a search by station id
 	 * @param id the station id to search for
 	 * @return the matched documents
 	 */
-	public List<Station> searchStationsById(String id);
+	public List<WeatherStation> searchStationsById(String id);
 	
 	/**
 	 * Search for stations near the given location within a given radius
@@ -56,7 +56,7 @@ public interface StationSearch {
 	 * @param radius the radius in meter around this location to do a nearby search
 	 * @return the matched documents
 	 */
-	public List<Station>searchStationNearLocation(GeoPosition location, int radius);
+	public List<WeatherStation>searchStationNearLocation(GeoPosition location, int radius);
 	
 	/**
 	 * Search for stations near the given location within a given radius
@@ -65,6 +65,6 @@ public interface StationSearch {
 	 * @param maxResults the maximum number of results
 	 * @return the matched documents
 	 */
-	public List<Station>searchStationNearLocation(GeoPosition location, int radius, int maxResults);
+	public List<WeatherStation>searchStationNearLocation(GeoPosition location, int radius, int maxResults);
 
 }

@@ -24,6 +24,7 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 public @interface MOSMIXStationConfig {
 	
 	String stationId() default "NONE";
+	String name() default "NONE";
 	double latitude();
 	double longitude();
 

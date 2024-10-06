@@ -25,12 +25,12 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.FeatureMapUtil.FeatureEList;
-import org.gecko.weather.dwd.fc.fetcher.DWDEMFFetcher;
-import org.gecko.weather.dwd.fc.util.DWDUtils;
+import org.gecko.weather.api.fetcher.DWDEMFFetcher;
+import org.gecko.weather.api.util.DWDUtils;
 import org.gecko.weather.model.weather.GeoPosition;
 import org.gecko.weather.model.weather.MOSMIXSWeatherReport;
-import org.gecko.weather.model.weather.Station;
 import org.gecko.weather.model.weather.WeatherFactory;
+import org.gecko.weather.model.weather.WeatherStation;
 import org.osgi.service.component.annotations.Reference;
 
 import biz.aQute.scheduler.api.Constants;
@@ -104,7 +104,7 @@ public class DWDMOSMIXForecastFetcher extends DWDEMFFetcher<KmlType> implements 
 		FeatureEList<PlacemarkType> placemarkTypeList = (FeatureEList<PlacemarkType>) documentType.getAbstractFeatureGroupGroup().get(kmlPackage.getDocumentRoot_Placemark(), true);
 		PlacemarkType placemarkType = (PlacemarkType) placemarkTypeList.get(0); 
 		System.out.println("MOSMIX Description: " + placemarkType.getDescription() + " (" + placemarkType.getName() + ")");
-		Station s = weatherFactory.createStation();
+		WeatherStation s = weatherFactory.createWeatherStation();
 		s.setName(placemarkType.getDescription());
 		s.setId(placemarkType.getName());
 		PointType pointType = (PointType) placemarkType.getAbstractGeometryGroupGroup().get(kmlPackage.getDocumentRoot_Point(), true);
@@ -126,6 +126,7 @@ public class DWDMOSMIXForecastFetcher extends DWDEMFFetcher<KmlType> implements 
 			for (int i = 0; i < forecastTimeSteps.size(); i++) {
 				MOSMIXSWeatherReport report = weatherFactory.createMOSMIXSWeatherReport();
 				report.setStation(s);
+				report.setWeatherStation(s);
 				report.setTimestamp(forecastTimeSteps.get(i).toGregorianCalendar().getTime());
 				reports[i] = report;
 			}
@@ -155,7 +156,7 @@ public class DWDMOSMIXForecastFetcher extends DWDEMFFetcher<KmlType> implements 
 		System.out.println("MOSMIX Forecast: " + reports.length);
 		for (int i = 0; i < reports.length; i++) {
 			MOSMIXSWeatherReport r = reports[i];
-			System.out.println("R " + r.getStation().getId() + " - " + r.getTimestamp().toString() + " wind " + r.getWindDirection() + " grad " + r.getWindSpeed() + " m/s");
+			System.out.println("R " + r.getWeatherStation().getId() + " - " + r.getTimestamp().toString() + " wind " + r.getWindDirection() + " grad " + r.getWindSpeed() + " m/s");
 		}
 	}
 

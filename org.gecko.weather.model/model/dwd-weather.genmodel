@@ -9,8 +9,6 @@
   <genPackages prefix="Weather" basePackage="org.gecko.weather.model" resource="XMI"
       disposableProviderFactory="true" ecorePackage="dwd-weather.ecore#/">
     <genClasses ecoreClass="dwd-weather.ecore#//Station">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//Station/id"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//Station/icaoCode"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//Station/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dwd-weather.ecore#//Station/location"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//Station/country"/>
@@ -19,6 +17,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//WeatherReport/id"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//WeatherReport/timestamp"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dwd-weather.ecore#//WeatherReport/station"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dwd-weather.ecore#//WeatherReport/astrotime"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dwd-weather.ecore#//WeatherReport/weatherStation"/>
     </genClasses>
     <genClasses ecoreClass="dwd-weather.ecore#//Measurement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//Measurement/unit"/>
@@ -98,6 +98,16 @@
     </genClasses>
     <genClasses ecoreClass="dwd-weather.ecore#//MeasurementWeatherReport">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dwd-weather.ecore#//MeasurementWeatherReport/measurements"/>
+    </genClasses>
+    <genClasses ecoreClass="dwd-weather.ecore#//Astrotime">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//Astrotime/sunset"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//Astrotime/sunrise"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//Astrotime/sunsetTwilight"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//Astrotime/sunriseTwilight"/>
+    </genClasses>
+    <genClasses ecoreClass="dwd-weather.ecore#//WeatherStation">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//WeatherStation/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//WeatherStation/icaoCode"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

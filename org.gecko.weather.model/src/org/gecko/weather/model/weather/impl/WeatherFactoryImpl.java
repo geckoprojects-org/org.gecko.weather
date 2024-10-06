@@ -80,6 +80,8 @@ public class WeatherFactoryImpl extends EFactoryImpl implements WeatherFactory {
 			case WeatherPackage.UV_RADIATION_MEASUREMENT: return createUVRadiationMeasurement();
 			case WeatherPackage.MOSMIXS_WEATHER_REPORT: return createMOSMIXSWeatherReport();
 			case WeatherPackage.MEASUREMENT_WEATHER_REPORT: return createMeasurementWeatherReport();
+			case WeatherPackage.ASTROTIME: return createAstrotime();
+			case WeatherPackage.WEATHER_STATION: return createWeatherStation();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -226,6 +228,28 @@ public class WeatherFactoryImpl extends EFactoryImpl implements WeatherFactory {
 	public MeasurementWeatherReport createMeasurementWeatherReport() {
 		MeasurementWeatherReportImpl measurementWeatherReport = new MeasurementWeatherReportImpl();
 		return measurementWeatherReport;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Astrotime createAstrotime() {
+		AstrotimeImpl astrotime = new AstrotimeImpl();
+		return astrotime;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public WeatherStation createWeatherStation() {
+		WeatherStationImpl weatherStation = new WeatherStationImpl();
+		return weatherStation;
 	}
 
 	/**

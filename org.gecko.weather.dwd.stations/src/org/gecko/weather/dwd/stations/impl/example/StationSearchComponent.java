@@ -17,8 +17,8 @@ import java.util.List;
 
 import org.gecko.weather.dwd.stations.StationSearch;
 import org.gecko.weather.model.weather.GeoPosition;
-import org.gecko.weather.model.weather.Station;
 import org.gecko.weather.model.weather.WeatherFactory;
+import org.gecko.weather.model.weather.WeatherStation;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Reference;
@@ -44,7 +44,7 @@ public class StationSearchComponent {
 	public void activate(BundleContext ctx) {
 		
 		System.out.println("Search Station 'Leumnitz' ...");
-		List<Station> byName = sss.searchStationByName("Leumnitz", false);
+		List<WeatherStation> byName = sss.searchStationByName("Leumnitz", false);
 		byName.forEach(s->{
 			System.out.println("[" + s.getId() + "] " + s.getName() + " [" + s.getLocation().getLatitude() + ", " + s.getLocation().getLongitude() + "]");
 		});
@@ -62,7 +62,7 @@ public class StationSearchComponent {
 		GeoPosition location = weatherFactory.createGeoPosition();
 		location.setLatitude(50.892690);
 		location.setLongitude(12.267132);
-		List<Station> byLocation = sss.searchStationNearLocation(location, 30000);
+		List<WeatherStation> byLocation = sss.searchStationNearLocation(location, 30000);
 		byLocation.forEach(s->{
 			System.out.println("[" + s.getId() + "] " + s.getName() + " [" + s.getLocation().getLatitude() + ", " + s.getLocation().getLongitude() + "]");
 		});

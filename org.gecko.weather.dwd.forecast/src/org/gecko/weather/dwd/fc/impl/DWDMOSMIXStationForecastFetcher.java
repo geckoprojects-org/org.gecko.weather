@@ -28,14 +28,15 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.FeatureMapUtil.FeatureEList;
+import org.gecko.weather.api.fetcher.DWDEMFFetcher;
+import org.gecko.weather.api.util.DWDUtils;
 import org.gecko.weather.dwd.fc.MOSMIXStationConfig;
 import org.gecko.weather.dwd.fc.WeatherReportIndex;
-import org.gecko.weather.dwd.fc.fetcher.DWDEMFFetcher;
-import org.gecko.weather.dwd.fc.util.DWDUtils;
 import org.gecko.weather.model.weather.GeoPosition;
 import org.gecko.weather.model.weather.MOSMIXSWeatherReport;
 import org.gecko.weather.model.weather.Station;
 import org.gecko.weather.model.weather.WeatherFactory;
+import org.gecko.weather.model.weather.WeatherStation;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
@@ -89,10 +90,21 @@ public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> impl
 	@Reference
 	private DWDUtils dwdUtils;
 	private MOSMIXStationConfig config;
+	private Station station;
 
 	@Activate
 	public void activate(MOSMIXStationConfig config) {
 		this.config = config;
+		if (!"NONE".equals(config.name())) {
+			station = weatherFactory.createStation();
+			station.setName(config.name());
+			if (config.latitude() != 0 && config.longitude() != 0) {
+				GeoPosition pos = weatherFactory.createGeoPosition();
+				pos.setLatitude(config.latitude());
+				pos.setLongitude(config.longitude());
+				station.setLocation(pos);
+			}
+		}
 	}
 
 	@Modified
@@ -137,9 +149,12 @@ public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> impl
 		PlacemarkType placemarkType = placemarkTypeList.get(0);
 		LOGGER.log(Level.DEBUG,
 				"MOSMIX Description: " + placemarkType.getDescription() + " (" + placemarkType.getName() + ")");
-		Station s = weatherFactory.createStation();
-		s.setName(placemarkType.getDescription());
-		s.setId(placemarkType.getName());
+		WeatherStation ws = weatherFactory.createWeatherStation();
+		ws.setName(placemarkType.getDescription());
+		ws.setId(placemarkType.getName());
+		if (Objects.isNull(station)) {
+			station = ws;
+		}
 		PointType pointType = (PointType) placemarkType.getAbstractGeometryGroupGroup()
 				.get(kmlPackage.getDocumentRoot_Point(), true);
 		if (Objects.nonNull(pointType)) {
@@ -148,7 +163,7 @@ public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> impl
 			location.setLatitude(Double.parseDouble(loc[0]));
 			location.setLongitude(Double.parseDouble(loc[1]));
 			location.setElevation((short) Double.parseDouble(loc[2]));
-			s.setLocation(location);
+			ws.setLocation(location);
 			LOGGER.log(Level.DEBUG, "MOSMIX Coords: " + pointType.getCoordinates().get(0));
 		}
 		ExtendedDataType extendedData = documentType.getExtendedData();
@@ -161,7 +176,8 @@ public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> impl
 			reports = new MOSMIXSWeatherReport[forecastTimeSteps.size()];
 			for (int i = 0; i < forecastTimeSteps.size(); i++) {
 				MOSMIXSWeatherReport report = weatherFactory.createMOSMIXSWeatherReport();
-				report.setStation(s);
+				report.setStation(station);
+				report.setWeatherStation(ws);
 				XMLGregorianCalendar xmlC = forecastTimeSteps.get(i);
 				GregorianCalendar c = xmlC.toGregorianCalendar();
 				report.setTimestamp(c.getTime());
@@ -174,7 +190,7 @@ public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> impl
 		if (Objects.nonNull(forecasts)) {
 			int cnt = 0;
 			for (ForecastType fc : forecasts) {
-//			forecasts.forEach(f->{
+				//			forecasts.forEach(f->{
 				for (int i = 0; i < fc.getValue().getValue().size(); i++) {
 					MOSMIXSWeatherReport report = reports[i];
 					Object value = fc.getValue().getValue().get(i);
@@ -189,7 +205,7 @@ public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> impl
 				}
 
 			}
-//			});
+			//			});
 		}
 		LOGGER.log(Level.DEBUG, "Indexing MOSMIX Forecast: ...");
 		for (int i = 0; i < reports.length; i++) {

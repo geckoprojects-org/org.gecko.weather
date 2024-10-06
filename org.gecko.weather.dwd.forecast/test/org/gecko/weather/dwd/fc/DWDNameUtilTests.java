@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Calendar;
 
-import org.gecko.weather.dwd.fc.util.DWDUtils;
+import org.gecko.weather.api.util.DWDUtils;
 import org.junit.jupiter.api.Test;
 
 /**

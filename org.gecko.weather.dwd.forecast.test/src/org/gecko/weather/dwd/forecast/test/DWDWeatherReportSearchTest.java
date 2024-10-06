@@ -19,9 +19,9 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.gecko.weather.dwd.fc.WeatherReportSearch;
-import org.gecko.weather.model.weather.Station;
 import org.gecko.weather.model.weather.WeatherPackage;
 import org.gecko.weather.model.weather.WeatherReport;
+import org.gecko.weather.model.weather.WeatherStation;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,31 +42,22 @@ import biz.aQute.scheduler.api.CronJob;
 @ExtendWith(ConfigurationExtension.class)
 @ExtendWith(BundleContextExtension.class)
 @WithFactoryConfiguration(factoryPid = "SimpleStorage~dwd-report", location = "?", name = "storage", properties = {})
-@WithFactoryConfiguration(factoryPid = "EMFLuceneIndex", location = "?", name = "station-index", properties = {
-		@Property(key = "id", value = "dwd.station"), @Property(key = "directory.type", value = "ByteBuffer") })
 @WithFactoryConfiguration(factoryPid = "EMFLuceneIndex", location = "?", name = "forecast-index", properties = {
 		@Property(key = "id", value = "dwd.forecast"), @Property(key = "directory.type", value = "ByteBuffer") })
-@WithFactoryConfiguration(factoryPid = "DWDStationFetcher", location = "?", name = "station", properties = {
-		@Property(key = "stationMosmixUrl", value = "file:data/mosmix_stationskatalog.csv"),
-		@Property(key = "stationUrl", value = "file:data/stations_list_CLIMAT_data.csv") })
 @WithFactoryConfiguration(factoryPid = "DWD-MOSMIX-Station", location = "?", name = "10554", properties = {
 		@Property(key = "stationId", value = "10554"), @Property(key = "latitude", value = "0.0"),
 		@Property(key = "longitude", value = "0.0") })
 @WithConfiguration(pid = "org.gecko.weather.dwd.fc.util.DWDUtils", properties = {
-		@Property(key = "dwdBaseUrl", value = "file:data/") })
+		@Property(key = "dwdBaseUrl", value = "data/") })
 public class DWDWeatherReportSearchTest {
 
 	@BeforeAll
 	public static void beforeAll(
-			@InjectService(cardinality = 0, filter = "(component.name=DWDStationFetcher)") ServiceAware<CronJob> stationAware,
 			@InjectService(cardinality = 0, filter = "(component.name=DWD-MOSMIX-Station)") ServiceAware<CronJob> mosAware)
 			throws Exception {
-		CronJob fetcher = stationAware.waitForService(1000);
-		assertThat(fetcher).isNotNull();
 		CronJob mos = mosAware.waitForService(1000);
 		assertThat(mos).isNotNull();
 
-		fetcher.run();
 		mos.run();
 	}
 
@@ -79,8 +70,8 @@ public class DWDWeatherReportSearchTest {
 				WeatherPackage.eINSTANCE.getMOSMIXSWeatherReport());
 		assertThat(result) //
 				.hasSize(5) //
-				.extracting(WeatherReport::getStation) //
-				.extracting(Station::getId) //
+				.extracting(WeatherReport::getWeatherStation) //
+				.extracting(WeatherStation::getId) //
 				.contains("10554");
 	}
 

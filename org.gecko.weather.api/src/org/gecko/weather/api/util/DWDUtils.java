@@ -11,7 +11,7 @@
  * Contributors:
  *     Data In Motion - initial API and implementation
  */
-package org.gecko.weather.dwd.fc.util;
+package org.gecko.weather.api.util;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;

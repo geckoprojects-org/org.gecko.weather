@@ -86,12 +86,12 @@ public interface GeoPosition extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Elevation</em>' attribute.
-	 * @see #setElevation(short)
+	 * @see #setElevation(int)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getGeoPosition_Elevation()
 	 * @model required="true"
 	 * @generated
 	 */
-	short getElevation();
+	int getElevation();
 
 	/**
 	 * Sets the value of the '{@link org.gecko.weather.model.weather.GeoPosition#getElevation <em>Elevation</em>}' attribute.
@@ -101,6 +101,6 @@ public interface GeoPosition extends EObject {
 	 * @see #getElevation()
 	 * @generated
 	 */
-	void setElevation(short value);
+	void setElevation(int value);
 
 } // GeoPosition

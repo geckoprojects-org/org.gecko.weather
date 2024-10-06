@@ -13,4 +13,4 @@
  */
 @org.osgi.annotation.bundle.Export
 @org.osgi.annotation.versioning.Version("1.0.0")
-package org.gecko.weather.dwd.fc.fetcher;
+package org.gecko.weather.api.util;

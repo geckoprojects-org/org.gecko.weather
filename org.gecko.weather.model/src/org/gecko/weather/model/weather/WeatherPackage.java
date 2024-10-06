@@ -84,31 +84,13 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	int STATION = 0;
 
 	/**
-	 * The feature id for the '<em><b>Id</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int STATION__ID = 0;
-
-	/**
-	 * The feature id for the '<em><b>Icao Code</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int STATION__ICAO_CODE = 1;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int STATION__NAME = 2;
+	int STATION__NAME = 0;
 
 	/**
 	 * The feature id for the '<em><b>Location</b></em>' containment reference.
@@ -117,7 +99,7 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int STATION__LOCATION = 3;
+	int STATION__LOCATION = 1;
 
 	/**
 	 * The feature id for the '<em><b>Country</b></em>' attribute.
@@ -126,7 +108,7 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int STATION__COUNTRY = 4;
+	int STATION__COUNTRY = 2;
 
 	/**
 	 * The number of structural features of the '<em>Station</em>' class.
@@ -135,7 +117,7 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int STATION_FEATURE_COUNT = 5;
+	int STATION_FEATURE_COUNT = 3;
 
 	/**
 	 * The number of operations of the '<em>Station</em>' class.
@@ -175,7 +157,7 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	int WEATHER_REPORT__TIMESTAMP = 1;
 
 	/**
-	 * The feature id for the '<em><b>Station</b></em>' reference.
+	 * The feature id for the '<em><b>Station</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -184,13 +166,31 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	int WEATHER_REPORT__STATION = 2;
 
 	/**
+	 * The feature id for the '<em><b>Astrotime</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WEATHER_REPORT__ASTROTIME = 3;
+
+	/**
+	 * The feature id for the '<em><b>Weather Station</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WEATHER_REPORT__WEATHER_STATION = 4;
+
+	/**
 	 * The number of structural features of the '<em>Report</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int WEATHER_REPORT_FEATURE_COUNT = 3;
+	int WEATHER_REPORT_FEATURE_COUNT = 5;
 
 	/**
 	 * The number of operations of the '<em>Report</em>' class.
@@ -851,13 +851,31 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	int MOSMIXS_WEATHER_REPORT__TIMESTAMP = WEATHER_REPORT__TIMESTAMP;
 
 	/**
-	 * The feature id for the '<em><b>Station</b></em>' reference.
+	 * The feature id for the '<em><b>Station</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int MOSMIXS_WEATHER_REPORT__STATION = WEATHER_REPORT__STATION;
+
+	/**
+	 * The feature id for the '<em><b>Astrotime</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MOSMIXS_WEATHER_REPORT__ASTROTIME = WEATHER_REPORT__ASTROTIME;
+
+	/**
+	 * The feature id for the '<em><b>Weather Station</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MOSMIXS_WEATHER_REPORT__WEATHER_STATION = WEATHER_REPORT__WEATHER_STATION;
 
 	/**
 	 * The feature id for the '<em><b>Wind Direction</b></em>' attribute.
@@ -1266,13 +1284,31 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	int MEASUREMENT_WEATHER_REPORT__TIMESTAMP = WEATHER_REPORT__TIMESTAMP;
 
 	/**
-	 * The feature id for the '<em><b>Station</b></em>' reference.
+	 * The feature id for the '<em><b>Station</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int MEASUREMENT_WEATHER_REPORT__STATION = WEATHER_REPORT__STATION;
+
+	/**
+	 * The feature id for the '<em><b>Astrotime</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEASUREMENT_WEATHER_REPORT__ASTROTIME = WEATHER_REPORT__ASTROTIME;
+
+	/**
+	 * The feature id for the '<em><b>Weather Station</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEASUREMENT_WEATHER_REPORT__WEATHER_STATION = WEATHER_REPORT__WEATHER_STATION;
 
 	/**
 	 * The feature id for the '<em><b>Measurements</b></em>' containment reference list.
@@ -1301,6 +1337,143 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	 */
 	int MEASUREMENT_WEATHER_REPORT_OPERATION_COUNT = WEATHER_REPORT_OPERATION_COUNT + 0;
 
+	/**
+	 * The meta object id for the '{@link org.gecko.weather.model.weather.impl.AstrotimeImpl <em>Astrotime</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.gecko.weather.model.weather.impl.AstrotimeImpl
+	 * @see org.gecko.weather.model.weather.impl.WeatherPackageImpl#getAstrotime()
+	 * @generated
+	 */
+	int ASTROTIME = 13;
+
+	/**
+	 * The feature id for the '<em><b>Sunset</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASTROTIME__SUNSET = 0;
+
+	/**
+	 * The feature id for the '<em><b>Sunrise</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASTROTIME__SUNRISE = 1;
+
+	/**
+	 * The feature id for the '<em><b>Sunset Twilight</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASTROTIME__SUNSET_TWILIGHT = 2;
+
+	/**
+	 * The feature id for the '<em><b>Sunrise Twilight</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASTROTIME__SUNRISE_TWILIGHT = 3;
+
+	/**
+	 * The number of structural features of the '<em>Astrotime</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASTROTIME_FEATURE_COUNT = 4;
+
+	/**
+	 * The number of operations of the '<em>Astrotime</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASTROTIME_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link org.gecko.weather.model.weather.impl.WeatherStationImpl <em>Station</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.gecko.weather.model.weather.impl.WeatherStationImpl
+	 * @see org.gecko.weather.model.weather.impl.WeatherPackageImpl#getWeatherStation()
+	 * @generated
+	 */
+	int WEATHER_STATION = 14;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WEATHER_STATION__NAME = STATION__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Location</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WEATHER_STATION__LOCATION = STATION__LOCATION;
+
+	/**
+	 * The feature id for the '<em><b>Country</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WEATHER_STATION__COUNTRY = STATION__COUNTRY;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WEATHER_STATION__ID = STATION_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Icao Code</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WEATHER_STATION__ICAO_CODE = STATION_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Station</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WEATHER_STATION_FEATURE_COUNT = STATION_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of operations of the '<em>Station</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WEATHER_STATION_OPERATION_COUNT = STATION_OPERATION_COUNT + 0;
+
 
 	/**
 	 * Returns the meta object for class '{@link org.gecko.weather.model.weather.Station <em>Station</em>}'.
@@ -1311,28 +1484,6 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 */
 	EClass getStation();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.gecko.weather.model.weather.Station#getId <em>Id</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Id</em>'.
-	 * @see org.gecko.weather.model.weather.Station#getId()
-	 * @see #getStation()
-	 * @generated
-	 */
-	EAttribute getStation_Id();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.gecko.weather.model.weather.Station#getIcaoCode <em>Icao Code</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Icao Code</em>'.
-	 * @see org.gecko.weather.model.weather.Station#getIcaoCode()
-	 * @see #getStation()
-	 * @generated
-	 */
-	EAttribute getStation_IcaoCode();
 
 	/**
 	 * Returns the meta object for the attribute '{@link org.gecko.weather.model.weather.Station#getName <em>Name</em>}'.
@@ -1400,15 +1551,37 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	EAttribute getWeatherReport_Timestamp();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.gecko.weather.model.weather.WeatherReport#getStation <em>Station</em>}'.
+	 * Returns the meta object for the containment reference '{@link org.gecko.weather.model.weather.WeatherReport#getStation <em>Station</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Station</em>'.
+	 * @return the meta object for the containment reference '<em>Station</em>'.
 	 * @see org.gecko.weather.model.weather.WeatherReport#getStation()
 	 * @see #getWeatherReport()
 	 * @generated
 	 */
 	EReference getWeatherReport_Station();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link org.gecko.weather.model.weather.WeatherReport#getAstrotime <em>Astrotime</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Astrotime</em>'.
+	 * @see org.gecko.weather.model.weather.WeatherReport#getAstrotime()
+	 * @see #getWeatherReport()
+	 * @generated
+	 */
+	EReference getWeatherReport_Astrotime();
+
+	/**
+	 * Returns the meta object for the reference '{@link org.gecko.weather.model.weather.WeatherReport#getWeatherStation <em>Weather Station</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Weather Station</em>'.
+	 * @see org.gecko.weather.model.weather.WeatherReport#getWeatherStation()
+	 * @see #getWeatherReport()
+	 * @generated
+	 */
+	EReference getWeatherReport_WeatherStation();
 
 	/**
 	 * Returns the meta object for class '{@link org.gecko.weather.model.weather.Measurement <em>Measurement</em>}'.
@@ -2148,6 +2321,92 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	EReference getMeasurementWeatherReport_Measurements();
 
 	/**
+	 * Returns the meta object for class '{@link org.gecko.weather.model.weather.Astrotime <em>Astrotime</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Astrotime</em>'.
+	 * @see org.gecko.weather.model.weather.Astrotime
+	 * @generated
+	 */
+	EClass getAstrotime();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.model.weather.Astrotime#getSunset <em>Sunset</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Sunset</em>'.
+	 * @see org.gecko.weather.model.weather.Astrotime#getSunset()
+	 * @see #getAstrotime()
+	 * @generated
+	 */
+	EAttribute getAstrotime_Sunset();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.model.weather.Astrotime#getSunrise <em>Sunrise</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Sunrise</em>'.
+	 * @see org.gecko.weather.model.weather.Astrotime#getSunrise()
+	 * @see #getAstrotime()
+	 * @generated
+	 */
+	EAttribute getAstrotime_Sunrise();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.model.weather.Astrotime#getSunsetTwilight <em>Sunset Twilight</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Sunset Twilight</em>'.
+	 * @see org.gecko.weather.model.weather.Astrotime#getSunsetTwilight()
+	 * @see #getAstrotime()
+	 * @generated
+	 */
+	EAttribute getAstrotime_SunsetTwilight();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.model.weather.Astrotime#getSunriseTwilight <em>Sunrise Twilight</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Sunrise Twilight</em>'.
+	 * @see org.gecko.weather.model.weather.Astrotime#getSunriseTwilight()
+	 * @see #getAstrotime()
+	 * @generated
+	 */
+	EAttribute getAstrotime_SunriseTwilight();
+
+	/**
+	 * Returns the meta object for class '{@link org.gecko.weather.model.weather.WeatherStation <em>Station</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Station</em>'.
+	 * @see org.gecko.weather.model.weather.WeatherStation
+	 * @generated
+	 */
+	EClass getWeatherStation();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.model.weather.WeatherStation#getId <em>Id</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Id</em>'.
+	 * @see org.gecko.weather.model.weather.WeatherStation#getId()
+	 * @see #getWeatherStation()
+	 * @generated
+	 */
+	EAttribute getWeatherStation_Id();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.model.weather.WeatherStation#getIcaoCode <em>Icao Code</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Icao Code</em>'.
+	 * @see org.gecko.weather.model.weather.WeatherStation#getIcaoCode()
+	 * @see #getWeatherStation()
+	 * @generated
+	 */
+	EAttribute getWeatherStation_IcaoCode();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2179,22 +2438,6 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 		 * @generated
 		 */
 		EClass STATION = eINSTANCE.getStation();
-
-		/**
-		 * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute STATION__ID = eINSTANCE.getStation_Id();
-
-		/**
-		 * The meta object literal for the '<em><b>Icao Code</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute STATION__ICAO_CODE = eINSTANCE.getStation_IcaoCode();
 
 		/**
 		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
@@ -2247,12 +2490,28 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 		EAttribute WEATHER_REPORT__TIMESTAMP = eINSTANCE.getWeatherReport_Timestamp();
 
 		/**
-		 * The meta object literal for the '<em><b>Station</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Station</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference WEATHER_REPORT__STATION = eINSTANCE.getWeatherReport_Station();
+
+		/**
+		 * The meta object literal for the '<em><b>Astrotime</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference WEATHER_REPORT__ASTROTIME = eINSTANCE.getWeatherReport_Astrotime();
+
+		/**
+		 * The meta object literal for the '<em><b>Weather Station</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference WEATHER_REPORT__WEATHER_STATION = eINSTANCE.getWeatherReport_WeatherStation();
 
 		/**
 		 * The meta object literal for the '{@link org.gecko.weather.model.weather.impl.MeasurementImpl <em>Measurement</em>}' class.
@@ -2819,6 +3078,74 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 		 * @generated
 		 */
 		EReference MEASUREMENT_WEATHER_REPORT__MEASUREMENTS = eINSTANCE.getMeasurementWeatherReport_Measurements();
+
+		/**
+		 * The meta object literal for the '{@link org.gecko.weather.model.weather.impl.AstrotimeImpl <em>Astrotime</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.gecko.weather.model.weather.impl.AstrotimeImpl
+		 * @see org.gecko.weather.model.weather.impl.WeatherPackageImpl#getAstrotime()
+		 * @generated
+		 */
+		EClass ASTROTIME = eINSTANCE.getAstrotime();
+
+		/**
+		 * The meta object literal for the '<em><b>Sunset</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ASTROTIME__SUNSET = eINSTANCE.getAstrotime_Sunset();
+
+		/**
+		 * The meta object literal for the '<em><b>Sunrise</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ASTROTIME__SUNRISE = eINSTANCE.getAstrotime_Sunrise();
+
+		/**
+		 * The meta object literal for the '<em><b>Sunset Twilight</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ASTROTIME__SUNSET_TWILIGHT = eINSTANCE.getAstrotime_SunsetTwilight();
+
+		/**
+		 * The meta object literal for the '<em><b>Sunrise Twilight</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ASTROTIME__SUNRISE_TWILIGHT = eINSTANCE.getAstrotime_SunriseTwilight();
+
+		/**
+		 * The meta object literal for the '{@link org.gecko.weather.model.weather.impl.WeatherStationImpl <em>Station</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.gecko.weather.model.weather.impl.WeatherStationImpl
+		 * @see org.gecko.weather.model.weather.impl.WeatherPackageImpl#getWeatherStation()
+		 * @generated
+		 */
+		EClass WEATHER_STATION = eINSTANCE.getWeatherStation();
+
+		/**
+		 * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute WEATHER_STATION__ID = eINSTANCE.getWeatherStation_Id();
+
+		/**
+		 * The meta object literal for the '<em><b>Icao Code</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute WEATHER_STATION__ICAO_CODE = eINSTANCE.getWeatherStation_IcaoCode();
 
 	}
 

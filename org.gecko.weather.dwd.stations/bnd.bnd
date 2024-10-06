@@ -18,4 +18,4 @@ Bundle-Description: Gecko Weather - Station fetch and search DWD weather station
 	org.gecko.search.util;version=latest,\
 	org.gecko.emf.search;version=latest,\
 	org.gecko.weather.model;version=snapshot,\
-	org.gecko.weather.dwd.forecast;version=snapshot
+	org.gecko.weather.api;version=snapshot

@@ -153,6 +153,24 @@ public interface WeatherFactory extends EFactory {
 	MeasurementWeatherReport createMeasurementWeatherReport();
 
 	/**
+	 * Returns a new object of class '<em>Astrotime</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Astrotime</em>'.
+	 * @generated
+	 */
+	Astrotime createAstrotime();
+
+	/**
+	 * Returns a new object of class '<em>Station</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Station</em>'.
+	 * @generated
+	 */
+	WeatherStation createWeatherStation();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

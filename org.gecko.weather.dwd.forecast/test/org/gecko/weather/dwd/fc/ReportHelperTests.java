@@ -19,9 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.Date;
 
 import org.gecko.weather.dwd.fc.helper.ReportHelper;
-import org.gecko.weather.model.weather.Station;
 import org.gecko.weather.model.weather.WeatherFactory;
 import org.gecko.weather.model.weather.WeatherReport;
+import org.gecko.weather.model.weather.WeatherStation;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -38,8 +38,8 @@ class ReportHelperTests {
 		assertThrows(NullPointerException.class, () -> ReportHelper.createReportId(report));
 		report.setTimestamp(new Date(0));
 		assertThrows(NullPointerException.class, () -> ReportHelper.createReportId(report));
-		Station station = WeatherFactory.eINSTANCE.createStation();
-		report.setStation(station);
+		WeatherStation station = WeatherFactory.eINSTANCE.createWeatherStation();
+		report.setWeatherStation(station);
 		assertThrows(NullPointerException.class, () -> ReportHelper.createReportId(report));
 		station.setId("ABC123");
 		assertEquals("ABC123-1970010101", ReportHelper.createReportId(report));

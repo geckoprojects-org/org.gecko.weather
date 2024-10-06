@@ -19,8 +19,8 @@ import java.lang.System.Logger.Level;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.gecko.weather.dwd.fc.fetcher.DWDEMFFetcher;
-import org.gecko.weather.dwd.fc.util.DWDUtils;
+import org.gecko.weather.api.fetcher.DWDEMFFetcher;
+import org.gecko.weather.api.util.DWDUtils;
 import org.osgi.service.component.annotations.Reference;
 
 import biz.aQute.scheduler.api.Constants;
@@ -76,7 +76,7 @@ public class DWDMetElementsFetcher extends DWDEMFFetcher<MetElementDefinitionTyp
 	protected String getName() {
 		return "Met-Definition";
 	}
-
+	
 	@Override
 	protected MetElementDefinitionType get(EObject content) {
 		return DWDUtils.getMetDefinitions(content);

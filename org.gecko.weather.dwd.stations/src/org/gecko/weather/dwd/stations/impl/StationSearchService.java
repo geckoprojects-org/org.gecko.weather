@@ -36,11 +36,12 @@ import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.WildcardQuery;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.gecko.emf.osgi.annotation.require.RequireEMF;
 import org.gecko.weather.dwd.stations.StationSearch;
 import org.gecko.weather.dwd.stations.helper.StationIndexHelper;
 import org.gecko.weather.model.weather.GeoPosition;
-import org.gecko.weather.model.weather.Station;
 import org.gecko.weather.model.weather.WeatherPackage;
+import org.gecko.weather.model.weather.WeatherStation;
 import org.osgi.service.component.ComponentServiceObjects;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -49,6 +50,7 @@ import org.osgi.service.component.annotations.Reference;
  * This is a sample Search Service to retrieve the objects from the index
  */
 @Component
+@RequireEMF
 public class StationSearchService implements StationSearch {
 
 	private static final Logger LOGGER = System.getLogger(StationSearchService.class.getName());
@@ -69,7 +71,7 @@ public class StationSearchService implements StationSearch {
 	 * String, boolean)
 	 */
 	@Override
-	public List<Station> searchStationByName(String stationName, boolean exactMatch) {
+	public List<WeatherStation> searchStationByName(String stationName, boolean exactMatch) {
 		return searchStationByName(stationName, exactMatch, 5);
 	}
 
@@ -81,7 +83,7 @@ public class StationSearchService implements StationSearch {
 	 * String, int)
 	 */
 	@Override
-	public List<Station> searchStationByName(String stationName, int maxResults) {
+	public List<WeatherStation> searchStationByName(String stationName, int maxResults) {
 		return searchStationByName(stationName, false, maxResults);
 	}
 
@@ -93,7 +95,7 @@ public class StationSearchService implements StationSearch {
 	 * String)
 	 */
 	@Override
-	public List<Station> searchStationsById(String id) {
+	public List<WeatherStation> searchStationsById(String id) {
 		requireNonNull(id, "Cannot search Station by null id!");
 		return executeTermSearch(new TermQuery(new Term(StationIndexHelper.STATION_ID, id)), 5);
 	}
@@ -106,7 +108,7 @@ public class StationSearchService implements StationSearch {
 	 * gecko.weather.modelweather.GeoPosition, int)
 	 */
 	@Override
-	public List<Station> searchStationNearLocation(GeoPosition location, int radius) {
+	public List<WeatherStation> searchStationNearLocation(GeoPosition location, int radius) {
 		requireNonNull(location);
 		return executeTermSearch(LatLonPoint.newDistanceQuery(StationIndexHelper.STATION_POSITION,
 				location.getLatitude(), location.getLongitude(), radius), 5);
@@ -120,7 +122,7 @@ public class StationSearchService implements StationSearch {
 	 * gecko.weather.modelweather.GeoPosition, int, int)
 	 */
 	@Override
-	public List<Station> searchStationNearLocation(GeoPosition location, int radius, int maxresults) {
+	public List<WeatherStation> searchStationNearLocation(GeoPosition location, int radius, int maxresults) {
 		requireNonNull(location);
 		return executeTermSearch(LatLonPoint.newDistanceQuery(StationIndexHelper.STATION_POSITION,
 				location.getLatitude(), location.getLongitude(), radius), maxresults);
@@ -133,7 +135,7 @@ public class StationSearchService implements StationSearch {
 	 * @return the list of documents
 	 */
 	@SuppressWarnings("unused")
-	private List<Station> executeTermSearch(Query query) {
+	private List<WeatherStation> executeTermSearch(Query query) {
 		return executeTermSearch(query, Integer.MAX_VALUE);
 	}
 
@@ -145,7 +147,7 @@ public class StationSearchService implements StationSearch {
 	 * @param maxResults number of results, must be larger that 0
 	 * @return the list of matching stations
 	 */
-	private List<Station> searchStationByName(String name, boolean exactMatch, int maxResults) {
+	private List<WeatherStation> searchStationByName(String name, boolean exactMatch, int maxResults) {
 		requireNonNull(name, "Cannot search Person by null firstName!");
 		if (maxResults < 1) {
 			maxResults = 5;
@@ -174,7 +176,7 @@ public class StationSearchService implements StationSearch {
 	 * @param maxResults the number of maximum results
 	 * @return the list of documents
 	 */
-	private List<Station> executeTermSearch(Query query, int maxResults) {
+	private List<WeatherStation> executeTermSearch(Query query, int maxResults) {
 
 		IndexSearcher searcher = searcherSO.getService();
 		try {

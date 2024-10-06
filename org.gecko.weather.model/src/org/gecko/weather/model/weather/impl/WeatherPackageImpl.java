@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.EReference;
 
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
+import org.gecko.weather.model.weather.Astrotime;
 import org.gecko.weather.model.weather.BasicMeasurement;
 import org.gecko.weather.model.weather.BoolMeasurement;
 import org.gecko.weather.model.weather.DoubleMeasurement;
@@ -35,6 +36,7 @@ import org.gecko.weather.model.weather.UVRadiationMeasurement;
 import org.gecko.weather.model.weather.WeatherFactory;
 import org.gecko.weather.model.weather.WeatherPackage;
 import org.gecko.weather.model.weather.WeatherReport;
+import org.gecko.weather.model.weather.WeatherStation;
 
 /**
  * <!-- begin-user-doc -->
@@ -135,6 +137,20 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 	private EClass measurementWeatherReportEClass = null;
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass astrotimeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass weatherStationEClass = null;
+
+	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
@@ -210,7 +226,7 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getStation_Id() {
+	public EAttribute getStation_Name() {
 		return (EAttribute)stationEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -220,28 +236,8 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getStation_IcaoCode() {
-		return (EAttribute)stationEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getStation_Name() {
-		return (EAttribute)stationEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getStation_Location() {
-		return (EReference)stationEClass.getEStructuralFeatures().get(3);
+		return (EReference)stationEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -251,7 +247,7 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 	 */
 	@Override
 	public EAttribute getStation_Country() {
-		return (EAttribute)stationEClass.getEStructuralFeatures().get(4);
+		return (EAttribute)stationEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -292,6 +288,26 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 	@Override
 	public EReference getWeatherReport_Station() {
 		return (EReference)weatherReportEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getWeatherReport_Astrotime() {
+		return (EReference)weatherReportEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getWeatherReport_WeatherStation() {
+		return (EReference)weatherReportEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -980,6 +996,86 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getAstrotime() {
+		return astrotimeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getAstrotime_Sunset() {
+		return (EAttribute)astrotimeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getAstrotime_Sunrise() {
+		return (EAttribute)astrotimeEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getAstrotime_SunsetTwilight() {
+		return (EAttribute)astrotimeEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getAstrotime_SunriseTwilight() {
+		return (EAttribute)astrotimeEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getWeatherStation() {
+		return weatherStationEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getWeatherStation_Id() {
+		return (EAttribute)weatherStationEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getWeatherStation_IcaoCode() {
+		return (EAttribute)weatherStationEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public WeatherFactory getWeatherFactory() {
 		return (WeatherFactory)getEFactoryInstance();
 	}
@@ -1004,8 +1100,6 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 
 		// Create classes and their features
 		stationEClass = createEClass(STATION);
-		createEAttribute(stationEClass, STATION__ID);
-		createEAttribute(stationEClass, STATION__ICAO_CODE);
 		createEAttribute(stationEClass, STATION__NAME);
 		createEReference(stationEClass, STATION__LOCATION);
 		createEAttribute(stationEClass, STATION__COUNTRY);
@@ -1014,6 +1108,8 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 		createEAttribute(weatherReportEClass, WEATHER_REPORT__ID);
 		createEAttribute(weatherReportEClass, WEATHER_REPORT__TIMESTAMP);
 		createEReference(weatherReportEClass, WEATHER_REPORT__STATION);
+		createEReference(weatherReportEClass, WEATHER_REPORT__ASTROTIME);
+		createEReference(weatherReportEClass, WEATHER_REPORT__WEATHER_STATION);
 
 		measurementEClass = createEClass(MEASUREMENT);
 		createEAttribute(measurementEClass, MEASUREMENT__UNIT);
@@ -1093,6 +1189,16 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 
 		measurementWeatherReportEClass = createEClass(MEASUREMENT_WEATHER_REPORT);
 		createEReference(measurementWeatherReportEClass, MEASUREMENT_WEATHER_REPORT__MEASUREMENTS);
+
+		astrotimeEClass = createEClass(ASTROTIME);
+		createEAttribute(astrotimeEClass, ASTROTIME__SUNSET);
+		createEAttribute(astrotimeEClass, ASTROTIME__SUNRISE);
+		createEAttribute(astrotimeEClass, ASTROTIME__SUNSET_TWILIGHT);
+		createEAttribute(astrotimeEClass, ASTROTIME__SUNRISE_TWILIGHT);
+
+		weatherStationEClass = createEClass(WEATHER_STATION);
+		createEAttribute(weatherStationEClass, WEATHER_STATION__ID);
+		createEAttribute(weatherStationEClass, WEATHER_STATION__ICAO_CODE);
 	}
 
 	/**
@@ -1131,11 +1237,10 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 		uvRadiationMeasurementEClass.getESuperTypes().add(this.getFloatMeasurement());
 		mosmixsWeatherReportEClass.getESuperTypes().add(this.getWeatherReport());
 		measurementWeatherReportEClass.getESuperTypes().add(this.getWeatherReport());
+		weatherStationEClass.getESuperTypes().add(this.getStation());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(stationEClass, Station.class, "Station", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getStation_Id(), ecorePackage.getEString(), "id", null, 1, 1, Station.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getStation_IcaoCode(), ecorePackage.getEString(), "icaoCode", null, 0, 1, Station.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getStation_Name(), ecorePackage.getEString(), "name", null, 1, 1, Station.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getStation_Location(), this.getGeoPosition(), null, "location", null, 0, 1, Station.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getStation_Country(), ecorePackage.getEString(), "country", null, 0, 1, Station.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1143,8 +1248,10 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 		initEClass(weatherReportEClass, WeatherReport.class, "WeatherReport", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getWeatherReport_Id(), ecorePackage.getEString(), "id", null, 1, 1, WeatherReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getWeatherReport_Timestamp(), ecorePackage.getEDate(), "timestamp", null, 1, 1, WeatherReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getWeatherReport_Station(), this.getStation(), null, "station", null, 1, 1, WeatherReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		getWeatherReport_Station().getEKeys().add(this.getStation_Id());
+		initEReference(getWeatherReport_Station(), this.getStation(), null, "station", null, 1, 1, WeatherReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		getWeatherReport_Station().getEKeys().add(this.getStation_Name());
+		initEReference(getWeatherReport_Astrotime(), this.getAstrotime(), null, "astrotime", null, 0, 1, WeatherReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getWeatherReport_WeatherStation(), this.getWeatherStation(), null, "weatherStation", null, 1, 1, WeatherReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(measurementEClass, Measurement.class, "Measurement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getMeasurement_Unit(), ecorePackage.getEString(), "unit", null, 1, 1, Measurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1175,7 +1282,7 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 		initEClass(geoPositionEClass, GeoPosition.class, "GeoPosition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getGeoPosition_Latitude(), ecorePackage.getEDouble(), "latitude", null, 1, 1, GeoPosition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getGeoPosition_Longitude(), ecorePackage.getEDouble(), "longitude", null, 1, 1, GeoPosition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getGeoPosition_Elevation(), ecorePackage.getEShort(), "elevation", null, 1, 1, GeoPosition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getGeoPosition_Elevation(), ecorePackage.getEInt(), "elevation", null, 1, 1, GeoPosition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(uvRadiationMeasurementEClass, UVRadiationMeasurement.class, "UVRadiationMeasurement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getUVRadiationMeasurement_Area(), this.getGeoArea(), null, "area", null, 0, 1, UVRadiationMeasurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1224,6 +1331,16 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 
 		initEClass(measurementWeatherReportEClass, MeasurementWeatherReport.class, "MeasurementWeatherReport", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getMeasurementWeatherReport_Measurements(), this.getMeasurement(), null, "measurements", null, 0, -1, MeasurementWeatherReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(astrotimeEClass, Astrotime.class, "Astrotime", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getAstrotime_Sunset(), ecorePackage.getEDate(), "sunset", null, 0, 1, Astrotime.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAstrotime_Sunrise(), ecorePackage.getEDate(), "sunrise", null, 0, 1, Astrotime.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAstrotime_SunsetTwilight(), ecorePackage.getEDate(), "sunsetTwilight", null, 0, 1, Astrotime.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAstrotime_SunriseTwilight(), ecorePackage.getEDate(), "sunriseTwilight", null, 0, 1, Astrotime.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(weatherStationEClass, WeatherStation.class, "WeatherStation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getWeatherStation_Id(), ecorePackage.getEString(), "id", null, 1, 1, WeatherStation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getWeatherStation_IcaoCode(), ecorePackage.getEString(), "icaoCode", null, 0, 1, WeatherStation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

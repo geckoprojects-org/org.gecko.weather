@@ -20,7 +20,7 @@ import org.gecko.search.IndexActionType;
 import org.gecko.search.document.LuceneIndexService;
 import org.gecko.weather.dwd.stations.StationIndex;
 import org.gecko.weather.dwd.stations.helper.StationIndexHelper;
-import org.gecko.weather.model.weather.Station;
+import org.gecko.weather.model.weather.WeatherStation;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -38,7 +38,7 @@ public class StationIndexService implements StationIndex {
 	 * @see org.gecko.weather.dwd.stations.impl.StationIndex#indexStation(de.dwd.cdc.weather.Station, boolean)
 	 */
 	@Override
-	public void indexStation(Station station, boolean add) {
+	public void indexStation(WeatherStation station, boolean add) {
 		if(add) {
 			doIndexStation(station, IndexActionType.ADD);
 		}
@@ -52,7 +52,7 @@ public class StationIndexService implements StationIndex {
 	 * @see org.gecko.weather.dwd.stations.impl.StationIndex#deleteStation(de.dwd.cdc.weather.Station)
 	 */
 	@Override
-	public void deleteStation(Station station) {
+	public void deleteStation(WeatherStation station) {
 		doIndexStation(station, IndexActionType.REMOVE);		
 	}
 
@@ -71,7 +71,7 @@ public class StationIndexService implements StationIndex {
 		
 	}
 	
-	private void doIndexStation(Station station, IndexActionType actionType) {
+	private void doIndexStation(WeatherStation station, IndexActionType actionType) {
 		EObjectDocumentIndexObjectContext context = StationIndexHelper.mapStation(station, actionType);			
 		stationIndex.handleContextSync(context);
 	}

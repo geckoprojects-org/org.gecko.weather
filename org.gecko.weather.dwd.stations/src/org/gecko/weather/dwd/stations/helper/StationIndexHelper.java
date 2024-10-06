@@ -31,8 +31,8 @@ import org.gecko.emf.search.document.EObjectDocumentIndexObjectContext;
 import org.gecko.search.IndexActionType;
 import org.gecko.search.document.context.ObjectContextObject;
 import org.gecko.weather.model.weather.GeoPosition;
-import org.gecko.weather.model.weather.Station;
 import org.gecko.weather.model.weather.WeatherFactory;
+import org.gecko.weather.model.weather.WeatherStation;
 
 /**
  * This is an Index Helper class where the actual document to be indexed is created.
@@ -49,21 +49,21 @@ public class StationIndexHelper {
 
 	private StationIndexHelper() {}
 	
-	public static EObjectDocumentIndexObjectContext mapStationNew(Station station) {		
+	public static EObjectDocumentIndexObjectContext mapStationNew(WeatherStation station) {		
 		return mapStation(station, IndexActionType.ADD);
 	}
 
-	public static EObjectDocumentIndexObjectContext mapStationUpdate(Station station) {
+	public static EObjectDocumentIndexObjectContext mapStationUpdate(WeatherStation station) {
 		return mapStation(station, IndexActionType.MODIFY);
 	}
 	
 	/**
-	 * Maps a given {@link Station} to {@link ObjectContextObject} with a given {@link IndexActionType}
+	 * Maps a given {@link WeatherStation} to {@link ObjectContextObject} with a given {@link IndexActionType}
 	 * @param station the person to index
 	 * @param indexAction the index action (ADD, UPDATE, REMOVE)
 	 * @return the {@link ObjectContextObject}
 	 */
-	public static EObjectDocumentIndexObjectContext mapStation(Station station, IndexActionType indexAction) {
+	public static EObjectDocumentIndexObjectContext mapStation(WeatherStation station, IndexActionType indexAction) {
 		
 		Document doc = new Document();
 		
@@ -97,8 +97,8 @@ public class StationIndexHelper {
 		return builder.build();
 	}
 	
-	public static Station mapDocument(Document document) {
-		Station s = WeatherFactory.eINSTANCE.createStation();
+	public static WeatherStation mapDocument(Document document) {
+		WeatherStation s = WeatherFactory.eINSTANCE.createWeatherStation();
 		GeoPosition l = WeatherFactory.eINSTANCE.createGeoPosition();
 		getStringValue(document, STATION_ID).ifPresent(s::setId);
 		getStringValue(document, STATION_ICAO).ifPresent(s::setIcaoCode);

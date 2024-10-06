@@ -21,6 +21,7 @@ import org.gecko.weather.dwd.stations.StationSearch;
 import org.gecko.weather.model.weather.GeoPosition;
 import org.gecko.weather.model.weather.Station;
 import org.gecko.weather.model.weather.WeatherFactory;
+import org.gecko.weather.model.weather.WeatherStation;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,8 +41,8 @@ import biz.aQute.scheduler.api.CronJob;
 @ExtendWith(ConfigurationExtension.class)
 @ExtendWith(BundleContextExtension.class)
 @WithFactoryConfiguration(factoryPid = "DWDStationFetcher", location = "?", name = "fetcher", properties = {
-		@Property(key = "stationMosmixUrl", value = "file:data/mosmix_stationskatalog.csv"),
-		@Property(key = "stationUrl", value = "file:data/stations_list_CLIMAT_data.csv") })
+		@Property(key = "stationMosmixUrl", value = "data/mosmix_stationskatalog.csv"),
+		@Property(key = "stationUrl", value = "data/stations_list_CLIMAT_data.csv") })
 @WithFactoryConfiguration(factoryPid = "EMFLuceneIndex", location = "?", name = "index", properties = {
 		@Property(key = "id", value = "dwd.station"), @Property(key = "directory.type", value = "ByteBuffer") })
 public class DWDStationListTest {
@@ -58,10 +59,10 @@ public class DWDStationListTest {
 			throws InterruptedException {
 
 		StationSearch stationSearch = siAware.waitForService(1000);
-		List<Station> result = stationSearch.searchStationByName("erfurt", false);
+		List<WeatherStation> result = stationSearch.searchStationByName("erfurt", false);
 		assertThat(result) //
 				.hasSize(5) //
-				.extracting(Station::getId) //
+				.extracting(WeatherStation::getId) //
 				.contains("10554", "N6357", "G409", "P0560", "N748");
 		assertThat(result) //
 				.extracting(Station::getName) //
@@ -73,7 +74,7 @@ public class DWDStationListTest {
 			throws InterruptedException {
 
 		StationSearch stationSearch = siAware.waitForService(1000);
-		List<Station> result = stationSearch.searchStationByName("erfurt", true);
+		List<WeatherStation> result = stationSearch.searchStationByName("erfurt", true);
 		assertThat(result).isEmpty();
 
 		result = stationSearch.searchStationByName("Erfurt", true);
@@ -88,10 +89,10 @@ public class DWDStationListTest {
 			throws InterruptedException {
 
 		StationSearch stationSearch = siAware.waitForService(1000);
-		List<Station> result = stationSearch.searchStationByName("erfurt", 4);
+		List<WeatherStation> result = stationSearch.searchStationByName("erfurt", 4);
 		assertThat(result) //
 				.hasSize(4) //
-				.extracting(Station::getId) //
+				.extracting(WeatherStation::getId) //
 				.contains("10554", "N6357", "G409", "P0560");
 	}
 
@@ -103,11 +104,11 @@ public class DWDStationListTest {
 		GeoPosition geoPosition = WeatherFactory.eINSTANCE.createGeoPosition();
 		geoPosition.setLatitude(50.9281717);
 		geoPosition.setLongitude(11.5879359);
-		geoPosition.setElevation((short) 10);
-		List<Station> result = stationSearch.searchStationNearLocation(geoPosition, 20000);
+		geoPosition.setElevation(10);
+		List<WeatherStation> result = stationSearch.searchStationNearLocation(geoPosition, 20000);
 		assertThat(result) //
 				.hasSize(5) //
-				.extracting(Station::getId) //
+				.extracting(WeatherStation::getId) //
 				.contains("G407", "N5417", "N924", "N992", "P0514");
 	}
 
@@ -116,10 +117,10 @@ public class DWDStationListTest {
 			throws InterruptedException {
 
 		StationSearch stationSearch = siAware.waitForService(1000);
-		List<Station> result = stationSearch.searchStationsById("N992");
+		List<WeatherStation> result = stationSearch.searchStationsById("N992");
 		assertThat(result) //
 				.hasSize(1) //
-				.extracting(Station::getId) //
+				.extracting(WeatherStation::getId) //
 				.contains("N992");
 	}
 

@@ -26,13 +26,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import org.gecko.weather.dwd.fc.fetcher.DWDFetcher;
+import org.gecko.weather.api.fetcher.DWDFetcher;
 import org.gecko.weather.dwd.stations.StationIndex;
 import org.gecko.weather.dwd.stations.StationSearch;
 import org.gecko.weather.dwd.stations.config.StationConfig;
 import org.gecko.weather.model.weather.GeoPosition;
-import org.gecko.weather.model.weather.Station;
 import org.gecko.weather.model.weather.WeatherFactory;
+import org.gecko.weather.model.weather.WeatherStation;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceRegistration;
@@ -116,7 +116,7 @@ public class DWDStationListFetcher extends DWDFetcher implements CronJob {
 
 	}
 
-	private void indexStation(Station s) {
+	private void indexStation(WeatherStation s) {
 		try {
 			sis.indexStation(s, true);
 			if (LOGGER.isLoggable(Level.DEBUG)) {
@@ -129,6 +129,10 @@ public class DWDStationListFetcher extends DWDFetcher implements CronJob {
 		}
 	}
 
+	/* 
+	 * (non-Javadoc)
+	 * @see org.gecko.weather.api.fetcher.DWDFetcher#getFetchUrl()
+	 */
 	@Override
 	protected String getFetchUrl() {
 		if (mosmixDownload) {
@@ -139,19 +143,23 @@ public class DWDStationListFetcher extends DWDFetcher implements CronJob {
 		return config.stationUrl();
 	}
 
+	/* 
+	 * (non-Javadoc)
+	 * @see org.gecko.weather.api.fetcher.DWDFetcher#getName()
+	 */
 	@Override
 	protected String getName() {
 		return "Stations";
 	}
 
-	private Station mapStationAll(String line) {
+	private WeatherStation mapStationAll(String line) {
 		requireNonNull(line);
 		String[] columns = line.split(";");
 		try {
 			if (columns.length != 6) {
 				throw new IllegalArgumentException("Line is expected to have 6 columns");
 			}
-			Station station = weatherFactory.createStation();
+			WeatherStation station = weatherFactory.createWeatherStation();
 			if (Objects.isNull(columns[0])) {
 				return null;
 			}
@@ -187,12 +195,12 @@ public class DWDStationListFetcher extends DWDFetcher implements CronJob {
 		}
 	}
 
-	private Station mapStationMOSMIX(String line) {
+	private WeatherStation mapStationMOSMIX(String line) {
 		requireNonNull(line);
 		if (line.length() != 52) {
 			throw new IllegalArgumentException("Line is expected to have a length of 52");
 		}
-		Station station = weatherFactory.createStation();
+		WeatherStation station = weatherFactory.createWeatherStation();
 		station.setId(line.substring(0, 5).trim());
 		String icao = line.substring(6, 10).trim();
 		if (!"----".equals(icao)) {

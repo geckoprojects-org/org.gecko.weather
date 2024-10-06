@@ -13,7 +13,7 @@
  */
 package org.gecko.weather.dwd.stations;
 
-import org.gecko.weather.model.weather.Station;
+import org.gecko.weather.model.weather.WeatherStation;
 
 /**
  * Station index service interface
@@ -27,13 +27,13 @@ public interface StationIndex {
 	 * @param station the station to be added
 	 * @param add set to <code>true</code>, for adding, <code>false</code> for updating
 	 */
-	void indexStation(Station station, boolean add);
+	void indexStation(WeatherStation station, boolean add);
 
 	/**
 	 * Deletes a station from the index
 	 * @param station the station to delete
 	 */
-	void deleteStation(Station station);
+	void deleteStation(WeatherStation station);
 
 	/**
 	 * Resets the whole index

@@ -23,7 +23,7 @@ import org.apache.felix.service.command.Parameter;
 import org.apache.felix.service.command.annotations.GogoCommand;
 import org.gecko.weather.dwd.stations.StationSearch;
 import org.gecko.weather.model.weather.GeoPosition;
-import org.gecko.weather.model.weather.Station;
+import org.gecko.weather.model.weather.WeatherStation;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.condition.Condition;
@@ -56,7 +56,7 @@ public class StationSearchCommand {
 			return;
 		}
 		System.out.println(String.format("Searching for station with name '%s", name));
-		List<Station> byName = stationSearch.searchStationByName(name, false);
+		List<WeatherStation> byName = stationSearch.searchStationByName(name, false);
 		System.out.println(String.format("- Found %s results: ", byName.size()));
 		byName.forEach(s -> {
 			String lat, lon = lat = lon = "n/a";
@@ -102,7 +102,7 @@ public class StationSearchCommand {
 		System.out.println(
 				String.format("Searching for stations near location 'lat: %s, lon: %s' within a radius of %s km",
 						position.getLatitude(), position.getLongitude(), radius));
-		List<Station> byLocation = stationSearch.searchStationNearLocation(position, meters);
+		List<WeatherStation> byLocation = stationSearch.searchStationNearLocation(position, meters);
 		System.out.println(String.format("- Found %s results: ", byLocation.size()));
 		byLocation.forEach(s -> {
 			String lat = "n/a";

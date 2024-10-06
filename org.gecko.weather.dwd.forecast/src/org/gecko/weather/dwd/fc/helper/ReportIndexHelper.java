@@ -39,10 +39,10 @@ import org.gecko.emf.search.document.EObjectDocumentIndexObjectContext;
 import org.gecko.search.IndexActionType;
 import org.gecko.search.document.context.ObjectContextObject;
 import org.gecko.weather.model.weather.MOSMIXSWeatherReport;
-import org.gecko.weather.model.weather.Station;
 import org.gecko.weather.model.weather.WeatherFactory;
 import org.gecko.weather.model.weather.WeatherPackage;
 import org.gecko.weather.model.weather.WeatherReport;
+import org.gecko.weather.model.weather.WeatherStation;
 
 /**
  * This is an Index Helper class where the actual document to be indexed is created.
@@ -89,7 +89,7 @@ public class ReportIndexHelper {
 			doc.add(new LongField(REPORT_TIMESTAMP, ts, Store.YES));
 			doc.add(new SortedNumericDocValuesField(REPORT_TIMESTAMP_SORT, ts));
 		}
-		Station s = report.getStation();
+		WeatherStation s = report.getWeatherStation();
 		if (nonNull(s)) {
 			if(nonNull(s.getId())) {
 				doc.add(new StringField(STATION_ID, s.getId(), Store.YES));
@@ -128,8 +128,9 @@ public class ReportIndexHelper {
 		final WeatherReport r = createInstance(document, rs);
 		getStringValue(document, REPORT_ID).ifPresent(r::setId);
 		getValue(document, REPORT_TIMESTAMP).map(Long.class::cast).ifPresent(ts->r.setTimestamp(new Date(ts)));
-		Station s= WeatherFactory.eINSTANCE.createStation();
+		WeatherStation s= WeatherFactory.eINSTANCE.createWeatherStation();
 		r.setStation(s);
+		r.setWeatherStation(s);
 		getStringValue(document, STATION_ID).ifPresent(s::setId);
 		getStringValue(document, STATION_NAME).ifPresent(s::setName);
 		EList<EAttribute> reportAttributes = r.eClass().getEAttributes();

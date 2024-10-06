@@ -1,0 +1,11 @@
+Bundle-Version: 1.0.0.SNAPSHOT
+Bundle-Name: Gecko Weather API
+Bundle-Description: Gecko Weather - General API
+
+-library: \
+	enable-emf
+	
+-buildpath: \
+	net.opengis.kml.model;version=latest,\
+	de.dwd.cdc.common.model;version=latest,\
+	org.gecko.weather.model;version=snapshot

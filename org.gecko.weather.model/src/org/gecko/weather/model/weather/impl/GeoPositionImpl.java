@@ -87,7 +87,7 @@ public class GeoPositionImpl extends MinimalEObjectImpl.Container implements Geo
 	 * @generated
 	 * @ordered
 	 */
-	protected static final short ELEVATION_EDEFAULT = 0;
+	protected static final int ELEVATION_EDEFAULT = 0;
 
 	/**
 	 * The cached value of the '{@link #getElevation() <em>Elevation</em>}' attribute.
@@ -97,7 +97,7 @@ public class GeoPositionImpl extends MinimalEObjectImpl.Container implements Geo
 	 * @generated
 	 * @ordered
 	 */
-	protected short elevation = ELEVATION_EDEFAULT;
+	protected int elevation = ELEVATION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -170,7 +170,7 @@ public class GeoPositionImpl extends MinimalEObjectImpl.Container implements Geo
 	 * @generated
 	 */
 	@Override
-	public short getElevation() {
+	public int getElevation() {
 		return elevation;
 	}
 
@@ -180,8 +180,8 @@ public class GeoPositionImpl extends MinimalEObjectImpl.Container implements Geo
 	 * @generated
 	 */
 	@Override
-	public void setElevation(short newElevation) {
-		short oldElevation = elevation;
+	public void setElevation(int newElevation) {
+		int oldElevation = elevation;
 		elevation = newElevation;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, WeatherPackage.GEO_POSITION__ELEVATION, oldElevation, elevation));
@@ -220,7 +220,7 @@ public class GeoPositionImpl extends MinimalEObjectImpl.Container implements Geo
 				setLongitude((Double)newValue);
 				return;
 			case WeatherPackage.GEO_POSITION__ELEVATION:
-				setElevation((Short)newValue);
+				setElevation((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);

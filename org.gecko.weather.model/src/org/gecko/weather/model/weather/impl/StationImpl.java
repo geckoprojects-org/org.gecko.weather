@@ -34,8 +34,6 @@ import org.gecko.weather.model.weather.WeatherPackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.gecko.weather.model.weather.impl.StationImpl#getId <em>Id</em>}</li>
- *   <li>{@link org.gecko.weather.model.weather.impl.StationImpl#getIcaoCode <em>Icao Code</em>}</li>
  *   <li>{@link org.gecko.weather.model.weather.impl.StationImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.gecko.weather.model.weather.impl.StationImpl#getLocation <em>Location</em>}</li>
  *   <li>{@link org.gecko.weather.model.weather.impl.StationImpl#getCountry <em>Country</em>}</li>
@@ -44,46 +42,6 @@ import org.gecko.weather.model.weather.WeatherPackage;
  * @generated
  */
 public class StationImpl extends MinimalEObjectImpl.Container implements Station {
-	/**
-	 * The default value of the '{@link #getId() <em>Id</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getId()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String ID_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getId() <em>Id</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getId()
-	 * @generated
-	 * @ordered
-	 */
-	protected String id = ID_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getIcaoCode() <em>Icao Code</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getIcaoCode()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String ICAO_CODE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getIcaoCode() <em>Icao Code</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getIcaoCode()
-	 * @generated
-	 * @ordered
-	 */
-	protected String icaoCode = ICAO_CODE_EDEFAULT;
-
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -151,52 +109,6 @@ public class StationImpl extends MinimalEObjectImpl.Container implements Station
 	@Override
 	protected EClass eStaticClass() {
 		return WeatherPackage.Literals.STATION;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getId() {
-		return id;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setId(String newId) {
-		String oldId = id;
-		id = newId;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, WeatherPackage.STATION__ID, oldId, id));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getIcaoCode() {
-		return icaoCode;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setIcaoCode(String newIcaoCode) {
-		String oldIcaoCode = icaoCode;
-		icaoCode = newIcaoCode;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, WeatherPackage.STATION__ICAO_CODE, oldIcaoCode, icaoCode));
 	}
 
 	/**
@@ -312,10 +224,6 @@ public class StationImpl extends MinimalEObjectImpl.Container implements Station
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case WeatherPackage.STATION__ID:
-				return getId();
-			case WeatherPackage.STATION__ICAO_CODE:
-				return getIcaoCode();
 			case WeatherPackage.STATION__NAME:
 				return getName();
 			case WeatherPackage.STATION__LOCATION:
@@ -334,12 +242,6 @@ public class StationImpl extends MinimalEObjectImpl.Container implements Station
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case WeatherPackage.STATION__ID:
-				setId((String)newValue);
-				return;
-			case WeatherPackage.STATION__ICAO_CODE:
-				setIcaoCode((String)newValue);
-				return;
 			case WeatherPackage.STATION__NAME:
 				setName((String)newValue);
 				return;
@@ -361,12 +263,6 @@ public class StationImpl extends MinimalEObjectImpl.Container implements Station
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case WeatherPackage.STATION__ID:
-				setId(ID_EDEFAULT);
-				return;
-			case WeatherPackage.STATION__ICAO_CODE:
-				setIcaoCode(ICAO_CODE_EDEFAULT);
-				return;
 			case WeatherPackage.STATION__NAME:
 				setName(NAME_EDEFAULT);
 				return;
@@ -388,10 +284,6 @@ public class StationImpl extends MinimalEObjectImpl.Container implements Station
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case WeatherPackage.STATION__ID:
-				return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
-			case WeatherPackage.STATION__ICAO_CODE:
-				return ICAO_CODE_EDEFAULT == null ? icaoCode != null : !ICAO_CODE_EDEFAULT.equals(icaoCode);
 			case WeatherPackage.STATION__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case WeatherPackage.STATION__LOCATION:
@@ -412,11 +304,7 @@ public class StationImpl extends MinimalEObjectImpl.Container implements Station
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (id: ");
-		result.append(id);
-		result.append(", icaoCode: ");
-		result.append(icaoCode);
-		result.append(", name: ");
+		result.append(" (name: ");
 		result.append(name);
 		result.append(", country: ");
 		result.append(country);

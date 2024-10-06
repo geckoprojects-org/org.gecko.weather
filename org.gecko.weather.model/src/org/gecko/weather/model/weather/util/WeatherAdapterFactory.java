@@ -131,6 +131,14 @@ public class WeatherAdapterFactory extends AdapterFactoryImpl {
 				return createMeasurementWeatherReportAdapter();
 			}
 			@Override
+			public Adapter caseAstrotime(Astrotime object) {
+				return createAstrotimeAdapter();
+			}
+			@Override
+			public Adapter caseWeatherStation(WeatherStation object) {
+				return createWeatherStationAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -329,6 +337,34 @@ public class WeatherAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createMeasurementWeatherReportAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.gecko.weather.model.weather.Astrotime <em>Astrotime</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.gecko.weather.model.weather.Astrotime
+	 * @generated
+	 */
+	public Adapter createAstrotimeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.gecko.weather.model.weather.WeatherStation <em>Station</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.gecko.weather.model.weather.WeatherStation
+	 * @generated
+	 */
+	public Adapter createWeatherStationAdapter() {
 		return null;
 	}
 

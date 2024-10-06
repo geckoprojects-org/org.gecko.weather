@@ -26,8 +26,8 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.FeatureMapUtil.FeatureEList;
-import org.gecko.weather.dwd.fc.fetcher.DWDEMFFetcher;
-import org.gecko.weather.dwd.fc.util.DWDUtils;
+import org.gecko.weather.api.fetcher.DWDEMFFetcher;
+import org.gecko.weather.api.util.DWDUtils;
 import org.osgi.service.component.annotations.Reference;
 
 import biz.aQute.scheduler.api.Constants;

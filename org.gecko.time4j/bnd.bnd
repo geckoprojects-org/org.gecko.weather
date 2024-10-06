@@ -1,0 +1,12 @@
+Bundle-Version: 1.0.0.SNAPSHOT
+Bundle-Name: Gecko Time4J Services
+Bundle-Description: Gecko Time4J - Sunset and sunrise for geo-location and date
+
+-library: \
+	enable-emf
+	
+-buildpath: \
+	time4j-base;version=latest,\
+	time4j-calendar;version=latest,\
+	org.gecko.weather.model;version=snapshot,\
+	org.gecko.weather.api;version=snapshot

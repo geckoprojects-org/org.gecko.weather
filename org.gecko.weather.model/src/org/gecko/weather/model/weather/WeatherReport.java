@@ -31,6 +31,8 @@ import org.osgi.annotation.versioning.ProviderType;
  *   <li>{@link org.gecko.weather.model.weather.WeatherReport#getId <em>Id</em>}</li>
  *   <li>{@link org.gecko.weather.model.weather.WeatherReport#getTimestamp <em>Timestamp</em>}</li>
  *   <li>{@link org.gecko.weather.model.weather.WeatherReport#getStation <em>Station</em>}</li>
+ *   <li>{@link org.gecko.weather.model.weather.WeatherReport#getAstrotime <em>Astrotime</em>}</li>
+ *   <li>{@link org.gecko.weather.model.weather.WeatherReport#getWeatherStation <em>Weather Station</em>}</li>
  * </ul>
  *
  * @see org.gecko.weather.model.weather.WeatherPackage#getWeatherReport()
@@ -84,25 +86,78 @@ public interface WeatherReport extends EObject {
 	void setTimestamp(Date value);
 
 	/**
-	 * Returns the value of the '<em><b>Station</b></em>' reference.
+	 * Returns the value of the '<em><b>Station</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Station</em>' reference.
+	 * <!-- begin-model-doc -->
+	 * Station the measurments are for. This is usually the exact location the report belongs to
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Station</em>' containment reference.
 	 * @see #setStation(Station)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getWeatherReport_Station()
-	 * @model keys="id" required="true"
+	 * @model containment="true" keys="name" required="true"
 	 * @generated
 	 */
 	Station getStation();
 
 	/**
-	 * Sets the value of the '{@link org.gecko.weather.model.weather.WeatherReport#getStation <em>Station</em>}' reference.
+	 * Sets the value of the '{@link org.gecko.weather.model.weather.WeatherReport#getStation <em>Station</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Station</em>' reference.
+	 * @param value the new value of the '<em>Station</em>' containment reference.
 	 * @see #getStation()
 	 * @generated
 	 */
 	void setStation(Station value);
+
+	/**
+	 * Returns the value of the '<em><b>Astrotime</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Additional astro time information for this report, like sunset und sunrise times for the report day
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Astrotime</em>' containment reference.
+	 * @see #setAstrotime(Astrotime)
+	 * @see org.gecko.weather.model.weather.WeatherPackage#getWeatherReport_Astrotime()
+	 * @model containment="true"
+	 * @generated
+	 */
+	Astrotime getAstrotime();
+
+	/**
+	 * Sets the value of the '{@link org.gecko.weather.model.weather.WeatherReport#getAstrotime <em>Astrotime</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Astrotime</em>' containment reference.
+	 * @see #getAstrotime()
+	 * @generated
+	 */
+	void setAstrotime(Astrotime value);
+
+	/**
+	 * Returns the value of the '<em><b>Weather Station</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * The next official (DWD) weather station closest to the 'station'. This is the official weather station most measurement com from
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Weather Station</em>' reference.
+	 * @see #setWeatherStation(WeatherStation)
+	 * @see org.gecko.weather.model.weather.WeatherPackage#getWeatherReport_WeatherStation()
+	 * @model required="true"
+	 * @generated
+	 */
+	WeatherStation getWeatherStation();
+
+	/**
+	 * Sets the value of the '{@link org.gecko.weather.model.weather.WeatherReport#getWeatherStation <em>Weather Station</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Weather Station</em>' reference.
+	 * @see #getWeatherStation()
+	 * @generated
+	 */
+	void setWeatherStation(WeatherStation value);
 
 } // WeatherReport

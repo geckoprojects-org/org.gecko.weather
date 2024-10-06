@@ -76,8 +76,8 @@ public class WeatherReportIndexservice implements WeatherReportIndex {
 	public void indexReport(WeatherReport report) {
 		requireNonNull(report);
 		requireNonNull(report.getTimestamp());
-		requireNonNull(report.getStation());
-		requireNonNull(report.getStation().getId());
+		requireNonNull(report.getWeatherStation());
+		requireNonNull(report.getWeatherStation().getId());
 		String id = report.getId();
 		if (isNull(id)) {
 			id = ReportHelper.createReportId(report);

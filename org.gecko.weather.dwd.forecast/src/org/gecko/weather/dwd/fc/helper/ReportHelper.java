@@ -41,10 +41,10 @@ public class ReportHelper {
 	
 	public static String createReportId(WeatherReport report) {
 		requireNonNull(report);
-		requireNonNull(report.getStation());
-		requireNonNull(report.getStation().getId());
+		requireNonNull(report.getWeatherStation());
+		requireNonNull(report.getWeatherStation().getId());
 		requireNonNull(report.getTimestamp());
-		String stationId = report.getStation().getId();
+		String stationId = report.getWeatherStation().getId();
 		return String.format("%s-%s", stationId, sdf.format(report.getTimestamp()));
 	}
 	
