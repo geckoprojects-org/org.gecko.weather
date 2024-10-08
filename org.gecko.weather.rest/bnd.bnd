@@ -1,0 +1,27 @@
+-library: enable-emf,\
+	enableJakartaREST
+
+-buildpath: \
+	org.osgi.service.jakartars,\
+	org.osgi.service.servlet,\
+	jakarta.ws.rs-api,\
+	org.gecko.emf.util.annotations,\
+	org.gecko.emf.json;version=latest,\
+	jakarta.ws.rs-api,\
+	org.osgi.service.cm,\
+	org.gecko.weather.dwd.stations,\
+	org.gecko.weather.model,\
+	org.glassfish.jersey.media.jersey-media-json-jackson,\
+	org.gecko.emf.osgi.component
+
+-testpath: \
+	${junit}
+
+javac.source: 17
+javac.target: 17
+
+Bundle-Version: 0.0.0.${tstamp}
+-privatepackage: org.gecko.weather.rest
+
+-includeresource: OSGI-INF/configurator/=configs/
+Require-Capability: osgi.extender;filter:='(osgi.extender=osgi.configurator)'
