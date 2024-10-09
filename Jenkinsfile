@@ -41,6 +41,36 @@ pipeline  {
                 sh "cp -r cnf/release/* $JENKINS_HOME/repo.gecko/snapshot/org.gecko.weather"
             }
         }
+        stage('Prepare Docker') {
+            when {                                                                                                                         
+                branch 'main'
+            }
+            steps  {
+                echo "I am preparing docker: ${env.GIT_BRANCH}"
+
+                sh "./gradlew prepareDocker --info --stacktrace -Dmaven.repo.local=${WORKSPACE}/.m2"
+
+            }
+
+        }
+
+        stage('Docker Bridge Image build'){
+            when {
+                branch 'main'
+            }
+            steps  {
+                echo "I am building and publishing a docker image on branch: ${env.GIT_BRANCH}"
+
+                step([$class: 'DockerBuilderPublisher',
+                      dockerFileDirectory: 'docker',
+                            cloud: 'docker',
+                            tagsString: """devel.data-in-motion.biz:6000/scj/weather:latest
+                                        devel.data-in-motion.biz:6000/scj/weather:0.1.0.${VERSION}""",
+                            pushOnSuccess: true,
+                            pushCredentialsId: 'dim-nexus'])
+          }
+        }
+
     }
 
 }

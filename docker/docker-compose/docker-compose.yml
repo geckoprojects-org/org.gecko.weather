@@ -1,0 +1,7 @@
+services:
+    weather:
+        image: scj/weather:latest
+        ports:
+            - "8081:8081"
+
+

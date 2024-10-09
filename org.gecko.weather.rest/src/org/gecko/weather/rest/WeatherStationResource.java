@@ -101,11 +101,11 @@ public class WeatherStationResource {
 		List<WeatherStation> stations = stationSearch.searchStationsById(id);
 		return Response.status(Status.OK).entity(stations.toArray(new WeatherStation[stations.size()])).build();
 	}
-	
+
 	/**
 	 * Get the stations by name
 	 * 
-	 * @param name name of the station
+	 * @param name      name of the station
 	 * @param maxResult optional default is 5
 	 * 
 	 * @return
@@ -117,7 +117,7 @@ public class WeatherStationResource {
 		if (maxResult == null || maxResult > 100) {
 			maxResult = 5;
 		}
-		
+
 		List<WeatherStation> stations = stationSearch.searchStationByName(name, maxResult);
 		return Response.status(Status.OK).entity(stations.toArray(new WeatherStation[stations.size()])).build();
 	}

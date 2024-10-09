@@ -152,8 +152,8 @@ public class WeatherForecastResource {
 	}
 
 	/**
-	 * Getting weather forecast reports
-	 * example request: http://localhost:8081/weather/rest/forecast/10554?startDate=Thu,%2010%20Oct%202024%2011:05:30%20CET
+	 * Getting weather forecast reports example request:
+	 * http://localhost:8081/weather/rest/forecast/10554?startDate=Thu,%2010%20Oct%202024%2011:05:30%20CET
 	 * 
 	 * @param stationId
 	 * @param startDate
