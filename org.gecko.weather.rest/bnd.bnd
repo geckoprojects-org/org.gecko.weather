@@ -12,7 +12,8 @@
 	org.gecko.weather.dwd.stations,\
 	org.gecko.weather.model,\
 	org.glassfish.jersey.media.jersey-media-json-jackson,\
-	org.gecko.emf.osgi.component
+	org.gecko.emf.osgi.component,\
+	org.gecko.weather.dwd.forecast
 
 -testpath: \
 	${junit}

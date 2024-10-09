@@ -13,6 +13,8 @@
  */
 package org.gecko.weather.rest;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.List;
 
 import org.gecko.weather.dwd.stations.StationSearch;
@@ -22,7 +24,6 @@ import org.gecko.weather.model.weather.WeatherStation;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
-import org.osgi.service.jakartars.runtime.JakartarsServiceRuntime;
 import org.osgi.service.jakartars.whiteboard.propertytypes.JakartarsResource;
 
 import jakarta.ws.rs.GET;
@@ -39,16 +40,13 @@ import jakarta.ws.rs.core.Response.Status;
  * @since Oct 8, 2024
  */
 @JakartarsResource
-@Component(name = WeatherResource.COMPONENT_NAME, service = WeatherResource.class, scope = ServiceScope.PROTOTYPE)
+@Component(name = WeatherStationResource.COMPONENT_NAME, service = WeatherStationResource.class, scope = ServiceScope.PROTOTYPE)
 @Produces(MediaType.APPLICATION_JSON)
-@Path("/")
-public class WeatherResource {
-	public static final String COMPONENT_NAME = "WeatherResouce";
+@Path("station")
+public class WeatherStationResource {
+	public static final String COMPONENT_NAME = "WeatherStationResouce";
 	@Reference
 	private StationSearch stationSearch;
-
-	@Reference
-	private JakartarsServiceRuntime rt;
 
 	@GET
 	@Path("hello")
@@ -59,20 +57,68 @@ public class WeatherResource {
 	/**
 	 * Get the stations from an area around a geo location
 	 * 
-	 * @param lat Latitude
-	 * @param lon Longitude
-	 * @param radius
+	 * @param lat       Latitude
+	 * @param lon       Longitude
+	 * @param radius    optional default is 10000
+	 * @param maxResult optional default is 5
 	 * @return
 	 */
 	@GET
-	@Path("/station")
+	@Path("location")
 	public Response getStationByLocation(@QueryParam("latitude") Double lat, @QueryParam("longitude") Double lon,
-			@QueryParam("radius") Integer radius) {
+			@QueryParam("radius") Integer radius, @QueryParam("max") Integer maxResult) {
+		requireNonNull(lat);
+		requireNonNull(lon);
+
+		if (radius == null) {
+			radius = 10000;
+		}
+
+		if (maxResult == null || maxResult > 100) {
+			maxResult = 5;
+		}
+
 		GeoPosition geoPosition = WeatherFactory.eINSTANCE.createGeoPosition();
 		geoPosition.setLatitude(lat);
 		geoPosition.setLongitude(lon);
 
-		List<WeatherStation> stations = stationSearch.searchStationNearLocation(geoPosition, radius);
+		List<WeatherStation> stations = stationSearch.searchStationNearLocation(geoPosition, radius, maxResult);
+		return Response.status(Status.OK).entity(stations.toArray(new WeatherStation[stations.size()])).build();
+	}
+
+	/**
+	 * Get the stations by id
+	 * 
+	 * @param id id of the station
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("id")
+	public Response getStationById(@QueryParam("id") String id) {
+		requireNonNull(id);
+
+		List<WeatherStation> stations = stationSearch.searchStationsById(id);
+		return Response.status(Status.OK).entity(stations.toArray(new WeatherStation[stations.size()])).build();
+	}
+	
+	/**
+	 * Get the stations by name
+	 * 
+	 * @param name name of the station
+	 * @param maxResult optional default is 5
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("name")
+	public Response getStationByName(@QueryParam("name") String name, @QueryParam("max") Integer maxResult) {
+		requireNonNull(name);
+		if (maxResult == null || maxResult > 100) {
+			maxResult = 5;
+		}
+		
+		List<WeatherStation> stations = stationSearch.searchStationByName(name, maxResult);
 		return Response.status(Status.OK).entity(stations.toArray(new WeatherStation[stations.size()])).build();
 	}
 

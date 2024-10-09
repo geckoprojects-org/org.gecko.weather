@@ -78,7 +78,7 @@ public abstract class DWDFetcher {
 
 	public InputStream doUnzip(InputStream zippedSource) {
 		requireNonNull(zippedSource);
-		LOGGER.log(Level.INFO, "{0} Unzip thefile: {1}", getName());
+		LOGGER.log(Level.INFO, "Unzip the file: {0}", getName());
 		long start = System.currentTimeMillis();
 		try {
 			return DWDUtils.unzip(zippedSource);

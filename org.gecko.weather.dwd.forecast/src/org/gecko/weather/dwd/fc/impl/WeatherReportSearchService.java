@@ -39,6 +39,7 @@ import org.apache.lucene.search.TopDocs;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.gecko.emf.osgi.annotation.require.RequireEMF;
 import org.gecko.weather.api.util.DWDUtils;
 import org.gecko.weather.dwd.fc.WeatherReportSearch;
 import org.gecko.weather.dwd.fc.WeatherReportStorageHandler;
@@ -53,7 +54,8 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * This is a sample Search Service to retrieve the objects from the index
  */
-@Component(service = WeatherReportSearch.class)
+@Component
+@RequireEMF
 public class WeatherReportSearchService implements WeatherReportSearch {
 
 	private static final Logger LOGGER = System.getLogger(WeatherReportSearchService.class.getName());
@@ -81,7 +83,6 @@ public class WeatherReportSearchService implements WeatherReportSearch {
 			type = weatherPackage.getWeatherReport();
 		}
 		String typeUri = EcoreUtil.getURI(type).toString();
-		stationId = stationId.toLowerCase();
 		Query typeQuery = new TermQuery(new Term(ReportIndexHelper.REPORT_TYPE, typeUri));
 		Query stationQuery = new TermQuery(new Term(ReportIndexHelper.STATION_ID, stationId));
 		Query query = new BooleanQuery.Builder().
@@ -102,7 +103,6 @@ public class WeatherReportSearchService implements WeatherReportSearch {
 			type = weatherPackage.getWeatherReport();
 		}
 		String typeUri = EcoreUtil.getURI(type).toString();
-		stationId = stationId.toLowerCase();
 		Query typeQuery = new TermQuery(new Term(ReportIndexHelper.REPORT_TYPE, typeUri));
 		Query stationQuery = new TermQuery(new Term(ReportIndexHelper.STATION_ID, stationId));
 		Query rangeQuery = LongField.newRangeQuery(ReportIndexHelper.REPORT_TIMESTAMP, startDate.getTime(), Long.MAX_VALUE);
@@ -177,7 +177,6 @@ public class WeatherReportSearchService implements WeatherReportSearch {
 			type = weatherPackage.getWeatherReport();
 		}
 		String typeUri = EcoreUtil.getURI(type).toString();
-		stationId = stationId.toLowerCase();
 		Query typeQuery = new TermQuery(new Term(ReportIndexHelper.REPORT_TYPE, typeUri));
 		Query stationQuery = new TermQuery(new Term(ReportIndexHelper.STATION_ID, stationId));
 		Query rangeQuery = LongField.newRangeQuery(ReportIndexHelper.REPORT_TIMESTAMP, startTime.getTime(), endTime.getTime());

@@ -2,6 +2,32 @@
 
 # org.gecko.weather
 
+
+
+## Rest API
+
+With the default configuration two rest resources deployed, ```station``` and ```forecast```.  
+
+### station 
+
+load a list of stations from the DWD and makes it searchable.
+
+http://localhost:8081/weather/rest/station/name?name=jena
+
+http://localhost:8081/weather/rest/station/location?latitude=51.01&longitude=11.56&radius=50000&max=10
+
+### forecast
+
+provides methods to start the fetching of weather reports for specific stations
+
+http://localhost:8081/weather/rest/forecast/start/10554/
+
+and methods to search and get weather forecast reports
+
+http://localhost:8081/weather/rest/forecast/10554?startDate=Thu,%2010%20Oct%202024%2011:05:30%20CET
+
+
+
 ## Links
 
 * [Documentation](https://github.com/geckoprojects-org/org.gecko.weather)
