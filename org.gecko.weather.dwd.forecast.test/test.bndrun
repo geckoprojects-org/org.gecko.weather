@@ -4,9 +4,6 @@
 	bnd.identity;id='net.opengis.wfs.model',\
 	bnd.identity;id='org.gecko.weather.dwd.forecast.test',\
 	bnd.identity;id='org.gecko.weather.dwd.forecast',\
-	bnd.identity;id='biz.aQute.gogo.commands.provider',\
-	bnd.identity;id='org.apache.felix.gogo.runtime',\
-	bnd.identity;id='org.apache.felix.gogo.shell',\
 	bnd.identity;id='org.gecko.time4j'
 	
 -runbundles.test: \
@@ -58,10 +55,6 @@
 	net.bytebuddy.byte-buddy;version='[1.14.18,1.14.19)',\
 	org.gecko.weather.dwd.forecast.test;version=snapshot,\
 	org.gecko.weather.api;version=snapshot,\
-	aQute.libg;version='[7.0.0,7.0.1)',\
-	biz.aQute.gogo.commands.provider;version='[1.11.0,1.11.1)',\
-	slf4j.api;version='[1.7.36,1.7.37)',\
-	slf4j.simple;version='[1.7.36,1.7.37)',\
-	org.apache.felix.gogo.shell;version='[1.1.4,1.1.5)',\
 	org.gecko.time4j;version=snapshot,\
-	time4j-base;version='[5.9.4,5.9.5)'
+	time4j-base;version='[5.9.4,5.9.5)',\
+	org.osgi.service.cm;version='[1.6.1,1.6.2)'
