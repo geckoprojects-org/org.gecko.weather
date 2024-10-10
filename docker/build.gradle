@@ -13,8 +13,9 @@ task prepareDocker(){
 		stageDir.mkdirs()
 	     // copy all necessary files to  build/docker/ dir
     	copy {
-	        from new File("../org.gecko.weather.runtime/generated/distributions/executable/org.gecko.weather.runtime.jar")
+	        from new File("../org.gecko.weather.runtime/generated/distributions/executable/launch.jar")
 	        into stageDir
+            rename("launch.jar", "org.gecko.weather.runtime.jar")
 	    }
 	    copy {
 	        from new File("../org.gecko.weather.runtime/runtime/")

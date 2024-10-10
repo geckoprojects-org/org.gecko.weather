@@ -41,6 +41,18 @@ pipeline  {
                 sh "cp -r cnf/release/* $JENKINS_HOME/repo.gecko/snapshot/org.gecko.weather"
             }
         }
+        stage('Weather export') {
+            when {
+                branch 'main'
+            }
+            steps {
+                echo "I am building app on branch: ${env.GIT_BRANCH}"
+
+                sh "./gradlew :org.gecko.weather.runtime:resolve.launch --info --stacktrace -Dmaven.repo.local=${WORKSPACE}/.m2"
+                sh "./gradlew :org.gecko.weather.runtime:export.launch --info --stacktrace -Dmaven.repo.local=${WORKSPACE}/.m2"                                                        
+            }
+        }
+
         stage('Prepare Docker') {
             when {                                                                                                                         
                 branch 'main'
@@ -54,7 +66,7 @@ pipeline  {
 
         }
 
-        stage('Docker Bridge Image build'){
+        stage('Docker Weather Image build'){
             when {
                 branch 'main'
             }
@@ -68,9 +80,7 @@ pipeline  {
                                         devel.data-in-motion.biz:6000/scj/weather:0.1.0.${VERSION}""",
                             pushOnSuccess: true,
                             pushCredentialsId: 'dim-nexus'])
-          }
+            }
         }
-
     }
-
 }
