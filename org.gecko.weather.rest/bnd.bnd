@@ -13,15 +13,11 @@
 	org.gecko.weather.model,\
 	org.glassfish.jersey.media.jersey-media-json-jackson,\
 	org.gecko.emf.osgi.component,\
-	org.gecko.weather.dwd.forecast
+	org.gecko.weather.dwd.forecast,\
+	org.gecko.weather.api
 
 -testpath: \
 	${junit}
 
-javac.source: 17
-javac.target: 17
-
 Bundle-Version: 0.0.0.${tstamp}
 -privatepackage: org.gecko.weather.rest
-
-Require-Capability: osgi.extender;filter:='(osgi.extender=osgi.configurator)'

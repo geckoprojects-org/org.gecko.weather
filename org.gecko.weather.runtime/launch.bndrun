@@ -5,7 +5,7 @@
 
 -runprovidedcapabilities: ${native_capability}
 
--resolve.effective: active;skip:="osgi.service"
+-resolve.effective: active
 
 -runbundles: \
 	aQute.libg;version='[7.0.0,7.0.1)',\
@@ -89,12 +89,17 @@
 	org.apache.felix.eventadmin;version='[1.6.4,1.6.5)',\
 	org.gecko.weather.dwd.forecast;version=snapshot,\
 	org.w3.smil.model;version='[1.0.0,1.0.1)',\
-	org.w3.xlink.model;version='[1.0.0,1.0.1)'
+	org.w3.xlink.model;version='[1.0.0,1.0.1)',\
+	org.gecko.time4j;version=snapshot,\
+	org.xmlsoap.model;version='[1.0.0,1.0.1)',\
+	time4j-base;version='[5.9.4,5.9.5)',\
+	org.gecko.weather.runtime;version=snapshot
 
 -runrequires: \
 	bnd.identity;id='biz.aQute.gogo.commands.provider',\
 	bnd.identity;id='org.gecko.weather.rest',\
-	bnd.identity;id='org.gecko.weather.dwd.config'
+	bnd.identity;id='org.gecko.weather.dwd.config',\
+	bnd.identity;id='org.gecko.weather.runtime'
 -runfw: org.apache.felix.framework;version='[7.0.5,7.0.5]'
 -runee: JavaSE-17
 

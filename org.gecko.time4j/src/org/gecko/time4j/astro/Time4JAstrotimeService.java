@@ -37,56 +37,47 @@ import net.time4j.tz.Timezone;
 
 /**
  * Implementation of {@link AstrotimeService} using Time4J library
+ * 
  * @author Mark Hoffmann
  * @since 06.10.2024
  */
 @Component
-public class Time4JAstrotimeService implements AstrotimeService{
-	
+public class Time4JAstrotimeService implements AstrotimeService {
+
 	@Reference
 	private WeatherFactory weatherFactory;
-	
-	/* 
-	 * (non-Javadoc)
-	 * @see org.gecko.weather.api.AstrotimeService#getSunset(org.gecko.weather.model.weather.GeoPosition, java.time.LocalDate)
-	 */
+
 	public Date getSunset(GeoPosition position, LocalDate date) {
 		return getSunTimes(position, date).getSunset();
 	}
-	
-	/* 
-	 * (non-Javadoc)
-	 * @see org.gecko.weather.api.AstrotimeService#getSunrise(org.gecko.weather.model.weather.GeoPosition, java.time.LocalDate)
-	 */
+
 	public Date getSunrise(GeoPosition position, LocalDate date) {
 		return getSunTimes(position, date).getSunset();
 	}
-	
-	/* 
-	 * (non-Javadoc)
-	 * @see org.gecko.weather.api.AstrotimeService#getSunTimes(org.gecko.weather.model.weather.GeoPosition, java.time.LocalDate)
-	 */
+
 	@Override
 	public Astrotime getSunTimes(GeoPosition position, LocalDate date) {
 		requireNonNull(position);
 		requireNonNull(date);
 		PlainDate plainDate = PlainDate.from(date);
 		TZID tzid = Timezone.ofPlatform().getID();
-		
+
 		// high altitude implies earlier sunrise and later sunset
-		SolarTime solartimes =
-				SolarTime.ofLocation(position.getLatitude(), position.getLongitude());
+		SolarTime solartimes;
 		if (position.eIsSet(WeatherPackage.eINSTANCE.getGeoPosition_Elevation())) {
-			solartimes = SolarTime.ofLocation(position.getLatitude(), position.getLongitude(), position.getElevation(), StdSolarCalculator.TIME4J);
+			solartimes = SolarTime.ofLocation(position.getLatitude(), position.getLongitude(), position.getElevation(),
+					StdSolarCalculator.TIME4J);
 		} else {
-			solartimes =
-					SolarTime.ofLocation(position.getLatitude(), position.getLongitude());
+			solartimes = SolarTime.ofLocation(position.getLatitude(), position.getLongitude());
 		}
-		
+
 		LocalDateTime sunsetTime = plainDate.get(solartimes.sunset()).get().toZonalTimestamp(tzid).toTemporalAccessor();
-		LocalDateTime sunsetTLTime = plainDate.get(solartimes.sunset(Twilight.CIVIL)).get().toZonalTimestamp(tzid).toTemporalAccessor();
-		LocalDateTime sunriseTime = plainDate.get(solartimes.sunrise()).get().toZonalTimestamp(tzid).toTemporalAccessor();
-		LocalDateTime sunriseTLTime = plainDate.get(solartimes.sunrise(Twilight.CIVIL)).get().toZonalTimestamp(tzid).toTemporalAccessor();
+		LocalDateTime sunsetTLTime = plainDate.get(solartimes.sunset(Twilight.CIVIL)).get().toZonalTimestamp(tzid)
+				.toTemporalAccessor();
+		LocalDateTime sunriseTime = plainDate.get(solartimes.sunrise()).get().toZonalTimestamp(tzid)
+				.toTemporalAccessor();
+		LocalDateTime sunriseTLTime = plainDate.get(solartimes.sunrise(Twilight.CIVIL)).get().toZonalTimestamp(tzid)
+				.toTemporalAccessor();
 		Astrotime at = weatherFactory.createAstrotime();
 		at.setSunset(Date.from(sunsetTime.atZone(ZoneId.systemDefault()).toInstant()));
 		at.setSunsetTwilight(Date.from(sunsetTLTime.atZone(ZoneId.systemDefault()).toInstant()));
@@ -94,13 +85,14 @@ public class Time4JAstrotimeService implements AstrotimeService{
 		at.setSunriseTwilight(Date.from(sunriseTLTime.atZone(ZoneId.systemDefault()).toInstant()));
 		return at;
 	}
-	
+
 	/**
 	 * Used for testing
+	 * 
 	 * @param factory
 	 */
 	void setWeatherFactory(WeatherFactory factory) {
 		this.weatherFactory = factory;
 	}
-	
+
 }
