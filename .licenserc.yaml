@@ -49,6 +49,7 @@ header:
     - '**/.classpath'
     - 'LICENSE'
     - 'Jenkinsfile'
+    - 'Dockerfile'
     - 'NOTICE'
     - '.gitattributes'
     - '.github/**'

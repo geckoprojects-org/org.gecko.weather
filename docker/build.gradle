@@ -17,9 +17,9 @@ task prepareDocker(){
 	        into stageDir
             rename("launch.jar", "org.gecko.weather.runtime.jar")
 	    }
-	    copy {
+/*	    copy {
 	        from new File("../org.gecko.weather.runtime/runtime/")
 	        into new File(stageDir, "runtime")
-	    }
+	    }*/
     }
 }
