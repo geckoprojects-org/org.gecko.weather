@@ -1,6 +1,10 @@
 pipeline  {
     agent any
 
+    environment {                                                                                                                                                                              
+        JAVA_OPTS = "-Xms4048m -Xmx4048m -XX:MaxMetaspaceSize=2048m -Dgosh.args=--nointeractive ${sh(script:'echo $JAVA_OPTS', returnStdout: true).trim()}"
+        VERSION = "${env.BUILD_ID}"
+    }
     tools {
         jdk 'OpenJDK17'
     }
