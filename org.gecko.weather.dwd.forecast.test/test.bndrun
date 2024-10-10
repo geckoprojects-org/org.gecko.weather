@@ -3,7 +3,11 @@
 -runrequires: \
 	bnd.identity;id='net.opengis.wfs.model',\
 	bnd.identity;id='org.gecko.weather.dwd.forecast.test',\
-	bnd.identity;id='org.gecko.weather.dwd.forecast'
+	bnd.identity;id='org.gecko.weather.dwd.forecast',\
+	bnd.identity;id='biz.aQute.gogo.commands.provider',\
+	bnd.identity;id='org.apache.felix.gogo.runtime',\
+	bnd.identity;id='org.apache.felix.gogo.shell',\
+	bnd.identity;id='org.gecko.time4j'
 	
 -runbundles.test: \
 	org.gecko.weather.dwd.forecast.test;version=snapshot
@@ -12,6 +16,9 @@
 
 -runee: JavaSE-17
 -runproperties: baseDir=${build}/../org.gecko.weather.dwd.forecast.test
+
+-runvm: \
+	-DdwdBaseUrl=data/
 
 -runbundles: \
 	biz.aQute.api.scheduler;version='[1.11.0,1.11.1)',\
@@ -38,7 +45,6 @@
 	org.gecko.weather.model;version=snapshot,\
 	org.opentest4j;version='[1.3.0,1.3.1)',\
 	org.osgi.service.component;version='[1.5.1,1.5.2)',\
-	org.osgi.service.event;version='[1.4.1,1.4.2)',\
 	org.osgi.test.common;version='[1.3.0,1.3.1)',\
 	org.osgi.test.junit5;version='[1.3.0,1.3.1)',\
 	org.osgi.test.junit5.cm;version='[1.3.0,1.3.1)',\
@@ -51,7 +57,11 @@
 	assertj-core;version='[3.26.3,3.26.4)',\
 	net.bytebuddy.byte-buddy;version='[1.14.18,1.14.19)',\
 	org.gecko.weather.dwd.forecast.test;version=snapshot,\
-	org.gecko.emf.osgi.api;version='[6.3.0,6.3.1)',\
-	org.gecko.emf.osgi.component.config;version='[6.3.0,6.3.1)',\
-	org.osgi.service.cm;version='[1.6.1,1.6.2)',\
-	org.gecko.weather.api;version=snapshot
+	org.gecko.weather.api;version=snapshot,\
+	aQute.libg;version='[7.0.0,7.0.1)',\
+	biz.aQute.gogo.commands.provider;version='[1.11.0,1.11.1)',\
+	slf4j.api;version='[1.7.36,1.7.37)',\
+	slf4j.simple;version='[1.7.36,1.7.37)',\
+	org.apache.felix.gogo.shell;version='[1.1.4,1.1.5)',\
+	org.gecko.time4j;version=snapshot,\
+	time4j-base;version='[5.9.4,5.9.5)'

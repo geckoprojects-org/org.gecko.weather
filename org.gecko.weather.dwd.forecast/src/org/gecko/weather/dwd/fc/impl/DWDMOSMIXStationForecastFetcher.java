@@ -92,8 +92,6 @@ public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> impl
 	@Reference
 	private WeatherReportIndex reportIndex;
 	@Reference
-	private DWDUtils dwdUtils;
-	@Reference
 	private AstrotimeService as;
 	private MOSMIXStationConfig config;
 	private Station station;
@@ -130,7 +128,7 @@ public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> impl
 
 	@Override
 	protected String getFetchUrl() {
-		return dwdUtils.buildMOSMIXSingleForecastUrl(config.stationId());
+		return DWDUtils.getInstance().buildMOSMIXSingleForecastUrl(config.stationId());
 	}
 
 	@Override
@@ -189,8 +187,10 @@ public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> impl
 				XMLGregorianCalendar xmlC = forecastTimeSteps.get(i);
 				GregorianCalendar c = xmlC.toGregorianCalendar();
 				report.setTimestamp(c.getTime());
-				Astrotime sunTimes = as.getSunTimes(location, LocalDate.ofInstant(c.getTime().toInstant(), ZoneId.systemDefault()));
-				report.setAstrotime(sunTimes);
+				if(location != null) {
+					Astrotime sunTimes = as.getSunTimes(location, LocalDate.ofInstant(c.getTime().toInstant(), ZoneId.systemDefault()));
+					report.setAstrotime(sunTimes);
+				}
 				reports[i] = report;
 			}
 		}

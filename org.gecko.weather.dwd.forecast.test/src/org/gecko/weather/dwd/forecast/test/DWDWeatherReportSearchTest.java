@@ -28,7 +28,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.osgi.service.cm.annotations.RequireConfigurationAdmin;
 import org.osgi.test.common.annotation.InjectService;
 import org.osgi.test.common.annotation.Property;
-import org.osgi.test.common.annotation.config.WithConfiguration;
 import org.osgi.test.common.annotation.config.WithFactoryConfiguration;
 import org.osgi.test.common.service.ServiceAware;
 import org.osgi.test.junit5.cm.ConfigurationExtension;
@@ -45,10 +44,10 @@ import biz.aQute.scheduler.api.CronJob;
 @WithFactoryConfiguration(factoryPid = "EMFLuceneIndex", location = "?", name = "forecast-index", properties = {
 		@Property(key = "id", value = "dwd.forecast"), @Property(key = "directory.type", value = "ByteBuffer") })
 @WithFactoryConfiguration(factoryPid = "DWD-MOSMIX-Station", location = "?", name = "10554", properties = {
-		@Property(key = "stationId", value = "10554"), @Property(key = "latitude", value = "0.0"),
+		@Property(key = "stationId", value = "10554"), 
+		@Property(key = "name", value = "ERFURT"), 
+		@Property(key = "latitude", value = "0.0"),
 		@Property(key = "longitude", value = "0.0") })
-@WithConfiguration(pid = "org.gecko.weather.dwd.fc.util.DWDUtils", properties = {
-		@Property(key = "dwdBaseUrl", value = "data/") })
 public class DWDWeatherReportSearchTest {
 
 	@BeforeAll
