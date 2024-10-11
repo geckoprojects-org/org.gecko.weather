@@ -1,5 +1,9 @@
 -library: enable-emf,\
 	enableJakartaREST
+	
+-includeresource.swagger: \
+	swagger-api=@https://github.com/swagger-api/swagger-ui/archive/refs/tags/v3.52.3.zip!/swagger-ui-3.52.3/dist/(*);rename:=$1,\
+	swagger-api=swagger
 
 -buildpath: \
 	org.osgi.service.jakartars,\
@@ -8,16 +12,28 @@
 	org.gecko.emf.util.annotations,\
 	org.gecko.emf.json;version=latest,\
 	jakarta.ws.rs-api,\
+	io.swagger.core.v3.swagger-annotations.jakarta,\
+	io.swagger.core.v3.swagger-jaxrs2.jakarta,\
+	io.swagger.core.v3.swagger-integration.jakarta,\
+	io.swagger.core.v3.swagger-core.jakarta,\
+	io.swagger.core.v3.swagger-models.jakarta,\
 	org.osgi.service.cm,\
 	org.gecko.weather.dwd.stations,\
 	org.gecko.weather.model,\
 	org.glassfish.jersey.media.jersey-media-json-jackson,\
 	org.gecko.emf.osgi.component,\
 	org.gecko.weather.dwd.forecast,\
-	org.gecko.weather.api
+	org.gecko.weather.api,\
+	org.osgi.service.http.whiteboard,\
+	jakarta.servlet-api,\
+	com.fasterxml.jackson.core.jackson-databind,\
+	com.fasterxml.jackson.core.jackson-core
 
 -testpath: \
 	${junit}
 
 Bundle-Version: 0.0.0.${tstamp}
--privatepackage: org.gecko.weather.rest
+
+-privatepackage: \
+	org.gecko.weather.rest,\
+	org.gecko.weather.rest.openapi

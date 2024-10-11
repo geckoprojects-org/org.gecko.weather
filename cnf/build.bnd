@@ -19,6 +19,8 @@ dimcBaselining: true
 github-project: org.gecko.weather
 base-version: 1.0.0
 
+jackson.version: 2.16.0
+
 # Maven Central Group-Id
 # For Geckoprojects the groupid must start with org.geckoprojects
 -groupid: org.geckoprojects.weather
