@@ -6,5 +6,5 @@ Bundle-Description: Gecko Weather - Service to decode NetCDF format (Global radi
 	data=data
 -buildpath: \
 	com.google.guava;version=latest,\
-	org.gecko.ucar.netcdf;version=snapshot,\
+	org.gecko.ucar.netcdf;version=latest,\
 	org.gecko.weather.model;version=snapshot

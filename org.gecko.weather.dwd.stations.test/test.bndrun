@@ -41,10 +41,8 @@
 	assertj-core;version='[3.26.3,3.26.4)',\
 	net.bytebuddy.byte-buddy;version='[1.14.18,1.14.19)',\
 	org.gecko.weather.dwd.stations;version=snapshot,\
-	org.gecko.emf.osgi.api;version='[6.3.0,6.3.1)',\
 	org.osgi.service.cm;version='[1.6.1,1.6.2)',\
 	org.gecko.weather.api;version=snapshot,\
-	org.gecko.emf.osgi.component.config;version='[6.3.0,6.3.1)',\
 	org.gecko.emf.osgi.component.minimal;version='[6.3.0,6.3.1)',\
 	org.osgi.util.converter;version='[1.0.9,1.0.10)'
 -runproperties: baseDir=${build}/../org.gecko.weather.dwd.stations.test
