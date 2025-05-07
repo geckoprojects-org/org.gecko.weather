@@ -19,7 +19,7 @@ Gogo Command: *stationbyname*
 
 **Parameter:** 
 
-* *Name* - the station name to serach for
+* *Name* - the station name to search for
 
 **Example:**
 

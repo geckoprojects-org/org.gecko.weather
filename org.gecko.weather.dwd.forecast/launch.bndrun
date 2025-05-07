@@ -45,6 +45,10 @@
 	slf4j.simple;version='[1.7.36,1.7.37)',\
 	org.gecko.weather.dwd.forecast;version=snapshot,\
 	org.apache.felix.eventadmin;version='[1.6.4,1.6.5)',\
-	org.osgi.service.event;version='[1.4.1,1.4.2)'
+	org.osgi.service.event;version='[1.4.1,1.4.2)',\
+	org.gecko.emf.osgi.api;version='[6.3.0,6.3.1)',\
+	org.gecko.emf.osgi.component.config;version='[6.3.0,6.3.1)',\
+	org.gecko.weather.api;version=snapshot,\
+	org.osgi.service.cm;version='[1.6.1,1.6.2)'
 -runvm: -Xmx8g,\
 	-Xms4g

@@ -13,6 +13,8 @@
  */
 package org.gecko.weather.dwd.fc.impl;
 
+import static java.util.Objects.nonNull;
+
 import java.io.InputStream;
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
@@ -137,18 +139,29 @@ public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> impl
 		return DWDUtils.getKML(content);
 	}
 
+	/**
+	 * Called once the weather report is decoded
+	 * @param report the weather report
+	 */
+	protected void onDecoded(MOSMIXSWeatherReport report) {
+		if (nonNull(report)) {
+			LOGGER.log(Level.DEBUG, "[{0}] Indexing MOSMIX Forecast: {1}", getName(), report.getTimestamp());
+			reportIndex.indexReport(report);
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	public void doDecode(KmlType kml) {
 		MOSMIXSWeatherReport[] reports = null;
 
-		LOGGER.log(Level.DEBUG, "Decoding the MOSMIX KML data");
+		LOGGER.log(Level.DEBUG, "[{0}] Decoding the MOSMIX KML data for station {1}", getName(), station.getName());
 		DocumentType documentType = (DocumentType) kml.getAbstractFeatureGroupGroup()
 				.get(kmlPackage.getDocumentRoot_Document(), true);
 		FeatureEList<PlacemarkType> placemarkTypeList = (FeatureEList<PlacemarkType>) documentType
 				.getAbstractFeatureGroupGroup().get(kmlPackage.getDocumentRoot_Placemark(), true);
 		PlacemarkType placemarkType = placemarkTypeList.get(0);
 		LOGGER.log(Level.DEBUG,
-				"MOSMIX Description: " + placemarkType.getDescription() + " (" + placemarkType.getName() + ")");
+				"[{0}] MOSMIX Description: {1} ({2})", getName(), placemarkType.getDescription(), placemarkType.getName());
 		WeatherStation ws = weatherFactory.createWeatherStation();
 		ws.setName(placemarkType.getDescription());
 		ws.setId(placemarkType.getName());
@@ -157,22 +170,22 @@ public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> impl
 		}
 		PointType pointType = (PointType) placemarkType.getAbstractGeometryGroupGroup()
 				.get(kmlPackage.getDocumentRoot_Point(), true);
-		if (Objects.nonNull(pointType)) {
+		if (nonNull(pointType)) {
 			GeoPosition location = weatherFactory.createGeoPosition();
 			String[] loc = pointType.getCoordinates().get(0).split(",");
 			location.setLatitude(Double.parseDouble(loc[0]));
 			location.setLongitude(Double.parseDouble(loc[1]));
 			location.setElevation((short) Double.parseDouble(loc[2]));
 			ws.setLocation(location);
-			LOGGER.log(Level.DEBUG, "MOSMIX Coords: " + pointType.getCoordinates().get(0));
+			LOGGER.log(Level.DEBUG, "[{0}] MOSMIX Coords: {1}", getName(), pointType.getCoordinates().get(0));
 		}
 		ExtendedDataType extendedData = documentType.getExtendedData();
 		List<ProductDefinitionType> productDefinitions = (List<ProductDefinitionType>) extendedData.getAny()
 				.get(forecastPackage.getDocumentRoot_ProductDefinition(), true);
-		if (Objects.nonNull(productDefinitions) && !productDefinitions.isEmpty()) {
+		if (nonNull(productDefinitions) && !productDefinitions.isEmpty()) {
 			EList<XMLGregorianCalendar> forecastTimeSteps = productDefinitions.get(0).getForecastTimeSteps()
 					.getTimeStep();
-			LOGGER.log(Level.DEBUG, "MOSMIX Timesteps: " + forecastTimeSteps.size());
+			LOGGER.log(Level.DEBUG, "[{0}] MOSMIX Timesteps: {1}", getName(), forecastTimeSteps.size());
 			reports = new MOSMIXSWeatherReport[forecastTimeSteps.size()];
 			for (int i = 0; i < forecastTimeSteps.size(); i++) {
 				MOSMIXSWeatherReport report = weatherFactory.createMOSMIXSWeatherReport();
@@ -187,7 +200,7 @@ public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> impl
 		extendedData = placemarkType.getExtendedData();
 		List<ForecastType> forecasts = (List<ForecastType>) extendedData.getAny()
 				.get(forecastPackage.getDocumentRoot_Forecast(), true);
-		if (Objects.nonNull(forecasts)) {
+		if (nonNull(forecasts)) {
 			int cnt = 0;
 			for (ForecastType fc : forecasts) {
 				//			forecasts.forEach(f->{
@@ -199,7 +212,7 @@ public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> impl
 						DWDUtils.setMOSMIXMeasurement(report, fc.getElementName(), value);
 						cnt++;
 					} catch (Exception e) {
-						LOGGER.log(Level.ERROR, "[{0}] Error in Element: {1} Index: {2}, Value: {3} [{4}]", cnt,
+						LOGGER.log(Level.ERROR, "[{0}] Error in Element: {1} Index: {2}, Value: {3} [{4}]", getName(), cnt,
 								fc.getElementName(), i, value, value.getClass().getName());
 					}
 				}
@@ -207,25 +220,23 @@ public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> impl
 			}
 			//			});
 		}
-		LOGGER.log(Level.DEBUG, "Indexing MOSMIX Forecast: ...");
 		for (int i = 0; i < reports.length; i++) {
 			MOSMIXSWeatherReport r = reports[i];
-			reportIndex.indexReport(r);
+			onDecoded(r);
 		}
-		LOGGER.log(Level.DEBUG, "Indexed MOSMIX Forecast: " + reports.length);
 	}
 
 	@Override
 	public void run() throws Exception {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-		LOGGER.log(Level.DEBUG, "[{0}] Updating MOSMIX weather forecast - {1}", config.stationId(),
+		LOGGER.log(Level.DEBUG, "[{0}] Updating MOSMIX weather forecast - {1}", getName(), config.stationId(),
 				sdf.format(new Date()));
 		long start = System.currentTimeMillis();
 		InputStream download = doDownload();
 		InputStream kmlData = doUnzip(download);
 		KmlType kml = doLoad(kmlData);
 		doDecode(kml);
-		LOGGER.log(Level.DEBUG, "[{0}] Updated MOSMIX within {1} ms", config.stationId(),
+		LOGGER.log(Level.DEBUG, "[{0}] Updated MOSMIX within {1} ms", getName(), config.stationId(),
 				System.currentTimeMillis() - start);
 	}
 }

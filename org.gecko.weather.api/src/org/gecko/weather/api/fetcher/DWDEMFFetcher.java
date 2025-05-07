@@ -78,7 +78,7 @@ public abstract class DWDEMFFetcher<T extends EObject> extends DWDFetcher {
 			throw new IllegalStateException(String.format("[%s] Error loading %s data", name, extension.toUpperCase()),
 					e);
 		} finally {
-			LOGGER.log(Level.INFO, "{0} Loading the {1}  data ({2} ms)", name, extension.toUpperCase(),
+			LOGGER.log(Level.INFO, "[{0}] Loaded the {1} data ({2} ms)", name, extension.toUpperCase(),
 					(System.currentTimeMillis() - start));
 		}
 	}

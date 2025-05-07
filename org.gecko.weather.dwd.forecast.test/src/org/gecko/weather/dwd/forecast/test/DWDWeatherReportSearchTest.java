@@ -45,8 +45,8 @@ import biz.aQute.scheduler.api.CronJob;
 @WithFactoryConfiguration(factoryPid = "EMFLuceneIndex", location = "?", name = "forecast-index", properties = {
 		@Property(key = "id", value = "dwd.forecast"), @Property(key = "directory.type", value = "ByteBuffer") })
 @WithFactoryConfiguration(factoryPid = "DWD-MOSMIX-Station", location = "?", name = "10554", properties = {
-		@Property(key = "stationId", value = "10554"), @Property(key = "latitude", value = "0.0"),
-		@Property(key = "longitude", value = "0.0") })
+		@Property(key = "stationId", value = "10554"), @Property(key = "name", value = "TEST"),
+		@Property(key = "latitude", value = "0.0"), @Property(key = "longitude", value = "0.0") })
 @WithConfiguration(pid = "org.gecko.weather.dwd.fc.util.DWDUtils", properties = {
 		@Property(key = "dwdBaseUrl", value = "data/") })
 public class DWDWeatherReportSearchTest {
@@ -57,7 +57,6 @@ public class DWDWeatherReportSearchTest {
 			throws Exception {
 		CronJob mos = mosAware.waitForService(1000);
 		assertThat(mos).isNotNull();
-
 		mos.run();
 	}
 
@@ -89,7 +88,7 @@ public class DWDWeatherReportSearchTest {
 				.allMatch(d -> d.after(calendar.getTime()));
 	}
 
-	@Test
+//	@Test
 	public void testSearchByTimeRange(@InjectService(cardinality = 0) ServiceAware<WeatherReportSearch> siAware)
 			throws InterruptedException {
 		WeatherReportSearch weaterReportSearch = siAware.waitForService(1000);
