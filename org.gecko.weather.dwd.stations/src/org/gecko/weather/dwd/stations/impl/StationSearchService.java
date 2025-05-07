@@ -55,7 +55,7 @@ public class StationSearchService implements StationSearch {
 
 	private static final Logger LOGGER = System.getLogger(StationSearchService.class.getName());
 
-	@Reference(target = "(id=dwd.station)")
+	@Reference(target = "(id="+StationSearch.CONDITION_STATION_SEARCH+")")
 	private ComponentServiceObjects<IndexSearcher> searcherSO;
 
 	@Reference

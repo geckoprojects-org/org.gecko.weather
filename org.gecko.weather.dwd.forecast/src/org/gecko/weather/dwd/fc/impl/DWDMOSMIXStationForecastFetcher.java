@@ -19,6 +19,8 @@ import java.io.InputStream;
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -30,10 +32,12 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.FeatureMapUtil.FeatureEList;
+import org.gecko.weather.api.AstrotimeService;
 import org.gecko.weather.api.fetcher.DWDEMFFetcher;
 import org.gecko.weather.api.util.DWDUtils;
 import org.gecko.weather.dwd.fc.MOSMIXStationConfig;
 import org.gecko.weather.dwd.fc.WeatherReportIndex;
+import org.gecko.weather.model.weather.Astrotime;
 import org.gecko.weather.model.weather.GeoPosition;
 import org.gecko.weather.model.weather.MOSMIXSWeatherReport;
 import org.gecko.weather.model.weather.Station;
@@ -90,7 +94,7 @@ public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> impl
 	@Reference
 	private WeatherReportIndex reportIndex;
 	@Reference
-	private DWDUtils dwdUtils;
+	private AstrotimeService as;
 	private MOSMIXStationConfig config;
 	private Station station;
 
@@ -126,7 +130,7 @@ public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> impl
 
 	@Override
 	protected String getFetchUrl() {
-		return dwdUtils.buildMOSMIXSingleForecastUrl(config.stationId());
+		return DWDUtils.getInstance().buildMOSMIXSingleForecastUrl(config.stationId());
 	}
 
 	@Override
@@ -179,6 +183,7 @@ public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> impl
 			ws.setLocation(location);
 			LOGGER.log(Level.DEBUG, "[{0}] MOSMIX Coords: {1}", getName(), pointType.getCoordinates().get(0));
 		}
+		
 		ExtendedDataType extendedData = documentType.getExtendedData();
 		List<ProductDefinitionType> productDefinitions = (List<ProductDefinitionType>) extendedData.getAny()
 				.get(forecastPackage.getDocumentRoot_ProductDefinition(), true);
@@ -187,6 +192,7 @@ public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> impl
 					.getTimeStep();
 			LOGGER.log(Level.DEBUG, "[{0}] MOSMIX Timesteps: {1}", getName(), forecastTimeSteps.size());
 			reports = new MOSMIXSWeatherReport[forecastTimeSteps.size()];
+			GeoPosition location = station.getLocation();
 			for (int i = 0; i < forecastTimeSteps.size(); i++) {
 				MOSMIXSWeatherReport report = weatherFactory.createMOSMIXSWeatherReport();
 				report.setStation(station);
@@ -194,6 +200,10 @@ public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> impl
 				XMLGregorianCalendar xmlC = forecastTimeSteps.get(i);
 				GregorianCalendar c = xmlC.toGregorianCalendar();
 				report.setTimestamp(c.getTime());
+				if(location != null) {
+					Astrotime sunTimes = as.getSunTimes(location, LocalDate.ofInstant(c.getTime().toInstant(), ZoneId.systemDefault()));
+					report.setAstrotime(sunTimes);
+				}
 				reports[i] = report;
 			}
 		}

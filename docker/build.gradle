@@ -1,0 +1,25 @@
+/*
+ * build Gradle build script
+ */
+
+task prepareDocker(){
+	def stageDir = file('content')
+	def runtimeDir = new File(stageDir, 'runtime')
+	doFirst {
+		stageDir.deleteDir()
+    }
+    doLast {
+		println "Prepare Docker build"
+		stageDir.mkdirs()
+	     // copy all necessary files to  build/docker/ dir
+    	copy {
+	        from new File("../org.gecko.weather.runtime/generated/distributions/executable/launch.jar")
+	        into stageDir
+            rename("launch.jar", "org.gecko.weather.runtime.jar")
+	    }
+/*	    copy {
+	        from new File("../org.gecko.weather.runtime/runtime/")
+	        into new File(stageDir, "runtime")
+	    }*/
+    }
+}

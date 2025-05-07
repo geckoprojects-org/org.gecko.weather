@@ -67,8 +67,6 @@ public class DWDDMOForecastFetcher extends DWDEMFFetcher<KmlType> implements Cro
 	private PointforecastPackage forecastPackage;
 	@Reference
 	private ResourceSet resourceSet;
-	@Reference
-	private DWDUtils dwdUtils;
 	
 	@Override
 	protected String getModelFileExtension() {
@@ -82,7 +80,7 @@ public class DWDDMOForecastFetcher extends DWDEMFFetcher<KmlType> implements Cro
 
 	@Override
 	protected String getFetchUrl() {
-		return dwdUtils.buildDMOForecastUrl(Calendar.getInstance(), true);
+		return DWDUtils.getInstance().buildDMOForecastUrl(Calendar.getInstance(), true);
 	}
 
 	@Override

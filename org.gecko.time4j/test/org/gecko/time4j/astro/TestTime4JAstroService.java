@@ -32,10 +32,10 @@ import org.junit.jupiter.api.Test;
  * @author mark
  * @since 06.10.2024
  */
-public class TestTime4JAstroService {
+class TestTime4JAstroService {
 	
 	@Test
-	public void testAstroServiceNoArgs() {
+	void testAstroServiceNoArgs() {
 		Time4JAstrotimeService as = new Time4JAstrotimeService();
 		as.setWeatherFactory(WeatherFactory.eINSTANCE);
 		assertThrows(NullPointerException.class, ()->as.getSunTimes(null, null));
@@ -45,7 +45,7 @@ public class TestTime4JAstroService {
 	}
 	
 	@Test
-	public void testAstroServiceXMas() {
+	void testAstroServiceXMas() {
 		Time4JAstrotimeService as = new Time4JAstrotimeService();
 		as.setWeatherFactory(WeatherFactory.eINSTANCE);
 		LocalDate xmas = LocalDate.of(2024, 12, 24);
@@ -70,7 +70,7 @@ public class TestTime4JAstroService {
 	}
 	
 	@Test
-	public void testAstroServiceXMasElevation() {
+	void testAstroServiceXMasElevation() {
 		Time4JAstrotimeService as = new Time4JAstrotimeService();
 		as.setWeatherFactory(WeatherFactory.eINSTANCE);
 		LocalDate xmas = LocalDate.of(2024, 12, 24);
@@ -94,6 +94,4 @@ public class TestTime4JAstroService {
 		assertEquals(16, ssTL.getHour());
 		assertEquals(52, ssTL.getMinute());
 	}
-	
-
 }
