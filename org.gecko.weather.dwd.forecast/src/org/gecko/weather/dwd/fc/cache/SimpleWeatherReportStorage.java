@@ -54,6 +54,15 @@ public class SimpleWeatherReportStorage implements WeatherReportStorageHandler {
 
 	/* 
 	 * (non-Javadoc)
+	 * @see org.gecko.weather.dwd.fc.WeatherReportStorageHandler#updateReport(org.gecko.weather.model.weather.WeatherReport)
+	 */
+	@Override
+	public <R extends WeatherReport> R updateReport(R report) {
+		return saveReport(report);
+	}
+
+	/* 
+	 * (non-Javadoc)
 	 * @see org.gecko.weather.dwd.fc.WeatherReportStorageHandler#deleteReport(java.lang.String)
 	 */
 	@SuppressWarnings("unchecked")

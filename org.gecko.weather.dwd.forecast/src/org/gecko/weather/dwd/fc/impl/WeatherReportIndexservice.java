@@ -154,8 +154,10 @@ public class WeatherReportIndexservice implements WeatherReportIndex {
 		reportIndex.handleContextSync(context);
 		switch (actionType) {
 		case ADD: 
-		case MODIFY:
 			cache.saveReport(report);
+			break;
+		case MODIFY:
+			cache.updateReport(report);
 			break;
 		case REMOVE:
 			if (nonNull(report.getId())) {

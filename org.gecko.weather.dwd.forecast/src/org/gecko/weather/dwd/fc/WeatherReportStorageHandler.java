@@ -32,6 +32,13 @@ public interface WeatherReportStorageHandler {
 	<R extends WeatherReport> R saveReport(R report);
 	
 	/**
+	 * Saves or updated a {@link WeatherReport}
+	 * @param report the report to save, must not be <code>null</code>
+	 * @return the saved report that should contain an id, if not provided in the argument instance
+	 */
+	<R extends WeatherReport> R updateReport(R report);
+	
+	/**
 	 * Deletes a {@link WeatherReport} as {@link Optional}
 	 * @param reportId the report id, must not be <code>null</code>
 	 * @return the {@link Optional} containing the deleted instance or an empty {@link Optional}
