@@ -1,7 +1,7 @@
 Bundle-Name: Gecko Weather Model
 Bundle-Description: Gecko Weather - Generic weather model with generated code
 
-Bundle-Version: 1.0.0.SNAPSHOT
+Bundle-Version: ${project-version}
 # sets the usually required buildpath using the bnd library, you can extend it with the normal -buildpath to your liking
 -library: enable-emf
 

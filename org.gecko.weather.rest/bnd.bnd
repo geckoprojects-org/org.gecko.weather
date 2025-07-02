@@ -32,7 +32,7 @@
 -testpath: \
 	${junit}
 
-Bundle-Version: 0.0.0.${tstamp}
+Bundle-Version: ${project-version}
 
 -privatepackage: \
 	org.gecko.weather.rest,\

@@ -17,7 +17,7 @@ Test-Cases: ${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.platform.commons.
 	
 Private-Package: org.gecko.weather.dwd.stations.test
 
-Bundle-Version: 1.0.0.SNAPSHOT
+Bundle-Version: ${project-version}
 
 # Sometimes without DynamicImport Mockito will not find certain classes
 #DynamicImport-Package: *
