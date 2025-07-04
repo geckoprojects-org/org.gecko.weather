@@ -43,6 +43,7 @@ import org.gecko.weather.dwd.fc.helper.ReportIndexHelper;
 import org.gecko.weather.model.weather.WeatherPackage;
 import org.gecko.weather.model.weather.WeatherReport;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
@@ -53,7 +54,7 @@ import org.osgi.service.event.annotations.RequireEventAdmin;
  * @author Mark Hoffmann
  * @since 15.09.2024
  */
-@Component
+@Component(name = "WeatherReportIndex", configurationPid = "WeatherReportIndex", configurationPolicy = ConfigurationPolicy.OPTIONAL)
 @RequireEventAdmin
 public class WeatherReportIndexservice implements WeatherReportIndex {
 
