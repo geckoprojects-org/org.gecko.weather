@@ -1344,6 +1344,324 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 
 		// Create resource
 		createResource(eNS_URI);
+
+		// Create annotations
+		// http://www.eclipse.org/emf/2002/GenModel
+		createGenModelAnnotations();
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.eclipse.org/emf/2002/GenModel</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createGenModelAnnotations() {
+		String source = "http://www.eclipse.org/emf/2002/GenModel";
+		addAnnotation
+		  (this,
+		   source,
+		   new String[] {
+			   "copyrightText", "Copyright (c) 2012 - 2024 Data In Motion and others.\nAll rights reserved. \n\nThis program and the accompanying materials are made\navailable under the terms of the Eclipse Public License 2.0\nwhich is available at https://www.eclipse.org/legal/epl-2.0/\n\nSPDX-License-Identifier: EPL-2.0\n\nContributors:\n     Mark Hoffmann - initial API and implementation",
+			   "complianceLevel", "17.0",
+			   "oSGiCompatible", "true",
+			   "modelName", "DWDWeather",
+			   "basePackage", "org.gecko.weather.model",
+			   "resource", "XMI"
+		   });
+		addAnnotation
+		  (getWeatherReport_Station(),
+		   source,
+		   new String[] {
+			   "documentation", "Station the measurments are for. This is usually the exact location the report belongs to"
+		   });
+		addAnnotation
+		  (getWeatherReport_Astrotime(),
+		   source,
+		   new String[] {
+			   "documentation", "Additional astro time information for this report, like sunset und sunrise times for the report day"
+		   });
+		addAnnotation
+		  (getWeatherReport_WeatherStation(),
+		   source,
+		   new String[] {
+			   "documentation", "The next official (DWD) weather station closest to the \'station\'. This is the official weather station most measurement com from"
+		   });
+		addAnnotation
+		  (mosmixsWeatherReportEClass,
+		   source,
+		   new String[] {
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_WindDirection(),
+		   source,
+		   new String[] {
+			   "documentation", "Wind direction: 0..360 Degrees (DD)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_WindSpeed(),
+		   source,
+		   new String[] {
+			   "documentation", "Wind speed: m/s (FF)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_WindGustLastHour(),
+		   source,
+		   new String[] {
+			   "documentation", "Maximum wind gust within the last hour: m/s (FX1)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_WindGustLastThreeHours(),
+		   source,
+		   new String[] {
+			   "documentation", "Maximum wind gust within the last 3 hours: m/s (FX3)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_WindGustMaxLast12Hours(),
+		   source,
+		   new String[] {
+			   "documentation", "Maximum wind gust within the last 12 hours: m/s (FXh)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_WindGustProb25(),
+		   source,
+		   new String[] {
+			   "documentation", "Probability of wind gusts >= 25kn within the last 12 hours: 0..100% (FXh25)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_WindGustProb40(),
+		   source,
+		   new String[] {
+			   "documentation", "Probability of wind gusts >= 40kn within the last 12 hours: 0..100% (FXh40)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_WindGustProb55(),
+		   source,
+		   new String[] {
+			   "documentation", "Probability of wind gusts >= 55kn within the last 12 hours: 0..100% (FXh55)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_CloudCoverTotal(),
+		   source,
+		   new String[] {
+			   "documentation", "Total cloud cover: 0..100% (N)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_CloudCoverBelow500(),
+		   source,
+		   new String[] {
+			   "documentation", "Cloud cover below 500 ft.: 0..100% (N05)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_CloudCoverEffective(),
+		   source,
+		   new String[] {
+			   "documentation", "Effective cloud cover: 0..100% (Neff)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_CloudCoverHigh(),
+		   source,
+		   new String[] {
+			   "documentation", "High cloud cover (>7 km): 0..100% (Nh)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_CloudCoverMid(),
+		   source,
+		   new String[] {
+			   "documentation", "Midlevel cloud cover (2-7 km): 0..100% (Nm)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_CloudCoverLow(),
+		   source,
+		   new String[] {
+			   "documentation", "Low cloud cover (lower than 2 km): 0..100% (Nl)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_IrRadianceGlobal(),
+		   source,
+		   new String[] {
+			   "documentation", "Global Irradiance: kJ/m2 (Rad1h)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_SurfacePressure(),
+		   source,
+		   new String[] {
+			   "documentation", "Surface pressure, reduced: Pa (PPPP)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationLarger02Last6(),
+		   source,
+		   new String[] {
+			   "documentation", "Probability of precipitation > 0.2mm during the last 6 hours: 0..100% (R602)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationLarger50Last6(),
+		   source,
+		   new String[] {
+			   "documentation", "Probability of precipitation > 5mm during the last 6 hours: 0..100% (R650)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationLarger02LastDay(),
+		   source,
+		   new String[] {
+			   "documentation", "Probability of precipitation > 0.2mm during the last 24 hours: 0..100% (Rd02)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationLarger50LastDay(),
+		   source,
+		   new String[] {
+			   "documentation", "Probability of precipitation > 5mm during the last 24 hours: 0..100% (Rd50)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationLarger00Last12(),
+		   source,
+		   new String[] {
+			   "documentation", "Probability of precipitation > 0.0mm during the last 12 hours: 0..100% (Rh00)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationLarger02Last12(),
+		   source,
+		   new String[] {
+			   "documentation", "Probability of precipitation > 0.2mm during the last 12 hours: 0..100% (Rh02)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationLarger10Last12(),
+		   source,
+		   new String[] {
+			   "documentation", "Probability of precipitation > 1 mm during the last 12 hours: 0..100% (Rh10)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationLarger50Last12(),
+		   source,
+		   new String[] {
+			   "documentation", "Probability of precipitation > 5mm during the last 12 hours: 0..100% (Rh50)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationSignificantWeatherTotal(),
+		   source,
+		   new String[] {
+			   "documentation", "Total precipitation during the last hour consistent with significant weather: kg/m2 (RR1c)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationSignificantWeatherLast3(),
+		   source,
+		   new String[] {
+			   "documentation", "Total precipitation during the last 3 hours  consistent with significant weather: kg/m2 (RR3c)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_SnowRainEqLast1(),
+		   source,
+		   new String[] {
+			   "documentation", "Snow-Rain-Equivalent during the last hour: kg/m2 (RRS1c)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_SnowRainEqLast3(),
+		   source,
+		   new String[] {
+			   "documentation", "Snow-Rain-Equivalent during the 3 hours: kg/m2 (RRS3c)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_SunshineDurationLast1(),
+		   source,
+		   new String[] {
+			   "documentation", "Sunshine duration during the last Hour: s (SunD1)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_TempAboveSurface5(),
+		   source,
+		   new String[] {
+			   "documentation", "Temperature 5cm above surface: Kelvin (T5cm)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_TempAboveSurface200(),
+		   source,
+		   new String[] {
+			   "documentation", "Temperature 2m above surface: Kelvin (TTT)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_TempDewpointAboveSurface200(),
+		   source,
+		   new String[] {
+			   "documentation", "Dewpoint 2m above surface: Kelvin (Td)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_TempMinLast12(),
+		   source,
+		   new String[] {
+			   "documentation", "Minimum temperature - within the last 12 hours: Kelvin (TN)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_TempMaxLast12(),
+		   source,
+		   new String[] {
+			   "documentation", "Maximum temperature - within the last 12 hours: Kelvin (TX)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_Visibility(),
+		   source,
+		   new String[] {
+			   "documentation", "Visibility: m (VV)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PastWeather(),
+		   source,
+		   new String[] {
+			   "documentation", "Past weather during the last 6 hours: - (W1W2)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_SignificantWeather(),
+		   source,
+		   new String[] {
+			   "documentation", "Significant Weather: - (ww)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_FogPropLast1(),
+		   source,
+		   new String[] {
+			   "documentation", "Probability for fog within the last hour: 0..100% (wwM)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_FogPropLast6(),
+		   source,
+		   new String[] {
+			   "documentation", "Probability for fog within the last 6 hours: 0..100% (wwM6)"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_FogPropLast12(),
+		   source,
+		   new String[] {
+			   "documentation", "Probability for fog within the last 12 hours: 0..100% (wwMh)"
+		   });
+		addAnnotation
+		  (astrotimeEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Additional astro time information, like sunset und sunrise times  for a certain day"
+		   });
+		addAnnotation
+		  (getAstrotime_SunsetTwilight(),
+		   source,
+		   new String[] {
+			   "documentation", "Times for the civil twilight, means 6 degrees below the horizon"
+		   });
+		addAnnotation
+		  (getAstrotime_SunriseTwilight(),
+		   source,
+		   new String[] {
+			   "documentation", "Times for the civil twilight, means 6 degrees below the horizon"
+		   });
+		addAnnotation
+		  (getWeatherStation_Id(),
+		   source,
+		   new String[] {
+			   "documentation", "The DWD id"
+		   });
+		addAnnotation
+		  (getWeatherStation_IcaoCode(),
+		   source,
+		   new String[] {
+			   "documentation", "Internation Civil Aviation Organization code"
+		   });
 	}
 
 } //WeatherPackageImpl
