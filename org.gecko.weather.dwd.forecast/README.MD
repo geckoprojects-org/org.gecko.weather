@@ -3,7 +3,7 @@
 ## Introduction
 
 The forecast fetcher is currently activated for MOSMIX (https://www.dwd.de/DE/leistungen/met_verfahren_mosmix/met_verfahren_mosmix.html)[https://www.dwd.de/DE/leistungen/met_verfahren_mosmix/met_verfahren_mosmix.html].
-The 'WeatherReportSearch' service starts the configurable cron based `org.gecko.weathcer.dwd.fc.impl.DWDMOSMIXStationForecastFetcher`. This needs a station identifier which can be retrieved through the (station service)[../org.gecko.weather.dwd.stations/README.MD] / station search.
+The `WeatherReportSearch` service starts the configurable cron based on `org.gecko.weathcer.dwd.fc.impl.DWDMOSMIXStationForecastFetcher`. This needs a station identifier which can be retrieved through the [station service](../org.gecko.weather.dwd.stations/README.MD) / station search.
 
 In this implementation the configuration for the Station-Forecast-Fetcher is created when triggering a command: `org.gecko.weathcer.dwd.fc.cmd.MOSMIXForecastCommand`. To automatically schedule the cron job, just create a corresponding configuration.
 
