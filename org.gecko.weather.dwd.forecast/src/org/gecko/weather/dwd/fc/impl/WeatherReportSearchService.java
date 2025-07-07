@@ -49,12 +49,13 @@ import org.gecko.weather.model.weather.WeatherPackage;
 import org.gecko.weather.model.weather.WeatherReport;
 import org.osgi.service.component.ComponentServiceObjects;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Reference;
 
 /**
  * This is a sample Search Service to retrieve the objects from the index
  */
-@Component
+@Component(name = "WeatherReportSearch", configurationPid = "WeatherReportSearch", configurationPolicy = ConfigurationPolicy.OPTIONAL)
 @RequireEMF
 public class WeatherReportSearchService implements WeatherReportSearch {
 
