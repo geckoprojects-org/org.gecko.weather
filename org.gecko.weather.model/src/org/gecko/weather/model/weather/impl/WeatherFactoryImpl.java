@@ -14,6 +14,7 @@
 package org.gecko.weather.model.weather.impl;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
@@ -82,8 +83,39 @@ public class WeatherFactoryImpl extends EFactoryImpl implements WeatherFactory {
 			case WeatherPackage.MEASUREMENT_WEATHER_REPORT: return createMeasurementWeatherReport();
 			case WeatherPackage.ASTROTIME: return createAstrotime();
 			case WeatherPackage.WEATHER_STATION: return createWeatherStation();
+			case WeatherPackage.W1W2: return createW1W2();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object createFromString(EDataType eDataType, String initialValue) {
+		switch (eDataType.getClassifierID()) {
+			case WeatherPackage.WMO_WEATHER_CODE_TYPE:
+				return createWMOWeatherCodeTypeFromString(eDataType, initialValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String convertToString(EDataType eDataType, Object instanceValue) {
+		switch (eDataType.getClassifierID()) {
+			case WeatherPackage.WMO_WEATHER_CODE_TYPE:
+				return convertWMOWeatherCodeTypeToString(eDataType, instanceValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
 	}
 
@@ -250,6 +282,37 @@ public class WeatherFactoryImpl extends EFactoryImpl implements WeatherFactory {
 	public WeatherStation createWeatherStation() {
 		WeatherStationImpl weatherStation = new WeatherStationImpl();
 		return weatherStation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public W1W2 createW1W2() {
+		W1W2Impl w1W2 = new W1W2Impl();
+		return w1W2;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public WMOWeatherCodeType createWMOWeatherCodeTypeFromString(EDataType eDataType, String initialValue) {
+		WMOWeatherCodeType result = WMOWeatherCodeType.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertWMOWeatherCodeTypeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
 	}
 
 	/**

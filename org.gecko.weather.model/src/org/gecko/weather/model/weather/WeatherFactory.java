@@ -171,6 +171,15 @@ public interface WeatherFactory extends EFactory {
 	WeatherStation createWeatherStation();
 
 	/**
+	 * Returns a new object of class '<em>W1W2</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>W1W2</em>'.
+	 * @generated
+	 */
+	W1W2 createW1W2();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -14,12 +14,16 @@
 package org.gecko.weather.model.weather.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.gecko.weather.model.weather.MOSMIXSWeatherReport;
+import org.gecko.weather.model.weather.W1W2;
+import org.gecko.weather.model.weather.WMOWeatherCodeType;
 import org.gecko.weather.model.weather.WeatherPackage;
 
 /**
@@ -65,8 +69,8 @@ import org.gecko.weather.model.weather.WeatherPackage;
  *   <li>{@link org.gecko.weather.model.weather.impl.MOSMIXSWeatherReportImpl#getTempMinLast12 <em>Temp Min Last12</em>}</li>
  *   <li>{@link org.gecko.weather.model.weather.impl.MOSMIXSWeatherReportImpl#getTempMaxLast12 <em>Temp Max Last12</em>}</li>
  *   <li>{@link org.gecko.weather.model.weather.impl.MOSMIXSWeatherReportImpl#getVisibility <em>Visibility</em>}</li>
- *   <li>{@link org.gecko.weather.model.weather.impl.MOSMIXSWeatherReportImpl#getPastWeather <em>Past Weather</em>}</li>
- *   <li>{@link org.gecko.weather.model.weather.impl.MOSMIXSWeatherReportImpl#getSignificantWeather <em>Significant Weather</em>}</li>
+ *   <li>{@link org.gecko.weather.model.weather.impl.MOSMIXSWeatherReportImpl#getSignificantWeather6Hours <em>Significant Weather6 Hours</em>}</li>
+ *   <li>{@link org.gecko.weather.model.weather.impl.MOSMIXSWeatherReportImpl#getSignificantWeather3Hours <em>Significant Weather3 Hours</em>}</li>
  *   <li>{@link org.gecko.weather.model.weather.impl.MOSMIXSWeatherReportImpl#getFogPropLast1 <em>Fog Prop Last1</em>}</li>
  *   <li>{@link org.gecko.weather.model.weather.impl.MOSMIXSWeatherReportImpl#getFogPropLast6 <em>Fog Prop Last6</em>}</li>
  *   <li>{@link org.gecko.weather.model.weather.impl.MOSMIXSWeatherReportImpl#getFogPropLast12 <em>Fog Prop Last12</em>}</li>
@@ -776,44 +780,34 @@ public class MOSMIXSWeatherReportImpl extends WeatherReportImpl implements MOSMI
 	protected Float visibility = VISIBILITY_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getPastWeather() <em>Past Weather</em>}' attribute.
+	 * The cached value of the '{@link #getSignificantWeather6Hours() <em>Significant Weather6 Hours</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getPastWeather()
+	 * @see #getSignificantWeather6Hours()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final Float PAST_WEATHER_EDEFAULT = null;
+	protected W1W2 significantWeather6Hours;
 
 	/**
-	 * The cached value of the '{@link #getPastWeather() <em>Past Weather</em>}' attribute.
+	 * The default value of the '{@link #getSignificantWeather3Hours() <em>Significant Weather3 Hours</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getPastWeather()
+	 * @see #getSignificantWeather3Hours()
 	 * @generated
 	 * @ordered
 	 */
-	protected Float pastWeather = PAST_WEATHER_EDEFAULT;
+	protected static final WMOWeatherCodeType SIGNIFICANT_WEATHER3_HOURS_EDEFAULT = WMOWeatherCodeType.WUNKNOWN;
 
 	/**
-	 * The default value of the '{@link #getSignificantWeather() <em>Significant Weather</em>}' attribute.
+	 * The cached value of the '{@link #getSignificantWeather3Hours() <em>Significant Weather3 Hours</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getSignificantWeather()
+	 * @see #getSignificantWeather3Hours()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final Float SIGNIFICANT_WEATHER_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getSignificantWeather() <em>Significant Weather</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSignificantWeather()
-	 * @generated
-	 * @ordered
-	 */
-	protected Float significantWeather = SIGNIFICANT_WEATHER_EDEFAULT;
+	protected WMOWeatherCodeType significantWeather3Hours = SIGNIFICANT_WEATHER3_HOURS_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getFogPropLast1() <em>Fog Prop Last1</em>}' attribute.
@@ -1705,8 +1699,23 @@ public class MOSMIXSWeatherReportImpl extends WeatherReportImpl implements MOSMI
 	 * @generated
 	 */
 	@Override
-	public Float getPastWeather() {
-		return pastWeather;
+	public W1W2 getSignificantWeather6Hours() {
+		return significantWeather6Hours;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetSignificantWeather6Hours(W1W2 newSignificantWeather6Hours, NotificationChain msgs) {
+		W1W2 oldSignificantWeather6Hours = significantWeather6Hours;
+		significantWeather6Hours = newSignificantWeather6Hours;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, WeatherPackage.MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER6_HOURS, oldSignificantWeather6Hours, newSignificantWeather6Hours);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
 	}
 
 	/**
@@ -1715,34 +1724,41 @@ public class MOSMIXSWeatherReportImpl extends WeatherReportImpl implements MOSMI
 	 * @generated
 	 */
 	@Override
-	public void setPastWeather(Float newPastWeather) {
-		Float oldPastWeather = pastWeather;
-		pastWeather = newPastWeather;
+	public void setSignificantWeather6Hours(W1W2 newSignificantWeather6Hours) {
+		if (newSignificantWeather6Hours != significantWeather6Hours) {
+			NotificationChain msgs = null;
+			if (significantWeather6Hours != null)
+				msgs = ((InternalEObject)significantWeather6Hours).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - WeatherPackage.MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER6_HOURS, null, msgs);
+			if (newSignificantWeather6Hours != null)
+				msgs = ((InternalEObject)newSignificantWeather6Hours).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - WeatherPackage.MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER6_HOURS, null, msgs);
+			msgs = basicSetSignificantWeather6Hours(newSignificantWeather6Hours, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, WeatherPackage.MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER6_HOURS, newSignificantWeather6Hours, newSignificantWeather6Hours));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public WMOWeatherCodeType getSignificantWeather3Hours() {
+		return significantWeather3Hours;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setSignificantWeather3Hours(WMOWeatherCodeType newSignificantWeather3Hours) {
+		WMOWeatherCodeType oldSignificantWeather3Hours = significantWeather3Hours;
+		significantWeather3Hours = newSignificantWeather3Hours == null ? SIGNIFICANT_WEATHER3_HOURS_EDEFAULT : newSignificantWeather3Hours;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, WeatherPackage.MOSMIXS_WEATHER_REPORT__PAST_WEATHER, oldPastWeather, pastWeather));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Float getSignificantWeather() {
-		return significantWeather;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setSignificantWeather(Float newSignificantWeather) {
-		Float oldSignificantWeather = significantWeather;
-		significantWeather = newSignificantWeather;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, WeatherPackage.MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER, oldSignificantWeather, significantWeather));
+			eNotify(new ENotificationImpl(this, Notification.SET, WeatherPackage.MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER3_HOURS, oldSignificantWeather3Hours, significantWeather3Hours));
 	}
 
 	/**
@@ -1812,6 +1828,20 @@ public class MOSMIXSWeatherReportImpl extends WeatherReportImpl implements MOSMI
 		fogPropLast12 = newFogPropLast12;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, WeatherPackage.MOSMIXS_WEATHER_REPORT__FOG_PROP_LAST12, oldFogPropLast12, fogPropLast12));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case WeatherPackage.MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER6_HOURS:
+				return basicSetSignificantWeather6Hours(null, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -1892,10 +1922,10 @@ public class MOSMIXSWeatherReportImpl extends WeatherReportImpl implements MOSMI
 				return getTempMaxLast12();
 			case WeatherPackage.MOSMIXS_WEATHER_REPORT__VISIBILITY:
 				return getVisibility();
-			case WeatherPackage.MOSMIXS_WEATHER_REPORT__PAST_WEATHER:
-				return getPastWeather();
-			case WeatherPackage.MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER:
-				return getSignificantWeather();
+			case WeatherPackage.MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER6_HOURS:
+				return getSignificantWeather6Hours();
+			case WeatherPackage.MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER3_HOURS:
+				return getSignificantWeather3Hours();
 			case WeatherPackage.MOSMIXS_WEATHER_REPORT__FOG_PROP_LAST1:
 				return getFogPropLast1();
 			case WeatherPackage.MOSMIXS_WEATHER_REPORT__FOG_PROP_LAST6:
@@ -2019,11 +2049,11 @@ public class MOSMIXSWeatherReportImpl extends WeatherReportImpl implements MOSMI
 			case WeatherPackage.MOSMIXS_WEATHER_REPORT__VISIBILITY:
 				setVisibility((Float)newValue);
 				return;
-			case WeatherPackage.MOSMIXS_WEATHER_REPORT__PAST_WEATHER:
-				setPastWeather((Float)newValue);
+			case WeatherPackage.MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER6_HOURS:
+				setSignificantWeather6Hours((W1W2)newValue);
 				return;
-			case WeatherPackage.MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER:
-				setSignificantWeather((Float)newValue);
+			case WeatherPackage.MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER3_HOURS:
+				setSignificantWeather3Hours((WMOWeatherCodeType)newValue);
 				return;
 			case WeatherPackage.MOSMIXS_WEATHER_REPORT__FOG_PROP_LAST1:
 				setFogPropLast1((Float)newValue);
@@ -2151,11 +2181,11 @@ public class MOSMIXSWeatherReportImpl extends WeatherReportImpl implements MOSMI
 			case WeatherPackage.MOSMIXS_WEATHER_REPORT__VISIBILITY:
 				setVisibility(VISIBILITY_EDEFAULT);
 				return;
-			case WeatherPackage.MOSMIXS_WEATHER_REPORT__PAST_WEATHER:
-				setPastWeather(PAST_WEATHER_EDEFAULT);
+			case WeatherPackage.MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER6_HOURS:
+				setSignificantWeather6Hours((W1W2)null);
 				return;
-			case WeatherPackage.MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER:
-				setSignificantWeather(SIGNIFICANT_WEATHER_EDEFAULT);
+			case WeatherPackage.MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER3_HOURS:
+				setSignificantWeather3Hours(SIGNIFICANT_WEATHER3_HOURS_EDEFAULT);
 				return;
 			case WeatherPackage.MOSMIXS_WEATHER_REPORT__FOG_PROP_LAST1:
 				setFogPropLast1(FOG_PROP_LAST1_EDEFAULT);
@@ -2248,10 +2278,10 @@ public class MOSMIXSWeatherReportImpl extends WeatherReportImpl implements MOSMI
 				return TEMP_MAX_LAST12_EDEFAULT == null ? tempMaxLast12 != null : !TEMP_MAX_LAST12_EDEFAULT.equals(tempMaxLast12);
 			case WeatherPackage.MOSMIXS_WEATHER_REPORT__VISIBILITY:
 				return VISIBILITY_EDEFAULT == null ? visibility != null : !VISIBILITY_EDEFAULT.equals(visibility);
-			case WeatherPackage.MOSMIXS_WEATHER_REPORT__PAST_WEATHER:
-				return PAST_WEATHER_EDEFAULT == null ? pastWeather != null : !PAST_WEATHER_EDEFAULT.equals(pastWeather);
-			case WeatherPackage.MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER:
-				return SIGNIFICANT_WEATHER_EDEFAULT == null ? significantWeather != null : !SIGNIFICANT_WEATHER_EDEFAULT.equals(significantWeather);
+			case WeatherPackage.MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER6_HOURS:
+				return significantWeather6Hours != null;
+			case WeatherPackage.MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER3_HOURS:
+				return significantWeather3Hours != SIGNIFICANT_WEATHER3_HOURS_EDEFAULT;
 			case WeatherPackage.MOSMIXS_WEATHER_REPORT__FOG_PROP_LAST1:
 				return FOG_PROP_LAST1_EDEFAULT == null ? fogPropLast1 != null : !FOG_PROP_LAST1_EDEFAULT.equals(fogPropLast1);
 			case WeatherPackage.MOSMIXS_WEATHER_REPORT__FOG_PROP_LAST6:
@@ -2342,10 +2372,8 @@ public class MOSMIXSWeatherReportImpl extends WeatherReportImpl implements MOSMI
 		result.append(tempMaxLast12);
 		result.append(", visibility: ");
 		result.append(visibility);
-		result.append(", pastWeather: ");
-		result.append(pastWeather);
-		result.append(", significantWeather: ");
-		result.append(significantWeather);
+		result.append(", significantWeather3Hours: ");
+		result.append(significantWeather3Hours);
 		result.append(", fogPropLast1: ");
 		result.append(fogPropLast1);
 		result.append(", fogPropLast6: ");

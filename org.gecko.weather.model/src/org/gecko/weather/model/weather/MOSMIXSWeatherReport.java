@@ -59,8 +59,8 @@ import org.osgi.annotation.versioning.ProviderType;
  *   <li>{@link org.gecko.weather.model.weather.MOSMIXSWeatherReport#getTempMinLast12 <em>Temp Min Last12</em>}</li>
  *   <li>{@link org.gecko.weather.model.weather.MOSMIXSWeatherReport#getTempMaxLast12 <em>Temp Max Last12</em>}</li>
  *   <li>{@link org.gecko.weather.model.weather.MOSMIXSWeatherReport#getVisibility <em>Visibility</em>}</li>
- *   <li>{@link org.gecko.weather.model.weather.MOSMIXSWeatherReport#getPastWeather <em>Past Weather</em>}</li>
- *   <li>{@link org.gecko.weather.model.weather.MOSMIXSWeatherReport#getSignificantWeather <em>Significant Weather</em>}</li>
+ *   <li>{@link org.gecko.weather.model.weather.MOSMIXSWeatherReport#getSignificantWeather6Hours <em>Significant Weather6 Hours</em>}</li>
+ *   <li>{@link org.gecko.weather.model.weather.MOSMIXSWeatherReport#getSignificantWeather3Hours <em>Significant Weather3 Hours</em>}</li>
  *   <li>{@link org.gecko.weather.model.weather.MOSMIXSWeatherReport#getFogPropLast1 <em>Fog Prop Last1</em>}</li>
  *   <li>{@link org.gecko.weather.model.weather.MOSMIXSWeatherReport#getFogPropLast6 <em>Fog Prop Last6</em>}</li>
  *   <li>{@link org.gecko.weather.model.weather.MOSMIXSWeatherReport#getFogPropLast12 <em>Fog Prop Last12</em>}</li>
@@ -948,54 +948,58 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	void setVisibility(Float value);
 
 	/**
-	 * Returns the value of the '<em><b>Past Weather</b></em>' attribute.
+	 * Returns the value of the '<em><b>Significant Weather6 Hours</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Past weather during the last 6 hours: - (W1W2)
+	 * Significant weather during the last 6 hours. It encodes significant weather for two consecutive 3-hour intervals in the past 6 hours: - (W1W2)
 	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Past Weather</em>' attribute.
-	 * @see #setPastWeather(Float)
-	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_PastWeather()
-	 * @model
+	 * @return the value of the '<em>Significant Weather6 Hours</em>' containment reference.
+	 * @see #setSignificantWeather6Hours(W1W2)
+	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_SignificantWeather6Hours()
+	 * @model containment="true"
 	 * @generated
 	 */
-	Float getPastWeather();
+	W1W2 getSignificantWeather6Hours();
 
 	/**
-	 * Sets the value of the '{@link org.gecko.weather.model.weather.MOSMIXSWeatherReport#getPastWeather <em>Past Weather</em>}' attribute.
+	 * Sets the value of the '{@link org.gecko.weather.model.weather.MOSMIXSWeatherReport#getSignificantWeather6Hours <em>Significant Weather6 Hours</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Past Weather</em>' attribute.
-	 * @see #getPastWeather()
+	 * @param value the new value of the '<em>Significant Weather6 Hours</em>' containment reference.
+	 * @see #getSignificantWeather6Hours()
 	 * @generated
 	 */
-	void setPastWeather(Float value);
+	void setSignificantWeather6Hours(W1W2 value);
 
 	/**
-	 * Returns the value of the '<em><b>Significant Weather</b></em>' attribute.
+	 * Returns the value of the '<em><b>Significant Weather3 Hours</b></em>' attribute.
+	 * The default value is <code>"UNKNOWN"</code>.
+	 * The literals are from the enumeration {@link org.gecko.weather.model.weather.WMOWeatherCodeType}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Significant Weather: - (ww)
+	 * Significant weather during the past 3 hours: - (ww)
 	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Significant Weather</em>' attribute.
-	 * @see #setSignificantWeather(Float)
-	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_SignificantWeather()
-	 * @model
+	 * @return the value of the '<em>Significant Weather3 Hours</em>' attribute.
+	 * @see org.gecko.weather.model.weather.WMOWeatherCodeType
+	 * @see #setSignificantWeather3Hours(WMOWeatherCodeType)
+	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_SignificantWeather3Hours()
+	 * @model default="UNKNOWN"
 	 * @generated
 	 */
-	Float getSignificantWeather();
+	WMOWeatherCodeType getSignificantWeather3Hours();
 
 	/**
-	 * Sets the value of the '{@link org.gecko.weather.model.weather.MOSMIXSWeatherReport#getSignificantWeather <em>Significant Weather</em>}' attribute.
+	 * Sets the value of the '{@link org.gecko.weather.model.weather.MOSMIXSWeatherReport#getSignificantWeather3Hours <em>Significant Weather3 Hours</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Significant Weather</em>' attribute.
-	 * @see #getSignificantWeather()
+	 * @param value the new value of the '<em>Significant Weather3 Hours</em>' attribute.
+	 * @see org.gecko.weather.model.weather.WMOWeatherCodeType
+	 * @see #getSignificantWeather3Hours()
 	 * @generated
 	 */
-	void setSignificantWeather(Float value);
+	void setSignificantWeather3Hours(WMOWeatherCodeType value);
 
 	/**
 	 * Returns the value of the '<em><b>Fog Prop Last1</b></em>' attribute.

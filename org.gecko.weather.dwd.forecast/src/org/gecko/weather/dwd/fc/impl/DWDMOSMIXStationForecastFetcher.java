@@ -41,6 +41,7 @@ import org.gecko.weather.model.weather.Astrotime;
 import org.gecko.weather.model.weather.GeoPosition;
 import org.gecko.weather.model.weather.MOSMIXSWeatherReport;
 import org.gecko.weather.model.weather.Station;
+import org.gecko.weather.model.weather.W1W2;
 import org.gecko.weather.model.weather.WeatherFactory;
 import org.gecko.weather.model.weather.WeatherStation;
 import org.osgi.service.component.annotations.Activate;
@@ -158,7 +159,7 @@ public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> impl
 	public void doDecode(KmlType kml) {
 		MOSMIXSWeatherReport[] reports = null;
 
-		LOGGER.log(Level.DEBUG, "[{0}] Decoding the MOSMIX KML data for station {1}", getName(), station.getName());
+		LOGGER.log(Level.DEBUG, "[{0}] Decoding the MOSMIX KML data for station {1}", getName(), station == null ? "NONE" : station.getName());
 		DocumentType documentType = (DocumentType) kml.getAbstractFeatureGroupGroup()
 				.get(kmlPackage.getDocumentRoot_Document(), true);
 		FeatureEList<PlacemarkType> placemarkTypeList = (FeatureEList<PlacemarkType>) documentType
@@ -232,6 +233,10 @@ public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> impl
 		}
 		for (int i = 0; i < reports.length; i++) {
 			MOSMIXSWeatherReport r = reports[i];
+			if(r.getSignificantWeather6Hours() == null) {
+				W1W2 w1w2 = WeatherFactory.eINSTANCE.createW1W2();
+				r.setSignificantWeather6Hours(w1w2);				
+			}
 			onDecoded(r);
 		}
 	}

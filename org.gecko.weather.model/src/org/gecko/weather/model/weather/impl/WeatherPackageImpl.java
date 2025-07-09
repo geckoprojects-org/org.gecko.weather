@@ -15,6 +15,7 @@ package org.gecko.weather.model.weather.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -33,6 +34,7 @@ import org.gecko.weather.model.weather.Measurement;
 import org.gecko.weather.model.weather.MeasurementWeatherReport;
 import org.gecko.weather.model.weather.Station;
 import org.gecko.weather.model.weather.UVRadiationMeasurement;
+import org.gecko.weather.model.weather.WMOWeatherCodeType;
 import org.gecko.weather.model.weather.WeatherFactory;
 import org.gecko.weather.model.weather.WeatherPackage;
 import org.gecko.weather.model.weather.WeatherReport;
@@ -149,6 +151,20 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 	 * @generated
 	 */
 	private EClass weatherStationEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass w1W2EClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum wmoWeatherCodeTypeEEnum = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -926,8 +942,8 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getMOSMIXSWeatherReport_PastWeather() {
-		return (EAttribute)mosmixsWeatherReportEClass.getEStructuralFeatures().get(35);
+	public EReference getMOSMIXSWeatherReport_SignificantWeather6Hours() {
+		return (EReference)mosmixsWeatherReportEClass.getEStructuralFeatures().get(35);
 	}
 
 	/**
@@ -936,7 +952,7 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getMOSMIXSWeatherReport_SignificantWeather() {
+	public EAttribute getMOSMIXSWeatherReport_SignificantWeather3Hours() {
 		return (EAttribute)mosmixsWeatherReportEClass.getEStructuralFeatures().get(36);
 	}
 
@@ -1076,6 +1092,46 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getW1W2() {
+		return w1W2EClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getW1W2_W1() {
+		return (EAttribute)w1W2EClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getW1W2_W2() {
+		return (EAttribute)w1W2EClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EEnum getWMOWeatherCodeType() {
+		return wmoWeatherCodeTypeEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public WeatherFactory getWeatherFactory() {
 		return (WeatherFactory)getEFactoryInstance();
 	}
@@ -1181,8 +1237,8 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 		createEAttribute(mosmixsWeatherReportEClass, MOSMIXS_WEATHER_REPORT__TEMP_MIN_LAST12);
 		createEAttribute(mosmixsWeatherReportEClass, MOSMIXS_WEATHER_REPORT__TEMP_MAX_LAST12);
 		createEAttribute(mosmixsWeatherReportEClass, MOSMIXS_WEATHER_REPORT__VISIBILITY);
-		createEAttribute(mosmixsWeatherReportEClass, MOSMIXS_WEATHER_REPORT__PAST_WEATHER);
-		createEAttribute(mosmixsWeatherReportEClass, MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER);
+		createEReference(mosmixsWeatherReportEClass, MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER6_HOURS);
+		createEAttribute(mosmixsWeatherReportEClass, MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER3_HOURS);
 		createEAttribute(mosmixsWeatherReportEClass, MOSMIXS_WEATHER_REPORT__FOG_PROP_LAST1);
 		createEAttribute(mosmixsWeatherReportEClass, MOSMIXS_WEATHER_REPORT__FOG_PROP_LAST6);
 		createEAttribute(mosmixsWeatherReportEClass, MOSMIXS_WEATHER_REPORT__FOG_PROP_LAST12);
@@ -1199,6 +1255,13 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 		weatherStationEClass = createEClass(WEATHER_STATION);
 		createEAttribute(weatherStationEClass, WEATHER_STATION__ID);
 		createEAttribute(weatherStationEClass, WEATHER_STATION__ICAO_CODE);
+
+		w1W2EClass = createEClass(W1W2);
+		createEAttribute(w1W2EClass, W1W2__W1);
+		createEAttribute(w1W2EClass, W1W2__W2);
+
+		// Create enums
+		wmoWeatherCodeTypeEEnum = createEEnum(WMO_WEATHER_CODE_TYPE);
 	}
 
 	/**
@@ -1323,8 +1386,8 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 		initEAttribute(getMOSMIXSWeatherReport_TempMinLast12(), ecorePackage.getEFloatObject(), "tempMinLast12", null, 0, 1, MOSMIXSWeatherReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMOSMIXSWeatherReport_TempMaxLast12(), ecorePackage.getEFloatObject(), "tempMaxLast12", null, 0, 1, MOSMIXSWeatherReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMOSMIXSWeatherReport_Visibility(), ecorePackage.getEFloatObject(), "visibility", null, 0, 1, MOSMIXSWeatherReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getMOSMIXSWeatherReport_PastWeather(), ecorePackage.getEFloatObject(), "pastWeather", null, 0, 1, MOSMIXSWeatherReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getMOSMIXSWeatherReport_SignificantWeather(), ecorePackage.getEFloatObject(), "significantWeather", null, 0, 1, MOSMIXSWeatherReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMOSMIXSWeatherReport_SignificantWeather6Hours(), this.getW1W2(), null, "significantWeather6Hours", null, 0, 1, MOSMIXSWeatherReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMOSMIXSWeatherReport_SignificantWeather3Hours(), this.getWMOWeatherCodeType(), "significantWeather3Hours", "UNKNOWN", 0, 1, MOSMIXSWeatherReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMOSMIXSWeatherReport_FogPropLast1(), ecorePackage.getEFloatObject(), "fogPropLast1", null, 0, 1, MOSMIXSWeatherReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMOSMIXSWeatherReport_FogPropLast6(), ecorePackage.getEFloatObject(), "fogPropLast6", null, 0, 1, MOSMIXSWeatherReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMOSMIXSWeatherReport_FogPropLast12(), ecorePackage.getEFloatObject(), "fogPropLast12", null, 0, 1, MOSMIXSWeatherReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1341,6 +1404,86 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 		initEClass(weatherStationEClass, WeatherStation.class, "WeatherStation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getWeatherStation_Id(), ecorePackage.getEString(), "id", null, 1, 1, WeatherStation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getWeatherStation_IcaoCode(), ecorePackage.getEString(), "icaoCode", null, 0, 1, WeatherStation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(w1W2EClass, org.gecko.weather.model.weather.W1W2.class, "W1W2", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getW1W2_W1(), this.getWMOWeatherCodeType(), "w1", "UNKNOWN", 0, 1, org.gecko.weather.model.weather.W1W2.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getW1W2_W2(), this.getWMOWeatherCodeType(), "w2", "UNKNOWN", 0, 1, org.gecko.weather.model.weather.W1W2.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		// Initialize enums and add enum literals
+		initEEnum(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.class, "WMOWeatherCodeType");
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W00);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W01);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W02);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W03);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W04);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W05);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W10);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W20);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W21);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W22);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W23);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W24);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W25);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W26);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W27);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W28);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W29);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W30);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W31);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W32);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W33);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W34);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W35);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W40);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W41);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W42);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W43);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W44);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W45);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W50);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W51);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W52);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W53);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W54);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W55);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W56);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W57);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W58);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W60);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W61);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W62);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W63);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W64);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W65);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W66);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W67);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W68);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W70);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W71);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W72);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W73);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W74);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W75);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W76);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W77);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W80);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W81);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W82);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W83);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W85);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W86);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W87);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W90);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W91);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W92);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W93);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W94);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W95);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W96);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W97);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W98);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.W99);
+		addEEnumLiteral(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.WUNKNOWN);
 
 		// Create resource
 		createResource(eNS_URI);
@@ -1603,16 +1746,16 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 			   "documentation", "Visibility: m (VV)"
 		   });
 		addAnnotation
-		  (getMOSMIXSWeatherReport_PastWeather(),
+		  (getMOSMIXSWeatherReport_SignificantWeather6Hours(),
 		   source,
 		   new String[] {
-			   "documentation", "Past weather during the last 6 hours: - (W1W2)"
+			   "documentation", "Significant weather during the last 6 hours. It encodes significant weather for two consecutive 3-hour intervals in the past 6 hours: - (W1W2)"
 		   });
 		addAnnotation
-		  (getMOSMIXSWeatherReport_SignificantWeather(),
+		  (getMOSMIXSWeatherReport_SignificantWeather3Hours(),
 		   source,
 		   new String[] {
-			   "documentation", "Significant Weather: - (ww)"
+			   "documentation", "Significant weather during the past 3 hours: - (ww)"
 		   });
 		addAnnotation
 		  (getMOSMIXSWeatherReport_FogPropLast1(),
@@ -1661,6 +1804,456 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 		   source,
 		   new String[] {
 			   "documentation", "Internation Civil Aviation Organization code"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(0),
+		   source,
+		   new String[] {
+			   "documentation", "No change in cloud cover (MOSMIX-specific)"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(1),
+		   source,
+		   new String[] {
+			   "documentation", "Cloudiness is decreasing (MOSMIX-specific)"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(2),
+		   source,
+		   new String[] {
+			   "documentation", "Cloudiness remains unchanged (MOSMIX-specific)"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(3),
+		   source,
+		   new String[] {
+			   "documentation", "Cloudiness is increasing (MOSMIX-specific)"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(4),
+		   source,
+		   new String[] {
+			   "documentation", "Haze, smoke, dust, visibility \u2265 1 km"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(5),
+		   source,
+		   new String[] {
+			   "documentation", "Haze, smoke, dust, visibility < 1 km"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(6),
+		   source,
+		   new String[] {
+			   "documentation", "Mist"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(7),
+		   source,
+		   new String[] {
+			   "documentation", "Fog"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(8),
+		   source,
+		   new String[] {
+			   "documentation", "Precipitation (recent, unspecified)"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(9),
+		   source,
+		   new String[] {
+			   "documentation", "Drizzle or snow grains (recent)"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(10),
+		   source,
+		   new String[] {
+			   "documentation", "Rain (recent)"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(11),
+		   source,
+		   new String[] {
+			   "documentation", "Snow (recent)"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(12),
+		   source,
+		   new String[] {
+			   "documentation", "Freezing rain/drizzle (recent)"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(13),
+		   source,
+		   new String[] {
+			   "documentation", "Thunderstorm (recent)"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(14),
+		   source,
+		   new String[] {
+			   "documentation", "Blowing snow or sand (recent)"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(15),
+		   source,
+		   new String[] {
+			   "documentation", "Blowing snow/sand, V \u2265 1 km (recent)"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(16),
+		   source,
+		   new String[] {
+			   "documentation", "Blowing snow/sand, V < 1 km (recent)"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(17),
+		   source,
+		   new String[] {
+			   "documentation", "Fog"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(18),
+		   source,
+		   new String[] {
+			   "documentation", "Patches of fog"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(19),
+		   source,
+		   new String[] {
+			   "documentation", "Fog \u2014 thinning"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(20),
+		   source,
+		   new String[] {
+			   "documentation", "Fog \u2014 no change"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(21),
+		   source,
+		   new String[] {
+			   "documentation", "Fog \u2014 thickening"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(22),
+		   source,
+		   new String[] {
+			   "documentation", "Rime fog"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(23),
+		   source,
+		   new String[] {
+			   "documentation", "Precipitation (present, unspecified)"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(24),
+		   source,
+		   new String[] {
+			   "documentation", "Precipitation slight/moderate"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(25),
+		   source,
+		   new String[] {
+			   "documentation", "Precipitation heavy"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(26),
+		   source,
+		   new String[] {
+			   "documentation", "Liquid precipitation slight/mod"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(27),
+		   source,
+		   new String[] {
+			   "documentation", "Liquid precipitation heavy"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(28),
+		   source,
+		   new String[] {
+			   "documentation", "Solid precipitation slight/mod"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(29),
+		   source,
+		   new String[] {
+			   "documentation", "Drizzle"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(30),
+		   source,
+		   new String[] {
+			   "documentation", "Drizzle slight"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(31),
+		   source,
+		   new String[] {
+			   "documentation", "Drizzle moderate"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(32),
+		   source,
+		   new String[] {
+			   "documentation", "Drizzle heavy"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(33),
+		   source,
+		   new String[] {
+			   "documentation", "Freezing drizzle slight"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(34),
+		   source,
+		   new String[] {
+			   "documentation", "Freezing drizzle moderate"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(35),
+		   source,
+		   new String[] {
+			   "documentation", "Freezing drizzle heavy"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(36),
+		   source,
+		   new String[] {
+			   "documentation", "Drizzle & rain slight"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(37),
+		   source,
+		   new String[] {
+			   "documentation", "Drizzle & rain mod/heavy"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(38),
+		   source,
+		   new String[] {
+			   "documentation", "Rain"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(39),
+		   source,
+		   new String[] {
+			   "documentation", "Rain slight"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(40),
+		   source,
+		   new String[] {
+			   "documentation", "Rain moderate"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(41),
+		   source,
+		   new String[] {
+			   "documentation", "Rain heavy"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(42),
+		   source,
+		   new String[] {
+			   "documentation", "Freezing rain slight"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(43),
+		   source,
+		   new String[] {
+			   "documentation", "Freezing rain moderate"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(44),
+		   source,
+		   new String[] {
+			   "documentation", "Freezing rain heavy"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(45),
+		   source,
+		   new String[] {
+			   "documentation", "Rain + snow (or drizzle) slight"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(46),
+		   source,
+		   new String[] {
+			   "documentation", "Rain + snow mod/heavy"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(47),
+		   source,
+		   new String[] {
+			   "documentation", "Snow"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(48),
+		   source,
+		   new String[] {
+			   "documentation", "Snow slight"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(49),
+		   source,
+		   new String[] {
+			   "documentation", "Snow moderate"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(50),
+		   source,
+		   new String[] {
+			   "documentation", "Snow heavy"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(51),
+		   source,
+		   new String[] {
+			   "documentation", "Ice pellets slight"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(52),
+		   source,
+		   new String[] {
+			   "documentation", "Ice pellets moderate"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(53),
+		   source,
+		   new String[] {
+			   "documentation", "Ice pellets heavy"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(54),
+		   source,
+		   new String[] {
+			   "documentation", "Snow grains"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(55),
+		   source,
+		   new String[] {
+			   "documentation", "Showers"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(56),
+		   source,
+		   new String[] {
+			   "documentation", "Rain showers slight"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(57),
+		   source,
+		   new String[] {
+			   "documentation", "Rain showers moderate"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(58),
+		   source,
+		   new String[] {
+			   "documentation", "Rain showers heavy"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(59),
+		   source,
+		   new String[] {
+			   "documentation", "Snow showers slight"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(60),
+		   source,
+		   new String[] {
+			   "documentation", "Snow showers moderate"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(61),
+		   source,
+		   new String[] {
+			   "documentation", "Snow showers heavy"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(62),
+		   source,
+		   new String[] {
+			   "documentation", "Hail showers (no thunder)"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(63),
+		   source,
+		   new String[] {
+			   "documentation", "Thunderstorm recent + slight rain"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(64),
+		   source,
+		   new String[] {
+			   "documentation", "Thunderstorm recent + mod/heavy rain"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(65),
+		   source,
+		   new String[] {
+			   "documentation", "Thunderstorm recent + slight snow/hail"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(66),
+		   source,
+		   new String[] {
+			   "documentation", "Thunderstorm recent + mod/heavy snow/hail"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(67),
+		   source,
+		   new String[] {
+			   "documentation", "Thunderstorm, no hail (slight or moderate)"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(68),
+		   source,
+		   new String[] {
+			   "documentation", "Thunderstorm with slight hail"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(69),
+		   source,
+		   new String[] {
+			   "documentation", "Thunderstorm, heavy, no hail"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(70),
+		   source,
+		   new String[] {
+			   "documentation", "Thunderstorm with dust or sandstorm"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(71),
+		   source,
+		   new String[] {
+			   "documentation", "Thunderstorm with heavy hail"
+		   });
+		addAnnotation
+		  (wmoWeatherCodeTypeEEnum.getELiterals().get(72),
+		   source,
+		   new String[] {
+			   "documentation", "No value was set"
+		   });
+		addAnnotation
+		  (getW1W2_W1(),
+		   source,
+		   new String[] {
+			   "documentation", "Significant weather in the past 6 to 3 hours: - (W1 part of W1W2)"
+		   });
+		addAnnotation
+		  (getW1W2_W2(),
+		   source,
+		   new String[] {
+			   "documentation", "Significant weather in the past 3 hours: - (W2 part of W1W2)"
 		   });
 	}
 
