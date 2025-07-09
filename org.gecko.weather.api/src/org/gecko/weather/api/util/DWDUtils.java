@@ -513,25 +513,19 @@ public class DWDUtils {
 		case "ww":
 			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER3_HOURS;
 			int wwCode = Math.round((float) value);  // e.g., 1.0 → 1
-			String wwEnumKey = WMOWeatherCodeType.WUNKNOWN.getLiteral();
-			if(wwCode >= 0 && wwCode <= 99) {
-				wwEnumKey = String.format("%02d", wwCode); // → "01"
-			}
-			WMOWeatherCodeType wwEnumCode = WMOWeatherCodeType.get(wwEnumKey);
+			WMOWeatherCodeType wwEnumCode = WMOWeatherCodeType.get(wwCode);
 			if(wwEnumCode == null) wwEnumCode = WMOWeatherCodeType.WUNKNOWN;
 			value = wwEnumCode;
 			break;
 		case "W1W2":
 			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER6_HOURS;
 			int code = Math.round((float) value); // e.g. → 30.0 -> 30
-			String padded = String.format("%04d", code); //e.g 30 -> "0030"
-			String w1Str = padded.substring(0, 2);
-			String w2Str = padded.substring(2, 4); 
-			WMOWeatherCodeType w1Code = WMOWeatherCodeType.get(w1Str);
+			int[] w1w2Code = parse(code);
+			WMOWeatherCodeType w1Code = WMOWeatherCodeType.get(w1w2Code[0]);
 			if(w1Code == null) {
 				w1Code = WMOWeatherCodeType.WUNKNOWN;
 			}
-			WMOWeatherCodeType w2Code = WMOWeatherCodeType.get(w2Str);
+			WMOWeatherCodeType w2Code = WMOWeatherCodeType.get(w1w2Code[1]);
 			if(w2Code == null) {
 				w2Code = WMOWeatherCodeType.WUNKNOWN;
 			}
@@ -595,4 +589,11 @@ public class DWDUtils {
 			}
 		}
 	}
+	
+	public static int[] parse(int number) {
+        // This works for any non-negative integer (e.g., 3, 23, 123, 1234)
+        int firstValue = number / 100;
+        int secondValue = number % 100;
+        return new int[] {firstValue, secondValue};
+    }
 }
