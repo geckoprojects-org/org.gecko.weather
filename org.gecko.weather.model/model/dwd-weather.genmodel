@@ -8,6 +8,81 @@
   <foreignModel>dwd-weather.ecore</foreignModel>
   <genPackages prefix="Weather" basePackage="org.gecko.weather.model" resource="XMI"
       disposableProviderFactory="true" ecorePackage="dwd-weather.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="dwd-weather.ecore#//WMOWeatherCodeType">
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_00"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_01"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_02"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_03"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_04"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_05"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_10"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_20"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_21"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_22"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_23"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_24"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_25"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_26"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_27"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_28"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_29"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_30"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_31"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_32"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_33"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_34"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_35"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_40"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_41"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_42"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_43"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_44"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_45"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_50"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_51"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_52"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_53"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_54"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_55"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_56"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_57"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_58"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_60"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_61"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_62"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_63"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_64"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_65"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_66"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_67"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_68"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_70"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_71"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_72"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_73"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_74"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_75"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_76"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_77"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_80"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_81"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_82"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_83"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_85"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_86"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_87"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_90"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_91"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_92"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_93"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_94"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_95"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_96"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_97"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_98"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_99"/>
+      <genEnumLiterals ecoreEnumLiteral="dwd-weather.ecore#//WMOWeatherCodeType/W_UNKNOWN"/>
+    </genEnums>
     <genClasses ecoreClass="dwd-weather.ecore#//Station">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//Station/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dwd-weather.ecore#//Station/location"/>
@@ -90,8 +165,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//MOSMIXSWeatherReport/tempMinLast12"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//MOSMIXSWeatherReport/tempMaxLast12"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//MOSMIXSWeatherReport/visibility"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//MOSMIXSWeatherReport/pastWeather"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//MOSMIXSWeatherReport/significantWeather"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dwd-weather.ecore#//MOSMIXSWeatherReport/significantWeather6Hours"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//MOSMIXSWeatherReport/significantWeather3Hours"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//MOSMIXSWeatherReport/fogPropLast1"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//MOSMIXSWeatherReport/fogPropLast6"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//MOSMIXSWeatherReport/fogPropLast12"/>
@@ -108,6 +183,10 @@
     <genClasses ecoreClass="dwd-weather.ecore#//WeatherStation">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//WeatherStation/id"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//WeatherStation/icaoCode"/>
+    </genClasses>
+    <genClasses ecoreClass="dwd-weather.ecore#//W1W2">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//W1W2/w1"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//W1W2/w2"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

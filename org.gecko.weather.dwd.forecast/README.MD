@@ -14,9 +14,9 @@ The `org.gecko.weathcer.dwd.fc.impl.DWDMOSMIXStationForecastFetcher#onDecoded` c
 
 ## Commands
 
-### Start loading weatherdata
+### Start loading weather data
 
-Gogo Command: *forecastbystation*
+Gogo Command: *forecastByStation*
 
 **Parameter:** 
 
@@ -26,11 +26,11 @@ Gogo Command: *forecastbystation*
 
 Start loading weather data for station with id *“10567”*
 
-`g! forecastbystation 10567` 
+`g! forecastByStation 10567` 
 
 ### Stop cron jop by Station
 
-Gogo Command: *forecaststop*
+Gogo Command: *forecastStop*
 
 **Parameter: **
 
@@ -38,7 +38,7 @@ Gogo Command: *forecaststop*
 
 **Example:**
 
-Stop updating weatcher reports for station with id *“10567”*: 
+Stop updating weather reports for station with id *“10567”*: 
 
-`g! forecaststop 10567` 
+`g! forecastStop 10567` 
 

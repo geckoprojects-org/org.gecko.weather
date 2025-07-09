@@ -27,8 +27,11 @@ import java.util.zip.ZipInputStream;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.gecko.weather.model.weather.MOSMIXSWeatherReport;
 import org.gecko.weather.model.weather.Measurement;
+import org.gecko.weather.model.weather.W1W2;
+import org.gecko.weather.model.weather.WMOWeatherCodeType;
 import org.gecko.weather.model.weather.WeatherFactory;
 import org.gecko.weather.model.weather.WeatherPackage;
 
@@ -433,176 +436,163 @@ public class DWDUtils {
 		if (isNull(value) || "-".equals(value.toString().trim())) {
 			return;
 		}
-		EAttribute attr;
-//		Object castedValue = value;
+		EStructuralFeature feature;
 		switch (measurementId) {
 		case "DD":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__WIND_DIRECTION;
-			// castedValue = Short.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__WIND_DIRECTION;
 			break;
 		case "PPPP":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__SURFACE_PRESSURE;
-			// Double.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__SURFACE_PRESSURE;
 			break;
 		case "TX":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__TEMP_MAX_LAST12;
-			// castedValue = Double.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__TEMP_MAX_LAST12;
 			break;
 		case "TTT":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__TEMP_ABOVE_SURFACE200;
-			// castedValue = value;//castedValue = Double.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__TEMP_ABOVE_SURFACE200;
 			break;
 		case "Td":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__TEMP_DEWPOINT_ABOVE_SURFACE200;
-//			castedValue = value;//castedValue = Double.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__TEMP_DEWPOINT_ABOVE_SURFACE200;
 			break;
 		case "TN":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__TEMP_MIN_LAST12;
-//			castedValue = Double.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__TEMP_MIN_LAST12;
 			break;
 		case "T5cm":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__TEMP_ABOVE_SURFACE5;
-			// castedValue = Double.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__TEMP_ABOVE_SURFACE5;
 			break;
 		case "FF":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__WIND_SPEED;
-			// castedValue = Float.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__WIND_SPEED;
 			break;
 		case "FX1":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__WIND_GUST_LAST_HOUR;
-			// castedValue = Float.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__WIND_GUST_LAST_HOUR;
 			break;
 		case "FX3":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__WIND_GUST_LAST_THREE_HOURS;
-			// castedValue = Float.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__WIND_GUST_LAST_THREE_HOURS;
 			break;
 		case "FXh":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__WIND_GUST_MAX_LAST12_HOURS;
-			// castedValue = Float.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__WIND_GUST_MAX_LAST12_HOURS;
 			break;
 		case "FXh25":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__WIND_GUST_PROB25;
-			// castedValue = Short.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__WIND_GUST_PROB25;
 			break;
 		case "FXh40":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__WIND_GUST_PROB40;
-			// castedValue = Short.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__WIND_GUST_PROB40;
 			break;
 		case "FXh55":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__WIND_GUST_PROB55;
-			// castedValue = Short.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__WIND_GUST_PROB55;
 			break;
 		case "N":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__CLOUD_COVER_TOTAL;
-			// castedValue = Short.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__CLOUD_COVER_TOTAL;
 			break;
 		case "Neff":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__CLOUD_COVER_EFFECTIVE;
-			// castedValue = Short.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__CLOUD_COVER_EFFECTIVE;
 			break;
 		case "Nh":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__CLOUD_COVER_HIGH;
-			// castedValue = Short.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__CLOUD_COVER_HIGH;
 			break;
 		case "Nm":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__CLOUD_COVER_MID;
-			// castedValue = Short.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__CLOUD_COVER_MID;
 			break;
 		case "Nl":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__CLOUD_COVER_LOW;
-			// castedValue = Short.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__CLOUD_COVER_LOW;
 			break;
 		case "N05":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__CLOUD_COVER_BELOW500;
-			// castedValue = Short.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__CLOUD_COVER_BELOW500;
 			break;
 		case "VV":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__VISIBILITY;
-			// castedValue = Integer.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__VISIBILITY;
 			break;
 		case "wwM":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__FOG_PROP_LAST1;
-			// castedValue = Short.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__FOG_PROP_LAST1;
 			break;
 		case "wwM6":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__FOG_PROP_LAST6;
-			// castedValue = Short.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__FOG_PROP_LAST6;
 			break;
 		case "wwMh":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__FOG_PROP_LAST12;
-			// castedValue = Short.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__FOG_PROP_LAST12;
 			break;
 		case "ww":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER;
-			// castedValue = Integer.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER3_HOURS;
+			int wwCode = Math.round((float) value);  // e.g., 1.0 → 1
+			String wwEnumKey = WMOWeatherCodeType.WUNKNOWN.getLiteral();
+			if(wwCode >= 0 && wwCode <= 99) {
+				wwEnumKey = String.format("%02d", wwCode); // → "01"
+			}
+			WMOWeatherCodeType wwEnumCode = WMOWeatherCodeType.get(wwEnumKey);
+			if(wwEnumCode == null) wwEnumCode = WMOWeatherCodeType.WUNKNOWN;
+			value = wwEnumCode;
 			break;
 		case "W1W2":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__PAST_WEATHER;
-			// castedValue = Integer.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER6_HOURS;
+			int code = Math.round((float) value); // e.g. → 30.0 -> 30
+			String padded = String.format("%04d", code); //e.g 30 -> "0030"
+			String w1Str = padded.substring(0, 2);
+			String w2Str = padded.substring(2, 4); 
+			WMOWeatherCodeType w1Code = WMOWeatherCodeType.get(w1Str);
+			if(w1Code == null) {
+				w1Code = WMOWeatherCodeType.WUNKNOWN;
+			}
+			WMOWeatherCodeType w2Code = WMOWeatherCodeType.get(w2Str);
+			if(w2Code == null) {
+				w2Code = WMOWeatherCodeType.WUNKNOWN;
+			}
+			W1W2 w1w2 = WeatherFactory.eINSTANCE.createW1W2();
+			w1w2.setW1(w1Code);
+			w1w2.setW2(w2Code);
+			value = w1w2;
 			break;
 		case "RR1c":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__PRECIPITATION_SIGNIFICANT_WEATHER_TOTAL;
-			// castedValue = Double.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__PRECIPITATION_SIGNIFICANT_WEATHER_TOTAL;
 			break;
 		case "RRS1c":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__SNOW_RAIN_EQ_LAST1;
-			// castedValue = Double.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__SNOW_RAIN_EQ_LAST1;
 			break;
 		case "RR3c":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__PRECIPITATION_SIGNIFICANT_WEATHER_LAST3;
-			// castedValue = Double.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__PRECIPITATION_SIGNIFICANT_WEATHER_LAST3;
 			break;
 		case "RRS3c":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__SNOW_RAIN_EQ_LAST3;
-			// castedValue = Double.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__SNOW_RAIN_EQ_LAST3;
 			break;
 		case "R602":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__PRECIPITATION_LARGER02_LAST6;
-			// castedValue = Short.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__PRECIPITATION_LARGER02_LAST6;
 			break;
 		case "R650":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__PRECIPITATION_LARGER50_LAST6;
-			// castedValue = Short.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__PRECIPITATION_LARGER50_LAST6;
 			break;
 		case "Rh00":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__PRECIPITATION_LARGER00_LAST12;
-			// castedValue = Short.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__PRECIPITATION_LARGER00_LAST12;
 			break;
 		case "Rh02":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__PRECIPITATION_LARGER02_LAST12;
-			// castedValue = Short.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__PRECIPITATION_LARGER02_LAST12;
 			break;
 		case "Rh10":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__PRECIPITATION_LARGER10_LAST12;
-			// castedValue = Short.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__PRECIPITATION_LARGER10_LAST12;
 			break;
 		case "Rh50":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__PRECIPITATION_LARGER50_LAST12;
-			// castedValue = Short.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__PRECIPITATION_LARGER50_LAST12;
 			break;
 		case "Rd02":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__PRECIPITATION_LARGER02_LAST_DAY;
-			// castedValue = Short.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__PRECIPITATION_LARGER02_LAST_DAY;
 			break;
 		case "Rd50":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__PRECIPITATION_LARGER50_LAST_DAY;
-			// castedValue = Short.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__PRECIPITATION_LARGER50_LAST_DAY;
 			break;
 		case "Rad1h":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__IR_RADIANCE_GLOBAL;
-			// castedValue = Double.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__IR_RADIANCE_GLOBAL;
 			break;
 		case "SunD1":
-			attr = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__SUNSHINE_DURATION_LAST1;
-			// castedValue = Integer.valueOf(value.toString());
+			feature = WeatherPackage.Literals.MOSMIXS_WEATHER_REPORT__SUNSHINE_DURATION_LAST1;
 			break;
 		default:
 			return;
-//			throw new IllegalArgumentException("Unexpected value: " + measurementId);
 		}
-		if (nonNull(attr) && value.getClass() == attr.getEAttributeType().getInstanceClass()) {
-			report.eSet(attr, value);
+		if(nonNull(feature)) {
+			if(feature instanceof EAttribute attr) {
+				if(value.getClass() == attr.getEAttributeType().getInstanceClass()) {
+					report.eSet(attr, value);			
+				}
+			} else {
+				report.eSet(feature, value);		
+			}
 		}
-
 	}
 }

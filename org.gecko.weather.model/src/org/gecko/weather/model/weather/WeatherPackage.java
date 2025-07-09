@@ -16,6 +16,7 @@ package org.gecko.weather.model.weather;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EReference;
 
 import org.gecko.emf.osgi.annotation.provide.EPackage;
@@ -1194,22 +1195,22 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	int MOSMIXS_WEATHER_REPORT__VISIBILITY = WEATHER_REPORT_FEATURE_COUNT + 34;
 
 	/**
-	 * The feature id for the '<em><b>Past Weather</b></em>' attribute.
+	 * The feature id for the '<em><b>Significant Weather6 Hours</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MOSMIXS_WEATHER_REPORT__PAST_WEATHER = WEATHER_REPORT_FEATURE_COUNT + 35;
+	int MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER6_HOURS = WEATHER_REPORT_FEATURE_COUNT + 35;
 
 	/**
-	 * The feature id for the '<em><b>Significant Weather</b></em>' attribute.
+	 * The feature id for the '<em><b>Significant Weather3 Hours</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER = WEATHER_REPORT_FEATURE_COUNT + 36;
+	int MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER3_HOURS = WEATHER_REPORT_FEATURE_COUNT + 36;
 
 	/**
 	 * The feature id for the '<em><b>Fog Prop Last1</b></em>' attribute.
@@ -1474,6 +1475,62 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @ordered
 	 */
 	int WEATHER_STATION_OPERATION_COUNT = STATION_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.gecko.weather.model.weather.impl.W1W2Impl <em>W1W2</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.gecko.weather.model.weather.impl.W1W2Impl
+	 * @see org.gecko.weather.model.weather.impl.WeatherPackageImpl#getW1W2()
+	 * @generated
+	 */
+	int W1W2 = 15;
+
+	/**
+	 * The feature id for the '<em><b>W1</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int W1W2__W1 = 0;
+
+	/**
+	 * The feature id for the '<em><b>W2</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int W1W2__W2 = 1;
+
+	/**
+	 * The number of structural features of the '<em>W1W2</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int W1W2_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>W1W2</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int W1W2_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link org.gecko.weather.model.weather.WMOWeatherCodeType <em>WMO Weather Code Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.gecko.weather.model.weather.WMOWeatherCodeType
+	 * @see org.gecko.weather.model.weather.impl.WeatherPackageImpl#getWMOWeatherCodeType()
+	 * @generated
+	 */
+	int WMO_WEATHER_CODE_TYPE = 16;
 
 
 	/**
@@ -2246,26 +2303,26 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	EAttribute getMOSMIXSWeatherReport_Visibility();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.gecko.weather.model.weather.MOSMIXSWeatherReport#getPastWeather <em>Past Weather</em>}'.
+	 * Returns the meta object for the containment reference '{@link org.gecko.weather.model.weather.MOSMIXSWeatherReport#getSignificantWeather6Hours <em>Significant Weather6 Hours</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Past Weather</em>'.
-	 * @see org.gecko.weather.model.weather.MOSMIXSWeatherReport#getPastWeather()
+	 * @return the meta object for the containment reference '<em>Significant Weather6 Hours</em>'.
+	 * @see org.gecko.weather.model.weather.MOSMIXSWeatherReport#getSignificantWeather6Hours()
 	 * @see #getMOSMIXSWeatherReport()
 	 * @generated
 	 */
-	EAttribute getMOSMIXSWeatherReport_PastWeather();
+	EReference getMOSMIXSWeatherReport_SignificantWeather6Hours();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.gecko.weather.model.weather.MOSMIXSWeatherReport#getSignificantWeather <em>Significant Weather</em>}'.
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.model.weather.MOSMIXSWeatherReport#getSignificantWeather3Hours <em>Significant Weather3 Hours</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Significant Weather</em>'.
-	 * @see org.gecko.weather.model.weather.MOSMIXSWeatherReport#getSignificantWeather()
+	 * @return the meta object for the attribute '<em>Significant Weather3 Hours</em>'.
+	 * @see org.gecko.weather.model.weather.MOSMIXSWeatherReport#getSignificantWeather3Hours()
 	 * @see #getMOSMIXSWeatherReport()
 	 * @generated
 	 */
-	EAttribute getMOSMIXSWeatherReport_SignificantWeather();
+	EAttribute getMOSMIXSWeatherReport_SignificantWeather3Hours();
 
 	/**
 	 * Returns the meta object for the attribute '{@link org.gecko.weather.model.weather.MOSMIXSWeatherReport#getFogPropLast1 <em>Fog Prop Last1</em>}'.
@@ -2406,6 +2463,48 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 */
 	EAttribute getWeatherStation_IcaoCode();
+
+	/**
+	 * Returns the meta object for class '{@link org.gecko.weather.model.weather.W1W2 <em>W1W2</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>W1W2</em>'.
+	 * @see org.gecko.weather.model.weather.W1W2
+	 * @generated
+	 */
+	EClass getW1W2();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.model.weather.W1W2#getW1 <em>W1</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>W1</em>'.
+	 * @see org.gecko.weather.model.weather.W1W2#getW1()
+	 * @see #getW1W2()
+	 * @generated
+	 */
+	EAttribute getW1W2_W1();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.model.weather.W1W2#getW2 <em>W2</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>W2</em>'.
+	 * @see org.gecko.weather.model.weather.W1W2#getW2()
+	 * @see #getW1W2()
+	 * @generated
+	 */
+	EAttribute getW1W2_W2();
+
+	/**
+	 * Returns the meta object for enum '{@link org.gecko.weather.model.weather.WMOWeatherCodeType <em>WMO Weather Code Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>WMO Weather Code Type</em>'.
+	 * @see org.gecko.weather.model.weather.WMOWeatherCodeType
+	 * @generated
+	 */
+	EEnum getWMOWeatherCodeType();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -3023,20 +3122,20 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 		EAttribute MOSMIXS_WEATHER_REPORT__VISIBILITY = eINSTANCE.getMOSMIXSWeatherReport_Visibility();
 
 		/**
-		 * The meta object literal for the '<em><b>Past Weather</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Significant Weather6 Hours</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute MOSMIXS_WEATHER_REPORT__PAST_WEATHER = eINSTANCE.getMOSMIXSWeatherReport_PastWeather();
+		EReference MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER6_HOURS = eINSTANCE.getMOSMIXSWeatherReport_SignificantWeather6Hours();
 
 		/**
-		 * The meta object literal for the '<em><b>Significant Weather</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Significant Weather3 Hours</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER = eINSTANCE.getMOSMIXSWeatherReport_SignificantWeather();
+		EAttribute MOSMIXS_WEATHER_REPORT__SIGNIFICANT_WEATHER3_HOURS = eINSTANCE.getMOSMIXSWeatherReport_SignificantWeather3Hours();
 
 		/**
 		 * The meta object literal for the '<em><b>Fog Prop Last1</b></em>' attribute feature.
@@ -3147,6 +3246,42 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 		 * @generated
 		 */
 		EAttribute WEATHER_STATION__ICAO_CODE = eINSTANCE.getWeatherStation_IcaoCode();
+
+		/**
+		 * The meta object literal for the '{@link org.gecko.weather.model.weather.impl.W1W2Impl <em>W1W2</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.gecko.weather.model.weather.impl.W1W2Impl
+		 * @see org.gecko.weather.model.weather.impl.WeatherPackageImpl#getW1W2()
+		 * @generated
+		 */
+		EClass W1W2 = eINSTANCE.getW1W2();
+
+		/**
+		 * The meta object literal for the '<em><b>W1</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute W1W2__W1 = eINSTANCE.getW1W2_W1();
+
+		/**
+		 * The meta object literal for the '<em><b>W2</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute W1W2__W2 = eINSTANCE.getW1W2_W2();
+
+		/**
+		 * The meta object literal for the '{@link org.gecko.weather.model.weather.WMOWeatherCodeType <em>WMO Weather Code Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.gecko.weather.model.weather.WMOWeatherCodeType
+		 * @see org.gecko.weather.model.weather.impl.WeatherPackageImpl#getWMOWeatherCodeType()
+		 * @generated
+		 */
+		EEnum WMO_WEATHER_CODE_TYPE = eINSTANCE.getWMOWeatherCodeType();
 
 	}
 
