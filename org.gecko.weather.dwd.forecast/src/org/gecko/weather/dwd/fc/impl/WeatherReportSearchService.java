@@ -57,14 +57,14 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(name = "WeatherReportSearch", configurationPid = "WeatherReportSearch", configurationPolicy = ConfigurationPolicy.OPTIONAL)
 @RequireEMF
-public class WeatherReportSearchService implements WeatherReportSearch {
+public class WeatherReportSearchService implements WeatherReportSearch<WeatherReport> {
 
 	private static final Logger LOGGER = System.getLogger(WeatherReportSearchService.class.getName());
 
 	@Reference(target = "(id=dwd.forecast)")
 	private ComponentServiceObjects<IndexSearcher> searcherSO;
 	@Reference
-	private WeatherReportStorageHandler cache;
+	private WeatherReportStorageHandler<WeatherReport> cache;
 	@Reference
 	private WeatherPackage weatherPackage;
 	@Reference

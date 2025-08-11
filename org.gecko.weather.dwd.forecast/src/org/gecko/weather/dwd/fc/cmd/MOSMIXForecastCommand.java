@@ -53,7 +53,7 @@ public class MOSMIXForecastCommand {
 		try {
 			System.out.println(String.format("Created/found configuration for station '%s'", stationId));
 			configuration = configAdmin.getFactoryConfiguration("DWD-MOSMIX-Station", stationId, "?");
-			Dictionary<String,String> dictionary = FrameworkUtil.asDictionary(Map.of("stationId", stationId));
+			Dictionary<String,String> dictionary = FrameworkUtil.asDictionary(Map.of("stationId", stationId, "reportIndex.target", "(component.name=WeatherReportIndex)"));
 			configuration.updateIfDifferent(dictionary);
 			System.out.println(String.format("Updated configuration for station '%s'", stationId));
 		} catch (IOException e) {

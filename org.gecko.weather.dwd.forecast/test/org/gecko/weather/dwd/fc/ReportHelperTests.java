@@ -33,7 +33,7 @@ class ReportHelperTests {
 
 	@Test
 	void testCreateReportId() {
-		assertThrows(NullPointerException.class, () -> ReportHelper.createReportId(null));
+		assertThrows(NullPointerException.class, () -> ReportHelper.createReportId((WeatherReport)null));
 		WeatherReport report = WeatherFactory.eINSTANCE.createWeatherReport();
 		assertThrows(NullPointerException.class, () -> ReportHelper.createReportId(report));
 		report.setTimestamp(new Date(0));

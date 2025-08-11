@@ -22,34 +22,34 @@ import org.gecko.weather.model.weather.WeatherReport;
  * @author Mark Hoffmann
  * @since 15.09.2024
  */
-public interface WeatherReportStorageHandler {
+public interface WeatherReportStorageHandler<T> {
 	
 	/**
 	 * Saves or updated a {@link WeatherReport}
 	 * @param report the report to save, must not be <code>null</code>
 	 * @return the saved report that should contain an id, if not provided in the argument instance
 	 */
-	<R extends WeatherReport> R saveReport(R report);
+	<R extends T> R saveReport(R report);
 	
 	/**
 	 * Saves or updated a {@link WeatherReport}
 	 * @param report the report to save, must not be <code>null</code>
 	 * @return the saved report that should contain an id, if not provided in the argument instance
 	 */
-	<R extends WeatherReport> R updateReport(R report);
+	<R extends T> R updateReport(R report);
 	
 	/**
 	 * Deletes a {@link WeatherReport} as {@link Optional}
 	 * @param reportId the report id, must not be <code>null</code>
 	 * @return the {@link Optional} containing the deleted instance or an empty {@link Optional}
 	 */
-	<R extends WeatherReport> Optional<R> deleteReport(String reportId);
+	<R extends T> Optional<R> deleteReport(String reportId);
 	
 	/**
 	 * Returns a {@link WeatherReport} as {@link Optional}
 	 * @param reportId the report id, must not be <code>null</code>
 	 * @return the {@link Optional} containing the result
 	 */
-	<R extends WeatherReport> Optional<R> getReport(String reportId);
+	<R extends T> Optional<R> getReport(String reportId);
 
 }

@@ -84,6 +84,7 @@ public class WeatherFactoryImpl extends EFactoryImpl implements WeatherFactory {
 			case WeatherPackage.ASTROTIME: return createAstrotime();
 			case WeatherPackage.WEATHER_STATION: return createWeatherStation();
 			case WeatherPackage.W1W2: return createW1W2();
+			case WeatherPackage.WEATHER_REPORTS: return createWeatherReports();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -293,6 +294,17 @@ public class WeatherFactoryImpl extends EFactoryImpl implements WeatherFactory {
 	public W1W2 createW1W2() {
 		W1W2Impl w1W2 = new W1W2Impl();
 		return w1W2;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public WeatherReports createWeatherReports() {
+		WeatherReportsImpl weatherReports = new WeatherReportsImpl();
+		return weatherReports;
 	}
 
 	/**

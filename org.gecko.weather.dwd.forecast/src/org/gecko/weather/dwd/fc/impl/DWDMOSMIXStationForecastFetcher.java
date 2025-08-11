@@ -155,6 +155,10 @@ public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> impl
 		}
 	}
 
+	protected void onDecoded(MOSMIXSWeatherReport[] reports) {
+		reportIndex.indexReports(reports);
+	}
+
 	@SuppressWarnings("unchecked")
 	public void doDecode(KmlType kml) {
 		MOSMIXSWeatherReport[] reports = null;
@@ -184,7 +188,7 @@ public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> impl
 			ws.setLocation(location);
 			LOGGER.log(Level.DEBUG, "[{0}] MOSMIX Coords: {1}", getName(), pointType.getCoordinates().get(0));
 		}
-		
+
 		ExtendedDataType extendedData = documentType.getExtendedData();
 		List<ProductDefinitionType> productDefinitions = (List<ProductDefinitionType>) extendedData.getAny()
 				.get(forecastPackage.getDocumentRoot_ProductDefinition(), true);
@@ -237,8 +241,9 @@ public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> impl
 				W1W2 w1w2 = WeatherFactory.eINSTANCE.createW1W2();
 				r.setSignificantWeather6Hours(w1w2);				
 			}
-			onDecoded(r);
+//			onDecoded(r);
 		}
+		onDecoded(reports);
 	}
 
 	@Override

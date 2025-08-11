@@ -29,6 +29,12 @@ public interface WeatherReportIndex {
 	 * @param report the the weather report to be added
 	 */
 	void indexReport(WeatherReport report);
+	
+	/**
+	 * Indexes an array of weather reports
+	 * @param reports the array of weather reports to index
+	 */
+	void indexReports(WeatherReport[] reports);
 
 	/**
 	 * Deletes a weather report from the index
