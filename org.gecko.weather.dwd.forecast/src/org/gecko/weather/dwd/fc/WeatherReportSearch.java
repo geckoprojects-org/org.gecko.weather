@@ -18,14 +18,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.eclipse.emf.ecore.EClass;
-import org.gecko.weather.model.weather.WeatherReport;
 
 /**
  * Weather report search service
  * @author Mark Hoffmann
  * @since 14.09.2024
  */
-public interface WeatherReportSearch {
+public interface WeatherReportSearch<T> {
 	
 	/**
 	 * Returns the report with the given if or an empty {@link Optional}
@@ -33,7 +32,7 @@ public interface WeatherReportSearch {
 	 * @param reportId the report id, must not be <code>null</code>
 	 * @return the {@link Optional}
 	 */
-	<R extends WeatherReport> Optional<R> getReportById(String reportId);
+	<R extends T> Optional<R> getReportById(String reportId);
 	
 	/**
 	 * Returns all reports for a given station
@@ -41,7 +40,7 @@ public interface WeatherReportSearch {
 	 * @param stationId the station id, must not be <code>null</code>
 	 * @return the list of reports or an empty list
 	 */
-	<R extends WeatherReport> List<R> getReportsByStation(String stationId, EClass type);
+	<R extends T> List<R> getReportsByStation(String stationId, EClass type);
 	
 	/**
 	 * Returns all future reports for a given station, from now on
@@ -49,7 +48,7 @@ public interface WeatherReportSearch {
 	 * @param stationId the station id, must not be <code>null</code>
 	 * @return the list of reports or an empty list
 	 */
-	<R extends WeatherReport> List<R> getReportsByStationFromNow(String stationId, EClass type);
+	<R extends T> List<R> getReportsByStationFromNow(String stationId, EClass type);
 	
 	/**
 	 * Returns all future reports for a given station, from the given date on
@@ -58,7 +57,7 @@ public interface WeatherReportSearch {
 	 * @param startDate the start date, if <code>null</code>, the current date is taken
 	 * @return the list of reports or an empty list
 	 */
-	<R extends WeatherReport> List<R> getReportsByStationFromNow(String stationId, Date startDate, EClass type);
+	<R extends T> List<R> getReportsByStationFromNow(String stationId, Date startDate, EClass type);
 	
 	/**
 	 * Returns 2 reports around the given timestamp, the next before and the next after this timestamp
@@ -68,7 +67,7 @@ public interface WeatherReportSearch {
 	 * @param type the weather {@link EClass}
 	 * @return a list of reports or an empty list
 	 */
-	<R extends WeatherReport> List<R> getReportsByTime(Date timestamp, String stationId, EClass type);
+	<R extends T> List<R> getReportsByTime(Date timestamp, String stationId, EClass type);
 	
 	/**
 	 * Returns reports within the given timestamp range. The max resulting list is limited to 10
@@ -79,7 +78,7 @@ public interface WeatherReportSearch {
 	 * @param type the weather {@link EClass}
 	 * @return a list of reports or an empty list
 	 */
-	<R extends WeatherReport> List<R> getReportsByTimeRange(Date fromTimestamp, Date toTimestamp, String stationId, EClass type);
+	<R extends T> List<R> getReportsByTimeRange(Date fromTimestamp, Date toTimestamp, String stationId, EClass type);
 	
 	/**
 	 * Returns reports within the given timestamp range
@@ -91,6 +90,6 @@ public interface WeatherReportSearch {
 	 * @param maxResults number of max results
 	 * @return a list of reports or an empty list
 	 */
-	<R extends WeatherReport> List<R> getReportsByTimeRange(Date fromTimestamp, Date toTimestamp, String stationId, EClass type, int maxResults);
+	<R extends T> List<R> getReportsByTimeRange(Date fromTimestamp, Date toTimestamp, String stationId, EClass type, int maxResults);
 
 }

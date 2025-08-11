@@ -188,5 +188,9 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//W1W2/w1"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//W1W2/w2"/>
     </genClasses>
+    <genClasses ecoreClass="dwd-weather.ecore#//WeatherReports">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dwd-weather.ecore#//WeatherReports/id"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dwd-weather.ecore#//WeatherReports/reports"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

@@ -20,7 +20,11 @@ import static org.gecko.weather.dwd.fc.helper.ReportIndexHelper.REPORT_ACTION;
 import static org.gecko.weather.dwd.fc.helper.ReportIndexHelper.REPORT_ID;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -40,8 +44,10 @@ import org.gecko.weather.dwd.fc.WeatherReportIndex;
 import org.gecko.weather.dwd.fc.WeatherReportStorageHandler;
 import org.gecko.weather.dwd.fc.helper.ReportHelper;
 import org.gecko.weather.dwd.fc.helper.ReportIndexHelper;
+import org.gecko.weather.model.weather.WeatherFactory;
 import org.gecko.weather.model.weather.WeatherPackage;
 import org.gecko.weather.model.weather.WeatherReport;
+import org.gecko.weather.model.weather.WeatherReports;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Reference;
@@ -50,16 +56,16 @@ import org.osgi.service.event.EventAdmin;
 import org.osgi.service.event.annotations.RequireEventAdmin;
 
 /**
- * Index service for weather reports
+ * Index service for weather reports which only indexes reports for next hour and then every 3 hours up to 72 hours
  * @author Mark Hoffmann
  * @since 15.09.2024
  */
-@Component(name = "WeatherReportIndex", configurationPid = "WeatherReportIndex", configurationPolicy = ConfigurationPolicy.OPTIONAL)
+@Component(name = "WeatherReportIndexWithFilter", configurationPid = "WeatherReportIndexWithFilter", configurationPolicy = ConfigurationPolicy.OPTIONAL)
 @RequireEventAdmin
-public class WeatherReportIndexservice implements WeatherReportIndex {
+public class WeatherReportIndexServiceWithFilter implements WeatherReportIndex {
 
 	@Reference
-	private WeatherReportStorageHandler cache;
+	private WeatherReportStorageHandler<WeatherReports> cache;
 	@Reference(target = "(id=dwd.forecast)")
 	private LuceneIndexService<EObjectDocumentIndexObjectContext> reportIndex;
 	@Reference
@@ -84,10 +90,12 @@ public class WeatherReportIndexservice implements WeatherReportIndex {
 			id = ReportHelper.createReportId(report);
 			report.setId(id);
 		}
-		cache.getReport(id).
-		ifPresentOrElse(
-				r->doIndexReport(report, IndexActionType.MODIFY), 
-				()->doIndexReport(report, IndexActionType.ADD));
+		if(isValid(Instant.now(), report.getTimestamp().toInstant(), ZoneId.systemDefault())) {
+			cache.getReport(id).
+			ifPresentOrElse(
+					r->doIndexReport(report, IndexActionType.MODIFY), 
+					()->doIndexReport(report, IndexActionType.ADD));
+		}
 	}
 
 	/* 
@@ -153,22 +161,10 @@ public class WeatherReportIndexservice implements WeatherReportIndex {
 		requireNonNull(actionType);
 		EObjectDocumentIndexObjectContext context = ReportIndexHelper.mapReport(report, actionType);			
 		reportIndex.handleContextSync(context);
-		switch (actionType) {
-		case ADD: 
-			cache.saveReport(report);
-			break;
-		case MODIFY:
-			cache.updateReport(report);
-			break;
-		case REMOVE:
-			if (nonNull(report.getId())) {
-				cache.deleteReport(report.getId());
-			}
-		default:
-			break;
-		}
 		notifyEventAdmin(report, actionType);
 	}
+	
+	
 
 	/**
 	 * Notifies event admin for report changes
@@ -189,4 +185,52 @@ public class WeatherReportIndexservice implements WeatherReportIndex {
 		eventAdmin.postEvent(event);
 	}
 
+
+
+	private boolean isValid(Instant current, Instant other, ZoneId zoneId) {
+		ZonedDateTime currentTime = current.atZone(zoneId);
+		ZonedDateTime otherTime = other.atZone(zoneId);
+
+		if (otherTime.isBefore(currentTime)) return false;
+
+		// Start of the next hour block
+		ZonedDateTime nextHourStart = currentTime.truncatedTo(ChronoUnit.HOURS).plusHours(1);
+		ZonedDateTime nextHourEnd = nextHourStart.plusHours(1);
+
+		// Case 1: In the next hour block
+		if (!otherTime.isBefore(nextHourStart) && otherTime.isBefore(nextHourEnd)) {
+			return true;
+		}
+
+		// Case 2: After next hour start, at 3-hour intervals within 72 hours
+		Duration duration = Duration.between(nextHourStart, otherTime);
+		long minutes = duration.toMinutes();
+
+		return minutes >= 0 && minutes <= 72 * 60 && (duration.toHours() % 3 == 0);
+	}
+
+	/* 
+	 * (non-Javadoc)
+	 * @see org.gecko.weather.dwd.fc.WeatherReportIndex#indexReports(org.gecko.weather.model.weather.WeatherReport[])
+	 */
+	@Override
+	public void indexReports(WeatherReport[] reports) {
+		WeatherReports weatherReports = WeatherFactory.eINSTANCE.createWeatherReports();
+		for(WeatherReport report : reports) {
+			requireNonNull(report);
+			requireNonNull(report.getTimestamp());
+			if(isValid(Instant.now(), report.getTimestamp().toInstant(), ZoneId.systemDefault())) {
+				requireNonNull(report.getWeatherStation());
+				requireNonNull(report.getWeatherStation().getId());
+				String id = report.getId();
+				if (isNull(id)) {
+					id = ReportHelper.createReportId(report);
+					report.setId(id);
+				}
+				weatherReports.setId(report.getWeatherStation().getId());
+				weatherReports.getReports().add(report);			
+			}
+		}
+		cache.saveReport(weatherReports);
+	}
 }

@@ -143,6 +143,10 @@ public class WeatherAdapterFactory extends AdapterFactoryImpl {
 				return createW1W2Adapter();
 			}
 			@Override
+			public Adapter caseWeatherReports(WeatherReports object) {
+				return createWeatherReportsAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -383,6 +387,20 @@ public class WeatherAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createW1W2Adapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.gecko.weather.model.weather.WeatherReports <em>Reports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.gecko.weather.model.weather.WeatherReports
+	 * @generated
+	 */
+	public Adapter createWeatherReportsAdapter() {
 		return null;
 	}
 

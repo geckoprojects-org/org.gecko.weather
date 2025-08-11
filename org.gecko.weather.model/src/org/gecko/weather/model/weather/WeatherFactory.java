@@ -180,6 +180,15 @@ public interface WeatherFactory extends EFactory {
 	W1W2 createW1W2();
 
 	/**
+	 * Returns a new object of class '<em>Reports</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Reports</em>'.
+	 * @generated
+	 */
+	WeatherReports createWeatherReports();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

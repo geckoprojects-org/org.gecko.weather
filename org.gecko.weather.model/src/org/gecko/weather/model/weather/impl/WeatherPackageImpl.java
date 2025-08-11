@@ -38,6 +38,7 @@ import org.gecko.weather.model.weather.WMOWeatherCodeType;
 import org.gecko.weather.model.weather.WeatherFactory;
 import org.gecko.weather.model.weather.WeatherPackage;
 import org.gecko.weather.model.weather.WeatherReport;
+import org.gecko.weather.model.weather.WeatherReports;
 import org.gecko.weather.model.weather.WeatherStation;
 
 /**
@@ -158,6 +159,13 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 	 * @generated
 	 */
 	private EClass w1W2EClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass weatherReportsEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1122,6 +1130,36 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getWeatherReports() {
+		return weatherReportsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getWeatherReports_Id() {
+		return (EAttribute)weatherReportsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getWeatherReports_Reports() {
+		return (EReference)weatherReportsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getWMOWeatherCodeType() {
 		return wmoWeatherCodeTypeEEnum;
 	}
@@ -1259,6 +1297,10 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 		w1W2EClass = createEClass(W1W2);
 		createEAttribute(w1W2EClass, W1W2__W1);
 		createEAttribute(w1W2EClass, W1W2__W2);
+
+		weatherReportsEClass = createEClass(WEATHER_REPORTS);
+		createEAttribute(weatherReportsEClass, WEATHER_REPORTS__ID);
+		createEReference(weatherReportsEClass, WEATHER_REPORTS__REPORTS);
 
 		// Create enums
 		wmoWeatherCodeTypeEEnum = createEEnum(WMO_WEATHER_CODE_TYPE);
@@ -1408,6 +1450,10 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 		initEClass(w1W2EClass, org.gecko.weather.model.weather.W1W2.class, "W1W2", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getW1W2_W1(), this.getWMOWeatherCodeType(), "w1", "UNKNOWN", 0, 1, org.gecko.weather.model.weather.W1W2.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getW1W2_W2(), this.getWMOWeatherCodeType(), "w2", "UNKNOWN", 0, 1, org.gecko.weather.model.weather.W1W2.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(weatherReportsEClass, WeatherReports.class, "WeatherReports", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getWeatherReports_Id(), ecorePackage.getEString(), "id", null, 1, 1, WeatherReports.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getWeatherReports_Reports(), this.getWeatherReport(), null, "reports", null, 0, -1, WeatherReports.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(wmoWeatherCodeTypeEEnum, WMOWeatherCodeType.class, "WMOWeatherCodeType");

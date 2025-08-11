@@ -1523,6 +1523,52 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	int W1W2_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link org.gecko.weather.model.weather.impl.WeatherReportsImpl <em>Reports</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.gecko.weather.model.weather.impl.WeatherReportsImpl
+	 * @see org.gecko.weather.model.weather.impl.WeatherPackageImpl#getWeatherReports()
+	 * @generated
+	 */
+	int WEATHER_REPORTS = 16;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WEATHER_REPORTS__ID = 0;
+
+	/**
+	 * The feature id for the '<em><b>Reports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WEATHER_REPORTS__REPORTS = 1;
+
+	/**
+	 * The number of structural features of the '<em>Reports</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WEATHER_REPORTS_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Reports</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WEATHER_REPORTS_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link org.gecko.weather.model.weather.WMOWeatherCodeType <em>WMO Weather Code Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1530,7 +1576,7 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @see org.gecko.weather.model.weather.impl.WeatherPackageImpl#getWMOWeatherCodeType()
 	 * @generated
 	 */
-	int WMO_WEATHER_CODE_TYPE = 16;
+	int WMO_WEATHER_CODE_TYPE = 17;
 
 
 	/**
@@ -2497,6 +2543,38 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	EAttribute getW1W2_W2();
 
 	/**
+	 * Returns the meta object for class '{@link org.gecko.weather.model.weather.WeatherReports <em>Reports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Reports</em>'.
+	 * @see org.gecko.weather.model.weather.WeatherReports
+	 * @generated
+	 */
+	EClass getWeatherReports();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.model.weather.WeatherReports#getId <em>Id</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Id</em>'.
+	 * @see org.gecko.weather.model.weather.WeatherReports#getId()
+	 * @see #getWeatherReports()
+	 * @generated
+	 */
+	EAttribute getWeatherReports_Id();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.gecko.weather.model.weather.WeatherReports#getReports <em>Reports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Reports</em>'.
+	 * @see org.gecko.weather.model.weather.WeatherReports#getReports()
+	 * @see #getWeatherReports()
+	 * @generated
+	 */
+	EReference getWeatherReports_Reports();
+
+	/**
 	 * Returns the meta object for enum '{@link org.gecko.weather.model.weather.WMOWeatherCodeType <em>WMO Weather Code Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3272,6 +3350,32 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 		 * @generated
 		 */
 		EAttribute W1W2__W2 = eINSTANCE.getW1W2_W2();
+
+		/**
+		 * The meta object literal for the '{@link org.gecko.weather.model.weather.impl.WeatherReportsImpl <em>Reports</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.gecko.weather.model.weather.impl.WeatherReportsImpl
+		 * @see org.gecko.weather.model.weather.impl.WeatherPackageImpl#getWeatherReports()
+		 * @generated
+		 */
+		EClass WEATHER_REPORTS = eINSTANCE.getWeatherReports();
+
+		/**
+		 * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute WEATHER_REPORTS__ID = eINSTANCE.getWeatherReports_Id();
+
+		/**
+		 * The meta object literal for the '<em><b>Reports</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference WEATHER_REPORTS__REPORTS = eINSTANCE.getWeatherReports_Reports();
 
 		/**
 		 * The meta object literal for the '{@link org.gecko.weather.model.weather.WMOWeatherCodeType <em>WMO Weather Code Type</em>}' enum.

@@ -183,6 +183,12 @@ public class WeatherSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case WeatherPackage.WEATHER_REPORTS: {
+				WeatherReports weatherReports = (WeatherReports)theEObject;
+				T result = caseWeatherReports(weatherReports);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -424,6 +430,21 @@ public class WeatherSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseW1W2(W1W2 object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Reports</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Reports</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseWeatherReports(WeatherReports object) {
 		return null;
 	}
 

@@ -28,6 +28,7 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
 import org.gecko.weather.model.weather.WeatherReport;
+import org.gecko.weather.model.weather.WeatherReports;
 
 /**
  * Helper class for {@link WeatherReport}
@@ -45,6 +46,19 @@ public class ReportHelper {
 		requireNonNull(report.getTimestamp());
 		String stationId = report.getWeatherStation().getId();
 		return String.format("%s-%s", stationId, sdf.format(report.getTimestamp()));
+	}
+	
+	public static String createReportId(WeatherReports reports) {
+		requireNonNull(reports);
+		
+		if(!reports.getReports().isEmpty()) {
+			WeatherReport report = reports.getReports().get(0);
+			requireNonNull(report.getWeatherStation());
+			requireNonNull(report.getWeatherStation().getId());
+			String stationId = report.getWeatherStation().getId();
+			return stationId;
+		}
+		return "UNKNWON";		
 	}
 	
 	public static List<String> executeReportIdSearch(IndexSearcher searcher, Query query, int maxResults) {
