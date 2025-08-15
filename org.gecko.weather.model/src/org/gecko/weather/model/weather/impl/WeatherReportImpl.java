@@ -110,7 +110,7 @@ public class WeatherReportImpl extends MinimalEObjectImpl.Container implements W
 	protected Date timestamp = TIMESTAMP_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getStation() <em>Station</em>}' containment reference.
+	 * The cached value of the '{@link #getStation() <em>Station</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getStation()
@@ -234,6 +234,14 @@ public class WeatherReportImpl extends MinimalEObjectImpl.Container implements W
 	 */
 	@Override
 	public Station getStation() {
+		if (station != null && station.eIsProxy()) {
+			InternalEObject oldStation = (InternalEObject)station;
+			station = (Station)eResolveProxy(oldStation);
+			if (station != oldStation) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, WeatherPackage.WEATHER_REPORT__STATION, oldStation, station));
+			}
+		}
 		return station;
 	}
 
@@ -242,14 +250,8 @@ public class WeatherReportImpl extends MinimalEObjectImpl.Container implements W
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetStation(Station newStation, NotificationChain msgs) {
-		Station oldStation = station;
-		station = newStation;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, WeatherPackage.WEATHER_REPORT__STATION, oldStation, newStation);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
+	public Station basicGetStation() {
+		return station;
 	}
 
 	/**
@@ -259,17 +261,10 @@ public class WeatherReportImpl extends MinimalEObjectImpl.Container implements W
 	 */
 	@Override
 	public void setStation(Station newStation) {
-		if (newStation != station) {
-			NotificationChain msgs = null;
-			if (station != null)
-				msgs = ((InternalEObject)station).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - WeatherPackage.WEATHER_REPORT__STATION, null, msgs);
-			if (newStation != null)
-				msgs = ((InternalEObject)newStation).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - WeatherPackage.WEATHER_REPORT__STATION, null, msgs);
-			msgs = basicSetStation(newStation, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, WeatherPackage.WEATHER_REPORT__STATION, newStation, newStation));
+		Station oldStation = station;
+		station = newStation;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, WeatherPackage.WEATHER_REPORT__STATION, oldStation, station));
 	}
 
 	/**
@@ -365,8 +360,6 @@ public class WeatherReportImpl extends MinimalEObjectImpl.Container implements W
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case WeatherPackage.WEATHER_REPORT__STATION:
-				return basicSetStation(null, msgs);
 			case WeatherPackage.WEATHER_REPORT__ASTROTIME:
 				return basicSetAstrotime(null, msgs);
 		}
@@ -388,7 +381,8 @@ public class WeatherReportImpl extends MinimalEObjectImpl.Container implements W
 			case WeatherPackage.WEATHER_REPORT__TIMESTAMP:
 				return getTimestamp();
 			case WeatherPackage.WEATHER_REPORT__STATION:
-				return getStation();
+				if (resolve) return getStation();
+				return basicGetStation();
 			case WeatherPackage.WEATHER_REPORT__ASTROTIME:
 				return getAstrotime();
 			case WeatherPackage.WEATHER_REPORT__WEATHER_STATION:

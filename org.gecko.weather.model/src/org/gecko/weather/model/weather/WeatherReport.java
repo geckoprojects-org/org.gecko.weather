@@ -115,25 +115,25 @@ public interface WeatherReport extends EObject {
 	void setTimestamp(Date value);
 
 	/**
-	 * Returns the value of the '<em><b>Station</b></em>' containment reference.
+	 * Returns the value of the '<em><b>Station</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
 	 * Station the measurments are for. This is usually the exact location the report belongs to
 	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Station</em>' containment reference.
+	 * @return the value of the '<em>Station</em>' reference.
 	 * @see #setStation(Station)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getWeatherReport_Station()
-	 * @model containment="true" keys="name" required="true"
+	 * @model keys="name" required="true"
 	 * @generated
 	 */
 	Station getStation();
 
 	/**
-	 * Sets the value of the '{@link org.gecko.weather.model.weather.WeatherReport#getStation <em>Station</em>}' containment reference.
+	 * Sets the value of the '{@link org.gecko.weather.model.weather.WeatherReport#getStation <em>Station</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Station</em>' containment reference.
+	 * @param value the new value of the '<em>Station</em>' reference.
 	 * @see #getStation()
 	 * @generated
 	 */
