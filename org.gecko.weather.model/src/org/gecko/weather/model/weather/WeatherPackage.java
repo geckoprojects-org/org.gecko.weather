@@ -168,7 +168,7 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	int WEATHER_REPORT__TIMESTAMP = 2;
 
 	/**
-	 * The feature id for the '<em><b>Station</b></em>' containment reference.
+	 * The feature id for the '<em><b>Station</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -871,7 +871,7 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	int MOSMIXS_WEATHER_REPORT__TIMESTAMP = WEATHER_REPORT__TIMESTAMP;
 
 	/**
-	 * The feature id for the '<em><b>Station</b></em>' containment reference.
+	 * The feature id for the '<em><b>Station</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1313,7 +1313,7 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	int MEASUREMENT_WEATHER_REPORT__TIMESTAMP = WEATHER_REPORT__TIMESTAMP;
 
 	/**
-	 * The feature id for the '<em><b>Station</b></em>' containment reference.
+	 * The feature id for the '<em><b>Station</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1693,10 +1693,10 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	EAttribute getWeatherReport_Timestamp();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.gecko.weather.model.weather.WeatherReport#getStation <em>Station</em>}'.
+	 * Returns the meta object for the reference '{@link org.gecko.weather.model.weather.WeatherReport#getStation <em>Station</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Station</em>'.
+	 * @return the meta object for the reference '<em>Station</em>'.
 	 * @see org.gecko.weather.model.weather.WeatherReport#getStation()
 	 * @see #getWeatherReport()
 	 * @generated
@@ -2714,7 +2714,7 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 		EAttribute WEATHER_REPORT__TIMESTAMP = eINSTANCE.getWeatherReport_Timestamp();
 
 		/**
-		 * The meta object literal for the '<em><b>Station</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Station</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
