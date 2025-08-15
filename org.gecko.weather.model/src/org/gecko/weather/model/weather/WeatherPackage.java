@@ -150,13 +150,22 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	int WEATHER_REPORT__ID = 0;
 
 	/**
+	 * The feature id for the '<em><b>Issue Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WEATHER_REPORT__ISSUE_TIME = 1;
+
+	/**
 	 * The feature id for the '<em><b>Timestamp</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int WEATHER_REPORT__TIMESTAMP = 1;
+	int WEATHER_REPORT__TIMESTAMP = 2;
 
 	/**
 	 * The feature id for the '<em><b>Station</b></em>' containment reference.
@@ -165,7 +174,7 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int WEATHER_REPORT__STATION = 2;
+	int WEATHER_REPORT__STATION = 3;
 
 	/**
 	 * The feature id for the '<em><b>Astrotime</b></em>' containment reference.
@@ -174,7 +183,7 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int WEATHER_REPORT__ASTROTIME = 3;
+	int WEATHER_REPORT__ASTROTIME = 4;
 
 	/**
 	 * The feature id for the '<em><b>Weather Station</b></em>' reference.
@@ -183,7 +192,7 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int WEATHER_REPORT__WEATHER_STATION = 4;
+	int WEATHER_REPORT__WEATHER_STATION = 5;
 
 	/**
 	 * The number of structural features of the '<em>Report</em>' class.
@@ -192,7 +201,7 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int WEATHER_REPORT_FEATURE_COUNT = 5;
+	int WEATHER_REPORT_FEATURE_COUNT = 6;
 
 	/**
 	 * The number of operations of the '<em>Report</em>' class.
@@ -844,6 +853,15 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	int MOSMIXS_WEATHER_REPORT__ID = WEATHER_REPORT__ID;
 
 	/**
+	 * The feature id for the '<em><b>Issue Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MOSMIXS_WEATHER_REPORT__ISSUE_TIME = WEATHER_REPORT__ISSUE_TIME;
+
+	/**
 	 * The feature id for the '<em><b>Timestamp</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1277,6 +1295,15 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	int MEASUREMENT_WEATHER_REPORT__ID = WEATHER_REPORT__ID;
 
 	/**
+	 * The feature id for the '<em><b>Issue Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEASUREMENT_WEATHER_REPORT__ISSUE_TIME = WEATHER_REPORT__ISSUE_TIME;
+
+	/**
 	 * The feature id for the '<em><b>Timestamp</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1642,6 +1669,17 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 */
 	EAttribute getWeatherReport_Id();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.model.weather.WeatherReport#getIssueTime <em>Issue Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Issue Time</em>'.
+	 * @see org.gecko.weather.model.weather.WeatherReport#getIssueTime()
+	 * @see #getWeatherReport()
+	 * @generated
+	 */
+	EAttribute getWeatherReport_IssueTime();
 
 	/**
 	 * Returns the meta object for the attribute '{@link org.gecko.weather.model.weather.WeatherReport#getTimestamp <em>Timestamp</em>}'.
@@ -2658,6 +2696,14 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 		 * @generated
 		 */
 		EAttribute WEATHER_REPORT__ID = eINSTANCE.getWeatherReport_Id();
+
+		/**
+		 * The meta object literal for the '<em><b>Issue Time</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute WEATHER_REPORT__ISSUE_TIME = eINSTANCE.getWeatherReport_IssueTime();
 
 		/**
 		 * The meta object literal for the '<em><b>Timestamp</b></em>' attribute feature.

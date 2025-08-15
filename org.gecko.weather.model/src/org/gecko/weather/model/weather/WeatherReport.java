@@ -29,6 +29,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * </p>
  * <ul>
  *   <li>{@link org.gecko.weather.model.weather.WeatherReport#getId <em>Id</em>}</li>
+ *   <li>{@link org.gecko.weather.model.weather.WeatherReport#getIssueTime <em>Issue Time</em>}</li>
  *   <li>{@link org.gecko.weather.model.weather.WeatherReport#getTimestamp <em>Timestamp</em>}</li>
  *   <li>{@link org.gecko.weather.model.weather.WeatherReport#getStation <em>Station</em>}</li>
  *   <li>{@link org.gecko.weather.model.weather.WeatherReport#getAstrotime <em>Astrotime</em>}</li>
@@ -64,9 +65,37 @@ public interface WeatherReport extends EObject {
 	void setId(String value);
 
 	/**
+	 * Returns the value of the '<em><b>Issue Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * This is the time the report was issued.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Issue Time</em>' attribute.
+	 * @see #setIssueTime(Date)
+	 * @see org.gecko.weather.model.weather.WeatherPackage#getWeatherReport_IssueTime()
+	 * @model required="true"
+	 * @generated
+	 */
+	Date getIssueTime();
+
+	/**
+	 * Sets the value of the '{@link org.gecko.weather.model.weather.WeatherReport#getIssueTime <em>Issue Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Issue Time</em>' attribute.
+	 * @see #getIssueTime()
+	 * @generated
+	 */
+	void setIssueTime(Date value);
+
+	/**
 	 * Returns the value of the '<em><b>Timestamp</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * This is the time to which the report refers. So, if it is a forecast for a certain time, the forecasted time will be here.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Timestamp</em>' attribute.
 	 * @see #setTimestamp(Date)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getWeatherReport_Timestamp()

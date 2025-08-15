@@ -300,7 +300,7 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getWeatherReport_Timestamp() {
+	public EAttribute getWeatherReport_IssueTime() {
 		return (EAttribute)weatherReportEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -310,8 +310,8 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getWeatherReport_Station() {
-		return (EReference)weatherReportEClass.getEStructuralFeatures().get(2);
+	public EAttribute getWeatherReport_Timestamp() {
+		return (EAttribute)weatherReportEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -320,7 +320,7 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getWeatherReport_Astrotime() {
+	public EReference getWeatherReport_Station() {
 		return (EReference)weatherReportEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -330,8 +330,18 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getWeatherReport_WeatherStation() {
+	public EReference getWeatherReport_Astrotime() {
 		return (EReference)weatherReportEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getWeatherReport_WeatherStation() {
+		return (EReference)weatherReportEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -1200,6 +1210,7 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 
 		weatherReportEClass = createEClass(WEATHER_REPORT);
 		createEAttribute(weatherReportEClass, WEATHER_REPORT__ID);
+		createEAttribute(weatherReportEClass, WEATHER_REPORT__ISSUE_TIME);
 		createEAttribute(weatherReportEClass, WEATHER_REPORT__TIMESTAMP);
 		createEReference(weatherReportEClass, WEATHER_REPORT__STATION);
 		createEReference(weatherReportEClass, WEATHER_REPORT__ASTROTIME);
@@ -1352,6 +1363,7 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 
 		initEClass(weatherReportEClass, WeatherReport.class, "WeatherReport", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getWeatherReport_Id(), ecorePackage.getEString(), "id", null, 1, 1, WeatherReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getWeatherReport_IssueTime(), ecorePackage.getEDate(), "issueTime", null, 1, 1, WeatherReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getWeatherReport_Timestamp(), ecorePackage.getEDate(), "timestamp", null, 1, 1, WeatherReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getWeatherReport_Station(), this.getStation(), null, "station", null, 1, 1, WeatherReport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		getWeatherReport_Station().getEKeys().add(this.getStation_Name());
@@ -1557,6 +1569,18 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 			   "modelName", "DWDWeather",
 			   "basePackage", "org.gecko.weather.model",
 			   "resource", "XMI"
+		   });
+		addAnnotation
+		  (getWeatherReport_IssueTime(),
+		   source,
+		   new String[] {
+			   "documentation", "This is the time the report was issued."
+		   });
+		addAnnotation
+		  (getWeatherReport_Timestamp(),
+		   source,
+		   new String[] {
+			   "documentation", "This is the time to which the report refers. So, if it is a forecast for a certain time, the forecasted time will be here."
 		   });
 		addAnnotation
 		  (getWeatherReport_Station(),

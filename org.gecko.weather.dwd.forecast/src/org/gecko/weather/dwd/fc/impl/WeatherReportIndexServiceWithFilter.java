@@ -227,7 +227,7 @@ public class WeatherReportIndexServiceWithFilter implements WeatherReportIndex {
 					id = ReportHelper.createReportId(report);
 					report.setId(id);
 				}
-				weatherReports.setId(report.getWeatherStation().getId());
+				if(weatherReports.getId() == null) weatherReports.setId(report.getWeatherStation().getId());
 				weatherReports.getReports().add(report);			
 			}
 		}

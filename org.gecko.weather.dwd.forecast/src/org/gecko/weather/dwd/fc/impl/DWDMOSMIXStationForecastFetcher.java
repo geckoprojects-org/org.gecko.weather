@@ -193,6 +193,8 @@ public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> impl
 		List<ProductDefinitionType> productDefinitions = (List<ProductDefinitionType>) extendedData.getAny()
 				.get(forecastPackage.getDocumentRoot_ProductDefinition(), true);
 		if (nonNull(productDefinitions) && !productDefinitions.isEmpty()) {
+			XMLGregorianCalendar issueTime = productDefinitions.get(0).getIssueTime();
+			GregorianCalendar issueTimeGC = issueTime.toGregorianCalendar();
 			EList<XMLGregorianCalendar> forecastTimeSteps = productDefinitions.get(0).getForecastTimeSteps()
 					.getTimeStep();
 			LOGGER.log(Level.DEBUG, "[{0}] MOSMIX Timesteps: {1}", getName(), forecastTimeSteps.size());
@@ -205,6 +207,7 @@ public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> impl
 				XMLGregorianCalendar xmlC = forecastTimeSteps.get(i);
 				GregorianCalendar c = xmlC.toGregorianCalendar();
 				report.setTimestamp(c.getTime());
+				report.setIssueTime(issueTimeGC.getTime());
 				if(location != null) {
 					Astrotime sunTimes = as.getSunTimes(location, LocalDate.ofInstant(c.getTime().toInstant(), ZoneId.systemDefault()));
 					report.setAstrotime(sunTimes);
@@ -212,6 +215,7 @@ public class DWDMOSMIXStationForecastFetcher extends DWDEMFFetcher<KmlType> impl
 				reports[i] = report;
 			}
 		}
+		
 		extendedData = placemarkType.getExtendedData();
 		List<ForecastType> forecasts = (List<ForecastType>) extendedData.getAny()
 				.get(forecastPackage.getDocumentRoot_Forecast(), true);

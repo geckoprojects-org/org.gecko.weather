@@ -39,6 +39,7 @@ import org.gecko.weather.model.weather.WeatherStation;
  * </p>
  * <ul>
  *   <li>{@link org.gecko.weather.model.weather.impl.WeatherReportImpl#getId <em>Id</em>}</li>
+ *   <li>{@link org.gecko.weather.model.weather.impl.WeatherReportImpl#getIssueTime <em>Issue Time</em>}</li>
  *   <li>{@link org.gecko.weather.model.weather.impl.WeatherReportImpl#getTimestamp <em>Timestamp</em>}</li>
  *   <li>{@link org.gecko.weather.model.weather.impl.WeatherReportImpl#getStation <em>Station</em>}</li>
  *   <li>{@link org.gecko.weather.model.weather.impl.WeatherReportImpl#getAstrotime <em>Astrotime</em>}</li>
@@ -67,6 +68,26 @@ public class WeatherReportImpl extends MinimalEObjectImpl.Container implements W
 	 * @ordered
 	 */
 	protected String id = ID_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getIssueTime() <em>Issue Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getIssueTime()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final Date ISSUE_TIME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getIssueTime() <em>Issue Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getIssueTime()
+	 * @generated
+	 * @ordered
+	 */
+	protected Date issueTime = ISSUE_TIME_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getTimestamp() <em>Timestamp</em>}' attribute.
@@ -158,6 +179,29 @@ public class WeatherReportImpl extends MinimalEObjectImpl.Container implements W
 		id = newId;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, WeatherPackage.WEATHER_REPORT__ID, oldId, id));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Date getIssueTime() {
+		return issueTime;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setIssueTime(Date newIssueTime) {
+		Date oldIssueTime = issueTime;
+		issueTime = newIssueTime;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, WeatherPackage.WEATHER_REPORT__ISSUE_TIME, oldIssueTime, issueTime));
 	}
 
 	/**
@@ -339,6 +383,8 @@ public class WeatherReportImpl extends MinimalEObjectImpl.Container implements W
 		switch (featureID) {
 			case WeatherPackage.WEATHER_REPORT__ID:
 				return getId();
+			case WeatherPackage.WEATHER_REPORT__ISSUE_TIME:
+				return getIssueTime();
 			case WeatherPackage.WEATHER_REPORT__TIMESTAMP:
 				return getTimestamp();
 			case WeatherPackage.WEATHER_REPORT__STATION:
@@ -362,6 +408,9 @@ public class WeatherReportImpl extends MinimalEObjectImpl.Container implements W
 		switch (featureID) {
 			case WeatherPackage.WEATHER_REPORT__ID:
 				setId((String)newValue);
+				return;
+			case WeatherPackage.WEATHER_REPORT__ISSUE_TIME:
+				setIssueTime((Date)newValue);
 				return;
 			case WeatherPackage.WEATHER_REPORT__TIMESTAMP:
 				setTimestamp((Date)newValue);
@@ -390,6 +439,9 @@ public class WeatherReportImpl extends MinimalEObjectImpl.Container implements W
 			case WeatherPackage.WEATHER_REPORT__ID:
 				setId(ID_EDEFAULT);
 				return;
+			case WeatherPackage.WEATHER_REPORT__ISSUE_TIME:
+				setIssueTime(ISSUE_TIME_EDEFAULT);
+				return;
 			case WeatherPackage.WEATHER_REPORT__TIMESTAMP:
 				setTimestamp(TIMESTAMP_EDEFAULT);
 				return;
@@ -416,6 +468,8 @@ public class WeatherReportImpl extends MinimalEObjectImpl.Container implements W
 		switch (featureID) {
 			case WeatherPackage.WEATHER_REPORT__ID:
 				return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
+			case WeatherPackage.WEATHER_REPORT__ISSUE_TIME:
+				return ISSUE_TIME_EDEFAULT == null ? issueTime != null : !ISSUE_TIME_EDEFAULT.equals(issueTime);
 			case WeatherPackage.WEATHER_REPORT__TIMESTAMP:
 				return TIMESTAMP_EDEFAULT == null ? timestamp != null : !TIMESTAMP_EDEFAULT.equals(timestamp);
 			case WeatherPackage.WEATHER_REPORT__STATION:
@@ -440,6 +494,8 @@ public class WeatherReportImpl extends MinimalEObjectImpl.Container implements W
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (id: ");
 		result.append(id);
+		result.append(", issueTime: ");
+		result.append(issueTime);
 		result.append(", timestamp: ");
 		result.append(timestamp);
 		result.append(')');
