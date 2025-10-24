@@ -18,6 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Calendar;
 import java.util.List;
 
+import org.eclipse.osgi.technology.scheduler.api.CronJob;
 import org.gecko.weather.dwd.fc.WeatherReportSearch;
 import org.gecko.weather.model.weather.WeatherPackage;
 import org.gecko.weather.model.weather.WeatherReport;
@@ -33,8 +34,6 @@ import org.osgi.test.common.service.ServiceAware;
 import org.osgi.test.junit5.cm.ConfigurationExtension;
 import org.osgi.test.junit5.context.BundleContextExtension;
 import org.osgi.test.junit5.service.ServiceExtension;
-
-import biz.aQute.scheduler.api.CronJob;
 
 @RequireConfigurationAdmin
 @ExtendWith(ServiceExtension.class)

@@ -11,8 +11,6 @@
 	org.osgi.service.cm;version=latest,\
 	org.osgi.service.component;version=latest,\
 	org.osgi.service.event;version=latest,\
-	biz.aQute.api.scheduler;version=latest,\
-	biz.aQute.scheduler.basic.provider;version=latest,\
 	org.apache.lucene.core;version=latest,\
 	org.gecko.emf.search,\
 	org.apache.felix.gogo.runtime;version=latest,\
@@ -22,7 +20,9 @@
 	de.dwd.cdc.model;version=latest,\
 	de.dwd.cdc.common.model;version=latest,\
 	org.gecko.weather.api;version=snapshot,\
-	org.gecko.weather.model;version=snapshot
+	org.gecko.weather.model;version=snapshot,\
+	org.eclipse.osgi-technology.scheduler.api;version=latest,\
+	org.eclipse.osgi-technology.scheduler.basic;version=latest
 	
 Bundle-Name: Gecko Weather DWD Forecast
 Bundle-Description: Gecko Weather Forecast Services for DWD data

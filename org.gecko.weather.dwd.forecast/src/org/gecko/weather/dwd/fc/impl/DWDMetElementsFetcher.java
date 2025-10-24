@@ -19,13 +19,13 @@ import java.lang.System.Logger.Level;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.osgi.technology.scheduler.api.Constants;
+import org.eclipse.osgi.technology.scheduler.api.CronJob;
+import org.eclipse.osgi.technology.scheduler.api.whiteboard.prototypes.CronExpression;
 import org.gecko.weather.api.fetcher.DWDEMFFetcher;
 import org.gecko.weather.api.util.DWDUtils;
 import org.osgi.service.component.annotations.Reference;
 
-import biz.aQute.scheduler.api.Constants;
-import biz.aQute.scheduler.api.CronExpression;
-import biz.aQute.scheduler.api.CronJob;
 import de.dwd.cdc.metelements.MetElementDefinitionType;
 import de.dwd.cdc.metelements.MetElementType;
 import de.dwd.cdc.metelements.MetElementsPackage;

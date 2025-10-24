@@ -26,6 +26,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import org.eclipse.osgi.technology.scheduler.api.Constants;
+import org.eclipse.osgi.technology.scheduler.api.CronJob;
+import org.eclipse.osgi.technology.scheduler.api.whiteboard.prototypes.CronExpression;
 import org.gecko.weather.api.fetcher.DWDFetcher;
 import org.gecko.weather.dwd.stations.StationIndex;
 import org.gecko.weather.dwd.stations.StationSearch;
@@ -43,10 +46,6 @@ import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.condition.Condition;
 import org.osgi.service.metatype.annotations.Designate;
-
-import biz.aQute.scheduler.api.Constants;
-import biz.aQute.scheduler.api.CronExpression;
-import biz.aQute.scheduler.api.CronJob;
 
 /**
  * Fetches the latest station lists:
