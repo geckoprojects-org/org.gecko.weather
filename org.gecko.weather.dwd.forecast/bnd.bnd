@@ -26,3 +26,6 @@
 	
 Bundle-Name: Gecko Weather DWD Forecast
 Bundle-Description: Gecko Weather Forecast Services for DWD data
+
+-testpath: junit-jupiter-api,\
+    ${junit}

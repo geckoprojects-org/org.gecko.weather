@@ -10,3 +10,5 @@ Bundle-Description: Gecko Time4J - Sunset and sunrise for geo-location and date
 	time4j-calendar;version=latest,\
 	org.gecko.weather.model;version=snapshot,\
 	org.gecko.weather.api;version=snapshot
+-testpath: junit-jupiter-api,\
+    ${junit}
