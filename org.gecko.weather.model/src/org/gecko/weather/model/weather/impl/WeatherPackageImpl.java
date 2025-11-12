@@ -1549,6 +1549,10 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 		// Create annotations
 		// http://www.eclipse.org/emf/2002/GenModel
 		createGenModelAnnotations();
+		// sensinact.mapping
+		createSensinactAnnotations();
+		// sensinact.mapping.metadata
+		createSensinact_1Annotations();
 	}
 
 	/**
@@ -2324,6 +2328,576 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 		   source,
 		   new String[] {
 			   "documentation", "Significant weather in the past 3 hours: - (W2 part of W1W2)"
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>sensinact.mapping</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createSensinactAnnotations() {
+		String source = "sensinact.mapping";
+		addAnnotation
+		  (getMOSMIXSWeatherReport_WindDirection(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "\u00b0"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_WindSpeed(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "m/s"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_WindGustLastHour(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "m/s"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_WindGustLastThreeHours(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "m/s"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_WindGustMaxLast12Hours(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "m/s"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_WindGustProb25(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "%"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_WindGustProb40(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "%"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_WindGustProb55(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "%"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_CloudCoverTotal(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "%"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_CloudCoverBelow500(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "%"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_CloudCoverEffective(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "%"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_CloudCoverHigh(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "%"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_CloudCoverMid(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "%"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_CloudCoverLow(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "%"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_IrRadianceGlobal(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "kJ/m2"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_SurfacePressure(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "Pa"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationLarger02Last6(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "%"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationLarger50Last6(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "%"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationLarger02LastDay(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "%"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationLarger50LastDay(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "%"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationLarger00Last12(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "%"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationLarger02Last12(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "%"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationLarger10Last12(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "%"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationLarger50Last12(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "%"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationSignificantWeatherTotal(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "kg/m2"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationSignificantWeatherLast3(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "kg/m2"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_SnowRainEqLast1(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "kg/m2"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_SnowRainEqLast3(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "kg/m2"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_SunshineDurationLast1(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "s"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_TempAboveSurface5(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "K"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_TempAboveSurface200(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "K"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_TempDewpointAboveSurface200(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "K"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_TempMinLast12(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "K"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_TempMaxLast12(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "K"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_Visibility(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "m"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_FogPropLast1(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "%"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_FogPropLast6(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "%"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_FogPropLast12(),
+		   source,
+		   new String[] {
+			   "sensinact.mapping.unit", "%"
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>sensinact.mapping.metadata</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createSensinact_1Annotations() {
+		String source = "sensinact.mapping.metadata";
+		addAnnotation
+		  (getMOSMIXSWeatherReport_WindDirection(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "degrees",
+			   "sensorthings.unit.definition", "degrees",
+			   "dwd.id", "DD"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_WindSpeed(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "meters per seconds",
+			   "sensorthings.unit.definition", "meters per seconds",
+			   "dwd.id", "FF"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_WindGustLastHour(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "meters per seconds",
+			   "sensorthings.unit.definition", "meters per seconds",
+			   "dwd.id", "FX1"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_WindGustLastThreeHours(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "meters per seconds",
+			   "sensorthings.unit.definition", "meters per seconds",
+			   "dwd.id", "FX3"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_WindGustMaxLast12Hours(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "meters per seconds",
+			   "sensorthings.unit.definition", "meters per seconds",
+			   "dwd.id", "FXh"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_WindGustProb25(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "percentage probability",
+			   "sensorthings.unit.definition", "percentage probability",
+			   "dwd.id", "FXh25"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_WindGustProb40(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "percentage probability",
+			   "sensorthings.unit.definition", "percentage probability",
+			   "dwd.id", "FXh40"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_WindGustProb55(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "percentage probability",
+			   "sensorthings.unit.definition", "percentage probability",
+			   "dwd.id", "FXh55"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_CloudCoverTotal(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "percentage",
+			   "sensorthings.unit.definition", "percentage",
+			   "dwd.id", "N"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_CloudCoverBelow500(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "percentage",
+			   "sensorthings.unit.definition", "percentage",
+			   "dwd.id", "N05"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_CloudCoverEffective(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "percentage",
+			   "sensorthings.unit.definition", "percentage",
+			   "dwd.id", "Neff"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_CloudCoverHigh(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "percentage",
+			   "sensorthings.unit.definition", "percentage",
+			   "dwd.id", "Nh"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_CloudCoverMid(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "percentage",
+			   "sensorthings.unit.definition", "percentage",
+			   "dwd.id", "Nm"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_CloudCoverLow(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "percentage",
+			   "sensorthings.unit.definition", "percentage",
+			   "dwd.id", "Nl"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_IrRadianceGlobal(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "Kilo Joul per square meter",
+			   "sensorthings.unit.definition", "Kilo Joul per square meter",
+			   "dwd.id", "Rad1h"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_SurfacePressure(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "Pascal",
+			   "sensorthings.unit.definition", "Pascal",
+			   "dwd.id", "PPPP"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationLarger02Last6(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "percentage probability",
+			   "sensorthings.unit.definition", "percentage probability",
+			   "dwd.id", "R602"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationLarger50Last6(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "percentage probability",
+			   "sensorthings.unit.definition", "percentage probability",
+			   "dwd.id", "R650"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationLarger02LastDay(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "percentage probability",
+			   "sensorthings.unit.definition", "percentage probability",
+			   "dwd.id", "Rd02"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationLarger50LastDay(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "percentage probability",
+			   "sensorthings.unit.definition", "percentage probability",
+			   "dwd.id", "Rd50"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationLarger00Last12(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "percentage probability",
+			   "sensorthings.unit.definition", "percentage probability",
+			   "dwd.id", "Rh00"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationLarger02Last12(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "percentage probability",
+			   "sensorthings.unit.definition", "percentage probability",
+			   "dwd.id", "Rh02"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationLarger10Last12(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "percentage probability",
+			   "sensorthings.unit.definition", "percentage probability",
+			   "dwd.id", "Rh10"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationLarger50Last12(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "percentage probability",
+			   "sensorthings.unit.definition", "percentage probability",
+			   "dwd.id", "Rh50"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationSignificantWeatherTotal(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "Kilograms per square meter",
+			   "sensorthings.unit.definition", "Kilograms per square meter",
+			   "dwd.id", "RR1c"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_PrecipitationSignificantWeatherLast3(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "Kilograms per square meter",
+			   "sensorthings.unit.definition", "Kilograms per square meter",
+			   "dwd.id", "RR3c"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_SnowRainEqLast1(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "Kilograms per square meter",
+			   "sensorthings.unit.definition", "Kilograms per square meter",
+			   "dwd.id", "RRS1c"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_SnowRainEqLast3(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "Kilograms per square meter",
+			   "sensorthings.unit.definition", "Kilograms per square meter",
+			   "dwd.id", "RRS3c"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_SunshineDurationLast1(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "seconds",
+			   "sensorthings.unit.definition", "seconds",
+			   "dwd.id", "SunD1"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_TempAboveSurface5(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "Kelvin",
+			   "sensorthings.unit.definition", "Kelvin",
+			   "dwd.id", "T5cm"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_TempAboveSurface200(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "Kelvin",
+			   "sensorthings.unit.definition", "Kelvin",
+			   "dwd.id", "TTT"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_TempDewpointAboveSurface200(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "Kelvin",
+			   "sensorthings.unit.definition", "Kelvin",
+			   "dwd.id", "Td"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_TempMinLast12(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "Kelvin",
+			   "sensorthings.unit.definition", "Kelvin",
+			   "dwd.id", "TN"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_TempMaxLast12(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "Kelvin",
+			   "sensorthings.unit.definition", "Kelvin",
+			   "dwd.id", "TX"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_Visibility(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "meters",
+			   "sensorthings.unit.definition", "meters",
+			   "dwd.id", "VV"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_SignificantWeather3Hours(),
+		   source,
+		   new String[] {
+			   "dwd.id", "ww"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_FogPropLast1(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "percentage probability",
+			   "sensorthings.unit.definition", "percentage probability",
+			   "dwd.id", "wwM"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_FogPropLast6(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "percentage probability",
+			   "sensorthings.unit.definition", "percentage probability",
+			   "dwd.id", "wwM6"
+		   });
+		addAnnotation
+		  (getMOSMIXSWeatherReport_FogPropLast12(),
+		   source,
+		   new String[] {
+			   "sensorthings.unit.name", "percentage probability",
+			   "sensorthings.unit.definition", "percentage probability",
+			   "dwd.id", "wwMh"
+		   });
+		addAnnotation
+		  (getW1W2_W1(),
+		   source,
+		   new String[] {
+			   "dwd.id", "W1 part of W1W2"
+		   });
+		addAnnotation
+		  (getW1W2_W2(),
+		   source,
+		   new String[] {
+			   "dwd.id", "W2 part of W1W2"
 		   });
 	}
 
