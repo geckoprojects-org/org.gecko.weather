@@ -122,9 +122,9 @@ org.osgi:osgi.cmpn:7.0.0
 org.slf4j:slf4j-simple:1.7.36
 org.slf4j:slf4j-api:1.7.36
 
-org.geckoprojects.bnd:org.gecko.bnd.dimc.library:2.0.0
-org.geckoprojects.bnd:org.gecko.bnd.jacoco.library:2.0.0
-org.geckoprojects.bnd:org.gecko.bnd.osgitest.library:2.0.0
+org.geckoprojects.bnd:org.gecko.bnd.dimc.library:2.1.0-SNAPSHOT
+org.geckoprojects.bnd:org.gecko.bnd.jacoco.library:2.1.0-SNAPSHOT
+org.geckoprojects.bnd:org.gecko.bnd.osgitest.library:2.1.0-SNAPSHOT
 
 org.geckoprojects.search:org.gecko.emf.search.bnd.project.library:1.2.0
 org.geckoprojects.search:org.gecko.search.bnd.library:1.4.0
@@ -135,8 +135,8 @@ org.eclipse.osgi-technology.rest:org.eclipse.osgitech.rest.bnd.library:1.2.3
 org.geckoprojects.emf.utils:org.gecko.emf.json:1.6.0-SNAPSHOT
 
 org.bndtools:org.bndtools.templates.osgi:7.0.0
-biz.aQute:biz.aQute.api.scheduler:1.11.0-SNAPSHOT
-biz.aQute:biz.aQute.scheduler.basic.provider:1.11.0-SNAPSHOT
+org.eclipse.osgi-technology.scheduler:api:0.0.1
+org.eclipse.osgi-technology.scheduler:basic:0.0.1
 
 jakarta.annotation:jakarta.annotation-api:1.3.5
 org.geckoprojects.libraries:org.gecko.ucar.netcdf:5.6.0
@@ -144,7 +144,6 @@ org.geckoprojects.libraries:org.gecko.ucar.units:5.6.0
 
 net.time4j:time4j-calendar:4.38
 net.time4j:time4j-base:5.9.4
-biz.aQute:biz.aQute.gogo.commands.provider:1.11.0-SNAPSHOT
 
 # Swagger OpenAPI
 io.swagger.core.v3:swagger-annotations-jakarta:2.2.22

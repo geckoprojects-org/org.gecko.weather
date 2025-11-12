@@ -18,7 +18,6 @@
 	-DdwdBaseUrl=data/
 
 -runbundles: \
-	biz.aQute.api.scheduler;version='[1.11.0,1.11.1)',\
 	de.dwd.cdc.forecast.model;version='[1.0.0,1.0.1)',\
 	junit-jupiter-api;version='[5.10.3,5.10.4)',\
 	junit-jupiter-params;version='[5.10.3,5.10.4)',\
@@ -58,6 +57,4 @@
 	time4j-base;version='[5.9.4,5.9.5)',\
 	org.osgi.service.cm;version='[1.6.1,1.6.2)',\
 	de.dwd.cdc.common.model;version='[1.0.1,1.0.2)',\
-	org.gecko.emf.osgi.api;version='[6.3.0,6.3.1)',\
-	org.gecko.emf.osgi.component.config;version='[6.3.0,6.3.1)',\
-	org.osgi.service.event;version='[1.4.1,1.4.2)'
+	org.eclipse.osgi-technology.scheduler.api;version='[0.0.1,0.0.2)'
