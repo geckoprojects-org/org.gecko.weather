@@ -50,6 +50,7 @@ public interface W1W2 extends EObject {
 	 * @see #setW1(WMOWeatherCodeType)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getW1W2_W1()
 	 * @model default="UNKNOWN"
+	 *        annotation="sensinact.mapping.metadata dwd.id='W1 part of W1W2'"
 	 * @generated
 	 */
 	WMOWeatherCodeType getW1();
@@ -79,6 +80,7 @@ public interface W1W2 extends EObject {
 	 * @see #setW2(WMOWeatherCodeType)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getW1W2_W2()
 	 * @model default="UNKNOWN"
+	 *        annotation="sensinact.mapping.metadata dwd.id='W2 part of W1W2'"
 	 * @generated
 	 */
 	WMOWeatherCodeType getW2();

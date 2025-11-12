@@ -82,7 +82,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Wind Direction</em>' attribute.
 	 * @see #setWindDirection(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_WindDirection()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='\260'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='degrees' sensorthings.unit.definition='degrees' dwd.id='DD'"
 	 * @generated
 	 */
 	Float getWindDirection();
@@ -107,7 +108,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Wind Speed</em>' attribute.
 	 * @see #setWindSpeed(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_WindSpeed()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='m/s'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='meters per seconds' sensorthings.unit.definition='meters per seconds' dwd.id='FF'"
 	 * @generated
 	 */
 	Float getWindSpeed();
@@ -132,7 +134,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Wind Gust Last Hour</em>' attribute.
 	 * @see #setWindGustLastHour(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_WindGustLastHour()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='m/s'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='meters per seconds' sensorthings.unit.definition='meters per seconds' dwd.id='FX1'"
 	 * @generated
 	 */
 	Float getWindGustLastHour();
@@ -157,7 +160,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Wind Gust Last Three Hours</em>' attribute.
 	 * @see #setWindGustLastThreeHours(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_WindGustLastThreeHours()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='m/s'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='meters per seconds' sensorthings.unit.definition='meters per seconds' dwd.id='FX3'"
 	 * @generated
 	 */
 	Float getWindGustLastThreeHours();
@@ -182,7 +186,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Wind Gust Max Last12 Hours</em>' attribute.
 	 * @see #setWindGustMaxLast12Hours(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_WindGustMaxLast12Hours()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='m/s'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='meters per seconds' sensorthings.unit.definition='meters per seconds' dwd.id='FXh'"
 	 * @generated
 	 */
 	Float getWindGustMaxLast12Hours();
@@ -207,7 +212,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Wind Gust Prob25</em>' attribute.
 	 * @see #setWindGustProb25(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_WindGustProb25()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='%'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='percentage probability' sensorthings.unit.definition='percentage probability' dwd.id='FXh25'"
 	 * @generated
 	 */
 	Float getWindGustProb25();
@@ -232,7 +238,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Wind Gust Prob40</em>' attribute.
 	 * @see #setWindGustProb40(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_WindGustProb40()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='%'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='percentage probability' sensorthings.unit.definition='percentage probability' dwd.id='FXh40'"
 	 * @generated
 	 */
 	Float getWindGustProb40();
@@ -257,7 +264,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Wind Gust Prob55</em>' attribute.
 	 * @see #setWindGustProb55(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_WindGustProb55()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='%'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='percentage probability' sensorthings.unit.definition='percentage probability' dwd.id='FXh55'"
 	 * @generated
 	 */
 	Float getWindGustProb55();
@@ -282,7 +290,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Cloud Cover Total</em>' attribute.
 	 * @see #setCloudCoverTotal(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_CloudCoverTotal()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='%'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='percentage' sensorthings.unit.definition='percentage' dwd.id='N'"
 	 * @generated
 	 */
 	Float getCloudCoverTotal();
@@ -307,7 +316,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Cloud Cover Below500</em>' attribute.
 	 * @see #setCloudCoverBelow500(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_CloudCoverBelow500()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='%'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='percentage' sensorthings.unit.definition='percentage' dwd.id='N05'"
 	 * @generated
 	 */
 	Float getCloudCoverBelow500();
@@ -332,7 +342,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Cloud Cover Effective</em>' attribute.
 	 * @see #setCloudCoverEffective(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_CloudCoverEffective()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='%'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='percentage' sensorthings.unit.definition='percentage' dwd.id='Neff'"
 	 * @generated
 	 */
 	Float getCloudCoverEffective();
@@ -357,7 +368,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Cloud Cover High</em>' attribute.
 	 * @see #setCloudCoverHigh(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_CloudCoverHigh()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='%'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='percentage' sensorthings.unit.definition='percentage' dwd.id='Nh'"
 	 * @generated
 	 */
 	Float getCloudCoverHigh();
@@ -382,7 +394,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Cloud Cover Mid</em>' attribute.
 	 * @see #setCloudCoverMid(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_CloudCoverMid()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='%'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='percentage' sensorthings.unit.definition='percentage' dwd.id='Nm'"
 	 * @generated
 	 */
 	Float getCloudCoverMid();
@@ -407,7 +420,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Cloud Cover Low</em>' attribute.
 	 * @see #setCloudCoverLow(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_CloudCoverLow()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='%'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='percentage' sensorthings.unit.definition='percentage' dwd.id='Nl'"
 	 * @generated
 	 */
 	Float getCloudCoverLow();
@@ -432,7 +446,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Ir Radiance Global</em>' attribute.
 	 * @see #setIrRadianceGlobal(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_IrRadianceGlobal()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='kJ/m2'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='Kilo Joul per square meter' sensorthings.unit.definition='Kilo Joul per square meter' dwd.id='Rad1h'"
 	 * @generated
 	 */
 	Float getIrRadianceGlobal();
@@ -457,7 +472,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Surface Pressure</em>' attribute.
 	 * @see #setSurfacePressure(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_SurfacePressure()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='Pa'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='Pascal' sensorthings.unit.definition='Pascal' dwd.id='PPPP'"
 	 * @generated
 	 */
 	Float getSurfacePressure();
@@ -482,7 +498,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Precipitation Larger02 Last6</em>' attribute.
 	 * @see #setPrecipitationLarger02Last6(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_PrecipitationLarger02Last6()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='%'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='percentage probability' sensorthings.unit.definition='percentage probability' dwd.id='R602'"
 	 * @generated
 	 */
 	Float getPrecipitationLarger02Last6();
@@ -507,7 +524,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Precipitation Larger50 Last6</em>' attribute.
 	 * @see #setPrecipitationLarger50Last6(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_PrecipitationLarger50Last6()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='%'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='percentage probability' sensorthings.unit.definition='percentage probability' dwd.id='R650'"
 	 * @generated
 	 */
 	Float getPrecipitationLarger50Last6();
@@ -532,7 +550,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Precipitation Larger02 Last Day</em>' attribute.
 	 * @see #setPrecipitationLarger02LastDay(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_PrecipitationLarger02LastDay()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='%'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='percentage probability' sensorthings.unit.definition='percentage probability' dwd.id='Rd02'"
 	 * @generated
 	 */
 	Float getPrecipitationLarger02LastDay();
@@ -557,7 +576,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Precipitation Larger50 Last Day</em>' attribute.
 	 * @see #setPrecipitationLarger50LastDay(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_PrecipitationLarger50LastDay()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='%'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='percentage probability' sensorthings.unit.definition='percentage probability' dwd.id='Rd50'"
 	 * @generated
 	 */
 	Float getPrecipitationLarger50LastDay();
@@ -582,7 +602,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Precipitation Larger00 Last12</em>' attribute.
 	 * @see #setPrecipitationLarger00Last12(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_PrecipitationLarger00Last12()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='%'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='percentage probability' sensorthings.unit.definition='percentage probability' dwd.id='Rh00'"
 	 * @generated
 	 */
 	Float getPrecipitationLarger00Last12();
@@ -607,7 +628,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Precipitation Larger02 Last12</em>' attribute.
 	 * @see #setPrecipitationLarger02Last12(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_PrecipitationLarger02Last12()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='%'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='percentage probability' sensorthings.unit.definition='percentage probability' dwd.id='Rh02'"
 	 * @generated
 	 */
 	Float getPrecipitationLarger02Last12();
@@ -632,7 +654,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Precipitation Larger10 Last12</em>' attribute.
 	 * @see #setPrecipitationLarger10Last12(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_PrecipitationLarger10Last12()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='%'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='percentage probability' sensorthings.unit.definition='percentage probability' dwd.id='Rh10'"
 	 * @generated
 	 */
 	Float getPrecipitationLarger10Last12();
@@ -657,7 +680,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Precipitation Larger50 Last12</em>' attribute.
 	 * @see #setPrecipitationLarger50Last12(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_PrecipitationLarger50Last12()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='%'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='percentage probability' sensorthings.unit.definition='percentage probability' dwd.id='Rh50'"
 	 * @generated
 	 */
 	Float getPrecipitationLarger50Last12();
@@ -682,7 +706,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Precipitation Significant Weather Total</em>' attribute.
 	 * @see #setPrecipitationSignificantWeatherTotal(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_PrecipitationSignificantWeatherTotal()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='kg/m2'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='Kilograms per square meter' sensorthings.unit.definition='Kilograms per square meter' dwd.id='RR1c'"
 	 * @generated
 	 */
 	Float getPrecipitationSignificantWeatherTotal();
@@ -707,7 +732,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Precipitation Significant Weather Last3</em>' attribute.
 	 * @see #setPrecipitationSignificantWeatherLast3(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_PrecipitationSignificantWeatherLast3()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='kg/m2'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='Kilograms per square meter' sensorthings.unit.definition='Kilograms per square meter' dwd.id='RR3c'"
 	 * @generated
 	 */
 	Float getPrecipitationSignificantWeatherLast3();
@@ -732,7 +758,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Snow Rain Eq Last1</em>' attribute.
 	 * @see #setSnowRainEqLast1(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_SnowRainEqLast1()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='kg/m2'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='Kilograms per square meter' sensorthings.unit.definition='Kilograms per square meter' dwd.id='RRS1c'"
 	 * @generated
 	 */
 	Float getSnowRainEqLast1();
@@ -757,7 +784,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Snow Rain Eq Last3</em>' attribute.
 	 * @see #setSnowRainEqLast3(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_SnowRainEqLast3()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='kg/m2'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='Kilograms per square meter' sensorthings.unit.definition='Kilograms per square meter' dwd.id='RRS3c'"
 	 * @generated
 	 */
 	Float getSnowRainEqLast3();
@@ -782,7 +810,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Sunshine Duration Last1</em>' attribute.
 	 * @see #setSunshineDurationLast1(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_SunshineDurationLast1()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='s'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='seconds' sensorthings.unit.definition='seconds' dwd.id='SunD1'"
 	 * @generated
 	 */
 	Float getSunshineDurationLast1();
@@ -807,7 +836,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Temp Above Surface5</em>' attribute.
 	 * @see #setTempAboveSurface5(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_TempAboveSurface5()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='K'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='Kelvin' sensorthings.unit.definition='Kelvin' dwd.id='T5cm'"
 	 * @generated
 	 */
 	Float getTempAboveSurface5();
@@ -832,7 +862,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Temp Above Surface200</em>' attribute.
 	 * @see #setTempAboveSurface200(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_TempAboveSurface200()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='K'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='Kelvin' sensorthings.unit.definition='Kelvin' dwd.id='TTT'"
 	 * @generated
 	 */
 	Float getTempAboveSurface200();
@@ -857,7 +888,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Temp Dewpoint Above Surface200</em>' attribute.
 	 * @see #setTempDewpointAboveSurface200(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_TempDewpointAboveSurface200()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='K'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='Kelvin' sensorthings.unit.definition='Kelvin' dwd.id='Td'"
 	 * @generated
 	 */
 	Float getTempDewpointAboveSurface200();
@@ -882,7 +914,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Temp Min Last12</em>' attribute.
 	 * @see #setTempMinLast12(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_TempMinLast12()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='K'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='Kelvin' sensorthings.unit.definition='Kelvin' dwd.id='TN'"
 	 * @generated
 	 */
 	Float getTempMinLast12();
@@ -907,7 +940,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Temp Max Last12</em>' attribute.
 	 * @see #setTempMaxLast12(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_TempMaxLast12()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='K'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='Kelvin' sensorthings.unit.definition='Kelvin' dwd.id='TX'"
 	 * @generated
 	 */
 	Float getTempMaxLast12();
@@ -932,7 +966,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Visibility</em>' attribute.
 	 * @see #setVisibility(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_Visibility()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='m'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='meters' sensorthings.unit.definition='meters' dwd.id='VV'"
 	 * @generated
 	 */
 	Float getVisibility();
@@ -986,6 +1021,7 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @see #setSignificantWeather3Hours(WMOWeatherCodeType)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_SignificantWeather3Hours()
 	 * @model default="UNKNOWN"
+	 *        annotation="sensinact.mapping.metadata dwd.id='ww'"
 	 * @generated
 	 */
 	WMOWeatherCodeType getSignificantWeather3Hours();
@@ -1011,7 +1047,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Fog Prop Last1</em>' attribute.
 	 * @see #setFogPropLast1(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_FogPropLast1()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='%'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='percentage probability' sensorthings.unit.definition='percentage probability' dwd.id='wwM'"
 	 * @generated
 	 */
 	Float getFogPropLast1();
@@ -1036,7 +1073,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Fog Prop Last6</em>' attribute.
 	 * @see #setFogPropLast6(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_FogPropLast6()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='%'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='percentage probability' sensorthings.unit.definition='percentage probability' dwd.id='wwM6'"
 	 * @generated
 	 */
 	Float getFogPropLast6();
@@ -1061,7 +1099,8 @@ public interface MOSMIXSWeatherReport extends WeatherReport {
 	 * @return the value of the '<em>Fog Prop Last12</em>' attribute.
 	 * @see #setFogPropLast12(Float)
 	 * @see org.gecko.weather.model.weather.WeatherPackage#getMOSMIXSWeatherReport_FogPropLast12()
-	 * @model
+	 * @model annotation="sensinact.mapping sensinact.mapping.unit='%'"
+	 *        annotation="sensinact.mapping.metadata sensorthings.unit.name='percentage probability' sensorthings.unit.definition='percentage probability' dwd.id='wwMh'"
 	 * @generated
 	 */
 	Float getFogPropLast12();
