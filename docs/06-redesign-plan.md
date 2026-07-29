@@ -214,6 +214,30 @@ A slice is done when all of the following hold. Partial slices are fine to *paus
 5. Documentation updated in the same change — `docs/` and the affected bundle README.
 6. No dead code, no commented-out components. (`DEV-7`)
 
+## Next step
+
+*Updated 2026-07-29, end of session.*
+
+Slice 0 is done except 0.8, which waits on
+[org.gecko.libraries#3](https://github.com/geckoprojects-org/org.gecko.libraries/issues/3) — the GRIB
+wrap. `sunorcloud` is pushed with three commits and CI green.
+
+**Next is M.1, the model.** It does not depend on the wrap. Two things have to be settled first, and both
+are decisions rather than work:
+
+1. **`DEV-5`.** It names Ecore annotations as the mechanism for source-element mapping metadata. The
+   emf.osgi 1.1 metadata service is the better fit for `INT-15` because metadata lives beside the model
+   and is therefore reusable across providers by construction — but choosing it means changing that
+   requirement. See [ADR-0005](adr/0005-provider-neutral-model.md).
+2. **Who writes the `.ecore`.** Generating the model by hand from a written specification is slower than
+   doing it in the Ecore tooling directly. If the specification route is taken, the types to specify are
+   `Site`, `SourceBinding`, `MeasuredValue`, `Provenance`, `Uncertainty`, `GeoPosition`, `GridRef` and
+   `MeasurementKind` with the set from [09-source-inventory.md](09-source-inventory.md).
+
+Also still open, none of it blocking M.1: `M-10` (raw-record retention, needs `Q-B`), `M-11` (merge policy
+scope, needs `Q-F`), the UV product's exact grid, and how long each DWD product stays on the server —
+which is what bounds the backfill (`OPS-16`).
+
 ## Resuming after a gap
 
 The dominant failure mode for this project is not a wrong decision, it is **a resumption that costs a
