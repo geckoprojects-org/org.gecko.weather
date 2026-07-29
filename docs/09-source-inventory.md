@@ -144,6 +144,9 @@ coordinate transform and no neighbour lookup.
 uses. The library handles every template, so a DWD switch to CCSDS packing or another grid definition is
 a non-event instead of a project.
 
+Tracked upstream as
+[org.gecko.libraries#3](https://github.com/geckoprojects-org/org.gecko.libraries/issues/3).
+
 Three consequences that have to be handled when the bundle is created:
 
 - **The UCAR artifacts are not on Maven Central**, only on
@@ -154,10 +157,11 @@ Three consequences that have to be handled when the bundle is created:
   on cdm-core, wrapping it separately would put `ucar.nc2.*` in two bundles at once: duplicate packages,
   which is `F-13` and which `DEV-9` requires to be a build failure. So the wrap covers **cdm-core plus
   grib in one bundle**, extending the existing one rather than sitting beside it.
-- **Curate the exports.** The existing wrap exports 459 packages including `java.io`, `java.lang` and
-  `com.google.common.*`. Exporting `java.*` from a bundle is wrong, and re-exporting Guava invites
-  conflicts with anything else that uses it. The new wrap should export the `ucar.*` packages the
-  decoders actually import and privatise the rest.
+- **Review the exports while touching it.** The wrap's `Export-Package` is already curated by intent —
+  `com.google.re2j.*, thredds.*, ucar.*, uk.*` — which expands to 420 packages, none of them `java.*`.
+  That is simply what wrapping cdm-core costs. Two smaller smells are worth fixing in passing:
+  `org.jdom2` appears in both `Export-Package` and `Import-Package`, and 22 `java.*` packages are
+  imported, which the system bundle has to satisfy.
 
 libaec is not needed for the products in scope (`grid_simple`, measured above), so the JNA and native
 library path stays out — but the library supports it if that ever changes, which is the point of taking

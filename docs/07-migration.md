@@ -122,7 +122,8 @@ Foundation:
 
 Knowledge salvage — before the corresponding increment:
 
-- [ ] `edu.ucar:grib` added to the `org.gecko.ucar.netcdf` wrap, exports curated — **first code task**
+- [ ] `edu.ucar:grib` added to the `org.gecko.ucar.netcdf` wrap — requested as
+      [org.gecko.libraries#3](https://github.com/geckoprojects-org/org.gecko.libraries/issues/3)
 - [ ] DWD element mapping extracted from `DWDUtils` into declarative form
 - [ ] `sensinact.mapping` content relocated onto canonical kinds, mechanism per [ADR-0005](adr/0005-provider-neutral-model.md)
 - [ ] MOSMIX KML navigation logic understood and restructured, not copied

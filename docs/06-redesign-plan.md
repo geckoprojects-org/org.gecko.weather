@@ -57,7 +57,7 @@ Goal: a real, green, empty workspace, so that no later increment is blocked on t
 | 0.6 | Branch and coordinates | S | **done** — `sunorcloud`, group unchanged ([ADR-0001](adr/0001-greenfield-new-repository.md)) |
 | 0.5 | Curated dependency set with a duplicate-version check | M | `DEV-9`, prevents `F-13` recurring — matters more now, because the Fennec libraries are not version-aligned |
 | 0.7 | **`git init` on `sunorcloud`, commit the workspace** | S | **next**; orphan-vs-branched still open |
-| 0.8 | **Unidata repository into `cnf`, `edu.ucar:grib` added to the `org.gecko.ucar.netcdf` wrap** with curated exports | M | first code task; see [07-migration.md](07-migration.md) |
+| 0.8 | **Unidata repository into `cnf`, `edu.ucar:grib` added to the `org.gecko.ucar.netcdf` wrap** | M | requested upstream: [org.gecko.libraries#3](https://github.com/geckoprojects-org/org.gecko.libraries/issues/3) |
 
 **Exit criteria.** A trivial bundle builds, CI is green including baselining and the licence check, and a
 GRIB2 message from a real ICON-D2 file can be read in a plain JUnit test.
