@@ -1,0 +1,24 @@
+name: CI Build
+
+# GitHub Actions is the pre-gate only: licence check, build, test — on every branch
+# including main and snapshot. Publishing is Jenkins' job (see Jenkinsfile), which is why
+# there are no snapshot/release workflows here.
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '*'
+
+# Least privilege by default; this workflow only reads the repository.
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    uses: eclipse-fennec/.github/.github/workflows/reusable-verify.yml@227b1dfa5f323fdd6d857d0a61fbaaf6e7288716 # v1.0.0
