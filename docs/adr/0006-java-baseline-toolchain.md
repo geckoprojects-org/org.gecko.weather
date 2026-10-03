@@ -28,7 +28,9 @@ Java **21**, bnd **7.4**, OSGi **R8**. `java.time` throughout, with no `Date`, `
 `SimpleDateFormat` in new code and no reliance on the system default time zone in any computation.
 
 **As set up in the workspace:** `javac.source`/`javac.target: 21` in `cnf/ext/fennec.bnd`, and
-`bnd_version=7.4.0-SNAPSHOT` resolved from `https://bndtools.jfrog.io/bndtools/libs-snapshot-local`.
+`bnd_version=7.4.0` — the release, since 2026-10-03. Until then the workspace ran the 7.4.0 snapshot
+from `https://bndtools.jfrog.io/bndtools/libs-snapshot-local`, because 7.3.0 broke `-pom` snapshot
+handling.
 The snapshot is deliberate rather than provisional: bnd 7.3.0 shipped a regression in
 `PomResource.doSnapshot`, which parsed the Maven version `x.y.z-SNAPSHOT` as an OSGi version and
 threw, breaking bundle jar builds against the Fennec libraries. The fix is in the 7.4.0 line, and

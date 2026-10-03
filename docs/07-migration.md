@@ -23,7 +23,7 @@ can never be recovered.** That is an argument for reaching a deployable state ea
 
 | Item | From | Treatment |
 | --- | --- | --- |
-| **`cnf` workspace setup** | ~~old `cnf`~~ | **Superseded.** The `sunorcloud` workspace was built fresh on the Fennec `cnf` template instead: Java 21, bnd 7.4.0-SNAPSHOT, the Fennec library set ([ADR-0002](adr/0002-emf-as-core-model.md), [ADR-0006](adr/0006-java-baseline-toolchain.md)). Two things still to take from the old `cnf`: the **Unidata repository** declaration (`-plugin.3.Unidata` → `artifacts.unidata.ucar.edu`) and the `org.gecko.ucar.*` coordinates. Note the old `cnf/unidata.mvn` the plugin references **does not exist** — the plugin was dead and the UCAR bundles came as Gecko wraps from Maven Central. |
+| **`cnf` workspace setup** | ~~old `cnf`~~ | **Superseded.** The `sunorcloud` workspace was built fresh on the Fennec `cnf` template instead: Java 21, bnd 7.4.0, the Fennec library set ([ADR-0002](adr/0002-emf-as-core-model.md), [ADR-0006](adr/0006-java-baseline-toolchain.md)). Two things still to take from the old `cnf`: the **Unidata repository** declaration (`-plugin.3.Unidata` → `artifacts.unidata.ucar.edu`) and the `org.gecko.ucar.*` coordinates. Note the old `cnf/unidata.mvn` the plugin references **does not exist** — the plugin was dead and the UCAR bundles came as Gecko wraps from Maven Central. |
 | **CI and quality config** | `.github/`, `Jenkinsfile`, `build.gradle` Sonar/Jacoco setup, `.licenserc.yaml` | **Done.** Jenkinsfile carried over with JDK raised to `OpenJDK21`; GitHub Actions trimmed to the pre-gate (licence, build, test) since Jenkins does the releases. |
 | **UCAR wrap bundles** | [org.gecko.libraries](https://github.com/geckoprojects-org/org.gecko.libraries): `org.gecko.ucar.netcdf`, `org.gecko.ucar.units` (5.6.0) | **Reuse and extend.** These are the OSGi wraps for the UCAR library; the SIS spike used them. `org.gecko.ucar.netcdf` contains **no GRIB support**, so ICON-D2 needs `edu.ucar:grib` added to the same wrap — not a second bundle, or `ucar.nc2.*` lands in two bundles at once (`F-13`, `DEV-9`). See [09-source-inventory.md](09-source-inventory.md). |
 | **MOSMIX KML decoding knowledge** | `DWDMOSMIXStationForecastFetcher.doDecode`, `DWDUtils` | **Port with rework.** The navigation logic (document → placemark → extended data → forecast elements → timesteps) is correct and hard to re-derive. Restructure into a streaming decoder; do not copy the method. |
@@ -113,7 +113,7 @@ reason not to extend the parallel phase indefinitely (`OPS-11` politeness, `S-4`
 Foundation:
 
 - [x] Coordinates settled — branch `sunorcloud`, group `org.geckoprojects.weather`, no rename needed
-- [x] Workspace on the Fennec `cnf`: Java 21, bnd 7.4.0-SNAPSHOT, Fennec library set
+- [x] Workspace on the Fennec `cnf`: Java 21, bnd 7.4.0, Fennec library set
 - [x] CI split — Jenkins releases, GitHub Actions as licence/build/test pre-gate
 - [x] `docs/` is the canonical documentation home
 - [ ] Git initialised on `sunorcloud`, workspace committed
