@@ -48,3 +48,13 @@ javac.target: 21
 github-orga:    ${github_org}
 github-project: ${github_repository}
 -groupid:       ${maven_group_id}
+
+# Unidata (read-only) — netCDF-Java (cdm-core, grib) is not on Maven Central. Wrapped by
+# org.gecko.ucar.netcdf in this workspace (M-14); to be migrated to org.gecko.libraries.
+-plugin.6.Unidata: \
+	aQute.bnd.repository.maven.provider.MavenBndRepository; \
+		releaseUrl="https://artifacts.unidata.ucar.edu/repository/unidata-all/"; \
+		index=${.}/unidata.mvn; \
+		readOnly=true; \
+		poll.time=-1; \
+		name="Unidata"

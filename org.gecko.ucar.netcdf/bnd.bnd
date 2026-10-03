@@ -1,0 +1,60 @@
+# Re-packaged Unidata netCDF-Java: cdm-core plus the GRIB module in one bundle (edu.ucar:grib
+# depends on cdm-core; two bundles would split ucar.nc2.* and the resources). Same shape as
+# org.gecko.ucar.netcdf in org.gecko.libraries, which wraps cdm-core only — this one is meant to
+# replace it there (org.gecko.libraries#3), see README.md.
+lib.version: 5.6.0
+re2j.version: 1.7
+jdom2.version: 2.0.6.1
+
+Bundle-SymbolicName: org.gecko.ucar.netcdf
+Bundle-Version: ${lib.version}.SNAPSHOT
+Bundle-Name: Re-packaged Unidata netCDF-Java (cdm-core, grib)
+Bundle-Vendor: Unidata University Corporation for Atmospheric Research
+Bundle-License: BSD-3-Clause;link="https://github.com/Unidata/netcdf-java/blob/main/LICENSE"
+Bundle-Description: netCDF-Java ${lib.version} cdm-core and grib as one OSGi bundle, with re2j and \
+	jdom2 embedded (no OSGi manifests upstream). guava, protobuf, joda-time, slf4j and ucar.units \
+	are imported from their own bundles.
+
+-buildpath: \
+	edu.ucar:cdm-core;version=${lib.version},\
+	edu.ucar:grib;version=${lib.version},\
+	com.google.re2j:re2j;version=${re2j.version},\
+	org.jdom:jdom2;version=${jdom2.version}
+
+# Classes come in through Export-Package; everything that is not a class has to be named here:
+# protobuf schemas, the GRIB/NetCDF tables under resources/, ServiceLoader registrations.
+-includeresource: \
+	@${repo;edu.ucar:cdm-core:jar;${lib.version};EXACT}!/*.proto,\
+	@${repo;edu.ucar:cdm-core:jar;${lib.version};EXACT}!/resources/*,\
+	@${repo;edu.ucar:cdm-core:jar;${lib.version};EXACT}!/META-INF/services/*,\
+	@${repo;edu.ucar:cdm-core:jar;${lib.version};EXACT}!/META-INF/third-party-licenses/*,\
+	@${repo;edu.ucar:grib:jar;${lib.version};EXACT}!/*.proto,\
+	@${repo;edu.ucar:grib:jar;${lib.version};EXACT}!/resources/*,\
+	@${repo;edu.ucar:grib:jar;${lib.version};EXACT}!/META-INF/services/*,\
+	@${repo;edu.ucar:grib:jar;${lib.version};EXACT}!/META-INF/third-party-licenses/*,\
+	OSGI-OPT/src=@${repo;edu.ucar:cdm-core:jar:sources;${lib.version};EXACT},\
+	OSGI-OPT/src=@${repo;edu.ucar:grib:jar:sources;${lib.version};EXACT},\
+	OSGI-OPT/src=@${repo;com.google.re2j:re2j:jar:sources;${re2j.version};EXACT},\
+	OSGI-OPT/src=@${repo;org.jdom:jdom2:jar:sources;${jdom2.version};EXACT}
+
+Export-Package: \
+	com.google.re2j.*,\
+	org.jdom2.*,\
+	thredds.*,\
+	ucar.*,\
+	uk.*
+
+# Optional: remote access (httpservices, Apache HttpClient), the jcommander CLIs, JPEG2000 packing
+# (jj2000), commons-math, the jsr305 annotations and jdom2's XPath (jaxen). None is needed to read a local GRIB2
+# or NetCDF-3 file.
+Import-Package: \
+	ucar.httpservices.*;resolution:=optional,\
+	ucar.jpeg.*;resolution:=optional,\
+	org.apache.*;resolution:=optional,\
+	com.beust.*;resolution:=optional,\
+	javax.annotation.*;resolution:=optional,\
+	org.jaxen.*;resolution:=optional,\
+	*
+
+# The two jars overlap in no package, but bnd must not refuse should a future version change that.
+-split-package: merge-first
