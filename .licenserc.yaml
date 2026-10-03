@@ -58,6 +58,8 @@ header:
     - 'NOTICE'
     - 'cnf/**'
     - '**/src-gen/**'
+    # recorded source files (DWD KMZ, station catalogue) for offline tests carry the source's terms, not ours
+    - '**/test/fixtures/**'
     - '**/generated/**'
     - '.gitattributes'
     - '.github/**'
