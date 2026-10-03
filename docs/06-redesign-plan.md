@@ -78,7 +78,7 @@ and 2:
 | M.4 | **`site`** — registry over the repository, automatic binding resolution with distance plus manual override, `dataCompleteFrom` | M | `INT-1` |
 | M.5 | **`provider.dwd.icon`** — conditional-GET transport, **GRIB2 decoder** over the wrap, cell resolver by index arithmetic on plain lat/lon, de-averaging for `aswdir_s`/`aswdifd_s` | **L** | `INT-3`, `OPS-9`; the largest item |
 | M.6 | **`provider.dwd.mosmix`** — KML via `ecore.xmi`, nearest-station resolver. Also the cheap way to prove the SPI before M.5 | M | `F-1`…`F-4` resolved |
-| M.7 | **`solar.time4j`** — `DayInfo` per day, `SUN_ELEVATION`/`SUN_AZIMUTH` per timestep as a `COMPUTED` dataset, site time zone honoured (the old service used the platform zone and returned sunset for sunrise) | S | `INT-4`, resolves `F-18` |
+| M.7 | **`solar.time4j`** — `SolarService`: position per instant, `DayInfo` per civil date in the site's zone (the old service used the platform zone and returned sunset for sunrise); the per-timestep `COMPUTED` dataset is assembled in M.8 | S | **done 2026-10-03** — `INT-4`, `V-8`, resolves `F-18` |
 | M.8 | ~~`compute.merge`~~ **report assembly = `WeatherDataSink`** — `replace` (new issue: swap the product's dataset, archive the previous) and `append` (streams: rolling window per product, archive in buckets); refresh the solar dataset and `DayInfo` for the horizon; the fetch path and push sources both go through it | M | `INT-2` as reworded, `M-17`, [ADR-0013](adr/0013-values-per-source.md) |
 | M.9 | **`ingest`** — per-provider scheduling, conditional GET, bounded backoff | M | `OPS-6`, `OPS-7` |
 | M.10 | **In-process service** — report by site id, plus the first reading helpers (timeline per kind across datasets, newest issue per product) | S | `INT-12` in its cheapest form |
@@ -239,13 +239,17 @@ metatype `root`, 12 plain-JUnit tests against a temp folder. Also added the same
 weather stations (Bresser, Ecowitt) are a source like any other; `Origin.LOCAL_STATION` in the model,
 `WeatherDataSink` (`replace` / `append`) in the SPI as the one way data enters a report.
 
-**Next is M.7, `solar.time4j`**, because it is small, has no network and gives the first `COMPUTED`
-dataset: `SolarService` over `net.time4j` (`time4j-base` 5.9.4 is an OSGi bundle and carries
-`SunPosition`/`SolarTime`; add `net.time4j:time4j-base:5.9.4` to `central.mvn`), site time zone
-honoured, tested against known values (`V-8`). Then M.4 + M.8 together (`SiteRegistry`,
-`WeatherService`, `WeatherDataSink` over the repository — one `core` bundle), M.6 (MOSMIX, the first
-provider, with a shared HTTP transport helper), M.15 (the UCAR wrap), M.5 (ICON-D2), M.9 (ingest
-runtime).
+**M.7, `solar.time4j`, is done** (same day): `Time4jSolarService`, 8 tests against geometry
+(`90° − |φ − δ|`, solstice day lengths, civil date in Berlin and Tokyo, polar night, midnight sun).
+
+**Next is M.4 + M.8 as one `core` bundle**: `SiteRegistry` (ids, binding resolution over the
+`SiteBindingResolver` whiteboard, ranked stations, manual override), `WeatherService` (reads over the
+repository via `Reports`), and `WeatherDataSink` (`replace`: swap + archive; `append`: rolling window;
+after each change refresh the solar dataset — `SUN_ELEVATION`/`SUN_AZIMUTH` per timestep over the
+report's horizon — and `DayInfo` per day). Plain-JUnit against `XmiFolderRepository` in a temp folder
+and a fake resolver. Then M.6 (MOSMIX, the first provider, with a shared HTTP transport helper), M.15
+(the UCAR wrap), M.5 (ICON-D2), M.9 (ingest runtime), M.13 (`runtime` with Configurator defaults and
+the bndrun).
 
 Still open, none of it blocking: `M-10` (archive retention, needs `Q-B`), `M-11` (which reading helpers),
 `M-16` (several stations per site by default?), the UV product's exact grid, and how long each DWD
