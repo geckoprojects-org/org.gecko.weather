@@ -138,14 +138,35 @@ expected value) exists to catch. Same expected for `aswdifd_s`.
 Also settled: **use the `regular-lat-lon` files, not the icosahedral ones.** Template 0 needs no
 coordinate transform and no neighbour lookup.
 
+**Measured again 2026-10-03 while building the provider** (run `2026100300`, all six parameters):
+
+- **The radiation files hold four GRIB records per step**, the averages since model start ending
+  at :00, :15, :30 and :45 of the step hour. The provider reads the full-hour record; the quarter
+  hours are there if 15-minute means are ever wanted.
+- **`aswdifd_s` confirmed**: template 8, statistical process 0, same interval as `aswdir_s`.
+- **The cloud layers share parameter 6/22** and differ only by their pressure bounds — `clcl`
+  800 hPa to surface, `clcm` 400–800 hPa, `clch` 0–400 hPa (`clct` is 6/1 at the surface). A check
+  that a file is what its name says has to look at the levels.
+- Time unit is minutes (code 0): forecast time 180 for +3 h, range length 660 for the 11-hour average.
+- **Sizes by daylight.** The 0.6 MB per file above came from a +3 h night file. Cloud files are
+  0.65–0.8 MB bzip2 (1.6 MB raw) at any hour; radiation files are 3 KB at night (all zero) and
+  **4.4–4.6 MB bzip2 (6.5 MB raw, four records) by day**. A run of six parameters over 48 h
+  **measured 515 MB over the wire** (294 files, 898 MB decoded, ~50 s), a day of eight runs ~4 GB —
+  see `R-11`; the provider defaults to four runs.
+- Worked example of the de-averaging at the Dresden cell (884, 394): 33.02 W/m² mean to +10 h,
+  52.27 W/m² to +11 h → **244.8 W/m² direct radiation for 10–11 UTC**.
+
 ## GRIB2 library: a UCAR wrap bundle
 
 **Decided 2026-07-29: wrap `edu.ucar:grib`** rather than hand-write a reader for the four templates DWD
 uses. The library handles every template, so a DWD switch to CCSDS packing or another grid definition is
 a non-event instead of a project.
 
-Tracked upstream as
-[org.gecko.libraries#3](https://github.com/geckoprojects-org/org.gecko.libraries/issues/3).
+**Built 2026-10-03 as `org.gecko.ucar.netcdf` in this workspace** (M-14) — cdm-core plus grib, re2j and
+jdom2 embedded, Guava/protobuf/joda-time/slf4j/`ucar.units` imported; see its README. It is meant to
+replace the cdm-core-only wrap in `org.gecko.libraries`, tracked as
+[org.gecko.libraries#3](https://github.com/geckoprojects-org/org.gecko.libraries/issues/3); the
+migration is the owner's.
 
 Three consequences that have to be handled when the bundle is created:
 
@@ -171,4 +192,4 @@ the library.
 
 - **The exact grid of the UV product**, from its GRIB header rather than from documentation.
 - How far back each product is retained on the server, which bounds the best-effort backfill (`OPS-16`).
-- Whether `aswdifd_s` matches `aswdir_s` in template and averaging — expected, not verified.
+- ~~Whether `aswdifd_s` matches `aswdir_s` in template and averaging~~ — confirmed 2026-10-03, see above.

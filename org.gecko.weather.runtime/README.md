@@ -3,8 +3,9 @@
 Deployment glue, no domain logic.
 
 - **`configs/weather.json`** — Configurator defaults for a local run: repository `root`
-  `data/weather`, core and ingest defaults, the MOSMIX_L provider with an empty (= default)
-  configuration. Production replaces these.
+  `data/weather`, core and ingest defaults, the MOSMIX_L and ICON-D2 providers with an empty
+  (= default) configuration — ICON-D2 at its defaults fetches ~500 MB per run, four runs a day.
+  Production replaces these.
 - The Gogo commands live in `org.gecko.weather.shell`; `launch.bndrun` includes them, the smoke run
   does not (a bundle with `@GogoCommand` requires Gogo at resolve time).
 - **`SmokeRun`** — the end-to-end proof; armed by `-Dweather.smoke=true`, otherwise inert.
@@ -13,7 +14,7 @@ Deployment glue, no domain logic.
 
 | bndrun | What |
 | --- | --- |
-| `launch.bndrun` | Felix, Gogo shell + `weather` commands, Configurator, Fennec EMF runtime, all weather bundles, MOSMIX provider |
+| `launch.bndrun` | Felix, Gogo shell + `weather` commands, Configurator, Fennec EMF runtime, all weather bundles, the MOSMIX_L and ICON-D2 providers (the latter brings netCDF-Java, Guava, protobuf, joda-time, commons-compress + commons-io) |
 | `smoke.bndrun` | the same without an interactive shell, `SmokeRun` armed; exits 0 when a report with temperatures, sun elevations and day events exists for a freshly registered site |
 | `dev.bndrun` | the launch plus the Fennec Gogo MCP server on `127.0.0.1:8088/mcp/gogo` (configured by `org.gecko.weather.runtime.dev`, never in production), non-interactive shell so it can run in the background; commands go through MCP — `.mcp.json` at the workspace root points a Claude Code session at it |
 

@@ -18,5 +18,8 @@
 	},
 
 	"org.gecko.weather.provider.dwd.mosmix": {
+	},
+
+	"org.gecko.weather.provider.dwd.icon": {
 	}
 }

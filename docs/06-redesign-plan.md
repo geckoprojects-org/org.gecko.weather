@@ -57,7 +57,7 @@ Goal: a real, green, empty workspace, so that no later increment is blocked on t
 | 0.6 | Branch and coordinates | S | **done** — `sunorcloud`, group unchanged ([ADR-0001](adr/0001-greenfield-new-repository.md)) |
 | 0.5 | Curated dependency set with a duplicate-version check | M | `DEV-9`, prevents `F-13` recurring — matters more now, because the Fennec libraries are not version-aligned |
 | 0.7 | `git init` on `sunorcloud`, commit the workspace | S | **done** — branch pushed, CI green |
-| 0.8 | **Unidata repository into `cnf`, UCAR cdm-core + grib wrap bundle *in this workspace*** | M | open, **no longer blocked upstream** — decided 2026-10-03 (`M-14`): libraries that need OSGi-fication are wrapped here and moved out later. The upstream request [org.gecko.libraries#3](https://github.com/geckoprojects-org/org.gecko.libraries/issues/3) stays as a note |
+| 0.8 | **Unidata repository into `cnf`, UCAR cdm-core + grib wrap bundle *in this workspace*** | M | **done** 2026-10-03 — `org.gecko.ucar.netcdf`, `-plugin.6.Unidata`; to be migrated to `org.gecko.libraries` by its owner ([#3](https://github.com/geckoprojects-org/org.gecko.libraries/issues/3)) |
 | 0.9 | bnd 7.4.0 release instead of the snapshot | S | **done** 2026-10-03 |
 
 **Exit criteria.** A trivial bundle builds, CI is green including baselining and the licence check, and a
@@ -76,7 +76,7 @@ and 2:
 | M.2 | **`api`** — `SiteRegistry` (register with id, assign, rebind, deactivate, remove), `WeatherService` (report, **values of one kind or a `ValueQuery`** — e.g. only temperature, only UV — timeline, archive; all by site id), `Reports`, `SolarService`, `WeatherRepository`; SPI: `WeatherProvider.fetch` once per product for all sites, `SiteBindingResolver` ([ADR-0003](adr/0003-provider-spi.md) revision) | M | **done 2026-10-03** — `DEV-1`, `INT-1`, `INT-12` |
 | M.3 | **`repository.file`** — configurable folder: `sites/`, `reports/`, `archive/<site>/<provider>/<product>/`, `catalogs/` as XMI; atomic writes, append-only archive, `evictArchive` | M | **done 2026-10-03** — `OPS-1`, and the precondition for `INT-17` |
 | M.4 | **`site`** — registry over the repository, automatic binding resolution with distance plus manual override, `dataCompleteFrom` | M | `INT-1` |
-| M.5 | **`provider.dwd.icon`** — conditional-GET transport, **GRIB2 decoder** over the wrap, cell resolver by index arithmetic on plain lat/lon, de-averaging for `aswdir_s`/`aswdifd_s` | **L** | `INT-3`, `OPS-9`; the largest item |
+| M.5 | **`provider.dwd.icon`** — bzip2 transport, **GRIB2 decoder** over the wrap (one run fetched whole and remembered as a set of URIs, no per-file conditional GET — the files are immutable), cell resolver by index arithmetic on plain lat/lon, de-averaging for `aswdir_s`/`aswdifd_s` | **L** | **done 2026-10-03** — `INT-3`, `OPS-9`; the largest item |
 | M.6 | **`provider.dwd.mosmix`** — station catalogue (degrees-and-minutes trap fixed), nearest-station resolver, one KMZ per bound station with conditional requests, decode through the Fennec `net.opengis.kml.model` + `de.dwd.cdc.forecast.model` EMF models (MOSMIX_L only — the all-stations file would need a streaming decoder), ~60 elements mapped to canonical kinds; plus **`transport`** (JDK HttpClient, 304, zip/gzip) | M | **done 2026-10-03** — `F-1`…`F-4` resolved, SPI proven |
 | M.7 | **`solar`** — `SolarService` over NREL SPA (`net.e175.klaus:solarpositioning`, MIT, OSGi bundle; replaced Time4J, LGPL, on 2026-10-03): position per instant, `DayInfo` per civil date in the site's zone (the old service used the platform zone and returned sunset for sunrise); the per-timestep `COMPUTED` dataset is assembled in M.8 | S | **done 2026-10-03** — `INT-4`, `V-8`, resolves `F-18` |
 | M.8 | ~~`compute.merge`~~ **report assembly = `WeatherDataSink`** — `replace` (new issue: swap the product's dataset, archive the previous) and `append` (streams: rolling window per product, archive in buckets); refresh the solar dataset and `DayInfo` for the horizon; the fetch path and push sources both go through it | M | `INT-2` as reworded, `M-17`, [ADR-0013](adr/0013-values-per-source.md) |
@@ -85,8 +85,8 @@ and 2:
 | M.11 | **`provider.dwd.sis`** — NetCDF decoder, 0.05° cell resolver | M | high-cadence global radiation |
 | M.12 | **`provider.dwd.uv`** — GRIB2, health forecasts | S | completes the quantity set |
 | M.13 | **`runtime` + `shell`** — Configurator defaults, `launch.bndrun` (Felix, Gogo, Fennec EMF), `smoke.bndrun` as the end-to-end proof against the real DWD (exit 0 iff a fresh site has temperatures, sun positions and days), Gogo commands in the `weather` scope | M | **done 2026-10-03** — `OPS-5`; the volume is documented in the runtime README |
-| M.14 | Offline fixtures: ICON-D2 `.grib2`, SIS `.nc`, ~~MOSMIX `.kmz`~~ (done, with a station catalogue) | M | `DEV-6`, `QR-6` |
-| M.15 | **`wrap.ucar`** — cdm-core + grib as one bundle in this workspace, Unidata repository in `cnf` (was 0.8) | M | `M-14`, unblocks M.5 |
+| M.14 | Offline fixtures: ~~ICON-D2 `.grib2`~~ (done: `clct` and a four-record `aswdir_s` step, plus a synthetic GRIB2 writer on the ICON-D2 grid), SIS `.nc`, ~~MOSMIX `.kmz`~~ (done, with a station catalogue) | M | `DEV-6`, `QR-6` |
+| M.15 | **`wrap.ucar`** — cdm-core + grib as one bundle in this workspace, Unidata repository in `cnf` (was 0.8) | M | **done 2026-10-03** — `M-14`, unblocks M.5 |
 
 **Sequencing note.** M.6 before M.5 is deliberate even though ICON is the primary source: it proves
 transport → decoder → sink → mapper → persist with no library risk and no cell arithmetic, so M.5 only has
@@ -277,10 +277,33 @@ number rather than a guess, and the first lever is per-dataset provenance defaul
 serialisation, not a model change. Also open: Felix reports "Error ungetting service" for the
 prototype `ResourceSet` on shutdown — harmless, probably stop order, to be raised with Fennec EMF.
 
-**Next is M.15 + M.5, the gridded half:** the UCAR cdm-core + grib wrap in this workspace, then
-`provider.dwd.icon` — the GRIB2 decoder over the wrap, cell resolver by index arithmetic on the plain
-lat/lon grid, de-averaging of `aswdir_s`/`aswdifd_s`, one download per parameter and step serving all
-sites' cells. That is exit criterion 1, the claim the whole redesign is about.
+**M.15 + M.5, the gridded half, are done (2026-10-03, later the same day):** `org.gecko.ucar.netcdf`
+wraps cdm-core + grib in this workspace, `provider.dwd.icon` reads ICON-D2 through it — cell by
+index arithmetic, the file verified against its name (grid, parameter signature incl. the cloud
+layers' pressure bounds, run, step), `aswdir_s`/`aswdifd_s` de-averaged to hourly means, one
+download per parameter and step serving all bound cells, the run remembered as a set of URIs in the
+source state. 16 plain-JUnit tests; the expected values of the recorded files come from an
+independent hand-written GRIB2 parser. Three things the files taught, recorded in
+[09-source-inventory.md](09-source-inventory.md): radiation files hold four quarter-hour records per
+step; the cloud layers share one parameter number and differ by pressure bounds; daytime radiation
+files are 4.5 MB, so a run is 515 MB over the wire and `R-11` is now a number. Small changes alongside:
+`transport` unwraps bzip2 and signals 404 as `NotFoundException`; `api` gained `Geo` (haversine,
+shared by both providers); the shell shows cells.
+
+**Exit criterion 1 is demonstrated** (same day, dev launch against the real DWD): the Dresden site's
+report holds, beside its three MOSMIX_L station datasets, one ICON-D2 dataset from cell (884, 393)
+1.1 km away — 292 values, cloud cover by layer and direct/diffuse radiation per hour for 48 h, every
+value naming the cell and the distance; run `2026-10-03T12:00Z`, 294 files, 515 MB transferred and
+898 MB decoded in about 50 s. Criteria **6** and **7** are met by the offline tests (recorded files,
+synthetic GRIB2, de-averaging against a hand-computed value). The smoke run deliberately stays
+MOSMIX-only; `dev.bndrun` is where ICON-D2 is exercised.
+
+**Next:** `R-7` — a report now carries ~290 more values per cell and a second gridded product
+would double that; the first lever (per-dataset provenance defaults or a compact serialisation) is
+due before SIS or UV are added. Then `IngestScheduler` is single-threaded: a ~50 s ICON run delays
+the MOSMIX poll behind it, harmless today, worth a small pool once a third provider exists.
+`05-architecture-target.md` still describes a `compute.fusion` layer and is the next document to
+re-cut.
 
 Still open, none of it blocking: `M-10` (archive retention, needs `Q-B`), `M-11` (which reading helpers),
 `M-16` (several stations per site by default?), the UV product's exact grid, and how long each DWD
@@ -307,7 +330,7 @@ week of re-reading**. Two cheap habits, treated as part of the work rather than 
 | **R-1** | **Scope exceeds capacity.** The vision is a substantial system; capacity is one person alongside project work, no deadline. | The rebuild stalls half-finished while the old service still runs — the worst outcome, because effort is spent and nothing is gained. | MVP-first sequencing: the MVP must reach a deployable, useful state before anything else starts. Every step independently shippable. Focus already narrowed hard: DWD only, no second provider, no yield model, no radar. Revisit whenever capacity changes. |
 | ~~R-2~~ | ~~No usable gridded cloud-cover product.~~ | — | **Retired 2026-07-29.** ICON-D2 publishes `clct`/`clcl`/`clcm`/`clch` at 2.2 km, 0–48 h, 8×/day. |
 | ~~R-3~~ | ~~SIS's +18 h horizon is shorter than the 24–48 h window.~~ | — | **Retired 2026-07-29.** ICON-D2 also carries direct and diffuse surface radiation for the full 48 h, at finer resolution than SIS. No MOSMIX patching needed inside the window. |
-| **R-11** | **Transfer volume.** No server-side subsetting exists on DWD Open Data, so the whole field must be downloaded to read one cell: ~175 MB per ICON-D2 run for 6 parameters, ~1.4 GB/day at 8 runs. | Bandwidth cost, and impoliteness towards a shared open-data server (`S-4`). | `OPS-9` splits: storage scales with sites, transfer cannot. Levers are all "fetch less" — fewer runs per day, only mapped parameters, hourly only where it matters. Decide the number deliberately; log what was fetched. |
+| **R-11** | **Transfer volume.** No server-side subsetting exists on DWD Open Data, so the whole field must be downloaded to read one cell. **Measured 2026-10-03: 515 MB per ICON-D2 run for 6 parameters** (294 files; daytime radiation files are 4.5 MB each), ~4 GB/day at 8 runs. | Bandwidth cost, and impoliteness towards a shared open-data server (`S-4`). | `OPS-9` splits: storage scales with sites, transfer cannot. Levers are all "fetch less" — the provider's `runs` (default four a day, ~2 GB), `parameters`, `horizonHours`. A run is fetched once and remembered; a poll between runs costs one probe. Every run fetched is logged with its size. |
 | **R-12** | **Averaged radiation fields read as instantaneous.** `aswdir_s` is product template 8, statistical process 0 — averaged since model start. Reading it raw produces plausible, wrong numbers. | Silently wrong PV input, the worst failure mode for this service. | De-averaging implemented once in the ICON mapper, with a test against a hand-computed expected value (`QR-6`, exit criterion 7 of the MVP). |
 | R-4 | Subset-on-ingest is irreversible: a site added later has no history, and sources rarely allow retrospective retrieval. | New sites are permanently poorer than old ones for accuracy analysis. | Best-effort backfill at registration and a recorded `dataCompleteFrom` (`OPS-16`). Documented as a known cost in [ADR-0010](adr/0010-subset-on-ingest.md), not hidden. |
 | R-5 | File-based repository insufficient once `Q-B` retention and `Q-C` site count are answered. | Repository replacement mid-project. | The `WeatherRepository` interface is the boundary; swapping the implementation touches one bundle. Answer `Q-B`/`Q-C` before sizing the raw record. |
