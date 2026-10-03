@@ -50,6 +50,20 @@ public interface WeatherProvider {
 	/** {@code STATION} for point products, {@code GRID_CELL} for gridded ones. */
 	Origin origin();
 
+	/**
+	 * How a product delivers — the two verbs of {@link WeatherDataSink}: an <b>issue</b> is a complete
+	 * dataset that replaces the previous one; a <b>stream</b> is observations that are appended to a
+	 * rolling dataset (a satellite analysis every 15 minutes, an own station every minute).
+	 */
+	enum Delivery {
+		ISSUE, STREAM
+	}
+
+	/** {@link Delivery#ISSUE} unless the provider says otherwise. */
+	default Delivery delivery() {
+		return Delivery.ISSUE;
+	}
+
 	/** The product's publication interval; also the natural scheduling period. */
 	Duration expectedRefresh();
 

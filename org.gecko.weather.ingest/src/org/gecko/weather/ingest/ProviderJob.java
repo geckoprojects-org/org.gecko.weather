@@ -180,7 +180,11 @@ public class ProviderJob {
 		for (Map.Entry<String, List<SourceDataset>> e : fetched.datasets().entrySet()) {
 			for (SourceDataset dataset : e.getValue()) {
 				try {
-					sink.replace(e.getKey(), dataset);
+					if (provider.delivery() == WeatherProvider.Delivery.STREAM) {
+						sink.append(e.getKey(), dataset);
+					} else {
+						sink.replace(e.getKey(), dataset);
+					}
 					applied++;
 				} catch (UnknownSiteException gone) {
 					LOG.log(Level.INFO, "[{0}/{1}] site {2} disappeared during the run", providerId(), productId(), e.getKey());

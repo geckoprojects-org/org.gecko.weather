@@ -24,47 +24,49 @@ import org.gecko.weather.model.weather.GridCell;
 import org.gecko.weather.model.weather.Level;
 import org.gecko.weather.model.weather.MeasurementKind;
 import org.gecko.weather.model.weather.Statistic;
-import org.gecko.weather.provider.dwd.icon.IconD2Grid.Cell;
+import org.gecko.weather.api.spi.RegularLatLonGrid.Cell;
 import org.junit.jupiter.api.Test;
 
 class IconD2GridTest {
 
 	@Test
 	void cellsByIndexArithmetic() {
-		assertThat(IconD2Grid.cellFor(51.0504, 13.7373)).contains(new Cell(884, 394));
-		assertThat(IconD2Grid.cellFor(43.18, -3.94)).contains(new Cell(0, 0));
-		assertThat(IconD2Grid.cellFor(58.08, 20.34)).contains(new Cell(1214, 745));
-		assertThat(IconD2Grid.cellFor(53.55, 9.99)).contains(new Cell(697, 518));
-		assertThat(IconD2Grid.cellFor(40.0, 10.0)).isEmpty();
-		assertThat(IconD2Grid.cellFor(50.0, 25.0)).isEmpty();
-		assertThat(IconD2Grid.cellFor(50.0, -3.0)).contains(new Cell(47, 341)); // on the rectangle, masked in the files
-		assertThat(IconD2Grid.cellFor(51.0, 356.06 + 17.68 + 0.001)).contains(new Cell(884, 391)); // longitudes east of 180 wrap
-		assertThat(new Cell(884, 394).flatIndex()).isEqualTo(479594);
+		assertThat(IconD2Grid.GRID.cellFor(51.0504, 13.7373)).contains(new Cell(884, 394));
+		assertThat(IconD2Grid.GRID.cellFor(43.18, -3.94)).contains(new Cell(0, 0));
+		assertThat(IconD2Grid.GRID.cellFor(58.08, 20.34)).contains(new Cell(1214, 745));
+		assertThat(IconD2Grid.GRID.cellFor(53.55, 9.99)).contains(new Cell(697, 518));
+		assertThat(IconD2Grid.GRID.cellFor(40.0, 10.0)).isEmpty();
+		assertThat(IconD2Grid.GRID.cellFor(50.0, 25.0)).isEmpty();
+		assertThat(IconD2Grid.GRID.cellFor(50.0, -3.0)).contains(new Cell(47, 341)); // on the rectangle, masked in the files
+		assertThat(IconD2Grid.GRID.cellFor(51.0, 356.06 + 17.68 + 0.001)).contains(new Cell(884, 391)); // longitudes east of 180 wrap
+		assertThat(IconD2Grid.GRID.flatIndex(new Cell(884, 394))).isEqualTo(479594);
 	}
 
 	@Test
 	void centreAndModelObject() {
-		GeoPosition c = IconD2Grid.center(new Cell(884, 394));
+		GeoPosition c = IconD2Grid.GRID.center(new Cell(884, 394));
 		assertThat(c.getLatitude()).isCloseTo(51.06, within(1e-9));
 		assertThat(c.getLongitude()).isCloseTo(13.74, within(1e-9));
-		GridCell cell = IconD2Grid.gridCell(new Cell(884, 394));
+		GridCell cell = IconD2Grid.GRID.gridCell(new Cell(884, 394));
 		assertThat(cell.getGridId()).isEqualTo("icon-d2-regular-lat-lon");
 		assertThat(cell.getI()).isEqualTo(884);
 		assertThat(cell.getJ()).isEqualTo(394);
 		assertThat(cell.getResolutionDegrees()).isEqualTo(0.02);
-		assertThat(IconD2Grid.cellOf(cell)).contains(new Cell(884, 394));
+		assertThat(IconD2Grid.GRID.cellOf(cell)).contains(new Cell(884, 394));
 		cell.setGridId("sis-de-v3");
-		assertThat(IconD2Grid.cellOf(cell)).isEmpty();
+		assertThat(IconD2Grid.GRID.cellOf(cell)).isEmpty();
 	}
 
 	@Test
 	void parseAndBounds() {
-		assertThat(IconD2Grid.parse("884,394")).contains(new Cell(884, 394));
-		assertThat(IconD2Grid.parse(" 884 , 394 ")).contains(new Cell(884, 394));
-		assertThat(IconD2Grid.parse("1215,0")).isEmpty();
-		assertThat(IconD2Grid.parse("x")).isEmpty();
-		assertThat(IconD2Grid.parse("1,2,3")).isEmpty();
-		assertThatThrownBy(() -> new Cell(-1, 0)).isInstanceOf(IllegalArgumentException.class);
+		assertThat(IconD2Grid.GRID.parse("884,394")).contains(new Cell(884, 394));
+		assertThat(IconD2Grid.GRID.parse(" 884 , 394 ")).contains(new Cell(884, 394));
+		assertThat(IconD2Grid.GRID.parse("1215,0")).isEmpty();
+		assertThat(IconD2Grid.GRID.parse("x")).isEmpty();
+		assertThat(IconD2Grid.GRID.parse("1,2,3")).isEmpty();
+		assertThatThrownBy(() -> IconD2Grid.GRID.flatIndex(new Cell(-1, 0))).isInstanceOf(IllegalArgumentException.class);
+		assertThat(IconD2Grid.GRID.contains(1214, 745)).isTrue();
+		assertThat(IconD2Grid.GRID.contains(1215, 745)).isFalse();
 		assertThat(IconD2Grid.matches(IconD2Grid.DEFINITION)).isTrue();
 	}
 

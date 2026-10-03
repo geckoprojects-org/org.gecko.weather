@@ -82,7 +82,7 @@ and 2:
 | M.8 | ~~`compute.merge`~~ **report assembly = `WeatherDataSink`** — `replace` (new issue: swap the product's dataset, archive the previous) and `append` (streams: rolling window per product, archive in buckets); refresh the solar dataset and `DayInfo` for the horizon; the fetch path and push sources both go through it | M | `INT-2` as reworded, `M-17`, [ADR-0013](adr/0013-values-per-source.md) |
 | M.9 | **`ingest`** — a polling job per `WeatherProvider` (conditional requests make frequent polls cheap), persisted `SourceState`, results through `WeatherDataSink.replace`, exponential backoff on transport failures, `IngestControl` with status and `runNow` | M | **done 2026-10-03** — `OPS-6`, `OPS-7` (no jitter yet) |
 | M.10 | **In-process service** — report by site id, plus the first reading helpers (timeline per kind across datasets, newest issue per product) | S | `INT-12` in its cheapest form |
-| M.11 | **`provider.dwd.sis`** — NetCDF decoder, 0.05° cell resolver | M | high-cadence global radiation |
+| M.11 | **`provider.dwd.sis`** — NetCDF-3 through the wrap, 0.05° cell resolver on the shared `RegularLatLonGrid`; the 15-minute analysis as the first *stream* (`Delivery.STREAM`, appended), the hourly +18 h forecast as issues | M | **done 2026-10-03** — high-cadence global radiation |
 | M.12 | **`provider.dwd.uv`** — GRIB2, health forecasts | S | completes the quantity set |
 | M.13 | **`runtime` + `shell`** — Configurator defaults, `launch.bndrun` (Felix, Gogo, Fennec EMF), `smoke.bndrun` as the end-to-end proof against the real DWD (exit 0 iff a fresh site has temperatures, sun positions and days), Gogo commands in the `weather` scope | M | **done 2026-10-03** — `OPS-5`; the volume is documented in the runtime README |
 | M.14 | Offline fixtures: ~~ICON-D2 `.grib2`~~ (done: `clct` and a four-record `aswdir_s` step, plus a synthetic GRIB2 writer on the ICON-D2 grid), SIS `.nc`, ~~MOSMIX `.kmz`~~ (done, with a station catalogue) | M | `DEV-6`, `QR-6` |
@@ -305,10 +305,20 @@ already placed that redundancy with the repository, so the model stays as it is.
 `R-7` is parse time (~0.2 s per report load) — a core-side cache or binary EMF, when a consumer
 needs it.
 
-**Next:** `IngestScheduler` is single-threaded: a ~50 s ICON run delays the MOSMIX poll behind it,
-harmless today, worth a small pool once a third provider exists. Then the second gridded product
-(SIS or UV, M.11/M.12), and `05-architecture-target.md`, which still describes a `compute.fusion`
-layer and is the next document to re-cut.
+**M.11, SIS, is done (same day, the fourth and fifth provider):** `provider.dwd.sis` reads the
+15-minute satellite analysis as the first <em>stream</em> and the hourly +18 h forecast as issues,
+both from classic NetCDF-3 through the wrap, only the bound cells. Two things it needed from the
+shared code: `WeatherProvider.delivery()` (`ISSUE` | `STREAM`), so the ingest job knows whether to
+`replace` or `append`, and `RegularLatLonGrid` + `RegularGridBindingResolver` in the api, which
+ICON-D2 now uses too. One thing the files taught, recorded in
+[09-source-inventory.md](09-source-inventory.md): the SIS forecast beyond +1 h is regridded ICON-D2
+radiation. A report for one site now holds MOSMIX_L (three stations), ICON-D2, SIS and SISfc datasets
+side by side.
+
+**Next:** the UV index (M.12, GRIB2 on the ICON-EU grid — the reader exists, the grid is new), then
+`05-architecture-target.md`, which still describes a `compute.fusion` layer and is the next document
+to re-cut. `IngestScheduler` stays single-threaded on purpose (a slow source must not fan out); a
+~50 s ICON run delaying the polls behind it is accepted for now.
 
 Still open, none of it blocking: `M-10` (archive retention, needs `Q-B`), `M-11` (which reading helpers),
 `M-16` (several stations per site by default?), the UV product's exact grid, and how long each DWD

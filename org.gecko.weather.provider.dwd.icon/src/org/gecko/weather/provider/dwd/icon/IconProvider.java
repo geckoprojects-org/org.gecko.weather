@@ -45,6 +45,8 @@ import org.gecko.weather.api.spi.FetchException;
 import org.gecko.weather.api.spi.FetchRequest;
 import org.gecko.weather.api.spi.FetchRequest.SiteBindings;
 import org.gecko.weather.api.spi.FetchResult;
+import org.gecko.weather.api.spi.RegularGridBindingResolver;
+import org.gecko.weather.api.spi.RegularLatLonGrid.Cell;
 import org.gecko.weather.api.spi.SiteBindingResolver;
 import org.gecko.weather.api.spi.SourceState;
 import org.gecko.weather.api.spi.WeatherProvider;
@@ -53,7 +55,6 @@ import org.gecko.weather.model.weather.MeasurementKind;
 import org.gecko.weather.model.weather.Origin;
 import org.gecko.weather.model.weather.SourceBinding;
 import org.gecko.weather.model.weather.SourceDataset;
-import org.gecko.weather.provider.dwd.icon.IconD2Grid.Cell;
 import org.gecko.weather.provider.dwd.icon.IconDatasets.ProductInfo;
 import org.gecko.weather.provider.dwd.icon.IconParameters.Parameter;
 import org.gecko.weather.transport.ByteSource;
@@ -175,13 +176,13 @@ public class IconProvider implements WeatherProvider {
 	private final Settings settings;
 	private final ByteSource source;
 	private final Clock clock;
-	private final IconBindingResolver resolver;
+	private final SiteBindingResolver resolver;
 
 	public IconProvider(Settings settings, ByteSource source, Clock clock) {
 		this.settings = requireNonNull(settings, "settings");
 		this.source = requireNonNull(source, "source");
 		this.clock = requireNonNull(clock, "clock");
-		this.resolver = new IconBindingResolver(PROVIDER_ID, PRODUCT_ID, clock);
+		this.resolver = new RegularGridBindingResolver(IconD2Grid.GRID, PROVIDER_ID, PRODUCT_ID, clock);
 	}
 
 	public Settings settings() {
@@ -387,7 +388,7 @@ public class IconProvider implements WeatherProvider {
 			for (SourceBinding b : sb.bindings()) {
 				if (b instanceof GridBinding grid && PROVIDER_ID.equals(b.getProviderId()) && PRODUCT_ID.equals(b.getProductId())
 						&& grid.getCell() != null) {
-					IconD2Grid.cellOf(grid.getCell())
+					IconD2Grid.GRID.cellOf(grid.getCell())
 							.ifPresent(cell -> targets.computeIfAbsent(cell, k -> new ArrayList<>()).add(new Target(sb.site().getId(), grid)));
 				}
 			}

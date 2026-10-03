@@ -25,6 +25,7 @@
 	bnd.identity;id='org.gecko.weather.ingest',\
 	bnd.identity;id='org.gecko.weather.provider.dwd.mosmix',\
 	bnd.identity;id='org.gecko.weather.provider.dwd.icon',\
+	bnd.identity;id='org.gecko.weather.provider.dwd.sis',\
 	bnd.identity;id='org.apache.commons.commons-io',\
 	bnd.identity;id='org.eclipse.fennec.emf.osgi.component.minimal',\
 	bnd.identity;id='net.opengis.kml.model',\
@@ -109,4 +110,5 @@
 	org.apache.commons.commons-compress;version='[1.28.0,1.28.1)',\
 	org.gecko.ucar.netcdf;version=snapshot,\
 	org.gecko.ucar.units;version='[5.6.0,5.6.1)',\
-	org.gecko.weather.provider.dwd.icon;version=snapshot
+	org.gecko.weather.provider.dwd.icon;version=snapshot,\
+	org.gecko.weather.provider.dwd.sis;version=snapshot

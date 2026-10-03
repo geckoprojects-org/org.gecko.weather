@@ -7,7 +7,7 @@ The service contracts. Four exported packages, each versioned on its own:
 | `org.gecko.weather.api` | consumers | `SiteRegistry` (register, assign, rebind, deactivate, remove), `WeatherService` (report, values of a kind, `ValueQuery`, timeline, archive — all by site id), `Reports` (the same reads as pure functions over a report you already hold) |
 | `org.gecko.weather.api.repository` | the storage implementation | `WeatherRepository` — sites, reports, append-only archive, catalogues |
 | `org.gecko.weather.api.solar` | consumers and report assembly | `SolarService` — position at an instant, `DayInfo` for a date |
-| `org.gecko.weather.api.spi` | providers | `WeatherProvider` (one `fetch` for all bound sites, returns ready datasets), `SiteBindingResolver`, `FetchRequest`/`FetchResult`/`SourceState`, `WeatherDataSink` (how data enters a report — fetched or pushed) |
+| `org.gecko.weather.api.spi` | providers | `WeatherProvider` (one `fetch` for all bound sites, returns ready datasets; `delivery()` says whether its datasets are issues that replace or a stream that is appended), `SiteBindingResolver`, `FetchRequest`/`FetchResult`/`SourceState`, `WeatherDataSink` (how data enters a report — fetched or pushed); `RegularLatLonGrid` + `RegularGridBindingResolver` as the shared helpers for gridded products (ICON-D2, SIS) |
 
 ## Reading values: never merged
 

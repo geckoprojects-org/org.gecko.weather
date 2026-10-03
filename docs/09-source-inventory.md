@@ -156,6 +156,30 @@ coordinate transform and no neighbour lookup.
 - Worked example of the de-averaging at the Dresden cell (884, 394): 33.02 W/m² mean to +10 h,
   52.27 W/m² to +11 h → **244.8 W/m² direct radiation for 10–11 UTC**.
 
+## Measured from actual SIS files
+
+Read 2026-10-03 while building `provider.dwd.sis` (the 12:00 UTC analysis and the 18 UTC forecast run
+are recorded as fixtures):
+
+- **Classic NetCDF-3** (`CDF\x01`), CF-1.6, written by CDO — pure-Java reading through cdm-core, no
+  HDF5, no native code. The spike's `SISin…DEv3.nc` naming still holds.
+- **Grid (`sis-de-v3`)**: 221 × 221 at 0.05°, 46–57° N, 5–16° E, axes ascending as floats
+  (`5.050003`); the cell is index arithmetic like ICON-D2's. Variable `SIS(time, lat, lon)` in
+  `Watt m-2`, fill −1; **short** in the analysis, **float** in the forecast.
+- **Analysis** `SISin<yyyyMMddHHmm>DEv3.nc`: one instant per file, every 15 minutes, published
+  ~18 minutes after its valid time, **100 KB**; the folder keeps ~40 files (ten hours). A stream, not
+  an issue — the runtime appends it (`WeatherProvider.Delivery.STREAM`).
+- **Forecast** `SISfc<yyyyMMddHH>_fc+18h-DE.nc` (`+` URL-encoded in the listing): 18 hourly means
+  from the run hour, ~10 minutes after the hour, 3.5 MB; `time` in `hours since 2026-10-3 00:00:00`
+  — day unpadded, which rules out a strict ISO parser. **Its CDO history shows how it is made: the
+  first hour is the mean of the last four analyses, the rest is regridded ICON-D2 radiation.** Beyond
+  +1 h the product is therefore a smoothed, coarser cousin of our ICON-D2 dataset; per ADR-0013 both
+  are kept and the consumer sees the relationship in the provenance.
+- Other families in the same folder, not read: `EAv4`/`EUv4` (Europe, 17–53 MB), `FDv3` (full
+  disk, 27 MB), `CALhr` (cloud albedo).
+- Dresden cell (175, 101): 539 W/m² at 12:00 UTC; the 18 UTC run forecasts 12.6 W/m² for 06 UTC and
+  313 W/m² for 11 UTC next morning.
+
 ## GRIB2 library: a UCAR wrap bundle
 
 **Decided 2026-07-29: wrap `edu.ucar:grib`** rather than hand-write a reader for the four templates DWD

@@ -5,7 +5,7 @@ current.
 
 | Class | Does |
 | --- | --- |
-| `ProviderJob` | one run of one product: active sites' bindings → `WeatherProvider.fetch` with the persisted `SourceState` → every dataset through `WeatherDataSink.replace` → state saved. Bookkeeping for `IngestStatus`. No threads. |
+| `ProviderJob` | one run of one product: active sites' bindings → `WeatherProvider.fetch` with the persisted `SourceState` → every dataset through `WeatherDataSink.replace`, or `append` for a provider whose `delivery()` is `STREAM` (SIS analyses) → state saved. Bookkeeping for `IngestStatus`. No threads. |
 | `IngestScheduler` | one daemon thread; each job reschedules itself by its own `nextDelay()`. Implements `IngestControl` (`status`, `runNow`). One thread on purpose: providers share network and repository, a slow source must not fan out. |
 | `IngestRuntimeComponent` | the DS service; a job per `WeatherProvider` that comes and goes with the whiteboard |
 

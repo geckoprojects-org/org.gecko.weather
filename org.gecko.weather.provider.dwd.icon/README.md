@@ -7,10 +7,9 @@ surface radiation at 2.2 km for 0–48 h — the gridded half of the MVP, exit c
 
 | Piece | Does |
 | --- | --- |
-| `IconD2Grid` | the regular lat/lon grid as measured from the files: template 0, 1215 × 746 at 0.02°, first point 43.18° N / 3.94° W, west→east, south→north. `cellFor(lat, lon)` is `round((lon − Lo1)/0.02)`, `round((lat − La1)/0.02)`; `gridId` is `icon-d2-regular-lat-lon` |
+| `IconD2Grid` | the regular lat/lon grid as measured from the files: template 0, 1215 × 746 at 0.02°, first point 43.18° N / 3.94° W, west→east, south→north — as a `RegularLatLonGrid` (api), whose `cellFor(lat, lon)` is `round((lon − Lo1)/0.02)`, `round((lat − La1)/0.02)`; `gridId` is `icon-d2-regular-lat-lon`. Binding through the api's `RegularGridBindingResolver` |
 | `Grib2Reader`, `Grib2Field` | one file → its records through `Grib2RecordScanner` / `Grib2Record.readData` from memory (`InMemoryRandomAccessFile`); identification, grid, product definition (template 0 or 8 with interval and statistical process), levels, data with NaN where the bitmap masks |
 | `IconParameters` | `clct clcl clcm clch` → `CLOUD_COVER` at `CLOUD_TOTAL/LOW/MID/HIGH`, `%`; `aswdir_s aswdifd_s` → `DIRECT_RADIATION` / `DIFFUSE_RADIATION`, `SURFACE`, `MEAN` over `PT1H`, `W/m2`. Each carries the **signature** its file must have (parameter, template, levels) and `check` fails loudly on a mismatch. `hourly` is the de-averaging |
-| `IconBindingResolver` | one `GridBinding` per site: the containing cell, distance to its centre; `bind(site, "i,j")` for a manual assignment |
 | `IconDatasets` | one `SourceDataset` per site and cell, every value with provenance (`GRID_CELL`, the cell, distance, DWD parameter name, model run as issue time) and a `FORECAST` uncertainty (lead time, distance) |
 | `IconProvider` | picks the newest **complete** run among the configured run hours, fetches every file of it once, takes the values at all bound cells from each field, de-averages the radiation, remembers the run's URIs in the `SourceState` |
 | `IconProviderComponent` | the DS service, configuration required |

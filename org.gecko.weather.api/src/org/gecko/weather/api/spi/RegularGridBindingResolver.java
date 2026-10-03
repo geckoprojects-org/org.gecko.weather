@@ -11,7 +11,7 @@
  * Contributors:
  *     Data In Motion - initial API and implementation
  */
-package org.gecko.weather.provider.dwd.icon;
+package org.gecko.weather.api.spi;
 
 import static java.util.Objects.requireNonNull;
 
@@ -20,31 +20,37 @@ import java.util.List;
 import java.util.Optional;
 
 import org.gecko.weather.api.Geo;
-import org.gecko.weather.api.spi.SiteBindingResolver;
+import org.gecko.weather.api.spi.RegularLatLonGrid.Cell;
 import org.gecko.weather.model.weather.BindingOrigin;
 import org.gecko.weather.model.weather.GridBinding;
 import org.gecko.weather.model.weather.Site;
 import org.gecko.weather.model.weather.SourceBinding;
 import org.gecko.weather.model.weather.WeatherFactory;
-import org.gecko.weather.provider.dwd.icon.IconD2Grid.Cell;
 
 /**
- * The ICON-D2 cell a site lies in — a grid product has one binding per site, at rank 0. Needs no
- * catalogue: the grid is fixed and known. {@code bind} takes {@code "i,j"}.
+ * {@link SiteBindingResolver} for a gridded product on a {@link RegularLatLonGrid}: the cell a site
+ * lies in — one binding per site, at rank 0, with the distance to the cell centre. Needs no
+ * catalogue, the grid is fixed and known. {@code bind} takes {@code "i,j"}.
  *
  * @author Mark Hoffmann
  * @since 03.10.2026
  */
-public class IconBindingResolver implements SiteBindingResolver {
+public class RegularGridBindingResolver implements SiteBindingResolver {
 
+	private final RegularLatLonGrid grid;
 	private final String providerId;
 	private final String productId;
 	private final Clock clock;
 
-	public IconBindingResolver(String providerId, String productId, Clock clock) {
+	public RegularGridBindingResolver(RegularLatLonGrid grid, String providerId, String productId, Clock clock) {
+		this.grid = requireNonNull(grid, "grid");
 		this.providerId = requireNonNull(providerId, "providerId");
 		this.productId = requireNonNull(productId, "productId");
 		this.clock = requireNonNull(clock, "clock");
+	}
+
+	public RegularLatLonGrid grid() {
+		return grid;
 	}
 
 	@Override
@@ -63,14 +69,14 @@ public class IconBindingResolver implements SiteBindingResolver {
 		if (max < 1 || site.getPosition() == null) {
 			return List.of();
 		}
-		return IconD2Grid.cellFor(site.getPosition()).map(c -> List.<SourceBinding>of(binding(site, c))).orElse(List.of());
+		return grid.cellFor(site.getPosition()).map(c -> List.<SourceBinding>of(binding(site, c))).orElse(List.of());
 	}
 
 	@Override
 	public Optional<SourceBinding> bind(Site site, String locationId) {
 		requireNonNull(site, "site");
 		requireNonNull(locationId, "locationId");
-		return IconD2Grid.parse(locationId).map(c -> binding(site, c));
+		return grid.parse(locationId).map(c -> binding(site, c));
 	}
 
 	private GridBinding binding(Site site, Cell cell) {
@@ -78,7 +84,7 @@ public class IconBindingResolver implements SiteBindingResolver {
 		b.setProviderId(providerId);
 		b.setProductId(productId);
 		b.setOrigin(BindingOrigin.AUTOMATIC);
-		b.setCell(IconD2Grid.gridCell(cell));
+		b.setCell(grid.gridCell(cell));
 		b.setDistanceMeters(Geo.distanceMeters(site.getPosition(), b.getCell().getCenter()));
 		b.setResolvedAt(clock.instant());
 		return b;

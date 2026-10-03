@@ -21,5 +21,11 @@
 	},
 
 	"org.gecko.weather.provider.dwd.icon": {
+	},
+
+	"org.gecko.weather.provider.dwd.sis.analysis": {
+	},
+
+	"org.gecko.weather.provider.dwd.sis.forecast": {
 	}
 }

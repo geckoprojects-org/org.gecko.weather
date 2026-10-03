@@ -23,7 +23,7 @@ import java.time.Instant;
 import java.util.List;
 
 import org.gecko.weather.api.spi.FetchException;
-import org.gecko.weather.provider.dwd.icon.IconD2Grid.Cell;
+import org.gecko.weather.api.spi.RegularLatLonGrid.Cell;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -94,7 +94,7 @@ class Grib2ReaderTest {
 	@Test
 	void syntheticFilesReadBackWhatWasWritten() throws IOException {
 		IconParameters.Parameter clcm = IconParameters.byName("clcm").orElseThrow();
-		Grib2Field f = Grib2Reader.read(Grib2TestFiles.encode(clcm, RUN, 7, 42, k -> k != DRESDEN.flatIndex()));
+		Grib2Field f = Grib2Reader.read(Grib2TestFiles.encode(clcm, RUN, 7, 42, k -> k != IconD2Grid.GRID.flatIndex(DRESDEN)));
 		assertThat(IconD2Grid.matches(f.grid())).isTrue();
 		assertThat(f.validAt()).isEqualTo(RUN.plus(Duration.ofHours(7)));
 		assertThat(f.levelType1()).isEqualTo(IconParameters.ISOBARIC);

@@ -50,7 +50,7 @@ import org.gecko.weather.model.weather.SourceBinding;
 import org.gecko.weather.model.weather.SourceDataset;
 import org.gecko.weather.model.weather.Statistic;
 import org.gecko.weather.model.weather.WeatherFactory;
-import org.gecko.weather.provider.dwd.icon.IconD2Grid.Cell;
+import org.gecko.weather.api.spi.RegularLatLonGrid.Cell;
 import org.gecko.weather.provider.dwd.icon.IconParameters.Parameter;
 import org.gecko.weather.provider.dwd.icon.IconProvider.Settings;
 import org.gecko.weather.transport.ByteSource;
@@ -282,7 +282,7 @@ class IconProviderTest {
 
 	@Test
 	void aMaskedCellYieldsNoDatasetButTheRunIsRemembered() throws IOException {
-		present = k -> k != DRESDEN.flatIndex();
+		present = k -> k != IconD2Grid.GRID.flatIndex(DRESDEN);
 		FetchResult.Fetched fetched = (FetchResult.Fetched) provider.fetch(request(SourceState.EMPTY));
 		assertThat(fetched.datasets()).isEmpty();
 		assertThat(fetched.skipped()).containsEntry("cell-without-data", 1);

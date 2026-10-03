@@ -132,9 +132,10 @@ class ProviderJobTest {
 
 		@Override
 		public void append(String siteId, SourceDataset partial) {
-			throw new UnsupportedOperationException();
+			appended.add(siteId + ":" + partial.getProductId() + "@" + partial.getIssuedAt());
 		}
 	};
+	private final List<String> appended = new ArrayList<>();
 
 	@BeforeEach
 	void setUp() {
@@ -192,6 +193,67 @@ class ProviderJobTest {
 		repo.saveReport(report);
 		restarted.run();
 		assertThat(requests.get(2).unconditional()).isEmpty();
+	}
+
+	@Test
+	void aStreamProviderIsAppendedNotReplaced() {
+		WeatherProvider stream = new WeatherProvider() {
+			private final WeatherProvider base = provider(request -> new FetchResult.Fetched(
+					Map.of("home", List.of(dataset(T0.minusSeconds(900)))), request.state()));
+
+			@Override
+			public String providerId() {
+				return base.providerId();
+			}
+
+			@Override
+			public String productId() {
+				return base.productId();
+			}
+
+			@Override
+			public org.gecko.weather.model.weather.Origin origin() {
+				return base.origin();
+			}
+
+			@Override
+			public Delivery delivery() {
+				return Delivery.STREAM;
+			}
+
+			@Override
+			public java.time.Duration expectedRefresh() {
+				return base.expectedRefresh();
+			}
+
+			@Override
+			public java.util.Set<org.gecko.weather.model.weather.MeasurementKind> provides() {
+				return base.provides();
+			}
+
+			@Override
+			public String licence() {
+				return base.licence();
+			}
+
+			@Override
+			public String attribution() {
+				return base.attribution();
+			}
+
+			@Override
+			public org.gecko.weather.api.spi.SiteBindingResolver bindingResolver() {
+				return base.bindingResolver();
+			}
+
+			@Override
+			public FetchResult fetch(FetchRequest request) throws java.io.IOException {
+				return base.fetch(request);
+			}
+		};
+		new ProviderJob(stream, registry, sink, repo, IngestSettings.DEFAULTS, clock).run();
+		assertThat(appended).containsExactly("home:MOSMIX_L@" + T0.minusSeconds(900));
+		assertThat(replaced).isEmpty();
 	}
 
 	@Test
