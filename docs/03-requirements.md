@@ -71,7 +71,7 @@ Requirements that make the service usable for optimising a specific building.
 | ID | Requirement | Prio | Traces to |
 | --- | --- | --- | --- |
 | INT-1 | A site can be registered with coordinates and elevation and receives a stable identifier. Its source binding — which station(s), which grid cell per product — is resolved and persisted at registration. | Must | `F-17`, [ADR-0009](adr/0009-site-as-central-entity.md) |
-| INT-2 | One request returns a site's forecast as a continuous timeline over the horizon: one entry per timestep, already fused across sources, with no client-side alignment required. | Must | `V-2` |
+| INT-2 | One request returns everything currently known for a site: one dataset per source product, each aligned on `validAt` and stating its issue time, refresh cadence and horizon. Values are not merged across sources; the consumer combines them. *(Reworded 2026-10-03, [ADR-0013](adr/0013-values-per-source.md).)* | Must | `V-2` |
 | INT-3 | For a registered site, irradiance and cloud cover come from the site's resolved grid cell, not from a station. The response states the cell and its distance from the site. | Must | `F-17`, `F-19`, `V-1` |
 | INT-4 | Solar geometry is available per site and timestep: sun elevation and azimuth, plus sunrise, sunset and twilight. | Must | `F-18`, `V-8` |
 | INT-5 | All values use canonical measurement kinds with documented units. No source element identifier and no source-specific unit appears in the API. | Must | `F-3`, `F-20` |

@@ -1,6 +1,6 @@
 # ADR-0012: Configurable fusion, supersession instead of overwrite
 
-- **Status:** Accepted
+- **Status:** Superseded by [ADR-0013](0013-values-per-source.md)
 - **Date:** 2026-07-28
 - **Deciders:** DIM development team (redesign kickoff)
 - **Supersedes:** —

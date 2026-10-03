@@ -1,0 +1,539 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel"
+    copyrightText="Copyright (c) 2012 - 2026 Data In Motion and others.&#xA;All rights reserved.&#xA;&#xA;This program and the accompanying materials are made&#xA;available under the terms of the Eclipse Public License 2.0&#xA;which is available at https://www.eclipse.org/legal/epl-2.0/&#xA;&#xA;SPDX-License-Identifier: EPL-2.0&#xA;&#xA;Contributors:&#xA;     Data In Motion - initial API and implementation"
+    modelDirectory="/org.gecko.weather.model/src-gen" modelPluginID="org.gecko.weather.model"
+    modelName="Weather" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.emf.importer.ecore" bundleManifest="false" complianceLevel="17.0"
+    copyrightFields="false" operationReflection="true" importOrganizing="true" oSGiCompatible="true">
+  <foreignModel>weather.ecore</foreignModel>
+  <genPackages prefix="Weather" basePackage="org.gecko.weather.model" resource="XMI"
+      disposableProviderFactory="true">
+    <ecorePackage href="weather.ecore#/"/>
+    <genEnums typeSafeEnumCompatible="false">
+      <ecoreEnum href="weather.ecore#//BindingOrigin"/>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//BindingOrigin/AUTOMATIC"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//BindingOrigin/MANUAL"/>
+      </genEnumLiterals>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false">
+      <ecoreEnum href="weather.ecore#//MeasurementKind"/>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//MeasurementKind/AIR_TEMPERATURE"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//MeasurementKind/DEW_POINT"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//MeasurementKind/RELATIVE_HUMIDITY"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//MeasurementKind/SURFACE_PRESSURE"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//MeasurementKind/WIND_SPEED"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//MeasurementKind/WIND_DIRECTION"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//MeasurementKind/WIND_GUST"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//MeasurementKind/CLOUD_COVER"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//MeasurementKind/GLOBAL_RADIATION"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//MeasurementKind/DIRECT_RADIATION"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//MeasurementKind/DIFFUSE_RADIATION"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//MeasurementKind/SUNSHINE_DURATION"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//MeasurementKind/PRECIPITATION"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//MeasurementKind/SNOW_WATER_EQUIVALENT"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//MeasurementKind/FOG"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//MeasurementKind/VISIBILITY"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//MeasurementKind/UV_INDEX"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//MeasurementKind/SIGNIFICANT_WEATHER"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//MeasurementKind/SUN_ELEVATION"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//MeasurementKind/SUN_AZIMUTH"/>
+      </genEnumLiterals>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false">
+      <ecoreEnum href="weather.ecore#//Level"/>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//Level/UNSPECIFIED"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//Level/SURFACE"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//Level/GROUND_5CM"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//Level/GROUND_2M"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//Level/GROUND_10M"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//Level/MEAN_SEA_LEVEL"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//Level/CLOUD_TOTAL"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//Level/CLOUD_EFFECTIVE"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//Level/CLOUD_LOW"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//Level/CLOUD_MID"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//Level/CLOUD_HIGH"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//Level/CLOUD_BELOW_500FT"/>
+      </genEnumLiterals>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false">
+      <ecoreEnum href="weather.ecore#//Statistic"/>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//Statistic/INSTANT"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//Statistic/MEAN"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//Statistic/MIN"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//Statistic/MAX"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//Statistic/ACCUMULATED"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//Statistic/PROBABILITY"/>
+      </genEnumLiterals>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false">
+      <ecoreEnum href="weather.ecore#//Origin"/>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//Origin/STATION"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//Origin/GRID_CELL"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//Origin/COMPUTED"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//Origin/ADHOC"/>
+      </genEnumLiterals>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false">
+      <ecoreEnum href="weather.ecore#//Quality"/>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//Quality/OBSERVED"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//Quality/ANALYSIS"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//Quality/FORECAST"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//Quality/INTERPOLATED"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//Quality/DERIVED"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//Quality/DEGRADED"/>
+      </genEnumLiterals>
+    </genEnums>
+    <genDataTypes>
+      <ecoreDataType href="weather.ecore#//Instant"/>
+    </genDataTypes>
+    <genDataTypes>
+      <ecoreDataType href="weather.ecore#//Duration"/>
+    </genDataTypes>
+    <genDataTypes>
+      <ecoreDataType href="weather.ecore#//LocalDate"/>
+    </genDataTypes>
+    <genClasses>
+      <ecoreClass href="weather.ecore#//GeoPosition"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//GeoPosition/latitude"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//GeoPosition/longitude"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//GeoPosition/elevation"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="weather.ecore#//Site"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//Site/id"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//Site/name"/>
+      </genFeatures>
+      <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="weather.ecore#//Site/position"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//Site/timeZone"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//Site/registeredAt"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//Site/active"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//Site/dataCompleteFrom"/>
+      </genFeatures>
+      <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="weather.ecore#//Site/attributes"/>
+      </genFeatures>
+      <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="weather.ecore#//Site/bindings"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="weather.ecore#//SiteAttribute"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//SiteAttribute/key"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//SiteAttribute/value"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses image="false">
+      <ecoreClass href="weather.ecore#//SourceBinding"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//SourceBinding/providerId"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//SourceBinding/productId"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//SourceBinding/origin"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//SourceBinding/rank"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//SourceBinding/distanceMeters"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//SourceBinding/elevationDeltaMeters"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//SourceBinding/resolvedAt"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="weather.ecore#//StationBinding"/>
+      <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="weather.ecore#//StationBinding/station"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="weather.ecore#//GridBinding"/>
+      <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="weather.ecore#//GridBinding/cell"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="weather.ecore#//Station"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//Station/id"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//Station/name"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//Station/icaoCode"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//Station/country"/>
+      </genFeatures>
+      <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="weather.ecore#//Station/position"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="weather.ecore#//StationCatalog"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//StationCatalog/providerId"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//StationCatalog/productId"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//StationCatalog/retrievedAt"/>
+      </genFeatures>
+      <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="weather.ecore#//StationCatalog/stations"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="weather.ecore#//GridCell"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//GridCell/gridId"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//GridCell/i"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//GridCell/j"/>
+      </genFeatures>
+      <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="weather.ecore#//GridCell/center"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//GridCell/resolutionDegrees"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="weather.ecore#//MeasuredValue"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//MeasuredValue/kind"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//MeasuredValue/level"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//MeasuredValue/statistic"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//MeasuredValue/period"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//MeasuredValue/threshold"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//MeasuredValue/thresholdUnit"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//MeasuredValue/validAt"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//MeasuredValue/value"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//MeasuredValue/code"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//MeasuredValue/unit"/>
+      </genFeatures>
+      <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="weather.ecore#//MeasuredValue/provenance"/>
+      </genFeatures>
+      <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="weather.ecore#//MeasuredValue/uncertainty"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="weather.ecore#//Provenance"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//Provenance/providerId"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//Provenance/productId"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//Provenance/sourceElement"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//Provenance/modelRun"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//Provenance/issuedAt"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//Provenance/retrievedAt"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//Provenance/origin"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//Provenance/stationId"/>
+      </genFeatures>
+      <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="weather.ecore#//Provenance/cell"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//Provenance/distanceMeters"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//Provenance/licence"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//Provenance/attribution"/>
+      </genFeatures>
+      <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="weather.ecore#//Provenance/derivation"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="weather.ecore#//Derivation"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//Derivation/functionId"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//Derivation/inputs"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="weather.ecore#//Uncertainty"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//Uncertainty/quality"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//Uncertainty/spatialMeters"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//Uncertainty/temporalOffset"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//Uncertainty/leadTime"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//Uncertainty/stale"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//Uncertainty/note"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="weather.ecore#//WeatherReport"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//WeatherReport/siteId"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//WeatherReport/generatedAt"/>
+      </genFeatures>
+      <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="weather.ecore#//WeatherReport/datasets"/>
+      </genFeatures>
+      <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="weather.ecore#//WeatherReport/days"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="weather.ecore#//SourceDataset"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//SourceDataset/providerId"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//SourceDataset/productId"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//SourceDataset/issuedAt"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//SourceDataset/modelRun"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//SourceDataset/retrievedAt"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//SourceDataset/expectedRefresh"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//SourceDataset/horizonStart"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//SourceDataset/horizonEnd"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//SourceDataset/origin"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//SourceDataset/stationId"/>
+      </genFeatures>
+      <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="weather.ecore#//SourceDataset/cell"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//SourceDataset/distanceMeters"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//SourceDataset/licence"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//SourceDataset/attribution"/>
+      </genFeatures>
+      <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="weather.ecore#//SourceDataset/values"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="weather.ecore#//DayInfo"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//DayInfo/date"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//DayInfo/sunrise"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//DayInfo/sunset"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//DayInfo/civilDawn"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//DayInfo/civilDusk"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//DayInfo/nauticalDawn"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//DayInfo/nauticalDusk"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//DayInfo/solarNoon"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//DayInfo/dayLength"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//DayInfo/maxSunElevation"/>
+      </genFeatures>
+      <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="weather.ecore#//DayInfo/provenance"/>
+      </genFeatures>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

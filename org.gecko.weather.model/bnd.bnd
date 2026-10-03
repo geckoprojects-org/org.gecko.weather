@@ -1,0 +1,21 @@
+Bundle-Name: Gecko Weather Model
+Bundle-Description: Provider-neutral weather model: sites with their source bindings, \
+	per-source datasets of measured values with provenance and uncertainty, solar day events.
+
+src: src-gen,src
+
+-library: enableEMF
+
+# The genmodel is derived from the GenModel annotations in the ecore and written next to it.
+-generate: \
+	model/weather.ecore; \
+		generate=fennecEMF; \
+		ecore=model/weather.ecore; \
+		output=src-gen
+
+# Instruction namespace on purpose: a bare -includeresource would make bnd ignore the
+# @Export bundle annotations in package-info.
+-includeresource.model: model=model
+
+-testpath: \
+	assertj-core;version=latest

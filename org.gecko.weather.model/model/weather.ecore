@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="weather" nsURI="https://geckoprojects.org/weather/1.0" nsPrefix="weather">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+    <details key="copyrightText" value="Copyright (c) 2012 - 2026 Data In Motion and others.&#xA;All rights reserved.&#xA;&#xA;This program and the accompanying materials are made&#xA;available under the terms of the Eclipse Public License 2.0&#xA;which is available at https://www.eclipse.org/legal/epl-2.0/&#xA;&#xA;SPDX-License-Identifier: EPL-2.0&#xA;&#xA;Contributors:&#xA;     Data In Motion - initial API and implementation"/>
+    <details key="documentation" value="Provider-neutral weather model. A registered Site carries its position and the source bindings (stations, grid cells) resolved for it. A WeatherReport per site holds one SourceDataset per source product; every MeasuredValue inside carries its own provenance and uncertainty. Values are kept per source — nothing is merged in the model, consumers decide how to combine sources."/>
+    <details key="complianceLevel" value="21.0"/>
+    <details key="oSGiCompatible" value="true"/>
+    <details key="basePackage" value="org.gecko.weather.model"/>
+    <details key="prefix" value="Weather"/>
+    <details key="modelName" value="Weather"/>
+    <details key="resource" value="XMI"/>
+  </eAnnotations>
+  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+    <details key="conversionDelegates" value="java.time"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EDataType" name="Instant" instanceClassName="java.time.Instant">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Point on the UTC time line. Serialised in ISO-8601 (java.time.Instant#toString) through the java.time conversion delegate shipped with this bundle."/>
+    </eAnnotations>
+    <eAnnotations source="java.time"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Duration" instanceClassName="java.time.Duration">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Length of time. Serialised in ISO-8601 (PT1H, PT6H, ...) through the java.time conversion delegate."/>
+    </eAnnotations>
+    <eAnnotations source="java.time"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="LocalDate" instanceClassName="java.time.LocalDate">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Calendar date without a zone, interpreted in the site's time zone. Serialised in ISO-8601 (2026-10-03)."/>
+    </eAnnotations>
+    <eAnnotations source="java.time"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GeoPosition">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="WGS84 position. Latitude north-positive, longitude east-positive, both in decimal degrees; elevation in metres above mean sea level."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="latitude" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="longitude" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="elevation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        unsettable="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Site">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A registered location of interest — the central entity. Reports are requested by its id. Registering a site resolves and persists its source bindings; those bindings tell ingest what to fetch for it."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Stable identifier assigned at registration. Used as the file name of the persisted site and report."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="position" lowerBound="1"
+        eType="#//GeoPosition" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeZone" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="IANA zone id, e.g. Europe/Berlin. Defines day boundaries for DayInfo. Resolved from the coordinates when not given explicitly."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="registeredAt" eType="#//Instant"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="active" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Inactive sites are no longer supplied by ingest but keep their stored data."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataCompleteFrom" eType="#//Instant">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Instant from which the site's data is actually complete. A site added later has no history before this (subset-on-ingest)."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+        eType="#//SiteAttribute" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Extensible project-specific data without a model change — e.g. panel tilt and azimuth for a later plane-of-array module."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bindings" upperBound="-1"
+        eType="#//SourceBinding" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The stations and grid cells this site reads from, one binding per source product (several where a product allows more than one station)."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SiteAttribute" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SourceBinding" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Links a site to the concrete source location a product is read at: a station or a grid cell. Resolved automatically (nearest) or assigned manually; the manual assignment overrides."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="providerId" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Provider identifier, e.g. dwd."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="productId" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Product identifier within the provider, e.g. MOSMIX_L, ICON-D2, SIS."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="origin" lowerBound="1"
+        eType="#//BindingOrigin"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rank" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="0 is the primary binding for the product; higher ranks are alternates (e.g. second-nearest station)."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="distanceMeters" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Great-circle distance from the site to the station or cell centre."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="elevationDeltaMeters" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        unsettable="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Source elevation minus site elevation, where both are known."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resolvedAt" eType="#//Instant"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StationBinding" eSuperTypes="#//SourceBinding">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="station" lowerBound="1"
+        eType="#//Station" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Snapshot of the catalogue entry at resolution time, so the site file stands on its own."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GridBinding" eSuperTypes="#//SourceBinding">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cell" lowerBound="1" eType="#//GridCell"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="BindingOrigin">
+    <eLiterals name="AUTOMATIC"/>
+    <eLiterals name="MANUAL" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Station">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A weather station as listed in a provider's catalogue."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The provider's station id, e.g. the MOSMIX id 10385."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="icaoCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="country" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="position" lowerBound="1"
+        eType="#//GeoPosition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StationCatalog">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A provider's station list as retrieved, kept so that binding resolution works offline."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="providerId" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="productId" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="retrievedAt" eType="#//Instant"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stations" upperBound="-1"
+        eType="#//Station" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GridCell">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="One cell of a gridded product, addressed by column and row index on the product's grid."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="gridId" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Identifies the grid definition, e.g. icon-d2-regular-lat-lon or sis-de-v3. Indices are only meaningful together with it."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="i" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Column index (longitude direction)."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="j" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Row index (latitude direction)."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="center" eType="#//GeoPosition"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resolutionDegrees" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        unsettable="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="MeasurementKind">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Canonical, provider-neutral quantity. Variants of one quantity (height, layer, aggregation window, probability threshold) are expressed by the qualifiers on MeasuredValue, not by further kinds. Canonical units per kind are documented in docs/10-model.md."/>
+    </eAnnotations>
+    <eLiterals name="AIR_TEMPERATURE"/>
+    <eLiterals name="DEW_POINT" value="1"/>
+    <eLiterals name="RELATIVE_HUMIDITY" value="2"/>
+    <eLiterals name="SURFACE_PRESSURE" value="3"/>
+    <eLiterals name="WIND_SPEED" value="4"/>
+    <eLiterals name="WIND_DIRECTION" value="5"/>
+    <eLiterals name="WIND_GUST" value="6"/>
+    <eLiterals name="CLOUD_COVER" value="7"/>
+    <eLiterals name="GLOBAL_RADIATION" value="8"/>
+    <eLiterals name="DIRECT_RADIATION" value="9"/>
+    <eLiterals name="DIFFUSE_RADIATION" value="10"/>
+    <eLiterals name="SUNSHINE_DURATION" value="11"/>
+    <eLiterals name="PRECIPITATION" value="12"/>
+    <eLiterals name="SNOW_WATER_EQUIVALENT" value="13"/>
+    <eLiterals name="FOG" value="14"/>
+    <eLiterals name="VISIBILITY" value="15"/>
+    <eLiterals name="UV_INDEX" value="16"/>
+    <eLiterals name="SIGNIFICANT_WEATHER" value="17"/>
+    <eLiterals name="SUN_ELEVATION" value="18"/>
+    <eLiterals name="SUN_AZIMUTH" value="19"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Level">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Vertical reference of a value: height above ground, cloud layer, or sea level for reduced pressure."/>
+    </eAnnotations>
+    <eLiterals name="UNSPECIFIED"/>
+    <eLiterals name="SURFACE" value="1"/>
+    <eLiterals name="GROUND_5CM" value="2"/>
+    <eLiterals name="GROUND_2M" value="3"/>
+    <eLiterals name="GROUND_10M" value="4"/>
+    <eLiterals name="MEAN_SEA_LEVEL" value="5"/>
+    <eLiterals name="CLOUD_TOTAL" value="6"/>
+    <eLiterals name="CLOUD_EFFECTIVE" value="7"/>
+    <eLiterals name="CLOUD_LOW" value="8"/>
+    <eLiterals name="CLOUD_MID" value="9"/>
+    <eLiterals name="CLOUD_HIGH" value="10"/>
+    <eLiterals name="CLOUD_BELOW_500FT" value="11"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Statistic">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="How the value relates to its period. INSTANT values have no period; the others describe the window ending at validAt. PROBABILITY is the probability (0..100 %) that the quantity reaches the threshold within the period."/>
+    </eAnnotations>
+    <eLiterals name="INSTANT"/>
+    <eLiterals name="MEAN" value="1"/>
+    <eLiterals name="MIN" value="2"/>
+    <eLiterals name="MAX" value="3"/>
+    <eLiterals name="ACCUMULATED" value="4"/>
+    <eLiterals name="PROBABILITY" value="5"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MeasuredValue">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="One value of one quantity at one instant from one source. It stands on its own: provenance says where it came from, uncertainty says how much to trust it. Nothing in the model merges values from different sources."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" lowerBound="1" eType="#//MeasurementKind"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="level" eType="#//Level"
+        defaultValueLiteral="UNSPECIFIED"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="statistic" eType="#//Statistic"
+        defaultValueLiteral="INSTANT"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="period" eType="#//Duration"
+        unsettable="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Aggregation window ending at validAt; unset for INSTANT values."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="threshold" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        unsettable="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="For PROBABILITY: the threshold the quantity has to reach, in thresholdUnit."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="thresholdUnit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="validAt" lowerBound="1"
+        eType="#//Instant">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The instant the value is valid for (end of the period for aggregated values)."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        unsettable="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Numeric value in the canonical unit of the kind. Unset for coded kinds and for timesteps the source left empty."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="code" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        unsettable="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Coded value for coded kinds — SIGNIFICANT_WEATHER carries the WMO 4677 ww code."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="unit" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="UCUM unit string of value, always the canonical unit of the kind. Carried on the value so that a value is interpretable on its own."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="provenance" lowerBound="1"
+        eType="#//Provenance" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="uncertainty" lowerBound="1"
+        eType="#//Uncertainty" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Origin">
+    <eLiterals name="STATION"/>
+    <eLiterals name="GRID_CELL" value="1"/>
+    <eLiterals name="COMPUTED" value="2"/>
+    <eLiterals name="ADHOC" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Provenance">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Where a value came from: provider, product, model run and issue time, the station or grid cell it was read at and how far that is from the site. Deliberately repeated per value — a value must be interpretable without its dataset."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="providerId" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="productId" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceElement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The source's own element name the value was mapped from, e.g. TTT or clct. Kept for traceability only; consumers use kind."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="modelRun" eType="#//Instant">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference time of the model run that produced the value, where the product is model-based."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="issuedAt" lowerBound="1"
+        eType="#//Instant">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="When the source published this value. Two values for the same validAt from the same product differ in issuedAt; the newer one is presumably the better forecast."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="retrievedAt" eType="#//Instant"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="origin" lowerBound="1"
+        eType="#//Origin"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stationId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cell" eType="#//GridCell"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="distanceMeters" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        unsettable="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Distance from the site to the station or cell centre. Zero for COMPUTED values."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="licence" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Licence identifier of the source data, e.g. DL-DE-BY-2.0, so downstream consumers can meet their obligations."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attribution" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="derivation" eType="#//Derivation"
+        containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Present for COMPUTED values: which function produced it from which inputs."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Derivation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="functionId" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Identifier and version of the computation, e.g. solar.position/time4j-5.9."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="inputs" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Descriptors of the inputs, enough to recompute the value: site position, instant, or references to other values."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Quality">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Coarse classification of how the value was produced. The facts behind it (distance, offsets, staleness) sit beside it in Uncertainty."/>
+    </eAnnotations>
+    <eLiterals name="OBSERVED"/>
+    <eLiterals name="ANALYSIS" value="1"/>
+    <eLiterals name="FORECAST" value="2"/>
+    <eLiterals name="INTERPOLATED" value="3"/>
+    <eLiterals name="DERIVED" value="4"/>
+    <eLiterals name="DEGRADED" value="5"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Uncertainty">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="quality" lowerBound="1"
+        eType="#//Quality"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="spatialMeters" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        unsettable="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Spatial representativeness: the distance the value was carried, or half the cell size for a grid value."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="temporalOffset" eType="#//Duration"
+        unsettable="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Distance to the nearest source timestep where the value was interpolated in time."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="leadTime" eType="#//Duration"
+        unsettable="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="validAt minus issuedAt — how far ahead this value was forecast. Negative for values describing the past."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stale" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="True when the dataset is older than the product's expected refresh interval, i.e. a newer issue should have existed."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="note" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WeatherReport">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Everything currently known for one site: one SourceDataset per source product, each replaced whole when the source publishes anew, plus solar day events. Consumers read values across datasets per kind and validAt and decide themselves how to combine them."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="siteId" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="generatedAt" lowerBound="1"
+        eType="#//Instant">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="When this report instance was last written."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="datasets" upperBound="-1"
+        eType="#//SourceDataset" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="days" upperBound="-1" eType="#//DayInfo"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SourceDataset">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The values one source product currently provides for the site, from one issue. Products refresh on their own cadence; a refresh replaces the dataset of that product and nothing else. The superseded dataset is archived by the repository, not kept here."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="providerId" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="productId" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="issuedAt" lowerBound="1"
+        eType="#//Instant"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="modelRun" eType="#//Instant"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="retrievedAt" eType="#//Instant"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedRefresh" eType="#//Duration"
+        unsettable="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The product's publication interval (MOSMIX_S PT1H, MOSMIX_L PT6H, ICON-D2 PT3H, SIS PT15M). Lets a consumer judge staleness without knowing the product."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="horizonStart" eType="#//Instant"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="horizonEnd" eType="#//Instant"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="origin" lowerBound="1"
+        eType="#//Origin"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stationId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cell" eType="#//GridCell"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="distanceMeters" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="licence" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attribution" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="values" upperBound="-1"
+        eType="#//MeasuredValue" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DayInfo">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Solar day events for one calendar day at the site, computed from its coordinates (no spatial error). Sun elevation and azimuth per timestep are MeasuredValues of kind SUN_ELEVATION / SUN_AZIMUTH in a COMPUTED dataset."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" lowerBound="1" eType="#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sunrise" eType="#//Instant"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sunset" eType="#//Instant"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="civilDawn" eType="#//Instant"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="civilDusk" eType="#//Instant"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nauticalDawn" eType="#//Instant"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nauticalDusk" eType="#//Instant"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="solarNoon" eType="#//Instant"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dayLength" eType="#//Duration"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxSunElevation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        unsettable="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Sun elevation at solar noon, degrees above the horizon."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="provenance" lowerBound="1"
+        eType="#//Provenance" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

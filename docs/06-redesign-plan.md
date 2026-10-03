@@ -10,7 +10,7 @@ classes instead of estimates.
 
 The purpose spans the whole stack — a site forecast needs model, SPI, durable storage, grid handling,
 solar geometry and API at once. Building horizontally (all persistence, then all ingest, then all
-fusion) would produce nothing usable for a long time and is a poor fit for interval work.
+the API) would produce nothing usable for a long time and is a poor fit for interval work.
 
 So each slice is a **thin end-to-end path that answers a real question**, and each is independently
 deployable.
@@ -18,8 +18,8 @@ deployable.
 | Slice | Delivers | Vision claim status after it |
 | --- | --- | --- |
 | **0 — Foundation** | Branch, workspace, CI, baselining | — |
-| **MVP** | One site, ICON-D2 gridded cloud and radiation, SIS, solar position, merged + raw persisted, in-process access | **Site accuracy true from the first deployment.** No HTTP, no index, no operational qualities beyond conditional GET and retry |
-| **3 — Fusion depth** | As-of querying over the raw record, temporal interpolation, mixed-horizon beyond +48 h | Continuous fused timeline true |
+| **MVP** | Registered sites with ids; MOSMIX (station) and ICON-D2 (cell) as separate datasets per site, SIS after; solar; XMI folder; in-process access by site id | **Site accuracy true from the first deployment.** No HTTP, no index, no operational qualities beyond conditional GET and retry |
+| **3 — Depth** | Reading helpers across datasets, as-of queries over the archive, temporal interpolation, retention | History and alignment helpers available |
 | **4 — Breadth** | HTTP API, observations, ad-hoc coordinates, derived quantities, operational polish | Complete for the stated purpose |
 
 **The MVP replaces what were Slices 1 and 2.** See [08-mvp.md](08-mvp.md) — that document is the
@@ -56,8 +56,9 @@ Goal: a real, green, empty workspace, so that no later increment is blocked on t
 | 0.4 | `docs/` as the canonical documentation home | S | **done** — `DEV-12` |
 | 0.6 | Branch and coordinates | S | **done** — `sunorcloud`, group unchanged ([ADR-0001](adr/0001-greenfield-new-repository.md)) |
 | 0.5 | Curated dependency set with a duplicate-version check | M | `DEV-9`, prevents `F-13` recurring — matters more now, because the Fennec libraries are not version-aligned |
-| 0.7 | **`git init` on `sunorcloud`, commit the workspace** | S | **next**; orphan-vs-branched still open |
-| 0.8 | **Unidata repository into `cnf`, `edu.ucar:grib` added to the `org.gecko.ucar.netcdf` wrap** | M | requested upstream: [org.gecko.libraries#3](https://github.com/geckoprojects-org/org.gecko.libraries/issues/3) |
+| 0.7 | `git init` on `sunorcloud`, commit the workspace | S | **done** — branch pushed, CI green |
+| 0.8 | **Unidata repository into `cnf`, UCAR cdm-core + grib wrap bundle *in this workspace*** | M | open, **no longer blocked upstream** — decided 2026-10-03 (`M-14`): libraries that need OSGi-fication are wrapped here and moved out later. The upstream request [org.gecko.libraries#3](https://github.com/geckoprojects-org/org.gecko.libraries/issues/3) stays as a note |
+| 0.9 | bnd 7.4.0 release instead of the snapshot | S | **done** 2026-10-03 |
 
 **Exit criteria.** A trivial bundle builds, CI is green including baselining and the licence check, and a
 GRIB2 message from a real ICON-D2 file can be read in a plain JUnit test.
@@ -71,20 +72,21 @@ and 2:
 
 | # | Increment | Effort | Delivers |
 | --- | --- | --- | --- |
-| M.1 | **Model v0** — `Site`, `SourceBinding`, `MeasuredValue`, `Provenance` (incl. licence/attribution), `Uncertainty`, `GeoPosition`, `GridRef`; `MeasurementKind` per [09](09-source-inventory.md); builder + validator so no value exists without provenance | M | `INT-5`, `INT-6`, `INT-7`, `QR-11` |
-| M.2 | **`api` SPI packages** — provider, transport, decoder, mapper, binding, repository, solar | M | `DEV-1`, `DEV-3` |
-| M.3 | **`repository.file`** — XMI per site for the merged state, append-only raw record per site and time bucket | M | `OPS-1`, and the precondition for `INT-17` |
-| M.4 | **`site`** — registry, automatic binding resolution with distance plus manual override, `dataCompleteFrom` | M | `INT-1` |
+| M.1 | **Model** — `org.gecko.weather.model`: `Site` with bindings, `WeatherReport` with one `SourceDataset` per product, `MeasuredValue` with qualifiers, `Provenance`, `Uncertainty`, `DayInfo`; `java.time` data types via conversion delegate; plain-JUnit XMI round trip. Spec in [10-model.md](10-model.md) | M | **done 2026-10-03** — `INT-5`, `INT-6`, `INT-7`, `QR-11` |
+| M.2 | **`api`** — `SiteRegistry` (register, update, remove, list; ids), `WeatherReportService` (report by site id, reading helpers), `SolarService`; SPI: provider, transport, decoder, mapper, binding resolver, `WeatherRepository` | M | `DEV-1`, `DEV-3`, `INT-1`, `INT-12` |
+| M.3 | **`repository.file`** — configurable folder: `sites/`, `reports/`, `archive/`, `catalogs/` as XMI; dataset replace + archive on refresh | M | `OPS-1`, and the precondition for `INT-17` |
+| M.4 | **`site`** — registry over the repository, automatic binding resolution with distance plus manual override, `dataCompleteFrom` | M | `INT-1` |
 | M.5 | **`provider.dwd.icon`** — conditional-GET transport, **GRIB2 decoder** over the wrap, cell resolver by index arithmetic on plain lat/lon, de-averaging for `aswdir_s`/`aswdifd_s` | **L** | `INT-3`, `OPS-9`; the largest item |
 | M.6 | **`provider.dwd.mosmix`** — KML via `ecore.xmi`, nearest-station resolver. Also the cheap way to prove the SPI before M.5 | M | `F-1`…`F-4` resolved |
-| M.7 | **`solar`** — `SolarPositionService`, elevation and azimuth plus day events, via Time4J | S | `INT-4`, resolves `F-18` |
-| M.8 | **`compute.merge`** — merge per `(site, kind, validAt)`, newest issue time wins unless policy outranks, policy version recorded | M | `INT-2`, `QR-7` |
+| M.7 | **`solar.time4j`** — `DayInfo` per day, `SUN_ELEVATION`/`SUN_AZIMUTH` per timestep as a `COMPUTED` dataset, site time zone honoured (the old service used the platform zone and returned sunset for sunrise) | S | `INT-4`, resolves `F-18` |
+| M.8 | ~~`compute.merge`~~ **report assembly** — on a product refresh replace that product's dataset, archive the previous one, refresh the solar dataset and `DayInfo` for the horizon | S | `INT-2` as reworded, [ADR-0013](adr/0013-values-per-source.md) |
 | M.9 | **`ingest`** — per-provider scheduling, conditional GET, bounded backoff | M | `OPS-6`, `OPS-7` |
-| M.10 | **In-process service** exposing the merged model | S | `INT-12` in its cheapest form |
+| M.10 | **In-process service** — report by site id, plus the first reading helpers (timeline per kind across datasets, newest issue per product) | S | `INT-12` in its cheapest form |
 | M.11 | **`provider.dwd.sis`** — NetCDF decoder, 0.05° cell resolver | M | high-cadence global radiation |
 | M.12 | **`provider.dwd.uv`** — GRIB2, health forecasts | S | completes the quantity set |
 | M.13 | **`config` + `runtime`** — Configurator defaults, bndrun, documented volume | M | `OPS-5`, `QR-12` |
 | M.14 | Offline fixtures: ICON-D2 `.grib2`, SIS `.nc`, MOSMIX `.kmz` | M | `DEV-6`, `QR-6` |
+| M.15 | **`wrap.ucar`** — cdm-core + grib as one bundle in this workspace, Unidata repository in `cnf` (was 0.8) | M | `M-14`, unblocks M.5 |
 
 **Sequencing note.** M.6 before M.5 is deliberate even though ICON is the primary source: it proves
 transport → decoder → sink → mapper → persist with no library risk and no cell arithmetic, so M.5 only has
@@ -94,10 +96,11 @@ to prove GRIB2. This is the replacement mitigation for `R-8`.
 
 1. A registered site's cloud cover and radiation come from its own 2.2 km ICON-D2 cell; the value states
    the cell and its distance. (`V-1`, `INT-3`)
-2. The merged instance covers 0–48 h; every value carries provenance; solar elevation and azimuth are
-   present per timestep.
+2. The report holds one dataset per bound product, each with issue time, cadence and horizon; every
+   value carries provenance; solar elevation and azimuth are present per timestep. No merged value
+   exists. (`V-2`)
 3. Restart with data present → identical results from the persisted XMI. (`V-3`)
-4. The raw record contains the superseded predictions, with issue times. (precondition for `INT-17`)
+4. The archive contains the superseded datasets, with issue times. (precondition for `INT-17`, `V-7`)
 5. An unchanged upstream file produces no re-download, verified against a fixture. (`V-11`)
 6. Decoder and mapping tests run with no network and no OSGi framework start. (`DEV-6`)
 7. `aswdir_s` de-averaging verified against a hand-computed expected value. (`QR-6`)
@@ -126,26 +129,25 @@ radiation alone" — is obsolete. There is one, at 2.2 km.
 
 ---
 
-## Slice 3 — Fusion and asynchronous sources
+## Slice 3 — Depth
 
-Goal: several sources with different issue times assemble into one coherent timeline.
+Goal: the history and the reading helpers that make per-source data comfortable to consume, without
+ever merging it.
 
 | # | Increment | Effort | Delivers |
 | --- | --- | --- | --- |
-| 3.1 | Per-kind source priority as configuration, per site or global (`Q-F`) | M | `V-2`, [ADR-0012](adr/0012-fusion-and-supersession.md) |
-| 3.2 | **As-of querying over the raw record** — "what was predicted for tomorrow 08:00, and when" | M | `INT-17` becomes real |
-| 3.3 | Best-available-now: per-timestep degradation instead of request failure | M | `INT-8`, `V-5` |
-| 3.4 | Temporal interpolation where source timesteps do not align | M | `INT-3` completeness |
-| 3.5 | Retention for the raw record — by age and by revision depth (`M-10`, `Q-B`) | M | `OPS-8` |
-| 3.6 | Mixed-horizon handling **beyond +48 h**, where ICON-D2 ends and MOSMIX continues to +240 h | M | Only if a horizon past two days is wanted |
+| 3.1 | ~~Per-kind source priority~~ **Consumer-side selection module**, only if a consumer asks for one by name — never in the report ([ADR-0013](adr/0013-values-per-source.md)) | S | — |
+| 3.2 | **As-of querying over the archive** — "what was predicted for tomorrow 08:00, and when" | M | `INT-17` becomes real |
+| 3.3 | Staleness surfaced per dataset (`stale`, against `expectedRefresh`) and per-product degradation instead of request failure | S | `INT-8`, `V-5` |
+| 3.4 | Temporal interpolation as a reading helper where product timesteps do not align (15-minute SIS against hourly ICON) | M | `INT-3` completeness |
+| 3.5 | Retention for the archive — by age and by issue depth per product (`M-10`, `Q-B`) | M | `OPS-8` |
 
-**What changed here.** The MVP already merges across sources, so 3.1 is about making the *policy*
-configurable rather than building the merge. And 3.6 shrank: it was "SIS to +18 h, MOSMIX beyond", which
-ICON-D2 makes unnecessary inside 48 h — the transition only matters if the horizon is extended past that.
+**What changed here.** Fusion is gone (ADR-0013), so 3.1 is no longer a core increment. The old 3.6
+(mixed horizon beyond +48 h) needs nothing: datasets end where their products end, and the consumer sees
+MOSMIX continuing past ICON-D2 by itself.
 
-**Exit criteria.** A later-arriving source supersedes the merged value without destroying the earlier one
-in the raw record (`V-7`); an as-of query returns what was known at a chosen time; the source of each
-value is visible; retention keeps the raw record bounded.
+**Exit criteria.** An as-of query returns what was known at a chosen time; a stale dataset is marked
+as such; retention keeps the archive bounded.
 
 ---
 
@@ -155,7 +157,7 @@ Everything valuable that no longer changes the architecture. Order by whichever 
 
 | # | Increment | Effort | Delivers |
 | --- | --- | --- | --- |
-| 4.1 | Derived quantities — dew point, apparent temperature, direct/diffuse split (scope from `Q-G`) | M | Stage-1 derivation complete |
+| 4.1 | Derived quantities — dew point, apparent temperature, direct/diffuse split where a source lacks it (scope from `Q-G`) | M | Derivation complete |
 | 4.2 | Ad-hoc coordinate queries, marked degraded | M | `INT-13` |
 | 4.3 | Observation provider — enables checking forecasts against reality | **L** | Closes the `F-5` gap |
 | 4.4 | **HTTP API** — reopen [ADR-0008](adr/0008-rest-api-design.md), which is deferred; plus push notification per site | **L** | `INT-2`, `INT-9`…`INT-11`, `INT-14`. Blocks any external consumer, so it gates cutover |
@@ -173,8 +175,9 @@ conversation.
 - A second national provider (`Q-E`)
 - Stage-2 plane-of-array irradiance
 - Statistical post-processing and bias correction against stored observations
-- Materialised fusion cache — only if `QR-2` measurement demands it
-- Server-backed repository — only if `Q-B` / `Q-C` answers demand it
+- PV add-on modules (plane-of-array irradiance) — on the service, never in it
+- Server-backed repository (Fennec persistence) or Lucene index (`emf.search`) — only if `Q-B` /
+  `Q-C` answers or a real query demand it
 - Multi-instance operation
 
 ---
@@ -216,27 +219,33 @@ A slice is done when all of the following hold. Partial slices are fine to *paus
 
 ## Next step
 
-*Updated 2026-07-29, end of session.*
+*Updated 2026-10-03.*
 
-Slice 0 is done except 0.8, which waits on
-[org.gecko.libraries#3](https://github.com/geckoprojects-org/org.gecko.libraries/issues/3) — the GRIB
-wrap. `sunorcloud` is pushed with three commits and CI green.
+**Done this session:** the purpose was re-stated (weather backend; energy is a consumer; PV is an add-on
+module), [ADR-0013](adr/0013-values-per-source.md) replaced fusion with per-source datasets, **M.1 the
+model is built** (`org.gecko.weather.model`, [10-model.md](10-model.md), plain-JUnit XMI round trip
+green), and the workspace runs bnd 7.4.0 release. The `DEV-5` question from the previous note is
+unchanged and still not blocking: the first mapper can be hand-written against the model and the
+mechanism chosen when the second provider needs the same metadata.
 
-**Next is M.1, the model.** It does not depend on the wrap. Two things have to be settled first, and both
-are decisions rather than work:
+**Next is M.2, the `api` bundle**, in this order:
 
-1. **`DEV-5`.** It names Ecore annotations as the mechanism for source-element mapping metadata. The
-   emf.osgi 1.1 metadata service is the better fit for `INT-15` because metadata lives beside the model
-   and is therefore reusable across providers by construction — but choosing it means changing that
-   requirement. See [ADR-0005](adr/0005-provider-neutral-model.md).
-2. **Who writes the `.ecore`.** Generating the model by hand from a written specification is slower than
-   doing it in the Ecore tooling directly. If the specification route is taken, the types to specify are
-   `Site`, `SourceBinding`, `MeasuredValue`, `Provenance`, `Uncertainty`, `GeoPosition`, `GridRef` and
-   `MeasurementKind` with the set from [09-source-inventory.md](09-source-inventory.md).
+1. `SiteRegistry` and `WeatherReportService` — the consumer-facing interfaces, keyed by site id, with
+   the first reading helpers (timeline per kind across datasets, newest issue per product).
+2. `WeatherRepository` — the narrow persistence boundary: load/save site, load/save report, archive
+   dataset, load/save catalogue. Designed so that `repository.file` (M.3) is trivial and a Fennec
+   persistence or `emf.search` implementation is possible.
+3. The provider SPI — transport, decoder, mapper, binding resolver — sized by what MOSMIX (M.6) needs,
+   not by what GRIB2 might need.
 
-Also still open, none of it blocking M.1: `M-10` (raw-record retention, needs `Q-B`), `M-11` (merge policy
-scope, needs `Q-F`), the UV product's exact grid, and how long each DWD product stays on the server —
-which is what bounds the backfill (`OPS-16`).
+Then M.3 (`repository.file`), M.7 (`solar.time4j`, `time4j-base` 5.9.4 is an OSGi bundle and carries
+`SunPosition`/`SolarTime`; add `net.time4j:time4j-base:5.9.4` to `central.mvn`), M.4 (`site`), M.6
+(MOSMIX, which proves the SPI), M.15 (the UCAR wrap), M.5 (ICON-D2).
+
+Still open, none of it blocking: `M-10` (archive retention, needs `Q-B`), `M-11` (which reading helpers),
+`M-16` (several stations per site by default?), the UV product's exact grid, and how long each DWD
+product stays on the server (`OPS-16`). `05-architecture-target.md` still describes a `compute.fusion`
+layer and Gecko bundle names; it is the next document to re-cut.
 
 ## Resuming after a gap
 

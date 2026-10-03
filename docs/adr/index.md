@@ -32,20 +32,21 @@ One file per decision. Copy [0000-template.md](0000-template.md) to start a new 
 | [0009](0009-site-as-central-entity.md) | The site is the central entity, not the station | Accepted | Sites are state that must be stored, resolved and maintained |
 | [0010](0010-subset-on-ingest.md) | Subset-on-ingest for gridded products | Accepted | **Irreversible**: a site added later has no history |
 | [0011](0011-lineage-and-uncertainty.md) | Lineage and uncertainty as first-class model concepts | Accepted | Every value is heavier; responses are more verbose |
-| [0012](0012-fusion-and-supersession.md) | Configurable fusion, supersession instead of overwrite | Accepted | Storage grows with every revision; fusion computed per request |
+| [0012](0012-fusion-and-supersession.md) | Configurable fusion, supersession instead of overwrite | Superseded by 0013 | — |
+| [0013](0013-values-per-source.md) | Values kept per source, no service-side fusion; consumers combine | Accepted | Every consumer aligns sources itself; report carries all sources' values |
 
 ## Decision dependencies
 
 ```mermaid
 graph LR
     A9["0009<br/>site central"] --> A10["0010<br/>subset-on-ingest"]
-    A9 --> A12["0012<br/>fusion"]
-    A11["0011<br/>lineage"] --> A12
+    A9 --> A13["0013<br/>values per source"]
+    A11["0011<br/>lineage"] --> A13
     A10 --> A11
     A5["0005<br/>canonical kinds"] --> A11
     A2["0002<br/>EMF"] --> A5
     A3["0003<br/>provider SPI"] --> A10
-    A4["0004<br/>repo/index split"] --> A12
+    A4["0004<br/>repo/index split"] --> A13
     A1["0001<br/>greenfield"] --> A2
     A1 --> A6["0006<br/>toolchain"]
     A3 --> A7["0007<br/>ingest"]
@@ -55,6 +56,17 @@ graph LR
 `0009` and `0011` are the load-bearing ones: everything about accuracy follows from the site being the
 subject, and everything about trust follows from values carrying their origin. Both are also the
 hardest to retrofit, which is why they are decided first and implemented in the MVP.
+
+## Revision 2026-10-03 — a weather backend, not an energy service
+
+The purpose was re-stated: Gecko Weather is a **weather backend**; energy optimisation is one consumer
+and PV computation an add-on module. `0012` fell with that framing — it put source fusion into the
+service on the assumption that one merged value serves everyone. `0013` supersedes it: values stay per
+source, consumers combine. `0009`, `0010` and `0011` are untouched; they were always about the site and
+about provenance, not about energy.
+
+The model `0011` sketched now exists: `org.gecko.weather.model`, specified in
+[../10-model.md](../10-model.md).
 
 ## Revision 2026-07-29 — Eclipse Fennec
 
