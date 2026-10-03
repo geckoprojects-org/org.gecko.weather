@@ -28,4 +28,7 @@ public @interface FileRepositoryConfig {
 	@AttributeDefinition(name = "Root folder", description = "Absolute path, or relative to the working directory. Created if missing. Mount this as the durable volume.")
 	String root() default "data/weather";
 
+	@AttributeDefinition(name = "Compress", description = "Write gzip-compressed XMI (.xmi.gz, ~50x smaller for reports). Plain .xmi files are always read; on the next save they are replaced.")
+	boolean compress() default true;
+
 }

@@ -58,7 +58,7 @@ public class FileWeatherRepositoryComponent implements WeatherRepository {
 	@Activate
 	void activate(FileRepositoryConfig config) {
 		// one prototype instance for this component; the core clears its resources after each use
-		delegate = new XmiFolderRepository(Path.of(config.root()), () -> resourceSet);
+		delegate = new XmiFolderRepository(Path.of(config.root()), () -> resourceSet, config.compress());
 	}
 
 	public Path getRoot() {

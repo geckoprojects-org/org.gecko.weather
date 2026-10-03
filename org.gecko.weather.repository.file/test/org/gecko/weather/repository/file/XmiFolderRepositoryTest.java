@@ -80,8 +80,8 @@ class XmiFolderRepositoryTest {
 		Site site = site("home");
 		repo.saveSite(site);
 
-		assertThat(tmp.resolve("weather/sites/home.xmi")).isRegularFile();
-		assertThat(Files.exists(tmp.resolve("weather/sites/home.xmi.tmp"))).isFalse();
+		assertThat(tmp.resolve("weather/sites/home.xmi.gz")).isRegularFile();
+		assertThat(Files.exists(tmp.resolve("weather/sites/home.xmi.gz.tmp"))).isFalse();
 
 		Optional<Site> loaded = repo.loadSite("home");
 		assertThat(loaded).isPresent();
@@ -110,7 +110,7 @@ class XmiFolderRepositoryTest {
 		repo.saveSite(site("alpha"));
 		repo.saveSite(site("Berlin/Mitte"));
 		assertThat(repo.loadSites()).extracting(Site::getId).containsExactly("Berlin/Mitte", "alpha", "zulu");
-		assertThat(tmp.resolve("weather/sites/Berlin%2FMitte.xmi")).isRegularFile();
+		assertThat(tmp.resolve("weather/sites/Berlin%2FMitte.xmi.gz")).isRegularFile();
 	}
 
 	@Test
@@ -140,8 +140,8 @@ class XmiFolderRepositoryTest {
 		// same issue second twice: both kept
 		repo.archive("home", dataset("MOSMIX_L", i1));
 
-		assertThat(tmp.resolve("weather/archive/home/dwd/MOSMIX_L/20261003T060000Z.xmi")).isRegularFile();
-		assertThat(tmp.resolve("weather/archive/home/dwd/MOSMIX_L/20261003T060000Z-1.xmi")).isRegularFile();
+		assertThat(tmp.resolve("weather/archive/home/dwd/MOSMIX_L/20261003T060000Z.xmi.gz")).isRegularFile();
+		assertThat(tmp.resolve("weather/archive/home/dwd/MOSMIX_L/20261003T060000Z-1.xmi.gz")).isRegularFile();
 
 		List<SourceDataset> all = repo.loadArchive("home", "dwd", "MOSMIX_L", Instant.EPOCH, Instant.MAX);
 		assertThat(all).extracting(SourceDataset::getIssuedAt).containsExactly(i3, i2, i1, i1);
@@ -200,7 +200,7 @@ class XmiFolderRepositoryTest {
 		catalog.getStations().add(station("10385", 52.47, 13.40));
 		repo.saveCatalog(catalog);
 
-		assertThat(tmp.resolve("weather/catalogs/dwd/MOSMIX_L.xmi")).isRegularFile();
+		assertThat(tmp.resolve("weather/catalogs/dwd/MOSMIX_L.xmi.gz")).isRegularFile();
 		StationCatalog loaded = repo.loadCatalog("dwd", "MOSMIX_L").orElseThrow();
 		assertThat(loaded.getStations()).extracting(Station::getId).containsExactly("10488", "10385");
 		assertThat(repo.loadCatalog("dwd", "SIS")).isEmpty();
@@ -219,7 +219,7 @@ class XmiFolderRepositoryTest {
 		state.getEntities().add(e);
 		repo.saveSourceState(state);
 
-		assertThat(tmp.resolve("weather/state/dwd/MOSMIX_L.xmi")).isRegularFile();
+		assertThat(tmp.resolve("weather/state/dwd/MOSMIX_L.xmi.gz")).isRegularFile();
 		org.gecko.weather.model.weather.SourceStateRecord loaded = repo.loadSourceState("dwd", "MOSMIX_L").orElseThrow();
 		assertThat(loaded.getEntities()).singleElement().satisfies(x -> {
 			assertThat(x.getUri()).isEqualTo("https://opendata.dwd.de/x.kmz");
@@ -227,6 +227,51 @@ class XmiFolderRepositoryTest {
 			assertThat(x.getLastModified()).isEqualTo(T0.minusSeconds(60));
 		});
 		assertThat(repo.loadSourceState("dwd", "ICON-D2")).isEmpty();
+	}
+
+	@Test
+	void filesAreGzipAndPlainXmiFromBeforeIsReadAndReplaced() throws IOException {
+		repo.saveSite(site("home"));
+		Path gz = tmp.resolve("weather/sites/home.xmi.gz");
+		byte[] head = Files.readAllBytes(gz);
+		assertThat(head[0] & 0xff).isEqualTo(0x1f);
+		assertThat(head[1] & 0xff).isEqualTo(0x8b);
+
+		// a repository of the previous layout wrote plain XMI
+		XmiFolderRepository plain = new XmiFolderRepository(tmp.resolve("weather"),
+				org.eclipse.emf.ecore.resource.impl.ResourceSetImpl::new, false);
+		Site legacy = site("legacy");
+		plain.saveSite(legacy);
+		Path legacyFile = tmp.resolve("weather/sites/legacy.xmi");
+		assertThat(legacyFile).isRegularFile();
+		assertThat(Files.readString(legacyFile)).startsWith("<?xml");
+		// plain saves over a compressed file replace it, not sit beside it
+		plain.saveSite(site("home"));
+		assertThat(tmp.resolve("weather/sites/home.xmi")).isRegularFile();
+		assertThat(gz).doesNotExist();
+
+		// the compressing repository reads both and lists each site once
+		assertThat(repo.loadSite("legacy")).isPresent();
+		assertThat(repo.loadSites()).extracting(Site::getId).containsExactly("home", "legacy");
+		repo.saveSite(legacy);
+		assertThat(tmp.resolve("weather/sites/legacy.xmi.gz")).isRegularFile();
+		assertThat(legacyFile).doesNotExist();
+		assertThat(repo.loadSites()).extracting(Site::getId).containsExactly("home", "legacy");
+
+		// a report compresses hard: provenance repeats
+		WeatherReport report = F.createWeatherReport();
+		report.setSiteId("home");
+		report.setGeneratedAt(T0);
+		for (int i = 0; i < 50; i++) {
+			report.getDatasets().add(dataset("P" + i, T0));
+		}
+		plain.saveReport(report);
+		long plainSize = Files.size(tmp.resolve("weather/reports/home.xmi"));
+		repo.saveReport(report);
+		long gzSize = Files.size(tmp.resolve("weather/reports/home.xmi.gz"));
+		assertThat(tmp.resolve("weather/reports/home.xmi")).doesNotExist();
+		assertThat(gzSize * 5).isLessThan(plainSize);
+		assertThat(EcoreUtil.equals(repo.loadReport("home").orElseThrow(), report)).isTrue();
 	}
 
 	@Test

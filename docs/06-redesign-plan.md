@@ -298,12 +298,17 @@ value naming the cell and the distance; run `2026-10-03T12:00Z`, 294 files, 515 
 synthetic GRIB2, de-averaging against a hand-computed value). The smoke run deliberately stays
 MOSMIX-only; `dev.bndrun` is where ICON-D2 is exercised.
 
-**Next:** `R-7` — a report now carries ~290 more values per cell and a second gridded product
-would double that; the first lever (per-dataset provenance defaults or a compact serialisation) is
-due before SIS or UV are added. Then `IngestScheduler` is single-threaded: a ~50 s ICON run delays
-the MOSMIX poll behind it, harmless today, worth a small pool once a third provider exists.
-`05-architecture-target.md` still describes a `compute.fusion` layer and is the next document to
-re-cut.
+**`R-7`, the disk half, is done (same day):** the file repository writes gzip-compressed XMI
+(`.xmi.gz`, 14.6 MB → 265 KB for the Dresden report), reads plain files from before and replaces
+them on the next save. Measured first: 55 % of the XMI is provenance, 15 % uncertainty; ADR-0011 had
+already placed that redundancy with the repository, so the model stays as it is. What remains of
+`R-7` is parse time (~0.2 s per report load) — a core-side cache or binary EMF, when a consumer
+needs it.
+
+**Next:** `IngestScheduler` is single-threaded: a ~50 s ICON run delays the MOSMIX poll behind it,
+harmless today, worth a small pool once a third provider exists. Then the second gridded product
+(SIS or UV, M.11/M.12), and `05-architecture-target.md`, which still describes a `compute.fusion`
+layer and is the next document to re-cut.
 
 Still open, none of it blocking: `M-10` (archive retention, needs `Q-B`), `M-11` (which reading helpers),
 `M-16` (several stations per site by default?), the UV product's exact grid, and how long each DWD
@@ -335,7 +340,7 @@ week of re-reading**. Two cheap habits, treated as part of the work rather than 
 | R-4 | Subset-on-ingest is irreversible: a site added later has no history, and sources rarely allow retrospective retrieval. | New sites are permanently poorer than old ones for accuracy analysis. | Best-effort backfill at registration and a recorded `dataCompleteFrom` (`OPS-16`). Documented as a known cost in [ADR-0010](adr/0010-subset-on-ingest.md), not hidden. |
 | R-5 | File-based repository insufficient once `Q-B` retention and `Q-C` site count are answered. | Repository replacement mid-project. | The `WeatherRepository` interface is the boundary; swapping the implementation touches one bundle. Answer `Q-B`/`Q-C` before sizing the raw record. |
 | R-6 | Greenfield abandonment: the `sunorcloud` branch stalls while the old one remains in production. | Two half-systems to maintain. | The old branches are untouched and keep running until the MVP demonstrably beats them. No migration commitment before then ([07-migration.md](07-migration.md)). |
-| R-7 | Kind-keyed values with per-value provenance are many small EMF objects. **Measured 2026-10-03: 8 472 values per MOSMIX_L station, ~550 bytes each in XMI, 14 MB per site with three stations.** | Report write time and disk per refresh; ICON-D2 adds 48 h × 6 parameters per cell. | Tolerable for a handful of sites. Levers in order: provenance defaults at dataset level with per-value overrides, a compact resource format (binary EMF or zipped XMI), then a backend. Decide after ICON-D2 is in. |
+| R-7 | Kind-keyed values with per-value provenance are many small EMF objects. **Measured 2026-10-03: 8 472 values per MOSMIX_L station, ~550 bytes each in XMI; 14.6 MB per site with three stations and the ICON-D2 cell, 55 % of it provenance, 15 % uncertainty.** | Disk per refresh and archive entry; ~0.2 s to load and parse a report per service call. | **Disk is handled (2026-10-03): the repository writes gzip XMI, 14.6 MB → 265 KB**, as ADR-0011 foresaw ("compression is an implementation concern of the repository") — so the model keeps per-value provenance and no defaults layer was added. Still open: parse time and object count per load; levers are a report cache in the core (invalidated by the sink) or binary EMF, then a backend. Revisit when a consumer measures latency or when sites go past a handful. |
 | R-8 | GRIB2 streaming decode is harder than NetCDF and may need a further library with its own OSGi packaging problems. | **Now on the critical path, not in Slice 3.5.** | **The original mitigation is void.** It relied on NetCDF proving the streaming SPI first, but `Q-I` showed ICON-D2 (GRIB2) is the primary source and it goes first ([09-source-inventory.md](09-source-inventory.md)). Replacement: prove the SPI on a non-gridded source — MOSMIX KML or the station catalogue — so the GRIB2 decoder validates only GRIB2. Establish first whether one library covers GRIB2 *and* NetCDF. See [08-mvp.md](08-mvp.md). |
 | R-9 | Single maintainer; bus factor of one. | Project stops entirely. | Documentation-as-deliverable, ADRs capturing *why*, offline-runnable tests. This dossier is part of the mitigation. |
 | R-10 | Model evolution: adding a `MeasurementKind` or changing `Provenance` affects stored data. | Migration burden on every model release. | Repository stores a model version per record; upgrade path documented (`OPS-13`) before the first breaking model change, not after. |

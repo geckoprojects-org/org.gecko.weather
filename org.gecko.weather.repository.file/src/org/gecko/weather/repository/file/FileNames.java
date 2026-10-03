@@ -35,6 +35,8 @@ import java.util.Optional;
 final class FileNames {
 
 	static final String XMI = ".xmi";
+	/** gzip-compressed XMI — the default on disk; plain {@link #XMI} is still read. */
+	static final String XMI_GZ = ".xmi.gz";
 
 	private static final DateTimeFormatter STAMP = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'")
 			.withZone(ZoneOffset.UTC);
@@ -87,8 +89,32 @@ final class FileNames {
 
 	/** The id of a file name, extension stripped. */
 	static String idOf(String fileName) {
-		String base = fileName.endsWith(XMI) ? fileName.substring(0, fileName.length() - XMI.length()) : fileName;
-		return decode(base);
+		return decode(stripExtension(fileName));
+	}
+
+	/** Whether the name is one of our data files (not a {@code .tmp} sibling, not foreign). */
+	static boolean isData(String fileName) {
+		return fileName.endsWith(XMI) || fileName.endsWith(XMI_GZ);
+	}
+
+	static boolean isCompressed(String fileName) {
+		return fileName.endsWith(XMI_GZ);
+	}
+
+	/** The extension files are written with. */
+	static String extension(boolean compressed) {
+		return compressed ? XMI_GZ : XMI;
+	}
+
+	/** The name without {@link #XMI} or {@link #XMI_GZ}; unchanged if it has neither. */
+	static String stripExtension(String fileName) {
+		if (fileName.endsWith(XMI_GZ)) {
+			return fileName.substring(0, fileName.length() - XMI_GZ.length());
+		}
+		if (fileName.endsWith(XMI)) {
+			return fileName.substring(0, fileName.length() - XMI.length());
+		}
+		return fileName;
 	}
 
 	static String stamp(Instant instant) {
@@ -97,7 +123,7 @@ final class FileNames {
 
 	/** Parses the stamp at the start of an archive file name; empty for anything that is not one. */
 	static Optional<Instant> stampOf(String fileName) {
-		if (!fileName.endsWith(XMI) || fileName.length() < 16 + XMI.length()) {
+		if (!isData(fileName) || stripExtension(fileName).length() < 16) {
 			return Optional.empty();
 		}
 		try {

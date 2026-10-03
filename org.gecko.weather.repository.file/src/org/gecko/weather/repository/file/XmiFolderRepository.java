@@ -16,6 +16,7 @@ package org.gecko.weather.repository.file;
 import static java.util.Objects.requireNonNull;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.DirectoryStream;
@@ -32,6 +33,8 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -56,11 +59,14 @@ import org.gecko.weather.model.weather.WeatherReport;
  *
  * <pre>
  * root/
- *   sites/&lt;siteId&gt;.xmi
- *   reports/&lt;siteId&gt;.xmi
- *   archive/&lt;siteId&gt;/&lt;providerId&gt;/&lt;productId&gt;/&lt;yyyyMMddTHHmmssZ&gt;.xmi   one per superseded issue
- *   catalogs/&lt;providerId&gt;/&lt;productId&gt;.xmi
- *   state/&lt;providerId&gt;/&lt;productId&gt;.xmi       SourceStateRecord — the ingest runtime's validators per URL
+ *   sites/&lt;siteId&gt;.xmi.gz
+ *   reports/&lt;siteId&gt;.xmi.gz
+ *   archive/&lt;siteId&gt;/&lt;providerId&gt;/&lt;productId&gt;/&lt;yyyyMMddTHHmmssZ&gt;.xmi.gz   one per superseded issue
+ *   catalogs/&lt;providerId&gt;/&lt;productId&gt;.xmi.gz
+ *   state/&lt;providerId&gt;/&lt;productId&gt;.xmi.gz    SourceStateRecord — the ingest runtime's validators per URL
+ *
+ * Files are gzip-compressed XMI by default (a report with provenance per value shrinks ~50x); plain
+ * .xmi files from before are read as well and replaced by their compressed form on the next save.
  * </pre>
  *
  * Identifiers are percent-encoded into file names ({@link FileNames}), so any id works. Writes go to
@@ -85,11 +91,16 @@ public class XmiFolderRepository implements WeatherRepository {
 
 	private final Path root;
 	private final Supplier<ResourceSet> resourceSets;
+	private final boolean compress;
 	private final ConcurrentHashMap<String, Object> siteLocks = new ConcurrentHashMap<>();
 
-	/** A repository over the folder with plain EMF resource sets — for tests and tools. */
+	/** A compressing repository over the folder with plain EMF resource sets — for tests and tools. */
 	public XmiFolderRepository(Path root) {
 		this(root, ResourceSetImpl::new);
+	}
+
+	public XmiFolderRepository(Path root, Supplier<ResourceSet> resourceSets) {
+		this(root, resourceSets, true);
 	}
 
 	/**
@@ -98,10 +109,12 @@ public class XmiFolderRepository implements WeatherRepository {
 	 *                     same one every time (in OSGi: the prototype-scoped {@code ResourceSet} service
 	 *                     targeted at the weather model). Operations synchronise on the resource set
 	 *                     and remove their resource from it afterwards, so sharing one is safe.
+	 * @param compress     write {@code .xmi.gz}; false writes plain {@code .xmi}. Reading takes both.
 	 */
-	public XmiFolderRepository(Path root, Supplier<ResourceSet> resourceSets) {
+	public XmiFolderRepository(Path root, Supplier<ResourceSet> resourceSets, boolean compress) {
 		this.root = requireNonNull(root, "root").toAbsolutePath().normalize();
 		this.resourceSets = requireNonNull(resourceSets, "resourceSets");
+		this.compress = compress;
 		// EMF caches a missing delegate per data type, so this has to precede the first XMI operation.
 		JavaTimeConversionDelegateFactory.register();
 		try {
@@ -127,7 +140,7 @@ public class XmiFolderRepository implements WeatherRepository {
 	@Override
 	public List<Site> loadSites() {
 		List<Site> sites = new ArrayList<>();
-		try (DirectoryStream<Path> files = Files.newDirectoryStream(root.resolve(SITES), "*" + FileNames.XMI)) {
+		try (DirectoryStream<Path> files = Files.newDirectoryStream(root.resolve(SITES), XmiFolderRepository::isData)) {
 			for (Path file : files) {
 				load(file, Site.class).ifPresent(sites::add);
 			}
@@ -152,8 +165,8 @@ public class XmiFolderRepository implements WeatherRepository {
 		requireId(siteId, "site");
 		synchronized (lock(siteId)) {
 			try {
-				Files.deleteIfExists(siteFile(siteId));
-				Files.deleteIfExists(reportFile(siteId));
+				deleteVariants(siteFile(siteId));
+				deleteVariants(reportFile(siteId));
 				deleteTree(archiveDir(siteId));
 			} catch (IOException e) {
 				throw new RepositoryException("Cannot delete site " + siteId, e);
@@ -189,10 +202,10 @@ public class XmiFolderRepository implements WeatherRepository {
 		synchronized (lock(siteId)) {
 			Path dir = archiveDir(siteId, dataset.getProviderId(), dataset.getProductId());
 			String stamp = FileNames.stamp(dataset.getIssuedAt());
-			Path file = dir.resolve(stamp + FileNames.XMI);
+			Path file = dir.resolve(stamp + extension());
 			// append-only: a second dataset with the same issue second gets a suffix, never a replace
-			for (int n = 1; Files.exists(file); n++) {
-				file = dir.resolve(stamp + "-" + n + FileNames.XMI);
+			for (int n = 1; existing(file).isPresent(); n++) {
+				file = dir.resolve(stamp + "-" + n + extension());
 			}
 			save(file, dataset);
 		}
@@ -208,7 +221,7 @@ public class XmiFolderRepository implements WeatherRepository {
 			return List.of();
 		}
 		List<Path> files = new ArrayList<>();
-		try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir, "*" + FileNames.XMI)) {
+		try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir, XmiFolderRepository::isData)) {
 			for (Path file : stream) {
 				FileNames.stampOf(file.getFileName().toString())
 						.filter(issued -> !issued.isBefore(issuedFrom) && issued.isBefore(issuedTo))
@@ -289,12 +302,12 @@ public class XmiFolderRepository implements WeatherRepository {
 
 	private Path siteFile(String siteId) {
 		requireId(siteId, "site");
-		return root.resolve(SITES).resolve(FileNames.of(siteId) + FileNames.XMI);
+		return root.resolve(SITES).resolve(FileNames.of(siteId) + extension());
 	}
 
 	private Path reportFile(String siteId) {
 		requireId(siteId, "site");
-		return root.resolve(REPORTS).resolve(FileNames.of(siteId) + FileNames.XMI);
+		return root.resolve(REPORTS).resolve(FileNames.of(siteId) + extension());
 	}
 
 	private Path archiveDir(String siteId) {
@@ -311,26 +324,60 @@ public class XmiFolderRepository implements WeatherRepository {
 	private Path stateFile(String providerId, String productId) {
 		requireId(providerId, "providerId");
 		requireId(productId, "productId");
-		return root.resolve(STATE).resolve(FileNames.of(providerId)).resolve(FileNames.of(productId) + FileNames.XMI);
+		return root.resolve(STATE).resolve(FileNames.of(providerId)).resolve(FileNames.of(productId) + extension());
 	}
 
 	private Path catalogFile(String providerId, String productId) {
 		requireId(providerId, "providerId");
 		requireId(productId, "productId");
-		return root.resolve(CATALOGS).resolve(FileNames.of(providerId)).resolve(FileNames.of(productId) + FileNames.XMI);
+		return root.resolve(CATALOGS).resolve(FileNames.of(providerId)).resolve(FileNames.of(productId) + extension());
 	}
 
 	// --- XMI -----------------------------------------------------------------------------
 
-	private <T extends EObject> Optional<T> load(Path file, Class<T> type) {
-		if (!Files.isRegularFile(file)) {
+	private String extension() {
+		return FileNames.extension(compress);
+	}
+
+	private static boolean isData(Path file) {
+		return FileNames.isData(file.getFileName().toString()) && Files.isRegularFile(file);
+	}
+
+	/** The compressed or plain sibling of the given file name, whichever exists — compressed first. */
+	private static Optional<Path> existing(Path file) {
+		String base = FileNames.stripExtension(file.getFileName().toString());
+		for (String ext : List.of(FileNames.XMI_GZ, FileNames.XMI)) {
+			Path candidate = file.resolveSibling(base + ext);
+			if (Files.isRegularFile(candidate)) {
+				return Optional.of(candidate);
+			}
+		}
+		return Optional.empty();
+	}
+
+	private static void deleteVariants(Path file) throws IOException {
+		String base = FileNames.stripExtension(file.getFileName().toString());
+		Files.deleteIfExists(file.resolveSibling(base + FileNames.XMI_GZ));
+		Files.deleteIfExists(file.resolveSibling(base + FileNames.XMI));
+	}
+
+	/** The EMF resource URI: always the plain .xmi name, so the XMI factory applies whatever the file is called. */
+	private static URI resourceUri(Path file) {
+		String base = FileNames.stripExtension(file.getFileName().toString());
+		return URI.createFileURI(file.resolveSibling(base + FileNames.XMI).toString());
+	}
+
+	private <T extends EObject> Optional<T> load(Path wanted, Class<T> type) {
+		Path file = existing(wanted).orElse(null);
+		if (file == null) {
 			return Optional.empty();
 		}
 		ResourceSet rs = resourceSet();
 		synchronized (rs) {
-			Resource resource = rs.createResource(URI.createFileURI(file.toString()));
-			try {
-				resource.load(null);
+			Resource resource = rs.createResource(resourceUri(file));
+			try (InputStream raw = Files.newInputStream(file);
+					InputStream in = FileNames.isCompressed(file.getFileName().toString()) ? new GZIPInputStream(raw) : raw) {
+				resource.load(in, null);
 				if (!resource.getErrors().isEmpty()) {
 					throw new RepositoryException(
 							"Corrupt content in " + file + ": " + resource.getErrors().get(0).getMessage());
@@ -349,19 +396,24 @@ public class XmiFolderRepository implements WeatherRepository {
 		}
 	}
 
+	/** Writes the file (compressed or not, by its name) atomically and removes the other variant. */
 	private void save(Path file, EObject root) {
 		Path tmp = file.resolveSibling(file.getFileName() + ".tmp");
 		ResourceSet rs = resourceSet();
 		synchronized (rs) {
-			Resource resource = rs.createResource(URI.createFileURI(file.toString()));
+			Resource resource = rs.createResource(resourceUri(file));
 			try {
 				Files.createDirectories(file.getParent());
 				// a copy, so that the caller's object is neither moved into our resource nor changed
 				resource.getContents().add(EcoreUtil.copy(root));
-				try (OutputStream out = Files.newOutputStream(tmp)) {
+				try (OutputStream raw = Files.newOutputStream(tmp);
+						OutputStream out = FileNames.isCompressed(file.getFileName().toString()) ? new GZIPOutputStream(raw) : raw) {
 					resource.save(out, SAVE_OPTIONS);
 				}
 				move(tmp, file);
+				String base = FileNames.stripExtension(file.getFileName().toString());
+				String other = FileNames.isCompressed(file.getFileName().toString()) ? FileNames.XMI : FileNames.XMI_GZ;
+				Files.deleteIfExists(file.resolveSibling(base + other));
 			} catch (IOException e) {
 				try {
 					Files.deleteIfExists(tmp);

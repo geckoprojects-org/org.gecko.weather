@@ -50,6 +50,14 @@ class FileNamesTest {
 		assertThat(FileNames.stamp(a)).isEqualTo("20261003T060000Z");
 		assertThat(FileNames.stampOf(FileNames.stamp(a) + FileNames.XMI)).contains(a);
 		assertThat(FileNames.stampOf(FileNames.stamp(b) + "-1" + FileNames.XMI)).contains(b.truncatedTo(java.time.temporal.ChronoUnit.SECONDS));
+		assertThat(FileNames.stampOf(FileNames.stamp(a) + FileNames.XMI_GZ)).contains(a);
+		assertThat(FileNames.stampOf(FileNames.stamp(a) + FileNames.XMI_GZ + ".tmp")).isEmpty();
+		assertThat(FileNames.idOf("Berlin%2FMitte" + FileNames.XMI_GZ)).isEqualTo("Berlin/Mitte");
+		assertThat(FileNames.isData("x.xmi")).isTrue();
+		assertThat(FileNames.isData("x.xmi.gz")).isTrue();
+		assertThat(FileNames.isData("x.xmi.gz.tmp")).isFalse();
+		assertThat(FileNames.stripExtension("x.xmi.gz")).isEqualTo("x");
+		assertThat(FileNames.extension(true)).isEqualTo(".xmi.gz");
 		assertThat(FileNames.stamp(a).compareTo(FileNames.stamp(b))).isNegative();
 		assertThat(FileNames.stampOf("notes.txt")).isEmpty();
 		assertThat(FileNames.stampOf("home.xmi")).isEmpty();

@@ -1,17 +1,24 @@
 # org.gecko.weather.repository.file
 
-`WeatherRepository` as a folder of XMI files. The first and, for the MVP, only storage.
+`WeatherRepository` as a folder of gzip-compressed XMI files. The first and, for the MVP, only storage.
 
 ```
 <root>/                                     default data/weather, configurable
-  sites/<siteId>.xmi                        Site
-  reports/<siteId>.xmi                      WeatherReport — current dataset per product
-  archive/<siteId>/<providerId>/<productId>/<yyyyMMddTHHmmssZ>.xmi
+  sites/<siteId>.xmi.gz                     Site
+  reports/<siteId>.xmi.gz                   WeatherReport — current dataset per product
+  archive/<siteId>/<providerId>/<productId>/<yyyyMMddTHHmmssZ>.xmi.gz
                                             superseded SourceDataset, append-only; "-n" suffix if
                                             two share an issue second
-  catalogs/<providerId>/<productId>.xmi     StationCatalog
-  state/<providerId>/<productId>.xmi        SourceStateRecord — the ingest runtime's validators per URL
+  catalogs/<providerId>/<productId>.xmi.gz  StationCatalog
+  state/<providerId>/<productId>.xmi.gz     SourceStateRecord — the ingest runtime's validators per URL
 ```
+
+**Why compressed.** ADR-0011 puts provenance and uncertainty on every value and leaves the
+redundancy to the repository. Measured 2026-10-03 on the Dresden report (three MOSMIX_L stations,
+one ICON-D2 cell, 26 000 values): 14.6 MB as XMI, of which 55 % is provenance and 15 % uncertainty;
+**265 KB gzipped**. Compression costs nothing noticeable next to XML parsing, and `zcat` keeps the
+file readable. Plain `.xmi` files from before the change are read as well and replaced by their
+compressed form on the next save, so an existing folder migrates by itself.
 
 Identifiers are percent-encoded into file names (`Berlin/Mitte` → `Berlin%2FMitte.xmi`), so any id
 works on any file system. Every write goes to a `.tmp` sibling and is moved into place atomically.
@@ -27,6 +34,7 @@ working directory is worse than none (OPS-1, QR-12). One property:
 | Key | Default | Meaning |
 | --- | --- | --- |
 | `root` | `data/weather` (metatype suggestion only) | Root folder, absolute or relative to the working directory. Mount this as the durable volume. |
+| `compress` | `true` | Write `.xmi.gz`. `false` writes plain `.xmi` for a human-readable folder; reading takes both either way. |
 
 Development default: the `runtime` bundle's Configurator JSON sets `root` for the local launch.
 
@@ -46,4 +54,5 @@ synchronises on it and removes its resource after every operation, so one instan
 ## Tests
 
 Plain JUnit 5 against a temp folder: round trips, detachment, archive window and order, eviction,
-delete, catalogues, corrupt files, file-name encoding.
+delete, catalogues, corrupt files, file-name encoding, gzip on disk, plain files read and replaced,
+a report compressing better than 5:1.
