@@ -23,6 +23,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.fennec.emf.osgi.constants.EMFNamespaces;
 import org.gecko.weather.api.WeatherConstants;
 import org.gecko.weather.api.repository.WeatherRepository;
 import org.gecko.weather.api.spi.FetchRequest;
@@ -38,33 +40,43 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceScope;
 import org.osgi.service.metatype.annotations.Designate;
 
 /**
- * The OSGi face of {@link MosmixProvider}: one {@link WeatherProvider} service per configuration,
- * with the service properties {@code weather.provider.id=dwd} and {@code weather.product.id} set
- * from the product. The station catalogue is taken from the repository when fresh enough, otherwise
- * fetched and stored — the one thing a provider writes to the repository, and only a catalogue.
+ * The OSGi face of {@link MosmixProvider}: one {@link WeatherProvider} service with the properties
+ * {@code weather.provider.id=dwd} and {@code weather.product.id=MOSMIX_L}. Decoding uses the
+ * prototype-scoped {@link ResourceSet} Fennec EMF publishes for the KML model; the DWD extension
+ * model is registered into it defensively. The station catalogue is taken from the repository when
+ * fresh enough, otherwise fetched and stored — the one thing a provider writes to the repository,
+ * and only a catalogue.
  * <p>
- * Configuration is <b>required</b>: a provider talks to a third-party server on a schedule and
- * decides which product a deployment ingests. That is the operator's call, made in configuration,
- * not a side effect of a bundle being present.
+ * Configuration is <b>required</b>: a provider talks to a third-party server on a schedule, and
+ * whether a deployment ingests MOSMIX is the operator's call, made in configuration, not a side effect
+ * of a bundle being present.
  *
  * @author Mark Hoffmann
  * @since 03.10.2026
  */
 @Component(name = MosmixProviderComponent.PID, configurationPolicy = ConfigurationPolicy.REQUIRE, property = {
-		WeatherConstants.PROVIDER_ID + "=" + MosmixProvider.PROVIDER_ID })
+		WeatherConstants.PROVIDER_ID + "=" + MosmixProvider.PROVIDER_ID,
+		WeatherConstants.PRODUCT_ID + "=" + MosmixProvider.PRODUCT_ID })
 @Designate(ocd = MosmixConfig.class)
 public class MosmixProviderComponent implements WeatherProvider {
 
 	public static final String PID = "org.gecko.weather.provider.dwd.mosmix";
 
-	/** The catalogue is one for both products; stored under this product id. */
+	/** The catalogue is stored under this product id. */
 	static final String CATALOG_PRODUCT = "MOSMIX";
+
+	/** Target on the KML model's {@code emf.name}. */
+	static final String KML_TARGET = "(" + EMFNamespaces.EMF_NAME + "=kml)";
 
 	@Reference
 	private WeatherRepository repository;
+
+	@Reference(target = KML_TARGET, scope = ReferenceScope.PROTOTYPE)
+	private ResourceSet resourceSet;
 
 	private final AtomicReference<StationCatalog> catalog = new AtomicReference<>();
 	private MosmixProvider delegate;
@@ -78,9 +90,9 @@ public class MosmixProviderComponent implements WeatherProvider {
 		source = new HttpByteSource();
 		catalogUri = URI.create(config.catalogUrl());
 		catalogMaxAge = Duration.parse(config.catalogMaxAge());
-		MosmixProvider.Settings settings = new MosmixProvider.Settings(config.product(), URI.create(config.baseUrl()),
-				config.licence(), config.attribution());
-		delegate = new MosmixProvider(settings, source, this::catalog, clock);
+		MosmixProvider.Settings settings = new MosmixProvider.Settings(URI.create(config.baseUrl()), config.licence(),
+				config.attribution());
+		delegate = new MosmixProvider(settings, source, () -> resourceSet, this::catalog, clock);
 		loadCatalog(clock.instant());
 	}
 

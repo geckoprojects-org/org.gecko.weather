@@ -29,7 +29,7 @@ import org.gecko.weather.model.weather.StationBinding;
 import org.gecko.weather.model.weather.Uncertainty;
 import org.gecko.weather.model.weather.WeatherFactory;
 import org.gecko.weather.provider.dwd.mosmix.MosmixElements.Mapping;
-import org.gecko.weather.provider.dwd.mosmix.MosmixKmlParser.StationForecast;
+import org.gecko.weather.provider.dwd.mosmix.MosmixKmlDecoder.StationForecast;
 
 /**
  * Turns one station's decoded forecast into the {@link SourceDataset} a site gets for that station:

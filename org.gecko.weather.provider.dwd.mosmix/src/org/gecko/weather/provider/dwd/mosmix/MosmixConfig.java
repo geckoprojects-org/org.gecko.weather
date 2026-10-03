@@ -17,20 +17,15 @@ import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 
 /**
- * Configuration of the MOSMIX provider, PID {@value MosmixProviderComponent#PID}.
+ * Configuration of the MOSMIX_L provider, PID {@value MosmixProviderComponent#PID}.
  *
  * @author Mark Hoffmann
  * @since 03.10.2026
  */
-@ObjectClassDefinition(name = "Gecko Weather DWD MOSMIX", description = "DWD MOSMIX point forecasts as a weather provider")
+@ObjectClassDefinition(name = "Gecko Weather DWD MOSMIX_L", description = "DWD MOSMIX_L point forecasts as a weather provider")
 public @interface MosmixConfig {
 
-	@AttributeDefinition(name = "Product", description = "MOSMIX_L (per station, 6-hourly, ~115 elements) or MOSMIX_S (all stations in one file, hourly, ~40 elements).", options = {
-			@org.osgi.service.metatype.annotations.Option(label = "MOSMIX_L", value = "MOSMIX_L"),
-			@org.osgi.service.metatype.annotations.Option(label = "MOSMIX_S", value = "MOSMIX_S") })
-	String product() default MosmixProvider.MOSMIX_L;
-
-	@AttributeDefinition(name = "Base URL", description = "DWD Open Data folder holding MOSMIX_L/ and MOSMIX_S/.")
+	@AttributeDefinition(name = "Base URL", description = "DWD Open Data folder holding MOSMIX_L/.")
 	String baseUrl() default "https://opendata.dwd.de/weather/local_forecasts/mos/";
 
 	@AttributeDefinition(name = "Station catalogue URL", description = "The mosmix_stationskatalog.cfg to resolve bindings from.")

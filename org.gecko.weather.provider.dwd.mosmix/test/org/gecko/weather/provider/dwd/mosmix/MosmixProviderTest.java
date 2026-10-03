@@ -86,8 +86,8 @@ class MosmixProviderTest {
 			return new ByteSource.Content(new ByteArrayInputStream(Fixtures.bytes(Fixtures.KMZ_10554)),
 					new SourceState.Entity(Optional.of("\"v1\""), Optional.empty()));
 		};
-		provider = new MosmixProvider(MosmixProvider.Settings.defaults(MosmixProvider.MOSMIX_L), fixtures, () -> catalog,
-				Clock.fixed(NOW, ZoneOffset.UTC));
+		provider = new MosmixProvider(MosmixProvider.Settings.defaults(), fixtures, MosmixKmlDecoder::plainResourceSet,
+				() -> catalog, Clock.fixed(NOW, ZoneOffset.UTC));
 	}
 
 	@Test
@@ -98,8 +98,7 @@ class MosmixProviderTest {
 		assertThat(provider.expectedRefresh()).isEqualTo(Duration.ofHours(6));
 		assertThat(provider.provides()).contains(MeasurementKind.AIR_TEMPERATURE, MeasurementKind.CLOUD_COVER);
 		assertThat(provider.bindingResolver().productId()).isEqualTo("MOSMIX_L");
-		assertThat(MosmixProvider.Settings.defaults(MosmixProvider.MOSMIX_S).kmzUri("x"))
-				.hasToString("https://opendata.dwd.de/weather/local_forecasts/mos/MOSMIX_S/all_stations/kml/MOSMIX_S_LATEST_240.kmz");
+		assertThat(MosmixProvider.Settings.defaults().kmzUri("10554")).isEqualTo(ERFURT_URI);
 	}
 
 	@Test
@@ -159,7 +158,7 @@ class MosmixProviderTest {
 		assertThat(temps).hasSize(247);
 		MeasuredValue first = temps.get(0);
 		assertThat(first.getValidAt()).isEqualTo(Instant.parse("2024-09-26T10:00:00Z"));
-		assertThat(first.getValue()).isCloseTo(16.1, within(1e-9)); // 289.25 K
+		assertThat(first.getValue()).isCloseTo(16.1, within(1e-4)); // 289.25 K, published as a float
 		assertThat(first.getUnit()).isEqualTo("Cel");
 		assertThat(first.getProvenance().getSourceElement()).isEqualTo("TTT");
 		assertThat(first.getProvenance().getStationId()).isEqualTo("10554");
@@ -173,7 +172,7 @@ class MosmixProviderTest {
 		assertThat(first.getUncertainty().getSpatialMeters()).isEqualTo(binding.getDistanceMeters());
 
 		MeasuredValue radiation = ds.getValues().stream().filter(v -> v.getKind() == MeasurementKind.GLOBAL_RADIATION).findFirst().orElseThrow();
-		assertThat(radiation.getValue()).isCloseTo(175.0, within(1e-9)); // 630 kJ/m² per hour
+		assertThat(radiation.getValue()).isCloseTo(175.0, within(1e-4)); // 630 kJ/m² per hour
 		assertThat(radiation.getStatistic()).isEqualTo(Statistic.MEAN);
 		assertThat(radiation.getPeriod()).isEqualTo(Duration.ofHours(1));
 
@@ -185,7 +184,7 @@ class MosmixProviderTest {
 		List<MeasuredValue> gustProb = ds.getValues().stream()
 				.filter(v -> "FXh25".equals(v.getProvenance().getSourceElement())).toList();
 		assertThat(gustProb).hasSizeLessThan(247).isNotEmpty();
-		assertThat(gustProb.get(0).getValue()).isEqualTo(77.0);
+		assertThat(gustProb.get(0).getValue()).isCloseTo(77.0, within(1e-4));
 		assertThat(gustProb.get(0).getThreshold()).isEqualTo(25.0);
 		assertThat(gustProb.get(0).getThresholdUnit()).isEqualTo("[kn_i]");
 
@@ -212,7 +211,7 @@ class MosmixProviderTest {
 	void sitesWithoutMosmixBindingsAreIgnored() throws IOException {
 		Site site = StationCatalogTest.site(50.98, 11.33, 208);
 		SourceBinding other = provider.bindingResolver().bind(site, "10554").orElseThrow();
-		other.setProductId("MOSMIX_S");
+		other.setProductId("SOMETHING_ELSE");
 		FetchResult result = provider.fetch(new FetchRequest(List.of(new SiteBindings(site, List.of(other))), SourceState.EMPTY, NOW));
 		assertThat(result).isInstanceOf(FetchResult.Unchanged.class);
 		assertThat(requested).isEmpty();

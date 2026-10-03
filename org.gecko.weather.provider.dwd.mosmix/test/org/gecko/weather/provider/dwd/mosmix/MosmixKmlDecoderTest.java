@@ -23,27 +23,33 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.gecko.weather.api.spi.FetchException;
-import org.gecko.weather.provider.dwd.mosmix.MosmixKmlParser.Header;
-import org.gecko.weather.provider.dwd.mosmix.MosmixKmlParser.StationForecast;
+import org.gecko.weather.provider.dwd.mosmix.MosmixKmlDecoder.Header;
+import org.gecko.weather.provider.dwd.mosmix.MosmixKmlDecoder.StationForecast;
 import org.gecko.weather.transport.Unwrap;
 import org.junit.jupiter.api.Test;
 
 /**
+ * The EMF-based decoder against the recorded MOSMIX_L file.
+ *
  * @author Mark Hoffmann
  * @since 03.10.2026
  */
-class MosmixKmlParserTest {
+class MosmixKmlDecoderTest {
+
+	private final ResourceSet rs = MosmixKmlDecoder.plainResourceSet();
 
 	@Test
-	void parsesHeaderStationAndValuesOfTheRecordedFile() throws IOException {
+	void decodesHeaderStationAndValuesOfTheRecordedFile() throws IOException {
 		List<StationForecast> forecasts = new ArrayList<>();
 		Header header;
 		try (InputStream kml = Unwrap.zip(Fixtures.open(Fixtures.KMZ_10554))) {
-			header = MosmixKmlParser.parse(kml, Set.of(), forecasts::add);
+			header = MosmixKmlDecoder.decode(kml, Set.of(), forecasts::add, rs);
 		}
 
 		assertThat(header.issuedAt()).isEqualTo(Instant.parse("2024-09-26T09:00:00Z"));
@@ -62,42 +68,45 @@ class MosmixKmlParserTest {
 
 		assertThat(erfurt.values()).hasSize(114).containsKeys("TTT", "Rad1h", "ww", "FXh25", "PPPP", "N");
 		assertThat(erfurt.values().get("TTT")).hasSize(247);
-		assertThat(erfurt.values().get("TTT")[0]).isEqualTo(289.25);
-		assertThat(erfurt.values().get("Rad1h")[0]).isEqualTo(630.0);
-		assertThat(erfurt.values().get("ww")[0]).isEqualTo(61.0);
+		assertThat(erfurt.values().get("TTT")[0]).isCloseTo(289.25, within(1e-4));
+		assertThat(erfurt.values().get("Rad1h")[0]).isCloseTo(630.0, within(1e-4));
+		assertThat(erfurt.values().get("ww")[0]).isCloseTo(61.0, within(1e-4));
 		// FXh25 is published for 12-hour windows only; the rest is "-"
 		double[] gust = erfurt.values().get("FXh25");
 		assertThat(gust[0]).isNaN();
-		assertThat(gust[8]).isEqualTo(77.0);
+		assertThat(gust[8]).isCloseTo(77.0, within(1e-4));
 		assertThat(erfurt.rejectedElements()).isEmpty();
+
+		assertThat(rs.getResources()).as("the decoder cleans up after itself").isEmpty();
 	}
 
 	@Test
 	void unwantedStationsAreSkipped() throws IOException {
 		List<StationForecast> forecasts = new ArrayList<>();
 		try (InputStream kml = Unwrap.zip(Fixtures.open(Fixtures.KMZ_10554))) {
-			Header header = MosmixKmlParser.parse(kml, Set.of("10488"), forecasts::add);
+			Header header = MosmixKmlDecoder.decode(kml, Set.of("10488"), forecasts::add, rs);
 			assertThat(header.timeSteps()).hasSize(247);
 		}
 		assertThat(forecasts).isEmpty();
 	}
 
 	@Test
-	void valueParsing() {
-		assertThat(MosmixKmlParser.parseValues("  1.0 - 3.5 ", 3)).containsExactly(1.0, Double.NaN, 3.5);
-		assertThat(MosmixKmlParser.parseValues("1.0 2.0", 3)).isNull();
-		assertThat(MosmixKmlParser.parseValues("1.0 x 3.0", 3)).isNull();
-		assertThat(MosmixKmlParser.parseValues("", 1)).isNull();
+	void valueListConversion() {
+		assertThat(MosmixKmlDecoder.toDoubles(Arrays.asList(1.0f, "-", 3.5f), 3)).containsExactly(1.0, Double.NaN, 3.5);
+		assertThat(MosmixKmlDecoder.toDoubles(Arrays.asList(1.0f, 2.0f), 3)).isNull();
+		assertThat(MosmixKmlDecoder.toDoubles(Arrays.asList(1.0f, "x", 3.0f), 3)).isNull();
+		assertThat(MosmixKmlDecoder.toDoubles(null, 1)).isNull();
 	}
 
 	@Test
 	void garbageIsAFetchExceptionNotAnIOException() {
 		byte[] notKml = "<html><body>maintenance</body></html>".getBytes(StandardCharsets.ISO_8859_1);
-		assertThatThrownBy(() -> MosmixKmlParser.parse(new ByteArrayInputStream(notKml), Set.of(), f -> {
-		})).isInstanceOf(FetchException.class);
+		assertThatThrownBy(() -> MosmixKmlDecoder.decode(new ByteArrayInputStream(notKml), Set.of(), f -> {
+		}, rs)).isInstanceOf(FetchException.class);
 		byte[] truncated = "<kml:kml xmlns:kml=\"http://www.opengis.net/kml/2.2\"><kml:Document>".getBytes(StandardCharsets.ISO_8859_1);
-		assertThatThrownBy(() -> MosmixKmlParser.parse(new ByteArrayInputStream(truncated), Set.of(), f -> {
-		})).isInstanceOf(FetchException.class);
+		assertThatThrownBy(() -> MosmixKmlDecoder.decode(new ByteArrayInputStream(truncated), Set.of(), f -> {
+		}, rs)).isInstanceOf(FetchException.class);
+		assertThat(rs.getResources()).isEmpty();
 	}
 
 }
