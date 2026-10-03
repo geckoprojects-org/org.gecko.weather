@@ -149,3 +149,19 @@ org.eclipse.fennec.models:org.eclipse.fennec.common.models.library:0.0.1-SNAPSHO
 net.e175.klaus:solarpositioning:3.0.1
 org.eclipse.fennec.mcp:org.eclipse.fennec.mcp.workspace.library:0.1.0-SNAPSHOT
 org.eclipse.fennec.mcp:org.eclipse.fennec.mcp.gogo.runtime:0.1.0-SNAPSHOT
+
+# netCDF-Java dependencies (org.gecko.ucar.netcdf wrap). re2j and jdom2 carry no OSGi manifest and
+# are embedded in the wrap; the others are bundles of their own. Versions per the netcdf-java 5.6.0
+# BOM, or the newest compatible release.
+com.google.re2j:re2j:1.7
+com.google.re2j:re2j:jar:sources:1.7
+org.jdom:jdom2:2.0.6.1
+org.jdom:jdom2:jar:sources:2.0.6.1
+com.google.guava:guava:32.1.3-jre
+com.google.guava:failureaccess:1.0.1
+com.google.protobuf:protobuf-java:3.25.5
+joda-time:joda-time:2.12.7
+org.geckoprojects.libraries:org.gecko.ucar.units:5.6.0
+# bzip2 for DWD GRIB2 downloads (transport); compress 1.26+ needs commons-io at runtime
+org.apache.commons:commons-compress:1.27.1
+commons-io:commons-io:2.22.0

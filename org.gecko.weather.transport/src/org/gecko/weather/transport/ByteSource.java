@@ -37,6 +37,24 @@ public interface ByteSource {
 	sealed interface Result {
 	}
 
+	/**
+	 * The source has nothing under the URI (HTTP 404 or 410). Distinct from other failures because a
+	 * provider may probe for a file that is not published yet — a DWD model run appears step by step.
+	 */
+	class NotFoundException extends IOException {
+		private static final long serialVersionUID = 1L;
+		private final int status;
+
+		public NotFoundException(java.net.URI uri, int status) {
+			super("HTTP " + status + " for " + uri);
+			this.status = status;
+		}
+
+		public int status() {
+			return status;
+		}
+	}
+
 	/** The source reports no change against the validators given (HTTP 304). */
 	record Unchanged() implements Result {
 	}

@@ -29,6 +29,7 @@ import org.gecko.weather.api.SiteRegistry;
 import org.gecko.weather.api.WeatherService;
 import org.gecko.weather.model.weather.MeasuredValue;
 import org.gecko.weather.model.weather.MeasurementKind;
+import org.gecko.weather.model.weather.GridBinding;
 import org.gecko.weather.model.weather.Site;
 import org.gecko.weather.model.weather.SourceBinding;
 import org.gecko.weather.model.weather.SourceDataset;
@@ -114,7 +115,10 @@ public class WeatherCommands {
 		for (SourceDataset d : report.get().getDatasets()) {
 			sb.append(String.format(Locale.ROOT, "  %s/%s issued %s  %d values  %s .. %s%s%n", d.getProviderId(), d.getProductId(),
 					d.getIssuedAt(), d.getValues().size(), d.getHorizonStart(), d.getHorizonEnd(),
-					d.getStationId() == null ? "" : "  station " + d.getStationId() + " @ " + Math.round(d.getDistanceMeters()) + " m"));
+					d.getStationId() != null ? "  station " + d.getStationId() + " @ " + Math.round(d.getDistanceMeters()) + " m"
+							: d.getCell() != null ? "  cell " + d.getCell().getGridId() + " " + d.getCell().getI() + "," + d.getCell().getJ() + " @ "
+									+ Math.round(d.getDistanceMeters()) + " m"
+									: ""));
 		}
 		sb.append("  days: ").append(report.get().getDays().size()).append(", horizon end ")
 				.append(Reports.horizonEnd(report.get()).map(Instant::toString).orElse("-"));
@@ -160,8 +164,8 @@ public class WeatherCommands {
 	}
 
 	static String describe(SourceBinding b) {
-		String where = b instanceof StationBinding s
-				? s.getStation().getId() + " " + s.getStation().getName()
+		String where = b instanceof StationBinding s ? s.getStation().getId() + " " + s.getStation().getName()
+				: b instanceof GridBinding g && g.getCell() != null ? "cell " + g.getCell().getI() + "," + g.getCell().getJ()
 				: "cell";
 		return String.format(Locale.ROOT, "%s/%s #%d %s %s @ %.1f km", b.getProviderId(), b.getProductId(), b.getRank(), b.getOrigin(), where,
 				b.getDistanceMeters() / 1000);

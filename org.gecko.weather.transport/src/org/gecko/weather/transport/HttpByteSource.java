@@ -34,8 +34,9 @@ import org.gecko.weather.api.spi.SourceState;
 /**
  * {@link ByteSource} over {@link HttpClient}: sends {@code If-None-Match} / {@code If-Modified-Since}
  * when validators are known, treats 304 as {@link Unchanged}, returns {@code ETag} and
- * {@code Last-Modified} of a 200 as the next validators. Follows redirects; anything else than 200
- * or 304 is an {@link IOException} with the status in the message.
+ * {@code Last-Modified} of a 200 as the next validators. Follows redirects; 404 and 410 are a
+ * {@link NotFoundException}, anything else than 200 or 304 an {@link IOException} with the status in
+ * the message.
  *
  * @author Mark Hoffmann
  * @since 03.10.2026
@@ -84,6 +85,10 @@ public class HttpByteSource implements ByteSource {
 		if (status == 304) {
 			response.body().close();
 			return new Unchanged();
+		}
+		if (status == 404 || status == 410) {
+			response.body().close();
+			throw new NotFoundException(uri, status);
 		}
 		if (status != 200) {
 			response.body().close();

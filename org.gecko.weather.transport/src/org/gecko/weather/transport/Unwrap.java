@@ -22,6 +22,8 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
+
 /**
  * Archive unwrapping for the formats DWD Open Data uses. Streams through; nothing is buffered to
  * disk or memory beyond the decompressor's window.
@@ -52,6 +54,25 @@ public final class Unwrap {
 		throw new IOException("Zip archive contains no file entry");
 	}
 
+	/**
+	 * A bzip2 stream — DWD publishes GRIB2 as {@code .grib2.bz2}. Concatenated members are read
+	 * through. Commons Compress is touched only here, so a consumer that never meets bzip2 does not
+	 * need it on a plain class path.
+	 */
+	public static InputStream bzip2(InputStream compressed) throws IOException {
+		return Bzip2.open(new BufferedInputStream(requireNonNull(compressed, "compressed")));
+	}
+
+	/** Loaded on first use only: keeps the Commons Compress reference out of {@link Unwrap}'s verification. */
+	private static final class Bzip2 {
+		private Bzip2() {
+		}
+
+		static InputStream open(InputStream in) throws IOException {
+			return new BZip2CompressorInputStream(in, true);
+		}
+	}
+
 	/** A gzip stream. */
 	public static InputStream gzip(InputStream compressed) throws IOException {
 		return new GZIPInputStream(new BufferedInputStream(requireNonNull(compressed, "compressed")));
@@ -68,6 +89,9 @@ public final class Unwrap {
 		}
 		if (lower.endsWith(".gz")) {
 			return gzip(in);
+		}
+		if (lower.endsWith(".bz2")) {
+			return bzip2(in);
 		}
 		return in;
 	}

@@ -29,6 +29,8 @@ import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
+
 import org.gecko.weather.api.spi.SourceState;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -107,10 +109,22 @@ class HttpByteSourceTest {
 	}
 
 	@Test
-	void nonSuccessIsAnIOException() {
+	void notFoundIsItsOwnIOException() {
 		HttpByteSource source = new HttpByteSource();
 		URI missing = URI.create("http://127.0.0.1:" + server.getAddress().getPort() + "/missing");
-		assertThatThrownBy(() -> source.fetch(missing, Optional.empty())).isInstanceOf(IOException.class).hasMessageContaining("404");
+		assertThatThrownBy(() -> source.fetch(missing, Optional.empty())).isInstanceOf(ByteSource.NotFoundException.class)
+				.isInstanceOf(IOException.class).hasMessageContaining("404");
+	}
+
+	@Test
+	void unwrapBzip2() throws IOException {
+		ByteArrayOutputStream bz = new ByteArrayOutputStream();
+		try (BZip2CompressorOutputStream out = new BZip2CompressorOutputStream(bz)) {
+			out.write("GRIB".getBytes(StandardCharsets.UTF_8));
+		}
+		try (var in = Unwrap.byName("x.grib2.bz2", new ByteArrayInputStream(bz.toByteArray()))) {
+			assertThat(new String(in.readAllBytes(), StandardCharsets.UTF_8)).isEqualTo("GRIB");
+		}
 	}
 
 	@Test

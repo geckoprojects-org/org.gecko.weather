@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.gecko.weather.api.Geo;
 import org.gecko.weather.api.spi.SiteBindingResolver;
 import org.gecko.weather.model.weather.BindingOrigin;
 import org.gecko.weather.model.weather.GeoPosition;
@@ -109,14 +110,9 @@ public class MosmixBindingResolver implements SiteBindingResolver {
 		return b;
 	}
 
-	/** Haversine on a 6371 km sphere; metres. */
+	/** Great-circle distance in metres; see {@link Geo}. */
 	public static double distanceMeters(GeoPosition a, GeoPosition b) {
-		double r = 6_371_000;
-		double dLat = Math.toRadians(b.getLatitude() - a.getLatitude());
-		double dLon = Math.toRadians(b.getLongitude() - a.getLongitude());
-		double h = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(Math.toRadians(a.getLatitude()))
-				* Math.cos(Math.toRadians(b.getLatitude())) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-		return 2 * r * Math.asin(Math.min(1, Math.sqrt(h)));
+		return Geo.distanceMeters(a, b);
 	}
 
 	private record Candidate(Station station, double distance) {
