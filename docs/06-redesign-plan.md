@@ -77,7 +77,7 @@ and 2:
 | M.3 | **`repository.file`** — configurable folder: `sites/`, `reports/`, `archive/<site>/<provider>/<product>/`, `catalogs/` as XMI; atomic writes, append-only archive, `evictArchive` | M | **done 2026-10-03** — `OPS-1`, and the precondition for `INT-17` |
 | M.4 | **`site`** — registry over the repository, automatic binding resolution with distance plus manual override, `dataCompleteFrom` | M | `INT-1` |
 | M.5 | **`provider.dwd.icon`** — conditional-GET transport, **GRIB2 decoder** over the wrap, cell resolver by index arithmetic on plain lat/lon, de-averaging for `aswdir_s`/`aswdifd_s` | **L** | `INT-3`, `OPS-9`; the largest item |
-| M.6 | **`provider.dwd.mosmix`** — KML via `ecore.xmi`, nearest-station resolver. Also the cheap way to prove the SPI before M.5 | M | `F-1`…`F-4` resolved |
+| M.6 | **`provider.dwd.mosmix`** — station catalogue (degrees-and-minutes trap fixed), nearest-station resolver, KMZ per station or all-stations file with conditional requests, streaming StAX decode, ~60 elements mapped to canonical kinds; plus **`transport`** (JDK HttpClient, 304, zip/gzip) | M | **done 2026-10-03** — `F-1`…`F-4` resolved, SPI proven |
 | M.7 | **`solar`** — `SolarService` over NREL SPA (`net.e175.klaus:solarpositioning`, MIT, OSGi bundle; replaced Time4J, LGPL, on 2026-10-03): position per instant, `DayInfo` per civil date in the site's zone (the old service used the platform zone and returned sunset for sunrise); the per-timestep `COMPUTED` dataset is assembled in M.8 | S | **done 2026-10-03** — `INT-4`, `V-8`, resolves `F-18` |
 | M.8 | ~~`compute.merge`~~ **report assembly = `WeatherDataSink`** — `replace` (new issue: swap the product's dataset, archive the previous) and `append` (streams: rolling window per product, archive in buckets); refresh the solar dataset and `DayInfo` for the horizon; the fetch path and push sources both go through it | M | `INT-2` as reworded, `M-17`, [ADR-0013](adr/0013-values-per-source.md) |
 | M.9 | **`ingest`** — per-provider scheduling, conditional GET, bounded backoff | M | `OPS-6`, `OPS-7` |
@@ -85,7 +85,7 @@ and 2:
 | M.11 | **`provider.dwd.sis`** — NetCDF decoder, 0.05° cell resolver | M | high-cadence global radiation |
 | M.12 | **`provider.dwd.uv`** — GRIB2, health forecasts | S | completes the quantity set |
 | M.13 | **`config` + `runtime`** — Configurator defaults, bndrun, documented volume | M | `OPS-5`, `QR-12` |
-| M.14 | Offline fixtures: ICON-D2 `.grib2`, SIS `.nc`, MOSMIX `.kmz` | M | `DEV-6`, `QR-6` |
+| M.14 | Offline fixtures: ICON-D2 `.grib2`, SIS `.nc`, ~~MOSMIX `.kmz`~~ (done, with a station catalogue) | M | `DEV-6`, `QR-6` |
 | M.15 | **`wrap.ucar`** — cdm-core + grib as one bundle in this workspace, Unidata repository in `cnf` (was 0.8) | M | `M-14`, unblocks M.5 |
 
 **Sequencing note.** M.6 before M.5 is deliberate even though ICON is the primary source: it proves
@@ -242,14 +242,20 @@ weather stations (Bresser, Ecowitt) are a source like any other; `Origin.LOCAL_S
 **M.7, `solar`, is done** (same day): `SpaSolarService`, 8 tests against geometry
 (`90° − |φ − δ|`, solstice day lengths, civil date in Berlin and Tokyo, polar night, midnight sun).
 
-**Next is M.4 + M.8 as one `core` bundle**: `SiteRegistry` (ids, binding resolution over the
-`SiteBindingResolver` whiteboard, ranked stations, manual override), `WeatherService` (reads over the
-repository via `Reports`), and `WeatherDataSink` (`replace`: swap + archive; `append`: rolling window;
-after each change refresh the solar dataset — `SUN_ELEVATION`/`SUN_AZIMUTH` per timestep over the
-report's horizon — and `DayInfo` per day). Plain-JUnit against `XmiFolderRepository` in a temp folder
-and a fake resolver. Then M.6 (MOSMIX, the first provider, with a shared HTTP transport helper), M.15
-(the UCAR wrap), M.5 (ICON-D2), M.9 (ingest runtime), M.13 (`runtime` with Configurator defaults and
-the bndrun).
+**M.4 + M.8 (`core`) and M.6 (`provider.dwd.mosmix` + `transport`) are done** (same day). Two
+findings from the old code, both fixed and tested here: the MOSMIX station catalogue gives
+coordinates as degrees and minutes (`50.59` = 50°59′), which the old implementation read as decimals;
+and KML coordinates are `lon,lat`, which it read the other way round. 83 plain-JUnit tests across
+seven bundles.
+
+**Next is M.9, the ingest runtime** — the piece that turns the bundles into a running service: per
+`WeatherProvider` a scheduled job on `expectedRefresh`, collecting the active sites' bindings for that
+product, `fetch` with the persisted `SourceState`, results through `WeatherDataSink.replace`, bounded
+exponential backoff on `IOException`, no retry on `FetchException` until the next schedule, per-value
+`skipped` counts to the log. `SourceState` persistence belongs in the repository (one more small
+method pair) so a restart does not re-download everything. Then M.13 (`runtime`: Configurator JSON
+with the repository root, a `launch.bndrun`, first end-to-end run against DWD), then M.15 (UCAR wrap)
+and M.5 (ICON-D2).
 
 Still open, none of it blocking: `M-10` (archive retention, needs `Q-B`), `M-11` (which reading helpers),
 `M-16` (several stations per site by default?), the UV product's exact grid, and how long each DWD

@@ -1,0 +1,11 @@
+Bundle-Name: Gecko Weather Transport
+Bundle-Description: Shared byte transport for providers: HTTP with conditional requests over the \
+	JDK HttpClient, archive unwrapping (zip, gzip). Knows nothing about what the bytes mean.
+
+-library: enableEMF
+
+-buildpath: \
+	org.gecko.weather.api;version=snapshot
+
+-testpath: \
+	assertj-core;version=latest

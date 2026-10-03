@@ -1,0 +1,17 @@
+Bundle-Name: Gecko Weather Provider DWD MOSMIX
+Bundle-Description: WeatherProvider for DWD MOSMIX point forecasts: station catalogue, nearest-station \
+	binding, KMZ fetch with conditional requests, streaming KML decode, mapping to canonical kinds.
+
+-library: enableEMF
+
+-buildpath: \
+	org.gecko.weather.model;version=snapshot,\
+	org.gecko.weather.api;version=snapshot,\
+	org.gecko.weather.transport;version=snapshot,\
+	org.osgi.service.metatype.annotations;version=latest
+
+-testpath: \
+	assertj-core;version=latest
+
+# recorded DWD files for offline tests (DEV-6); kept out of the bundle
+-includeresource.fixtures:
