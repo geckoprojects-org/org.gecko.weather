@@ -11,7 +11,7 @@
  * Contributors:
  *     Data In Motion - initial API and implementation
  */
-package org.gecko.weather.provider.dwd.icon;
+package org.gecko.weather.grib2;
 
 import static java.util.Objects.requireNonNull;
 

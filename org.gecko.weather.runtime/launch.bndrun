@@ -1,5 +1,5 @@
 # Local launch: Felix, Gogo shell, Configurator with this bundle's defaults (configs/weather.json),
-# Fennec EMF runtime, the weather bundles and the DWD providers (MOSMIX_L, ICON-D2, SIS).
+# Fennec EMF runtime, the weather bundles and the DWD providers (MOSMIX_L, ICON-D2, SIS, UV index).
 #
 #   ./gradlew :org.gecko.weather.runtime:resolve      # refresh -runbundles after a dependency change
 #   ./gradlew :org.gecko.weather.runtime:export       # executable jar under generated/distributions
@@ -27,6 +27,7 @@
 	bnd.identity;id='org.gecko.weather.provider.dwd.mosmix',\
 	bnd.identity;id='org.gecko.weather.provider.dwd.icon',\
 	bnd.identity;id='org.gecko.weather.provider.dwd.sis',\
+	bnd.identity;id='org.gecko.weather.provider.dwd.uv',\
 	bnd.identity;id='org.apache.commons.commons-io',\
 	bnd.identity;id='org.eclipse.fennec.emf.osgi.component.minimal',\
 	bnd.identity;id='net.opengis.kml.model',\
@@ -87,4 +88,6 @@
 	org.objectweb.asm.util;version='[9.10.1,9.10.2)',\
 	slf4j.api;version='[2.0.17,2.0.18)',\
 	slf4j.simple;version='[2.0.17,2.0.18)',\
-	org.gecko.weather.provider.dwd.sis;version=snapshot
+	org.gecko.weather.provider.dwd.sis;version=snapshot,\
+	org.gecko.weather.grib2;version=snapshot,\
+	org.gecko.weather.provider.dwd.uv;version=snapshot

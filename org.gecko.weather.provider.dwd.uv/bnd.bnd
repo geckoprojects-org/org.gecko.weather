@@ -1,0 +1,23 @@
+Bundle-Name: Gecko Weather Provider DWD UV index
+Bundle-Description: WeatherProvider for DWD's daily UV index forecast (clouded sky, daily maximum) on \
+	the ICON-EU grid: one GRIB2 file a day with three daily maxima, read through the shared GRIB2 \
+	bundle, only the bound cells.
+
+-library: enableEMF
+
+-buildpath: \
+	org.gecko.weather.model;version=snapshot,\
+	org.gecko.weather.api;version=snapshot,\
+	org.gecko.weather.transport;version=snapshot,\
+	org.gecko.weather.grib2;version=snapshot,\
+	org.gecko.ucar.netcdf;version=snapshot,\
+	org.osgi.service.metatype.annotations;version=latest
+
+# What netCDF-Java touches when reading one GRIB2 record
+-testpath: \
+	com.google.guava;version=latest,\
+	com.google.guava.failureaccess;version=latest,\
+	com.google.protobuf;version=latest,\
+	joda-time;version=latest,\
+	slf4j.api;version=latest,\
+	assertj-core;version=latest

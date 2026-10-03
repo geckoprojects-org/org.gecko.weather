@@ -1,0 +1,11 @@
+Bundle-Name: Gecko Weather GRIB2
+Bundle-Description: Reading DWD GRIB2 files through netCDF-Java from memory — one or several \
+	records on a plain latitude/longitude grid — and writing minimal ones for tests. Shared by the \
+	gridded DWD providers (ICON-D2, UV index); no provider knowledge.
+
+-library: enableEMF
+
+-buildpath: \
+	org.gecko.weather.model;version=snapshot,\
+	org.gecko.weather.api;version=snapshot,\
+	org.gecko.ucar.netcdf;version=snapshot

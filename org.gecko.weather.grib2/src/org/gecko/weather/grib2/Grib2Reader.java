@@ -11,7 +11,7 @@
  * Contributors:
  *     Data In Motion - initial API and implementation
  */
-package org.gecko.weather.provider.dwd.icon;
+package org.gecko.weather.grib2;
 
 import static java.util.Objects.requireNonNull;
 
@@ -25,8 +25,8 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.gecko.weather.api.spi.FetchException;
-import org.gecko.weather.provider.dwd.icon.Grib2Field.GridDefinition;
-import org.gecko.weather.provider.dwd.icon.Grib2Field.Interval;
+import org.gecko.weather.grib2.Grib2Field.GridDefinition;
+import org.gecko.weather.grib2.Grib2Field.Interval;
 
 import ucar.nc2.grib.grib2.Grib2Gds;
 import ucar.nc2.grib.grib2.Grib2Pds;
@@ -143,7 +143,7 @@ public final class Grib2Reader {
 	}
 
 	/** Code table 4.4: the units DWD uses plus the common ones. */
-	static Duration duration(int unit, int value) {
+	public static Duration duration(int unit, int value) {
 		return switch (unit) {
 			case 0 -> Duration.ofMinutes(value);
 			case 1 -> Duration.ofHours(value);
@@ -156,7 +156,7 @@ public final class Grib2Reader {
 		};
 	}
 
-	static double normalizeLongitude(double lon) {
+	public static double normalizeLongitude(double lon) {
 		double l = lon % 360;
 		if (l >= 180) {
 			l -= 360;

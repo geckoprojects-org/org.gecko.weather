@@ -27,5 +27,8 @@
 	},
 
 	"org.gecko.weather.provider.dwd.sis.forecast": {
+	},
+
+	"org.gecko.weather.provider.dwd.uv": {
 	}
 }

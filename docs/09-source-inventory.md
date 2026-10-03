@@ -180,6 +180,25 @@ are recorded as fixtures):
 - Dresden cell (175, 101): 539 W/m² at 12:00 UTC; the 18 UTC run forecasts 12.6 W/m² for 06 UTC and
   313 W/m² for 11 UTC next morning.
 
+## Measured from the actual UV index file
+
+Read 2026-10-03 while building `provider.dwd.uv`
+(`Z__C_EDZW_20261003042842_grb02,icreu_uvi_icreu__000048_999999_2610030000_HPC.bin`, 5.4 MB):
+
+- **Grid**: ICON-EU regular lat/lon, template 0, **1377 × 657 at 0.0625°**, 29.5–70.5° N,
+  23.5° W–62.5° E, scan 0x40, no bitmap — `gridId` `icon-eu-regular-lat-lon`. That answers the
+  "exact grid of the UV product" question below.
+- **Three records**, product definition template 8, parameter 4/51, statistical process 2
+  (**maximum**), level type 103 at 0 m, time unit **days** (forecast time 0/1/2): the daily maximum
+  UV index under forecast clouds (`UVI_MAX_CL`) for today, tomorrow and the day after.
+  **Quirk:** the interval end written into each record equals its start (range length 0) —
+  midnight at the beginning of the day, not its end; the README says `stepRange 0-24`. The provider
+  derives the day from the start. `grid_simple`, 16 bit, with a non-zero reference value.
+- One file a day, published around **04:30 UTC**; the file name carries the processing time, the
+  folder keeps two days. Beside it: `uvh` (hour of the maximum, not read), a global 35 MB variant,
+  and 130 MB perceived-temperature files.
+- Dresden cell (596, 345), 1.5 km from the site: 2.77 / 1.68 / 2.45 for 3–5 October.
+
 ## GRIB2 library: a UCAR wrap bundle
 
 **Decided 2026-07-29: wrap `edu.ucar:grib`** rather than hand-write a reader for the four templates DWD
@@ -214,6 +233,6 @@ the library.
 
 ## Still to confirm
 
-- **The exact grid of the UV product**, from its GRIB header rather than from documentation.
+- ~~The exact grid of the UV product~~ — measured 2026-10-03, see above.
 - How far back each product is retained on the server, which bounds the best-effort backfill (`OPS-16`).
 - ~~Whether `aswdifd_s` matches `aswdir_s` in template and averaging~~ — confirmed 2026-10-03, see above.

@@ -11,8 +11,7 @@
  * Contributors:
  *     Data In Motion - initial API and implementation
  */
-package org.gecko.weather.provider.dwd.icon;
-
+package org.gecko.weather.provider.dwd.uv;
 
 import static java.util.Objects.requireNonNull;
 
@@ -20,35 +19,31 @@ import org.gecko.weather.api.spi.RegularLatLonGrid;
 import org.gecko.weather.grib2.Grib2Field.GridDefinition;
 
 /**
- * The ICON-D2 regular latitude/longitude grid as DWD publishes it (measured from the files, see
- * docs/09-source-inventory.md): grid definition template 0, 1215 × 746 points at 0.02°, first point
- * 43.18° N / 3.94° W, west→east and south→north. Cell arithmetic is {@link #GRID}'s; a quarter of
- * the rectangle carries no data (bitmap), which shows as NaN when reading, not here.
+ * The ICON-EU regular latitude/longitude grid DWD's health forecasts use (measured from the UV
+ * files, docs/09-source-inventory.md): template 0, 1377 × 657 points at 0.0625°, first point
+ * 29.5° N / 23.5° W, west→east and south→north, no bitmap.
  *
  * @author Mark Hoffmann
- * @since 03.10.2026
+ * @since 04.10.2026
  */
-public final class IconD2Grid {
+public final class IconEuGrid {
 
-	/** The {@code gridId} every binding and dataset of this product carries. */
-	public static final String GRID_ID = "icon-d2-regular-lat-lon";
-	public static final double LA1 = 43.18;
-	public static final double LO1 = -3.94;
-	public static final double RESOLUTION_DEGREES = 0.02;
-	public static final int NI = 1215;
-	public static final int NJ = 746;
+	public static final String GRID_ID = "icon-eu-regular-lat-lon";
+	public static final double LA1 = 29.5;
+	public static final double LO1 = -23.5;
+	public static final double RESOLUTION_DEGREES = 0.0625;
+	public static final int NI = 1377;
+	public static final int NJ = 657;
 	public static final int SCAN_MODE = 0x40;
 	public static final RegularLatLonGrid GRID = new RegularLatLonGrid(GRID_ID, LA1, LO1, RESOLUTION_DEGREES, NI, NJ);
 	public static final GridDefinition DEFINITION = new GridDefinition(0, LA1, LO1, RESOLUTION_DEGREES, RESOLUTION_DEGREES,
 			NI, NJ, SCAN_MODE);
 
-	/** Tolerance for comparing a file's grid against the definition — GRIB stores micro-degrees, the library floats. */
 	static final double TOLERANCE = 1e-4;
 
-	private IconD2Grid() {
+	private IconEuGrid() {
 	}
 
-	/** Whether a file's grid is this grid. */
 	public static boolean matches(GridDefinition grid) {
 		return DEFINITION.nearlyEquals(requireNonNull(grid, "grid"), TOLERANCE);
 	}

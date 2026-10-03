@@ -83,7 +83,7 @@ and 2:
 | M.9 | **`ingest`** — a polling job per `WeatherProvider` (conditional requests make frequent polls cheap), persisted `SourceState`, results through `WeatherDataSink.replace`, exponential backoff on transport failures, `IngestControl` with status and `runNow` | M | **done 2026-10-03** — `OPS-6`, `OPS-7` (no jitter yet) |
 | M.10 | **In-process service** — report by site id, plus the first reading helpers (timeline per kind across datasets, newest issue per product) | S | `INT-12` in its cheapest form |
 | M.11 | **`provider.dwd.sis`** — NetCDF-3 through the wrap, 0.05° cell resolver on the shared `RegularLatLonGrid`; the 15-minute analysis as the first *stream* (`Delivery.STREAM`, appended), the hourly +18 h forecast as issues | M | **done 2026-10-03** — high-cadence global radiation |
-| M.12 | **`provider.dwd.uv`** — GRIB2, health forecasts | S | completes the quantity set |
+| M.12 | **`provider.dwd.uv`** — GRIB2 through the shared `org.gecko.weather.grib2` bundle (reader and a writer for tests, split out of ICON-D2), ICON-EU grid, three daily maxima a day | S | **done 2026-10-04** — completes the quantity set |
 | M.13 | **`runtime` + `shell`** — Configurator defaults, `launch.bndrun` (Felix, Gogo, Fennec EMF), `smoke.bndrun` as the end-to-end proof against the real DWD (exit 0 iff a fresh site has temperatures, sun positions and days), Gogo commands in the `weather` scope | M | **done 2026-10-03** — `OPS-5`; the volume is documented in the runtime README |
 | M.14 | Offline fixtures: ~~ICON-D2 `.grib2`~~ (done: `clct` and a four-record `aswdir_s` step, plus a synthetic GRIB2 writer on the ICON-D2 grid), SIS `.nc`, ~~MOSMIX `.kmz`~~ (done, with a station catalogue) | M | `DEV-6`, `QR-6` |
 | M.15 | **`wrap.ucar`** — cdm-core + grib as one bundle in this workspace, Unidata repository in `cnf` (was 0.8) | M | **done 2026-10-03** — `M-14`, unblocks M.5 |
@@ -315,10 +315,18 @@ ICON-D2 now uses too. One thing the files taught, recorded in
 radiation. A report for one site now holds MOSMIX_L (three stations), ICON-D2, SIS and SISfc datasets
 side by side.
 
-**Next:** the UV index (M.12, GRIB2 on the ICON-EU grid — the reader exists, the grid is new), then
-`05-architecture-target.md`, which still describes a `compute.fusion` layer and is the next document
-to re-cut. `IngestScheduler` stays single-threaded on purpose (a slow source must not fan out); a
-~50 s ICON run delaying the polls behind it is accepted for now.
+**M.12, the UV index, is done (2026-10-04, the sixth provider):** `provider.dwd.uv` reads the daily
+`UVI_MAX_CL` file on the ICON-EU grid; the GRIB2 reader moved into its own bundle
+(`org.gecko.weather.grib2`, with a `Grib2Writer` for synthetic test files) so that ICON-D2 and UV
+share it without one provider depending on the other. The quantity set of the MVP is complete:
+cloud cover by layer, direct/diffuse/global radiation, UV index — gridded; temperature, wind and the
+rest station-only from MOSMIX.
+
+**Next:** `05-architecture-target.md`, which still describes a `compute.fusion` layer and is the
+next document to re-cut; then the long-run observations (see the runtime README) decide whether the
+~1 GB resident set after an ICON run needs a heap cap or a smaller decode buffer. `IngestScheduler`
+stays single-threaded on purpose (a slow source must not fan out); a ~50 s ICON run delaying the
+polls behind it is accepted for now.
 
 Still open, none of it blocking: `M-10` (archive retention, needs `Q-B`), `M-11` (which reading helpers),
 `M-16` (several stations per site by default?), the UV product's exact grid, and how long each DWD

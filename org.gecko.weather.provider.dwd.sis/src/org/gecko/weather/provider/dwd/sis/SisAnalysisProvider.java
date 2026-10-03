@@ -35,7 +35,6 @@ import java.util.TreeMap;
 
 import org.gecko.weather.api.spi.FetchException;
 import org.gecko.weather.api.spi.FetchRequest;
-import org.gecko.weather.api.spi.FetchRequest.SiteBindings;
 import org.gecko.weather.api.spi.FetchResult;
 import org.gecko.weather.api.spi.RegularGridBindingResolver;
 import org.gecko.weather.api.spi.RegularLatLonGrid.Cell;
@@ -46,7 +45,6 @@ import org.gecko.weather.model.weather.GridBinding;
 import org.gecko.weather.model.weather.MeasurementKind;
 import org.gecko.weather.model.weather.Origin;
 import org.gecko.weather.model.weather.Quality;
-import org.gecko.weather.model.weather.SourceBinding;
 import org.gecko.weather.model.weather.SourceDataset;
 import org.gecko.weather.model.weather.Statistic;
 import org.gecko.weather.provider.dwd.sis.SisDatasets.ProductInfo;

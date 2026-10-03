@@ -50,6 +50,8 @@ import org.gecko.weather.api.spi.RegularLatLonGrid.Cell;
 import org.gecko.weather.api.spi.SiteBindingResolver;
 import org.gecko.weather.api.spi.SourceState;
 import org.gecko.weather.api.spi.WeatherProvider;
+import org.gecko.weather.grib2.Grib2Field;
+import org.gecko.weather.grib2.Grib2Reader;
 import org.gecko.weather.model.weather.GridBinding;
 import org.gecko.weather.model.weather.MeasurementKind;
 import org.gecko.weather.model.weather.Origin;

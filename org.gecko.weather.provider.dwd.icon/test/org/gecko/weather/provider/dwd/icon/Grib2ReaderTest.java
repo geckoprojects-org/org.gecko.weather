@@ -24,6 +24,8 @@ import java.util.List;
 
 import org.gecko.weather.api.spi.FetchException;
 import org.gecko.weather.api.spi.RegularLatLonGrid.Cell;
+import org.gecko.weather.grib2.Grib2Field;
+import org.gecko.weather.grib2.Grib2Reader;
 import org.junit.jupiter.api.Test;
 
 /**

@@ -9,6 +9,7 @@ Bundle-Description: WeatherProvider for DWD ICON-D2 regular-lat-lon single-level
 	org.gecko.weather.model;version=snapshot,\
 	org.gecko.weather.api;version=snapshot,\
 	org.gecko.weather.transport;version=snapshot,\
+	org.gecko.weather.grib2;version=snapshot,\
 	org.gecko.ucar.netcdf;version=snapshot,\
 	org.osgi.service.metatype.annotations;version=latest
 

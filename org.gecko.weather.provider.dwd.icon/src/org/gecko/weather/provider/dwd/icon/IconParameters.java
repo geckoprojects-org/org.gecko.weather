@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.gecko.weather.api.spi.FetchException;
+import org.gecko.weather.grib2.Grib2Field;
 import org.gecko.weather.model.weather.Level;
 import org.gecko.weather.model.weather.MeasurementKind;
 import org.gecko.weather.model.weather.Statistic;
