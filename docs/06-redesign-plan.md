@@ -73,7 +73,7 @@ and 2:
 | # | Increment | Effort | Delivers |
 | --- | --- | --- | --- |
 | M.1 | **Model** — `org.gecko.weather.model`: `Site` with bindings, `WeatherReport` with one `SourceDataset` per product, `MeasuredValue` with qualifiers, `Provenance`, `Uncertainty`, `DayInfo`; `java.time` data types via conversion delegate; plain-JUnit XMI round trip. Spec in [10-model.md](10-model.md) | M | **done 2026-10-03** — `INT-5`, `INT-6`, `INT-7`, `QR-11` |
-| M.2 | **`api`** — `SiteRegistry` (register, update, remove, list; ids), `WeatherReportService` (report by site id, reading helpers), `SolarService`; SPI: provider, transport, decoder, mapper, binding resolver, `WeatherRepository` | M | `DEV-1`, `DEV-3`, `INT-1`, `INT-12` |
+| M.2 | **`api`** — `SiteRegistry` (register with id, assign, rebind, deactivate, remove), `WeatherService` (report, **values of one kind or a `ValueQuery`** — e.g. only temperature, only UV — timeline, archive; all by site id), `Reports`, `SolarService`, `WeatherRepository`; SPI: `WeatherProvider.fetch` once per product for all sites, `SiteBindingResolver` ([ADR-0003](adr/0003-provider-spi.md) revision) | M | **done 2026-10-03** — `DEV-1`, `INT-1`, `INT-12` |
 | M.3 | **`repository.file`** — configurable folder: `sites/`, `reports/`, `archive/`, `catalogs/` as XMI; dataset replace + archive on refresh | M | `OPS-1`, and the precondition for `INT-17` |
 | M.4 | **`site`** — registry over the repository, automatic binding resolution with distance plus manual override, `dataCompleteFrom` | M | `INT-1` |
 | M.5 | **`provider.dwd.icon`** — conditional-GET transport, **GRIB2 decoder** over the wrap, cell resolver by index arithmetic on plain lat/lon, de-averaging for `aswdir_s`/`aswdifd_s` | **L** | `INT-3`, `OPS-9`; the largest item |
@@ -228,19 +228,20 @@ green), and the workspace runs bnd 7.4.0 release. The `DEV-5` question from the 
 unchanged and still not blocking: the first mapper can be hand-written against the model and the
 mechanism chosen when the second provider needs the same metadata.
 
-**Next is M.2, the `api` bundle**, in this order:
+**M.2, the `api` bundle, is done** (same day): `SiteRegistry`, `WeatherService` with `ValueQuery`
+("only temperature", "only UV", any window, any subset of products), `Reports`, `WeatherRepository`,
+`SolarService`, and the SPI re-cut to one `WeatherProvider.fetch` per product and run for all bound
+sites ([ADR-0003](adr/0003-provider-spi.md) revision). 9 plain-JUnit tests.
 
-1. `SiteRegistry` and `WeatherReportService` — the consumer-facing interfaces, keyed by site id, with
-   the first reading helpers (timeline per kind across datasets, newest issue per product).
-2. `WeatherRepository` — the narrow persistence boundary: load/save site, load/save report, archive
-   dataset, load/save catalogue. Designed so that `repository.file` (M.3) is trivial and a Fennec
-   persistence or `emf.search` implementation is possible.
-3. The provider SPI — transport, decoder, mapper, binding resolver — sized by what MOSMIX (M.6) needs,
-   not by what GRIB2 might need.
+**Next is M.3, `repository.file`**: the XMI folder (`sites/`, `reports/`, `archive/`, `catalogs/`) behind
+`WeatherRepository`, configurable root via Configuration Admin, detached copies on load, append-only
+archive with `evictArchive`. Plain-JUnit against a temp folder; the `java.time` delegate must be
+registered before the first XMI write (see the model README).
 
-Then M.3 (`repository.file`), M.7 (`solar.time4j`, `time4j-base` 5.9.4 is an OSGi bundle and carries
-`SunPosition`/`SolarTime`; add `net.time4j:time4j-base:5.9.4` to `central.mvn`), M.4 (`site`), M.6
-(MOSMIX, which proves the SPI), M.15 (the UCAR wrap), M.5 (ICON-D2).
+Then M.7 (`solar.time4j`, `time4j-base` 5.9.4 is an OSGi bundle and carries `SunPosition`/`SolarTime`;
+add `net.time4j:time4j-base:5.9.4` to `central.mvn`), M.4 (`site` + the `WeatherService`
+implementation over the repository), M.6 (MOSMIX, the first provider, with a shared HTTP transport
+helper), M.15 (the UCAR wrap), M.5 (ICON-D2), M.9 (ingest runtime).
 
 Still open, none of it blocking: `M-10` (archive retention, needs `Q-B`), `M-11` (which reading helpers),
 `M-16` (several stations per site by default?), the UV product's exact grid, and how long each DWD

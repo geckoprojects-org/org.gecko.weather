@@ -158,3 +158,31 @@ window precisely so it need not. Everywhere else, load the document if the docum
 - **MOSMIX_S, if it is ever used.** KML via `ecore.xmi` is settled and fine for per-station files. A
   single file containing every station is a different volume question and would need measuring before it
   is loaded whole. Not an MVP concern — MOSMIX_L is per station.
+
+## Revision 2026-10-03 — one fetch per product and run, not four orchestrated interfaces
+
+Still `Proposed`, so revised in place. The four extension points above assumed the ingest runtime
+orchestrates transport → decoder → mapper per request and per site. That shape made the common case
+awkward: an all-stations MOSMIX_S file or an ICON-D2 field is published **once per product**, and the
+efficient thing is to download it once and extract every bound site's stations or cells from it — not
+to run a per-site pipeline that downloads the same bytes again.
+
+What `org.gecko.weather.api.spi` actually exports:
+
+- **`WeatherProvider.fetch(FetchRequest) → FetchResult`** — one call per product and run, handed
+  *every* bound site with its bindings and the previous `SourceState` (ETag / Last-Modified per URI).
+  Returns `Unchanged` or `Fetched(datasets by site, new state, skipped counts)`. The provider owns how
+  it gets there.
+- **`SiteBindingResolver`** — unchanged in role: nearest stations or cell by index arithmetic,
+  automatic and manual.
+
+Transport, decoding and mapping are **provider internals**, not SPI. The reasons the four interfaces
+were introduced still hold and are met differently: conditional requests are structural through
+`SourceState` and the `Unchanged` result; decoders are tested offline because providers are built
+from plain classes over fixtures (`DEV-6`), not because the runtime calls a `SourceDecoder`; the HTTP
+transport with unwrapping is written once as a shared helper and reused, which needs no interface in
+the API. Subset-on-ingest ([ADR-0010](0010-subset-on-ingest.md)) is carried by the bindings in the
+request: a gridded provider reads exactly those cells.
+
+Cost: a provider that ignores the efficiency rule and fetches per site is not prevented by the type
+system, only by review. Accepted — the alternative prevented the efficient implementation instead.

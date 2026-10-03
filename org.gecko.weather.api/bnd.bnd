@@ -1,0 +1,12 @@
+Bundle-Name: Gecko Weather API
+Bundle-Description: Consumer-facing services (site registry, weather service with report and value \
+	queries by site id), the repository boundary, the solar service and the provider SPI. \
+	Provider-neutral; no vendor name appears in any type.
+
+-library: enableEMF
+
+-buildpath: \
+	org.gecko.weather.model;version=snapshot
+
+-testpath: \
+	assertj-core;version=latest
