@@ -205,6 +205,10 @@ class MosmixProviderTest {
 
 		assertThat(result).isInstanceOf(FetchResult.Unchanged.class);
 		assertThat(requested).containsExactly(ERFURT_URI);
+
+		// a site named unconditional is served even though the validators would say 304
+		FetchResult again = provider.fetch(new FetchRequest(List.of(new SiteBindings(weimar, List.of(binding))), known, NOW, java.util.Set.of("weimar")));
+		assertThat(again).isInstanceOf(FetchResult.Fetched.class);
 	}
 
 	@Test

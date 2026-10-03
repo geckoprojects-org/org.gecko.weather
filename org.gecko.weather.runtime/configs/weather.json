@@ -1,0 +1,22 @@
+{
+	":configurator:resource-version": 1,
+
+	"org.gecko.weather.repository.file": {
+		"root": "data/weather"
+	},
+
+	"org.gecko.weather.core": {
+		"defaultTimeZone": "Europe/Berlin",
+		"maxStationBindings": 3,
+		"solarStep": "PT1H",
+		"streamWindow": "P7D"
+	},
+
+	"org.gecko.weather.ingest": {
+		"pollInterval": "PT20M",
+		"initialDelay": "PT10S"
+	},
+
+	"org.gecko.weather.provider.dwd.mosmix": {
+	}
+}

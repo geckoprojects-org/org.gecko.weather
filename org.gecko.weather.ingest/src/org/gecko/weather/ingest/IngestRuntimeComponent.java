@@ -40,7 +40,7 @@ import org.osgi.service.metatype.annotations.Designate;
  * @author Mark Hoffmann
  * @since 03.10.2026
  */
-@Component(name = IngestRuntimeComponent.PID, service = IngestControl.class)
+@Component(name = IngestRuntimeComponent.PID)
 @Designate(ocd = IngestConfig.class)
 public class IngestRuntimeComponent implements IngestControl {
 

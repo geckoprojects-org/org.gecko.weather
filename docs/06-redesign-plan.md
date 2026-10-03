@@ -84,7 +84,7 @@ and 2:
 | M.10 | **In-process service** — report by site id, plus the first reading helpers (timeline per kind across datasets, newest issue per product) | S | `INT-12` in its cheapest form |
 | M.11 | **`provider.dwd.sis`** — NetCDF decoder, 0.05° cell resolver | M | high-cadence global radiation |
 | M.12 | **`provider.dwd.uv`** — GRIB2, health forecasts | S | completes the quantity set |
-| M.13 | **`config` + `runtime`** — Configurator defaults, bndrun, documented volume | M | `OPS-5`, `QR-12` |
+| M.13 | **`runtime` + `shell`** — Configurator defaults, `launch.bndrun` (Felix, Gogo, Fennec EMF), `smoke.bndrun` as the end-to-end proof against the real DWD (exit 0 iff a fresh site has temperatures, sun positions and days), Gogo commands in the `weather` scope | M | **done 2026-10-03** — `OPS-5`; the volume is documented in the runtime README |
 | M.14 | Offline fixtures: ICON-D2 `.grib2`, SIS `.nc`, ~~MOSMIX `.kmz`~~ (done, with a station catalogue) | M | `DEV-6`, `QR-6` |
 | M.15 | **`wrap.ucar`** — cdm-core + grib as one bundle in this workspace, Unidata repository in `cnf` (was 0.8) | M | `M-14`, unblocks M.5 |
 
@@ -248,16 +248,39 @@ coordinates as degrees and minutes (`50.59` = 50°59′), which the old implemen
 and KML coordinates are `lon,lat`, which it read the other way round. 83 plain-JUnit tests across
 seven bundles.
 
-**M.9, the ingest runtime, is done** (same day): `ProviderJob` + `IngestScheduler` + DS component,
-`SourceStateRecord` in the model and `state/` in the repository, `IngestControl` in the API. The
-MOSMIX decoder was also switched from StAX to the Fennec KML/pointforecast EMF models (MOSMIX_L only).
+**M.9 and M.13 are done** (same day). **The first end-to-end run against the real DWD is green:**
+`smoke.bndrun` registers a site in Dresden, binds three MOSMIX stations (0.5 / 4.1 / 8.5 km), fetches
+their KMZ, and the report holds three MOSMIX datasets side by side (8 472 values each — 17.7 °C,
+17.8 °C, 18.5 °C for the same hour), the solar dataset and 11 days; the second run in the same folder
+fetches with saved ETags. Exit criteria **2** (datasets per source with provenance, solar per
+timestep), **5** (conditional requests, verified in unit tests and visible in `state/`) and the
+in-process access are demonstrated; **1** waits for ICON-D2, **3** (restart → identical report) is
+covered by the repository tests but not yet shown end to end.
 
-**Next is M.13, the `runtime` bundle** — the first end-to-end run against DWD: Configurator JSON
-(repository `root`, the MOSMIX provider configuration), `launch.bndrun` with Felix, Gogo shell and the
-Fennec EMF runtime, resolve it, register a site from the shell (a small Gogo command set over
-`SiteRegistry`/`WeatherService`/`IngestControl` is worth the hour), `runNow`, and read the report back.
-That is MVP exit criteria 1–3 and 5 demonstrated for MOSMIX. Then M.15 (UCAR wrap) and M.5 (ICON-D2)
-for the gridded half.
+Three things the run taught, all fixed:
+
+- **A dataset is identified by provider, product and location.** With three bound stations, "one
+  dataset per product" replaced itself three times; `Reports.sourceKey` now includes the station or
+  cell, and the report carries one dataset per bound station.
+- **Sites registered before a provider exists must heal.** The ingest job rebinds sites without a
+  binding for its product on every run, and fetches unconditionally for sites that have no dataset
+  yet — change detection is per URL, and an "unchanged" answer would otherwise mean no data for a new
+  site until the next publication.
+- **DS, bnd and Gogo details** worth remembering: dynamic references by method, never fields; a
+  `-include`d bndrun overrides the including one unless written `~file`; a bundle with
+  `@GogoCommand` requires Gogo at resolve time (hence a separate `shell` bundle); the launcher's
+  `main.thread` `Callable` must be a named class returning `Integer`.
+
+**Measured:** a report with three MOSMIX_L datasets is a **14 MB XMI** — provenance per value, as
+ADR-0011 accepted, costs roughly 550 bytes per value. Fine for a handful of sites; `R-7` is now a
+number rather than a guess, and the first lever is per-dataset provenance defaults or a compact
+serialisation, not a model change. Also open: Felix reports "Error ungetting service" for the
+prototype `ResourceSet` on shutdown — harmless, probably stop order, to be raised with Fennec EMF.
+
+**Next is M.15 + M.5, the gridded half:** the UCAR cdm-core + grib wrap in this workspace, then
+`provider.dwd.icon` — the GRIB2 decoder over the wrap, cell resolver by index arithmetic on the plain
+lat/lon grid, de-averaging of `aswdir_s`/`aswdifd_s`, one download per parameter and step serving all
+sites' cells. That is exit criterion 1, the claim the whole redesign is about.
 
 Still open, none of it blocking: `M-10` (archive retention, needs `Q-B`), `M-11` (which reading helpers),
 `M-16` (several stations per site by default?), the UV product's exact grid, and how long each DWD
@@ -289,7 +312,7 @@ week of re-reading**. Two cheap habits, treated as part of the work rather than 
 | R-4 | Subset-on-ingest is irreversible: a site added later has no history, and sources rarely allow retrospective retrieval. | New sites are permanently poorer than old ones for accuracy analysis. | Best-effort backfill at registration and a recorded `dataCompleteFrom` (`OPS-16`). Documented as a known cost in [ADR-0010](adr/0010-subset-on-ingest.md), not hidden. |
 | R-5 | File-based repository insufficient once `Q-B` retention and `Q-C` site count are answered. | Repository replacement mid-project. | The `WeatherRepository` interface is the boundary; swapping the implementation touches one bundle. Answer `Q-B`/`Q-C` before sizing the raw record. |
 | R-6 | Greenfield abandonment: the `sunorcloud` branch stalls while the old one remains in production. | Two half-systems to maintain. | The old branches are untouched and keep running until the MVP demonstrably beats them. No migration commitment before then ([07-migration.md](07-migration.md)). |
-| R-7 | Kind-keyed values create many small EMF objects; creation cost at volume. | Ingest or query latency. | Subset-on-ingest keeps volumes tiny — order of 1,500 values per site per run. Measure once ICON-D2 ingest runs rather than optimising speculatively. |
+| R-7 | Kind-keyed values with per-value provenance are many small EMF objects. **Measured 2026-10-03: 8 472 values per MOSMIX_L station, ~550 bytes each in XMI, 14 MB per site with three stations.** | Report write time and disk per refresh; ICON-D2 adds 48 h × 6 parameters per cell. | Tolerable for a handful of sites. Levers in order: provenance defaults at dataset level with per-value overrides, a compact resource format (binary EMF or zipped XMI), then a backend. Decide after ICON-D2 is in. |
 | R-8 | GRIB2 streaming decode is harder than NetCDF and may need a further library with its own OSGi packaging problems. | **Now on the critical path, not in Slice 3.5.** | **The original mitigation is void.** It relied on NetCDF proving the streaming SPI first, but `Q-I` showed ICON-D2 (GRIB2) is the primary source and it goes first ([09-source-inventory.md](09-source-inventory.md)). Replacement: prove the SPI on a non-gridded source — MOSMIX KML or the station catalogue — so the GRIB2 decoder validates only GRIB2. Establish first whether one library covers GRIB2 *and* NetCDF. See [08-mvp.md](08-mvp.md). |
 | R-9 | Single maintainer; bus factor of one. | Project stops entirely. | Documentation-as-deliverable, ADRs capturing *why*, offline-runnable tests. This dossier is part of the mitigation. |
 | R-10 | Model evolution: adding a `MeasurementKind` or changing `Provenance` affects stored data. | Migration burden on every model release. | Repository stores a model version per record; upgrade path documented (`OPS-13`) before the first breaking model change, not after. |

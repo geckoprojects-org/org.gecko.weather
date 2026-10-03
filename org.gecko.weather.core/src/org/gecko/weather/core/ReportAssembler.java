@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.gecko.weather.api.Reports;
 import org.gecko.weather.api.UnknownSiteException;
 import org.gecko.weather.api.WeatherConstants;
 import org.gecko.weather.api.repository.WeatherRepository;
@@ -37,7 +38,9 @@ import org.gecko.weather.model.weather.WeatherReport;
  * change, refreshes the computed solar part over the new horizon, saves. Per site, changes are
  * serialised; one file per site makes that enough.
  * <p>
- * {@code replace} archives the dataset it replaces. {@code append} keeps a rolling window per
+ * A dataset is identified by provider, product <em>and</em> location: a site bound to three MOSMIX
+ * stations holds three MOSMIX datasets side by side, and a refresh replaces each by its own
+ * station. {@code replace} archives the dataset it replaces. {@code append} keeps a rolling window per
  * streaming product and drops what falls out of it <em>without</em> archiving — a file per minute
  * would be noise, and the forecast history {@code INT-17} asks for is in the replaced issues. Noted
  * as an open point in the plan.
@@ -149,9 +152,9 @@ public class ReportAssembler implements WeatherDataSink {
 		});
 	}
 
+	/** Same provider, product and location (station or cell) — see {@link Reports#sourceKey}. */
 	private static Optional<SourceDataset> find(WeatherReport report, SourceDataset like) {
-		return report.getDatasets().stream().filter(d -> d.getProviderId().equals(like.getProviderId())
-				&& d.getProductId().equals(like.getProductId())).findFirst();
+		return report.getDatasets().stream().filter(d -> Reports.sameSource(d, like)).findFirst();
 	}
 
 	private Site requireSite(String siteId) {

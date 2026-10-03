@@ -139,6 +139,26 @@ class ReportsTest {
 	}
 
 	@Test
+	void sourceKeyDistinguishesStationsAndCells() {
+		SourceDataset other = dataset("MOSMIX_L", Origin.STATION, MOSMIX_ISSUE, Duration.ofHours(6));
+		mosmix.setStationId("10487");
+		other.setStationId("O457");
+		assertThat(Reports.sameSource(mosmix, other)).isFalse();
+		other.setStationId("10487");
+		assertThat(Reports.sameSource(mosmix, other)).isTrue();
+		assertThat(Reports.sourceKey(mosmix)).isEqualTo("dwd/MOSMIX_L@10487");
+		org.gecko.weather.model.weather.GridCell cell = F.createGridCell();
+		cell.setGridId("icon-d2");
+		cell.setI(884);
+		cell.setJ(394);
+		icon.setCell(cell);
+		assertThat(Reports.sourceKey(icon)).isEqualTo("dwd/ICON-D2@icon-d2:884,394");
+		report.getDatasets().add(other);
+		assertThat(Reports.datasets(report, "dwd", "MOSMIX_L")).hasSize(2);
+		assertThat(Reports.dataset(report, "dwd", "MOSMIX_L", "O457")).isEmpty();
+	}
+
+	@Test
 	void datasetLookupDayAndHorizon() {
 		assertThat(Reports.dataset(report, "dwd", "ICON-D2")).contains(icon);
 		assertThat(Reports.dataset(report, "dwd", "SIS")).isEmpty();

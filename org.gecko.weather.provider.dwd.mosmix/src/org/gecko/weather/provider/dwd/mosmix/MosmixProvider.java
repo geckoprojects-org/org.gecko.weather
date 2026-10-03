@@ -165,7 +165,9 @@ public class MosmixProvider implements WeatherProvider {
 		for (Map.Entry<String, List<Target>> e : targets.entrySet()) {
 			String stationId = e.getKey();
 			URI uri = settings.kmzUri(stationId);
-			ByteSource.Result result = source.fetch(uri, state.entity(uri));
+			// a site without data for this station needs the file even if nothing changed
+			boolean unconditional = request.isUnconditional(e.getValue().stream().map(Target::siteId).toList());
+			ByteSource.Result result = source.fetch(uri, unconditional ? java.util.Optional.empty() : state.entity(uri));
 			if (result instanceof ByteSource.Unchanged) {
 				continue;
 			}

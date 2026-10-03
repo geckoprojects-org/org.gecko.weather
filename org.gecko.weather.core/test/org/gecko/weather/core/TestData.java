@@ -148,8 +148,12 @@ final class TestData {
 		return 2 * r * Math.asin(Math.sqrt(h));
 	}
 
-	/** A forecast dataset of one kind with hourly values from {@code issuedAt} for {@code hours}. */
+	/** A forecast dataset of one kind with hourly values from {@code issuedAt} for {@code hours}, station 10488. */
 	static SourceDataset forecast(String productId, Instant issuedAt, int hours, MeasurementKind kind, double base) {
+		return forecast(productId, issuedAt, hours, kind, base, "10488");
+	}
+
+	static SourceDataset forecast(String productId, Instant issuedAt, int hours, MeasurementKind kind, double base, String stationId) {
 		SourceDataset d = F.createSourceDataset();
 		d.setProviderId("dwd");
 		d.setProductId(productId);
@@ -157,7 +161,7 @@ final class TestData {
 		d.setRetrievedAt(issuedAt.plusSeconds(120));
 		d.setExpectedRefresh(Duration.ofHours(6));
 		d.setOrigin(Origin.STATION);
-		d.setStationId("10488");
+		d.setStationId(stationId);
 		d.setHorizonStart(issuedAt);
 		d.setHorizonEnd(issuedAt.plus(Duration.ofHours(hours)));
 		for (int h = 0; h <= hours; h++) {

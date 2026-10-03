@@ -117,6 +117,28 @@ class ReportAssemblerTest {
 	}
 
 	@Test
+	void oneProductAtThreeStationsIsThreeDatasets() {
+		sink.replace("home", TestData.forecast("MOSMIX_L", ISSUE_1, 24, MeasurementKind.AIR_TEMPERATURE, 10, "10487"));
+		sink.replace("home", TestData.forecast("MOSMIX_L", ISSUE_1, 24, MeasurementKind.AIR_TEMPERATURE, 11, "O457"));
+		sink.replace("home", TestData.forecast("MOSMIX_L", ISSUE_1, 24, MeasurementKind.AIR_TEMPERATURE, 12, "O458"));
+		// a new issue of one station replaces that station only
+		sink.replace("home", TestData.forecast("MOSMIX_L", ISSUE_2, 24, MeasurementKind.AIR_TEMPERATURE, 13, "O457"));
+
+		WeatherReport report = repo.loadReport("home").orElseThrow();
+		List<SourceDataset> mosmix = Reports.datasets(report, "dwd", "MOSMIX_L");
+		assertThat(mosmix).extracting(SourceDataset::getStationId).containsExactly("10487", "O458", "O457");
+		assertThat(Reports.dataset(report, "dwd", "MOSMIX_L", "O457").orElseThrow().getIssuedAt()).isEqualTo(ISSUE_2);
+		assertThat(Reports.dataset(report, "dwd", "MOSMIX_L", "10487").orElseThrow().getIssuedAt()).isEqualTo(ISSUE_1);
+		assertThat(weather.archive("home", "dwd", "MOSMIX_L", Instant.EPOCH, Instant.MAX))
+				.singleElement().satisfies(d -> assertThat(d.getStationId()).isEqualTo("O457"));
+		// three temperature curves for the same hour, one per station — before O457's new issue starts, two
+		assertThat(Reports.valuesAt(report, MeasurementKind.AIR_TEMPERATURE, ISSUE_1.plus(Duration.ofHours(3))))
+				.extracting(v -> v.getProvenance().getStationId()).containsExactlyInAnyOrder("10487", "O458");
+		assertThat(Reports.valuesAt(report, MeasurementKind.AIR_TEMPERATURE, ISSUE_2.plus(Duration.ofHours(12))))
+				.extracting(v -> v.getProvenance().getStationId()).containsExactlyInAnyOrder("10487", "O458", "O457");
+	}
+
+	@Test
 	void valuesAcrossSourcesStayPerSource() {
 		sink.replace("home", TestData.forecast("MOSMIX_L", ISSUE_1, 48, MeasurementKind.AIR_TEMPERATURE, 10));
 		sink.append("home", TestData.observation(ISSUE_1.plus(Duration.ofHours(6)), 15.5));

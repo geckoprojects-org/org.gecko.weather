@@ -94,7 +94,12 @@ class ProviderJobTest {
 
 		@Override
 		public Site rebind(String siteId) {
-			throw new UnsupportedOperationException();
+			rebound.add(siteId);
+			Site site = get(siteId).orElseThrow();
+			if (rebindable.contains(siteId)) {
+				site.getBindings().add(binding());
+			}
+			return site;
 		}
 
 		@Override
@@ -112,6 +117,9 @@ class ProviderJobTest {
 			throw new UnsupportedOperationException();
 		}
 	};
+
+	private final List<String> rebound = new ArrayList<>();
+	private final Set<String> rebindable = new java.util.HashSet<>();
 
 	private final WeatherDataSink sink = new WeatherDataSink() {
 		@Override
@@ -153,6 +161,8 @@ class ProviderJobTest {
 
 		assertThat(requests).hasSize(1);
 		assertThat(requests.get(0).sites()).extracting(sb -> sb.site().getId()).containsExactly("home");
+		assertThat(requests.get(0).unconditional()).as("no report yet → must be fetched regardless of state").containsExactly("home");
+		assertThat(rebound).as("the unbound active site was offered a rebind, the inactive one not").containsExactly("unbound");
 		assertThat(requests.get(0).state()).isEqualTo(SourceState.EMPTY);
 		assertThat(replaced).containsExactly("home:MOSMIX_L@" + T0.minusSeconds(3600));
 		IngestStatus status = job.status();
@@ -168,9 +178,20 @@ class ProviderJobTest {
 		assertThat(repo.loadSourceState("dwd", "MOSMIX_L")).isPresent();
 		assertThat(SourceStates.fromRecord(repo.loadSourceState("dwd", "MOSMIX_L").orElseThrow()).entity(URI_A))
 				.map(SourceState.Entity::etag).contains(Optional.of("\"v1\""));
+		// the site still has no report in the repository (the recording sink stores nothing) → still unconditional
 		ProviderJob restarted = new ProviderJob(provider, registry, sink, repo, IngestSettings.DEFAULTS, clock);
 		restarted.run();
 		assertThat(requests.get(1).state().entity(URI_A)).isPresent();
+		assertThat(requests.get(1).unconditional()).containsExactly("home");
+
+		// once the report holds a dataset for the bound station, the fetch may be conditional
+		org.gecko.weather.model.weather.WeatherReport report = F.createWeatherReport();
+		report.setSiteId("home");
+		report.setGeneratedAt(T0);
+		report.getDatasets().add(withStation(dataset(T0), "10488"));
+		repo.saveReport(report);
+		restarted.run();
+		assertThat(requests.get(2).unconditional()).isEmpty();
 	}
 
 	@Test
@@ -236,7 +257,22 @@ class ProviderJobTest {
 		}), registry, sink, repo, IngestSettings.DEFAULTS, clock);
 		job.run();
 		assertThat(requests).isEmpty();
+		assertThat(rebound).containsExactly("unbound");
 		assertThat(job.status().lastSuccess()).contains(T0);
+	}
+
+	@Test
+	void aSiteRegisteredBeforeTheProviderIsBoundOnFirstSight() {
+		sites.clear();
+		sites.add(site("late", true, false));
+		rebindable.add("late");
+		List<FetchRequest> requests = new ArrayList<>();
+		ProviderJob job = new ProviderJob(provider(r -> {
+			requests.add(r);
+			return new FetchResult.Unchanged();
+		}), registry, sink, repo, IngestSettings.DEFAULTS, clock);
+		job.run();
+		assertThat(requests).singleElement().satisfies(r -> assertThat(r.sites()).extracting(sb -> sb.site().getId()).containsExactly("late"));
 	}
 
 	@Test
@@ -327,17 +363,29 @@ class ProviderJobTest {
 		site.setPosition(p);
 		site.setTimeZone("Europe/Berlin");
 		if (bound) {
-			StationBinding b = F.createStationBinding();
-			b.setProviderId("dwd");
-			b.setProductId("MOSMIX_L");
-			b.setOrigin(BindingOrigin.AUTOMATIC);
-			Station s = F.createStation();
-			s.setId("10488");
-			s.setPosition(p);
-			b.setStation(s);
-			site.getBindings().add(b);
+			site.getBindings().add(binding());
 		}
 		return site;
+	}
+
+	private static StationBinding binding() {
+		StationBinding b = F.createStationBinding();
+		b.setProviderId("dwd");
+		b.setProductId("MOSMIX_L");
+		b.setOrigin(BindingOrigin.AUTOMATIC);
+		Station s = F.createStation();
+		s.setId("10488");
+		GeoPosition p = F.createGeoPosition();
+		p.setLatitude(51.13);
+		p.setLongitude(13.75);
+		s.setPosition(p);
+		b.setStation(s);
+		return b;
+	}
+
+	private static SourceDataset withStation(SourceDataset d, String stationId) {
+		d.setStationId(stationId);
+		return d;
 	}
 
 	private static SourceDataset dataset(Instant issuedAt) {

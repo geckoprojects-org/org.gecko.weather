@@ -22,11 +22,14 @@ import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.gecko.weather.api.IngestControl.IngestStatus;
+import org.gecko.weather.api.Reports;
 import org.gecko.weather.api.SiteRegistry;
 import org.gecko.weather.api.UnknownSiteException;
 import org.gecko.weather.api.repository.WeatherRepository;
@@ -38,9 +41,12 @@ import org.gecko.weather.api.spi.SourceState;
 import org.gecko.weather.api.spi.SourceStates;
 import org.gecko.weather.api.spi.WeatherDataSink;
 import org.gecko.weather.api.spi.WeatherProvider;
+import org.gecko.weather.model.weather.GridBinding;
 import org.gecko.weather.model.weather.Site;
 import org.gecko.weather.model.weather.SourceBinding;
 import org.gecko.weather.model.weather.SourceDataset;
+import org.gecko.weather.model.weather.StationBinding;
+import org.gecko.weather.model.weather.WeatherReport;
 
 /**
  * One ingest run of one product, and the bookkeeping between runs. Plain Java, no threads: the
@@ -163,7 +169,8 @@ public class ProviderJob {
 			LOG.log(Level.DEBUG, "[{0}/{1}] no active site is bound to this product", providerId(), productId());
 			return Outcome.NOTHING_TO_DO;
 		}
-		FetchResult result = provider.fetch(new FetchRequest(bound, state, now));
+		Set<String> unconditional = sitesWithoutData(bound);
+		FetchResult result = provider.fetch(new FetchRequest(bound, state, now, unconditional));
 		if (result instanceof FetchResult.Unchanged) {
 			LOG.log(Level.DEBUG, "[{0}/{1}] unchanged", providerId(), productId());
 			return Outcome.UNCHANGED;
@@ -190,20 +197,71 @@ public class ProviderJob {
 		return Outcome.CHANGED;
 	}
 
-	/** Active sites with their bindings for this product; sites without one are left out. */
+	/**
+	 * Active sites with their bindings for this product. A site without one — registered before
+	 * this provider existed, or before its catalogue was loaded — is rebound once per run, so the
+	 * system heals itself instead of waiting for an operator; a site the product does not cover
+	 * stays unbound and is left out.
+	 */
 	private List<SiteBindings> boundSites() {
 		List<SiteBindings> result = new ArrayList<>();
 		for (Site site : sites.list()) {
 			if (!site.isActive()) {
 				continue;
 			}
-			List<SourceBinding> bindings = site.getBindings().stream()
-					.filter(b -> providerId().equals(b.getProviderId()) && productId().equals(b.getProductId())).toList();
+			List<SourceBinding> bindings = bindingsFor(site);
+			if (bindings.isEmpty()) {
+				try {
+					site = sites.rebind(site.getId());
+					bindings = bindingsFor(site);
+					if (!bindings.isEmpty()) {
+						LOG.log(Level.INFO, "[{0}/{1}] bound site {2} on first sight", providerId(), productId(), site.getId());
+					}
+				} catch (RuntimeException e) {
+					LOG.log(Level.WARNING, "[{0}/{1}] cannot rebind site {2}: {3}", providerId(), productId(), site.getId(), e.toString());
+				}
+			}
 			if (!bindings.isEmpty()) {
 				result.add(new SiteBindings(site, bindings));
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * Sites that lack a dataset for at least one of their bindings of this product — their sources
+	 * must be fetched even if unchanged, or they would wait for the next publication.
+	 */
+	private Set<String> sitesWithoutData(List<SiteBindings> bound) {
+		Set<String> result = new HashSet<>();
+		for (SiteBindings sb : bound) {
+			Optional<WeatherReport> report = repository.loadReport(sb.site().getId());
+			for (SourceBinding b : sb.bindings()) {
+				boolean covered = report.isPresent() && Reports.datasets(report.get(), providerId(), productId()).stream()
+						.anyMatch(d -> coveredBy(d, b));
+				if (!covered) {
+					result.add(sb.site().getId());
+					break;
+				}
+			}
+		}
+		return result;
+	}
+
+	private static boolean coveredBy(SourceDataset dataset, SourceBinding binding) {
+		if (binding instanceof StationBinding s) {
+			return s.getStation().getId().equals(dataset.getStationId());
+		}
+		if (binding instanceof GridBinding g && dataset.getCell() != null) {
+			return g.getCell().getGridId().equals(dataset.getCell().getGridId()) && g.getCell().getI() == dataset.getCell().getI()
+					&& g.getCell().getJ() == dataset.getCell().getJ();
+		}
+		return false;
+	}
+
+	private List<SourceBinding> bindingsFor(Site site) {
+		return site.getBindings().stream()
+				.filter(b -> providerId().equals(b.getProviderId()) && productId().equals(b.getProductId())).toList();
 	}
 
 }

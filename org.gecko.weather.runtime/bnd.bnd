@@ -1,0 +1,15 @@
+Bundle-Name: Gecko Weather Runtime
+Bundle-Description: Deployment glue: the Configurator defaults for a local run and the smoke run \
+	that proves the chain against the real DWD. No shell — that is org.gecko.weather.shell.
+
+-library: enableEMF
+
+-buildpath: \
+	org.gecko.weather.model;version=snapshot,\
+	org.gecko.weather.api;version=snapshot
+
+# Configurator JSON for the local launch; production replaces this bundle's configuration.
+-includeresource: \
+	OSGI-INF/configurator/=configs/
+Require-Capability: \
+	osgi.extender;filter:='(osgi.extender=osgi.configurator)'

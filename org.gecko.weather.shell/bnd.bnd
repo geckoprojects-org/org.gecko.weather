@@ -1,0 +1,10 @@
+Bundle-Name: Gecko Weather Shell
+Bundle-Description: Gogo shell commands in the weather scope over the site registry, weather service \
+	and ingest control. Separate from the runtime so that a headless launch carries no shell.
+
+-library: enableEMF
+
+-buildpath: \
+	org.gecko.weather.model;version=snapshot,\
+	org.gecko.weather.api;version=snapshot,\
+	org.apache.felix.gogo.runtime;version=latest

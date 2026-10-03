@@ -37,7 +37,7 @@ The model is [`org.gecko.weather.model`](10-model.md), **done 2026-10-03**.
 
 | # | Decision | Status |
 | --- | --- | --- |
-| M-1 | **Datasets per source, archived on refresh.** The report is the present; the archive is the history. Nothing is merged. | revised 2026-10-03, [ADR-0013](adr/0013-values-per-source.md) |
+| M-1 | **Datasets per source — provider, product and station or cell — archived on refresh.** The report is the present; the archive is the history. Nothing is merged. | revised 2026-10-03, [ADR-0013](adr/0013-values-per-source.md) |
 | M-2 | **Full provenance per value** — provider, product, model run, issue time, station or grid cell, distance. | unchanged |
 | M-3 | The central entity is **`Site`**, not `Geolocation`. A site *has* a position. | unchanged |
 | M-4 | A station is **resolved automatically** (nearest, distance recorded); an explicit assignment **overrides**. Several stations per product may be bound, ranked. | unchanged |

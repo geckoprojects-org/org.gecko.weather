@@ -55,12 +55,40 @@ public final class Reports {
 	private Reports() {
 	}
 
-	/** The dataset of one product, if the report has one. */
-	public static Optional<SourceDataset> dataset(WeatherReport report, String providerId, String productId) {
+	/**
+	 * What makes a dataset distinct within a report: provider, product and the location it was read
+	 * at — a point product bound to three stations yields three datasets. A refresh replaces the
+	 * dataset with the same key.
+	 */
+	public static String sourceKey(SourceDataset dataset) {
+		requireNonNull(dataset, "dataset");
+		String location = dataset.getStationId() != null ? dataset.getStationId()
+				: dataset.getCell() != null ? dataset.getCell().getGridId() + ":" + dataset.getCell().getI() + "," + dataset.getCell().getJ()
+				: "";
+		return dataset.getProviderId() + "/" + dataset.getProductId() + "@" + location;
+	}
+
+	/** Whether two datasets are the same source: same provider, product and location. */
+	public static boolean sameSource(SourceDataset a, SourceDataset b) {
+		return sourceKey(a).equals(sourceKey(b));
+	}
+
+	/** The datasets of one product — one per bound station or cell — in rank order of the report. */
+	public static List<SourceDataset> datasets(WeatherReport report, String providerId, String productId) {
 		requireNonNull(report, "report");
 		return report.getDatasets().stream()
-				.filter(d -> providerId.equals(d.getProviderId()) && productId.equals(d.getProductId()))
-				.findFirst();
+				.filter(d -> providerId.equals(d.getProviderId()) && productId.equals(d.getProductId())).toList();
+	}
+
+	/** The first dataset of one product, if the report has one. For several stations use {@link #datasets}. */
+	public static Optional<SourceDataset> dataset(WeatherReport report, String providerId, String productId) {
+		return datasets(report, providerId, productId).stream().findFirst();
+	}
+
+	/** The dataset of one product read at one station. */
+	public static Optional<SourceDataset> dataset(WeatherReport report, String providerId, String productId, String stationId) {
+		requireNonNull(stationId, "stationId");
+		return datasets(report, providerId, productId).stream().filter(d -> stationId.equals(d.getStationId())).findFirst();
 	}
 
 	/** Every value of a kind, from every dataset, in {@link #TIMELINE_ORDER}. */
