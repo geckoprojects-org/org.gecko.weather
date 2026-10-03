@@ -24,7 +24,7 @@ wins for now and the other document is the thing to correct.
 5. **Persistence is a configurable local folder of XMI files** — sites, reports, archive, station
    catalogues — behind a narrow `WeatherRepository` interface, so that the Fennec persistence layer
    (Mongo, JPA) or a Lucene index can be added without touching the rest.
-6. **Solar position and day events** per site via Time4J: sunrise, sunset, twilight, solar noon per
+6. **Solar position and day events** per site via the NREL SPA algorithm (`solarpositioning`, MIT): sunrise, sunset, twilight, solar noon per
    day; elevation and azimuth per timestep.
 7. **Fetchers** retrieve each source with **conditional GET and bounded retry**, map it into the model
    and hand it to the repository.

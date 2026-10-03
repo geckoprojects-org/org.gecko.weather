@@ -35,7 +35,7 @@ import org.gecko.weather.model.weather.Quality;
 import org.gecko.weather.model.weather.SourceDataset;
 import org.gecko.weather.model.weather.WeatherReport;
 import org.gecko.weather.repository.file.XmiFolderRepository;
-import org.gecko.weather.solar.time4j.Time4jSolarService;
+import org.gecko.weather.solar.SpaSolarService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -65,7 +65,7 @@ class ReportAssemblerTest {
 		Clock clock = Clock.fixed(NOW, ZoneOffset.UTC);
 		new SiteRegistryImpl(repo, List::of, CoreSettings.DEFAULTS, clock)
 				.register(SiteRegistration.of("Home roof", 51.05, 13.74).withId("home").withElevation(118));
-		sink = new ReportAssembler(repo, new SolarDatasets(new Time4jSolarService(clock)), CoreSettings.DEFAULTS, clock);
+		sink = new ReportAssembler(repo, new SolarDatasets(new SpaSolarService(clock)), CoreSettings.DEFAULTS, clock);
 		weather = new WeatherServiceImpl(repo);
 	}
 

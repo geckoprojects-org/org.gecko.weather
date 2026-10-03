@@ -11,7 +11,7 @@
  * Contributors:
  *     Data In Motion - initial API and implementation
  */
-package org.gecko.weather.solar.time4j;
+package org.gecko.weather.solar;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
@@ -34,12 +34,13 @@ import org.junit.jupiter.api.Test;
 /**
  * Checked against geometry rather than against another library: the noon elevation is
  * {@code 90° − |φ − δ|} (latitude minus solar declination), the noon azimuth is south, day lengths
- * at the solstices are well known, and polar day and night are unambiguous.
+ * at the solstices are well known, and polar day and night are unambiguous. The same assertions held
+ * for the Time4J implementation this one replaced.
  *
  * @author Mark Hoffmann
  * @since 03.10.2026
  */
-class Time4jSolarServiceTest {
+class SpaSolarServiceTest {
 
 	private static final Instant NOW = Instant.parse("2026-10-03T06:00:00Z");
 	private static final ZoneId BERLIN = ZoneId.of("Europe/Berlin");
@@ -53,7 +54,7 @@ class Time4jSolarServiceTest {
 	/** Cape Town: 33.93° S, 18.42° E. */
 	private static final GeoPosition CAPE_TOWN = position(-33.93, 18.42, 0);
 
-	private final Time4jSolarService service = new Time4jSolarService(Clock.fixed(NOW, ZoneOffset.UTC));
+	private final SpaSolarService service = new SpaSolarService(Clock.fixed(NOW, ZoneOffset.UTC));
 
 	@Test
 	void noonElevationFollowsDeclinationAndAzimuthIsSouth() {
@@ -117,7 +118,8 @@ class Time4jSolarServiceTest {
 	void southernHemisphereNoonIsNorth() {
 		DayInfo day = service.dayInfo(CAPE_TOWN, LocalDate.of(2026, 6, 21), ZoneId.of("Africa/Johannesburg"));
 		SolarPosition atNoon = service.positionAt(CAPE_TOWN, day.getSolarNoon());
-		assertThat(atNoon.azimuth()).isCloseTo(0, within(1.0)); // or 360 — Time4J normalises to [0, 360)
+		double fromNorth = Math.min(atNoon.azimuth(), 360 - atNoon.azimuth());
+		assertThat(fromNorth).isLessThan(1.0);
 		assertThat(day.getMaxSunElevation()).isCloseTo(90 - (33.93 + 23.44), within(0.3));
 	}
 
@@ -153,7 +155,7 @@ class Time4jSolarServiceTest {
 		assertThat(day.getProvenance().getProductId()).isEqualTo("solar");
 		assertThat(day.getProvenance().getIssuedAt()).isEqualTo(NOW);
 		assertThat(day.getProvenance().getDistanceMeters()).isZero();
-		assertThat(day.getProvenance().getDerivation().getFunctionId()).isEqualTo(Time4jSolarService.FUNCTION_DAY_EVENTS);
+		assertThat(day.getProvenance().getDerivation().getFunctionId()).isEqualTo(SpaSolarService.FUNCTION_DAY_EVENTS);
 		assertThat(day.getProvenance().getDerivation().getInputs())
 				.containsExactly("lat=51.05", "lon=13.74", "elevation=118.0", "date=2026-10-03", "zone=Europe/Berlin");
 	}

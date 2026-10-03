@@ -1,0 +1,14 @@
+Bundle-Name: Gecko Weather Solar
+Bundle-Description: SolarService over the NREL SPA algorithm (net.e175.klaus:solarpositioning, MIT): \
+	sun elevation and azimuth at an instant, day events (sunrise, sunset, twilight, solar noon, \
+	day length) for a civil date in the site's time zone.
+
+-library: enableEMF
+
+-buildpath: \
+	org.gecko.weather.model;version=snapshot,\
+	org.gecko.weather.api;version=snapshot,\
+	solarpositioning-osgi;version=latest
+
+-testpath: \
+	assertj-core;version=latest

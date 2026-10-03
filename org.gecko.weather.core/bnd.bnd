@@ -12,6 +12,6 @@ Bundle-Description: SiteRegistry, WeatherService and WeatherDataSink over the re
 # plain-JUnit tests run the core against the real file repository and the real solar service
 -testpath: \
 	org.gecko.weather.repository.file;version=snapshot,\
-	org.gecko.weather.solar.time4j;version=snapshot,\
-	time4j-base;version=latest,\
+	org.gecko.weather.solar;version=snapshot;packages=*,\
+	solarpositioning-osgi;version=latest,\
 	assertj-core;version=latest

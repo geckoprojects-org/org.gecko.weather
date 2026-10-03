@@ -57,7 +57,7 @@ the cell 640 m away and 75 % from the station 8.9 km away, and decides
   retry, no backoff, no health signal, no metrics. → `F-9`, `F-10`
 
 The redesign is a **greenfield rebuild on the `sunorcloud` branch** that keeps what is good — EMF/Ecore
-as single source of truth, the DWD decoding knowledge, the SIS spike, Time4J for solar geometry — and
+as single source of truth, the DWD decoding knowledge, the SIS spike — and
 rebuilds the structure around the site, with durable storage, sparse grid access and traceable values.
 
 The platform moved with it: what was the Gecko OSGi stack is now **Eclipse Fennec**, since GeckoEMF was
@@ -105,7 +105,7 @@ an energy tool, which it is not.
 - **European coverage is a design constraint, not a deliverable.** Provider-neutral model, canonical
   kinds, transport separated from decoding; no second national provider is built.
 - **Gridded data is core.** Subset-on-ingest: only the cells registered sites need.
-- **Solar geometry is core**, via Time4J: day events per day, elevation and azimuth per timestep.
+- **Solar geometry is core**, via the NREL SPA algorithm (`solarpositioning`, MIT): day events per day, elevation and azimuth per timestep. Time4J was dropped for its LGPL licence.
 - **Lineage and uncertainty from the first slice.** Provenance cannot be retrofitted.
 - **Libraries that need OSGi-fication are wrapped in this workspace** and moved out later. Nothing waits
   upstream.
