@@ -37,7 +37,6 @@ import org.gecko.weather.model.weather.SourceDataset;
 import org.gecko.weather.model.weather.WeatherReport;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
@@ -52,7 +51,7 @@ import org.osgi.service.metatype.annotations.Designate;
  * @author Mark Hoffmann
  * @since 03.10.2026
  */
-@Component(name = WeatherCoreComponent.PID, configurationPolicy = ConfigurationPolicy.OPTIONAL)
+@Component(name = WeatherCoreComponent.PID)
 @Designate(ocd = CoreConfig.class)
 public class WeatherCoreComponent implements SiteRegistry, WeatherService, WeatherDataSink {
 

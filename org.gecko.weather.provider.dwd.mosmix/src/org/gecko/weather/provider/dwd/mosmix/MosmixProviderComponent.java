@@ -45,11 +45,15 @@ import org.osgi.service.metatype.annotations.Designate;
  * with the service properties {@code weather.provider.id=dwd} and {@code weather.product.id} set
  * from the product. The station catalogue is taken from the repository when fresh enough, otherwise
  * fetched and stored — the one thing a provider writes to the repository, and only a catalogue.
+ * <p>
+ * Configuration is <b>required</b>: a provider talks to a third-party server on a schedule and
+ * decides which product a deployment ingests. That is the operator's call, made in configuration,
+ * not a side effect of a bundle being present.
  *
  * @author Mark Hoffmann
  * @since 03.10.2026
  */
-@Component(name = MosmixProviderComponent.PID, configurationPolicy = ConfigurationPolicy.OPTIONAL, property = {
+@Component(name = MosmixProviderComponent.PID, configurationPolicy = ConfigurationPolicy.REQUIRE, property = {
 		WeatherConstants.PROVIDER_ID + "=" + MosmixProvider.PROVIDER_ID })
 @Designate(ocd = MosmixConfig.class)
 public class MosmixProviderComponent implements WeatherProvider {

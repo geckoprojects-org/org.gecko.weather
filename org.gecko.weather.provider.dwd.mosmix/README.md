@@ -15,7 +15,9 @@ SPI without library risk: KMZ over HTTP, a StAX parser, a mapping table.
 
 ## Configuration
 
-PID `org.gecko.weather.provider.dwd.mosmix`, optional — defaults give MOSMIX_L from DWD Open Data.
+PID `org.gecko.weather.provider.dwd.mosmix`, **required** — a provider fetches from a third-party
+server on a schedule; which products a deployment ingests is the operator's decision, made in
+configuration. An empty configuration gives MOSMIX_L from DWD Open Data.
 
 | Key | Default | Meaning |
 | --- | --- | --- |
