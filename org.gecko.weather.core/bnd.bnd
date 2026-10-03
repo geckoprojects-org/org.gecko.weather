@@ -1,0 +1,17 @@
+Bundle-Name: Gecko Weather Core
+Bundle-Description: SiteRegistry, WeatherService and WeatherDataSink over the repository: site \
+	registration with ranked bindings, report assembly (replace and append), the computed solar dataset.
+
+-library: enableEMF
+
+-buildpath: \
+	org.gecko.weather.model;version=snapshot,\
+	org.gecko.weather.api;version=snapshot,\
+	org.osgi.service.metatype.annotations;version=latest
+
+# plain-JUnit tests run the core against the real file repository and the real solar service
+-testpath: \
+	org.gecko.weather.repository.file;version=snapshot,\
+	org.gecko.weather.solar.time4j;version=snapshot,\
+	time4j-base;version=latest,\
+	assertj-core;version=latest
