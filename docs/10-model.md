@@ -129,7 +129,7 @@ is no cross-document EMF reference, so each file loads on its own.
 | `WeatherReport` | Everything currently known for one site | One per site. `generatedAt` is the last write. |
 | `SourceDataset` | What one product currently provides, from one issue | Replaced whole when the product publishes anew; the superseded one is archived by the repository. `expectedRefresh` is the product's cadence (MOSMIX_S `PT1H`, MOSMIX_L `PT6H`, ICON-D2 `PT3H`, SIS `PT15M`) so a consumer can judge staleness without product knowledge. `horizonStart`/`horizonEnd` bound the values. |
 | `MeasuredValue` | One quantity, one instant, one source | See qualifiers below. `value` is unsettable: unset for coded kinds and for timesteps the source left empty (MOSMIX has gaps). `code` carries coded kinds. |
-| `Provenance` | Where the value came from | `issuedAt` is mandatory: two values for the same `validAt` from the same product differ in issue time, and the newer is presumably better. `origin` distinguishes `STATION`, `GRID_CELL`, `COMPUTED`, `ADHOC`. `licence`/`attribution` travel with the data (`QR-11`). |
+| `Provenance` | Where the value came from | `issuedAt` is mandatory: two values for the same `validAt` from the same product differ in issue time, and the newer is presumably better. `origin` distinguishes `STATION` (a weather service's network station), `GRID_CELL`, `COMPUTED`, `ADHOC` and `LOCAL_STATION` (a station the operator runs at the site — Bresser, Ecowitt; observations, pushed in). `licence`/`attribution` travel with the data (`QR-11`). |
 | `Derivation` | How a `COMPUTED` value was produced | `functionId` names function and version (`solar.position/time4j-5.9`); `inputs` are descriptors sufficient to recompute. |
 | `Uncertainty` | How much to trust the value | `quality` is a coarse class; the facts sit beside it: `spatialMeters` (distance carried, or half a cell), `temporalOffset` (when interpolated in time), `leadTime` (`validAt − issuedAt`), `stale` (dataset older than `expectedRefresh`). No calibrated error bar is pretended. |
 | `DayInfo` | Solar day events for one date at the site | Sunrise, sunset, civil and nautical twilight, solar noon, day length, maximum elevation. Computed from coordinates, no spatial error. Sun elevation and azimuth *per timestep* are not here — they are `MeasuredValue`s of kind `SUN_ELEVATION`/`SUN_AZIMUTH` in a `COMPUTED` dataset, so they align with the forecast values. |
@@ -220,16 +220,29 @@ with the backend question answered for the MVP; the `WeatherRepository` boundary
 persistence layer or a Lucene index as later options):
 
 ```
-<root>/                                   configurable, default ./data/weather
+<root>/                                   configurable, default data/weather
   sites/<siteId>.xmi                      Site
   reports/<siteId>.xmi                    WeatherReport — current dataset per product
-  archive/<siteId>/<provider>_<product>_<issuedAt>.xmi
+  archive/<siteId>/<providerId>/<productId>/<yyyyMMddTHHmmssZ>.xmi
                                           superseded SourceDataset, append-only
-  catalogs/<provider>_<product>.xmi       StationCatalog
+  catalogs/<providerId>/<productId>.xmi   StationCatalog
 ```
 
-One file per site means one writer per site: no locking across sites, and a write is proportional to
-one report. The archive is the history; the report is the present.
+Identifiers are percent-encoded into file names; the issue stamp is UTC without colons so it sorts as
+text. One file per site means one writer per site: no locking across sites, and a write is
+proportional to one report. The archive is the history; the report is the present. Implementation:
+[`org.gecko.weather.repository.file`](../org.gecko.weather.repository.file/README.md).
+
+## Own weather stations are a source like any other
+
+A station the operator runs at the site — Bresser, Ecowitt and the like — needs nothing new in the
+model: it is a provider (`providerId=ecowitt`, `productId` the device family), bound to the site
+manually like any station, delivering a `SourceDataset` whose values carry `Quality.OBSERVED` and
+`Origin.LOCAL_STATION`. The difference is in *how* data arrives: pushed by the device's gateway every
+minute instead of fetched every few hours. The API carries that as `WeatherDataSink` — `replace` for
+issues, `append` for streams — and the DWD fetch path goes through the same sink, so report assembly
+and archive are one mechanism. Consumers then see, side by side for 14:00, what the own station
+measured, what the MOSMIX station forecast and what the ICON-D2 cell forecast.
 
 ## What is deliberately not in the model
 

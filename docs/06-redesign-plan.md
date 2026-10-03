@@ -74,12 +74,12 @@ and 2:
 | --- | --- | --- | --- |
 | M.1 | **Model** — `org.gecko.weather.model`: `Site` with bindings, `WeatherReport` with one `SourceDataset` per product, `MeasuredValue` with qualifiers, `Provenance`, `Uncertainty`, `DayInfo`; `java.time` data types via conversion delegate; plain-JUnit XMI round trip. Spec in [10-model.md](10-model.md) | M | **done 2026-10-03** — `INT-5`, `INT-6`, `INT-7`, `QR-11` |
 | M.2 | **`api`** — `SiteRegistry` (register with id, assign, rebind, deactivate, remove), `WeatherService` (report, **values of one kind or a `ValueQuery`** — e.g. only temperature, only UV — timeline, archive; all by site id), `Reports`, `SolarService`, `WeatherRepository`; SPI: `WeatherProvider.fetch` once per product for all sites, `SiteBindingResolver` ([ADR-0003](adr/0003-provider-spi.md) revision) | M | **done 2026-10-03** — `DEV-1`, `INT-1`, `INT-12` |
-| M.3 | **`repository.file`** — configurable folder: `sites/`, `reports/`, `archive/`, `catalogs/` as XMI; dataset replace + archive on refresh | M | `OPS-1`, and the precondition for `INT-17` |
+| M.3 | **`repository.file`** — configurable folder: `sites/`, `reports/`, `archive/<site>/<provider>/<product>/`, `catalogs/` as XMI; atomic writes, append-only archive, `evictArchive` | M | **done 2026-10-03** — `OPS-1`, and the precondition for `INT-17` |
 | M.4 | **`site`** — registry over the repository, automatic binding resolution with distance plus manual override, `dataCompleteFrom` | M | `INT-1` |
 | M.5 | **`provider.dwd.icon`** — conditional-GET transport, **GRIB2 decoder** over the wrap, cell resolver by index arithmetic on plain lat/lon, de-averaging for `aswdir_s`/`aswdifd_s` | **L** | `INT-3`, `OPS-9`; the largest item |
 | M.6 | **`provider.dwd.mosmix`** — KML via `ecore.xmi`, nearest-station resolver. Also the cheap way to prove the SPI before M.5 | M | `F-1`…`F-4` resolved |
 | M.7 | **`solar.time4j`** — `DayInfo` per day, `SUN_ELEVATION`/`SUN_AZIMUTH` per timestep as a `COMPUTED` dataset, site time zone honoured (the old service used the platform zone and returned sunset for sunrise) | S | `INT-4`, resolves `F-18` |
-| M.8 | ~~`compute.merge`~~ **report assembly** — on a product refresh replace that product's dataset, archive the previous one, refresh the solar dataset and `DayInfo` for the horizon | S | `INT-2` as reworded, [ADR-0013](adr/0013-values-per-source.md) |
+| M.8 | ~~`compute.merge`~~ **report assembly = `WeatherDataSink`** — `replace` (new issue: swap the product's dataset, archive the previous) and `append` (streams: rolling window per product, archive in buckets); refresh the solar dataset and `DayInfo` for the horizon; the fetch path and push sources both go through it | M | `INT-2` as reworded, `M-17`, [ADR-0013](adr/0013-values-per-source.md) |
 | M.9 | **`ingest`** — per-provider scheduling, conditional GET, bounded backoff | M | `OPS-6`, `OPS-7` |
 | M.10 | **In-process service** — report by site id, plus the first reading helpers (timeline per kind across datasets, newest issue per product) | S | `INT-12` in its cheapest form |
 | M.11 | **`provider.dwd.sis`** — NetCDF decoder, 0.05° cell resolver | M | high-cadence global radiation |
@@ -164,7 +164,8 @@ Everything valuable that no longer changes the architecture. Order by whichever 
 | 4.5 | **`index.lucene`** — our own integration against the Lucene wraps, `rebuildFrom` the repository | M | `OPS-2`, needed once queries exist |
 | 4.6 | Health endpoint, metrics, jitter, failure isolation, backup/restore, upgrade path, footprint | M | `OPS-3`, `OPS-4`, `OPS-11`, `OPS-13`…`OPS-15` |
 | 4.7 | Resolve `QR-10` / `Q-A`: authentication, or a documented decision to delegate it | S–M | `QR-10` |
-| 4.8 | Site attributes for tilt and azimuth, stage 2 preparation only | S | `INT-16`, `Q-J` |
+| 4.8 | Site attributes for tilt and azimuth, add-on module preparation only | S | `INT-16`, `Q-J` |
+| 4.9 | **First local-station provider** — Ecowitt gateway upload (HTTP POST in the device's format) or Bresser, mapped to canonical kinds, `Origin.LOCAL_STATION`, pushed through `WeatherDataSink.append`; manual binding by device id | M | `M-17`; the own station beside the forecasts |
 
 ## Deferred indefinitely
 
@@ -233,15 +234,18 @@ mechanism chosen when the second provider needs the same metadata.
 `SolarService`, and the SPI re-cut to one `WeatherProvider.fetch` per product and run for all bound
 sites ([ADR-0003](adr/0003-provider-spi.md) revision). 9 plain-JUnit tests.
 
-**Next is M.3, `repository.file`**: the XMI folder (`sites/`, `reports/`, `archive/`, `catalogs/`) behind
-`WeatherRepository`, configurable root via Configuration Admin, detached copies on load, append-only
-archive with `evictArchive`. Plain-JUnit against a temp folder; the `java.time` delegate must be
-registered before the first XMI write (see the model README).
+**M.3, `repository.file`, is done** (same day): `XmiFolderRepository` as plain core, DS component with
+metatype `root`, 12 plain-JUnit tests against a temp folder. Also added the same day: `M-17` — own
+weather stations (Bresser, Ecowitt) are a source like any other; `Origin.LOCAL_STATION` in the model,
+`WeatherDataSink` (`replace` / `append`) in the SPI as the one way data enters a report.
 
-Then M.7 (`solar.time4j`, `time4j-base` 5.9.4 is an OSGi bundle and carries `SunPosition`/`SolarTime`;
-add `net.time4j:time4j-base:5.9.4` to `central.mvn`), M.4 (`site` + the `WeatherService`
-implementation over the repository), M.6 (MOSMIX, the first provider, with a shared HTTP transport
-helper), M.15 (the UCAR wrap), M.5 (ICON-D2), M.9 (ingest runtime).
+**Next is M.7, `solar.time4j`**, because it is small, has no network and gives the first `COMPUTED`
+dataset: `SolarService` over `net.time4j` (`time4j-base` 5.9.4 is an OSGi bundle and carries
+`SunPosition`/`SolarTime`; add `net.time4j:time4j-base:5.9.4` to `central.mvn`), site time zone
+honoured, tested against known values (`V-8`). Then M.4 + M.8 together (`SiteRegistry`,
+`WeatherService`, `WeatherDataSink` over the repository — one `core` bundle), M.6 (MOSMIX, the first
+provider, with a shared HTTP transport helper), M.15 (the UCAR wrap), M.5 (ICON-D2), M.9 (ingest
+runtime).
 
 Still open, none of it blocking: `M-10` (archive retention, needs `Q-B`), `M-11` (which reading helpers),
 `M-16` (several stations per site by default?), the UV product's exact grid, and how long each DWD

@@ -1937,6 +1937,7 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 		addEEnumLiteral(originEEnum, Origin.GRID_CELL);
 		addEEnumLiteral(originEEnum, Origin.COMPUTED);
 		addEEnumLiteral(originEEnum, Origin.ADHOC);
+		addEEnumLiteral(originEEnum, Origin.LOCAL_STATION);
 
 		initEEnum(qualityEEnum, Quality.class, "Quality");
 		addEEnumLiteral(qualityEEnum, Quality.OBSERVED);

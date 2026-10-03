@@ -70,7 +70,20 @@ public enum Origin implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	ADHOC(3, "ADHOC", "ADHOC");
+	ADHOC(3, "ADHOC", "ADHOC"),
+
+	/**
+	 * The '<em><b>LOCAL STATION</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * A weather station the operator runs at or near the site (Bresser, Ecowitt, ...). Observations, not forecasts; pushed into the service rather than fetched. Distinct from STATION, which is a weather service's network station.
+	 * <!-- end-model-doc -->
+	 * @see #LOCAL_STATION_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	LOCAL_STATION(4, "LOCAL_STATION", "LOCAL_STATION");
 
 	/**
 	 * The '<em><b>STATION</b></em>' literal value.
@@ -117,6 +130,20 @@ public enum Origin implements Enumerator {
 	public static final int ADHOC_VALUE = 3;
 
 	/**
+	 * The '<em><b>LOCAL STATION</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * A weather station the operator runs at or near the site (Bresser, Ecowitt, ...). Observations, not forecasts; pushed into the service rather than fetched. Distinct from STATION, which is a weather service's network station.
+	 * <!-- end-model-doc -->
+	 * @see #LOCAL_STATION
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int LOCAL_STATION_VALUE = 4;
+
+	/**
 	 * An array of all the '<em><b>Origin</b></em>' enumerators.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -128,6 +155,7 @@ public enum Origin implements Enumerator {
 			GRID_CELL,
 			COMPUTED,
 			ADHOC,
+			LOCAL_STATION,
 		};
 
 	/**
@@ -188,6 +216,7 @@ public enum Origin implements Enumerator {
 			case GRID_CELL_VALUE: return GRID_CELL;
 			case COMPUTED_VALUE: return COMPUTED;
 			case ADHOC_VALUE: return ADHOC;
+			case LOCAL_STATION_VALUE: return LOCAL_STATION;
 		}
 		return null;
 	}

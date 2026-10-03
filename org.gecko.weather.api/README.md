@@ -7,7 +7,7 @@ The service contracts. Four exported packages, each versioned on its own:
 | `org.gecko.weather.api` | consumers | `SiteRegistry` (register, assign, rebind, deactivate, remove), `WeatherService` (report, values of a kind, `ValueQuery`, timeline, archive — all by site id), `Reports` (the same reads as pure functions over a report you already hold) |
 | `org.gecko.weather.api.repository` | the storage implementation | `WeatherRepository` — sites, reports, append-only archive, catalogues |
 | `org.gecko.weather.api.solar` | consumers and report assembly | `SolarService` — position at an instant, `DayInfo` for a date |
-| `org.gecko.weather.api.spi` | providers | `WeatherProvider` (one `fetch` for all bound sites, returns ready datasets), `SiteBindingResolver`, `FetchRequest`/`FetchResult`/`SourceState` |
+| `org.gecko.weather.api.spi` | providers | `WeatherProvider` (one `fetch` for all bound sites, returns ready datasets), `SiteBindingResolver`, `FetchRequest`/`FetchResult`/`SourceState`, `WeatherDataSink` (how data enters a report — fetched or pushed) |
 
 ## Reading values: never merged
 
@@ -32,6 +32,14 @@ can be shaped per source and tested offline against fixtures. The runtime owns s
 state persistence, report assembly and the archive.
 
 This replaces the four-interface SPI sketched in ADR-0003; the revision is recorded there.
+
+## Pushing data: the same door
+
+`WeatherDataSink` is the runtime's single entry for data into a report. The ingest runtime feeds fetch
+results through `replace` (a new issue swaps the product's dataset and archives the old one). A push
+source — an Ecowitt or Bresser gateway upload, an MQTT subscriber — calls `append` (observations join
+the product's rolling dataset). An own weather station is therefore just another provider, bound to the
+site by device id, with `Origin.LOCAL_STATION` on its values.
 
 ## Tests
 

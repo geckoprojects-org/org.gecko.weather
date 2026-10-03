@@ -156,6 +156,9 @@
       <genEnumLiterals>
         <ecoreEnumLiteral href="weather.ecore#//Origin/ADHOC"/>
       </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//Origin/LOCAL_STATION"/>
+      </genEnumLiterals>
     </genEnums>
     <genEnums typeSafeEnumCompatible="false">
       <ecoreEnum href="weather.ecore#//Quality"/>

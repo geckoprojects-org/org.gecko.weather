@@ -302,6 +302,11 @@
     <eLiterals name="GRID_CELL" value="1"/>
     <eLiterals name="COMPUTED" value="2"/>
     <eLiterals name="ADHOC" value="3"/>
+    <eLiterals name="LOCAL_STATION" value="4">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A weather station the operator runs at or near the site (Bresser, Ecowitt, ...). Observations, not forecasts; pushed into the service rather than fetched. Distinct from STATION, which is a weather service&apos;s network station."/>
+      </eAnnotations>
+    </eLiterals>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Provenance">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">

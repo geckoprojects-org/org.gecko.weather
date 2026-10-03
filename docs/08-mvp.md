@@ -48,6 +48,7 @@ The model is [`org.gecko.weather.model`](10-model.md), **done 2026-10-03**.
 | M-9 | Fetchers do **conditional GET plus bounded retry with backoff**. No health endpoint, no metrics, no jitter. | unchanged |
 | M-14 | **Libraries that need OSGi-fication are wrapped in this workspace** (UCAR cdm-core + grib, anything else that turns up) and moved to a shared place later if they are not already there. Nothing waits upstream. | new 2026-10-03 |
 | M-15 | **Energy-specific computation is an add-on module**, not part of the service. The service stops at meteorological and solar quantities with provenance. | new 2026-10-03 |
+| M-17 | **Own weather stations (Bresser, Ecowitt, …) are a source like any other**: a provider with a manual binding, `Origin.LOCAL_STATION`, observations pushed through `WeatherDataSink.append`. The sink is part of the API now; the first local-station provider is Slice 4. | new 2026-10-03 |
 
 ### Why M-1 and M-2 matter more than they look
 
