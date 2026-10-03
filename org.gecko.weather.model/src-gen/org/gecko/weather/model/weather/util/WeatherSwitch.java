@@ -177,6 +177,18 @@ public class WeatherSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case WeatherPackage.SOURCE_STATE_RECORD: {
+				SourceStateRecord sourceStateRecord = (SourceStateRecord)theEObject;
+				T result = caseSourceStateRecord(sourceStateRecord);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case WeatherPackage.SOURCE_ENTITY: {
+				SourceEntity sourceEntity = (SourceEntity)theEObject;
+				T result = caseSourceEntity(sourceEntity);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -418,6 +430,36 @@ public class WeatherSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseDayInfo(DayInfo object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Source State Record</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Source State Record</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSourceStateRecord(SourceStateRecord object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Source Entity</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Source Entity</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSourceEntity(SourceEntity object) {
 		return null;
 	}
 

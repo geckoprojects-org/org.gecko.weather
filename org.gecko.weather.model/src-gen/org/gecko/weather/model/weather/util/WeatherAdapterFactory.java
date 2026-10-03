@@ -145,6 +145,14 @@ public class WeatherAdapterFactory extends AdapterFactoryImpl {
 				return createDayInfoAdapter();
 			}
 			@Override
+			public Adapter caseSourceStateRecord(SourceStateRecord object) {
+				return createSourceStateRecordAdapter();
+			}
+			@Override
+			public Adapter caseSourceEntity(SourceEntity object) {
+				return createSourceEntityAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -385,6 +393,34 @@ public class WeatherAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createDayInfoAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.gecko.weather.model.weather.SourceStateRecord <em>Source State Record</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.gecko.weather.model.weather.SourceStateRecord
+	 * @generated
+	 */
+	public Adapter createSourceStateRecordAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.gecko.weather.model.weather.SourceEntity <em>Source Entity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.gecko.weather.model.weather.SourceEntity
+	 * @generated
+	 */
+	public Adapter createSourceEntityAdapter() {
 		return null;
 	}
 

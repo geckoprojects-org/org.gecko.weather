@@ -162,6 +162,24 @@ public interface WeatherFactory extends EFactory {
 	DayInfo createDayInfo();
 
 	/**
+	 * Returns a new object of class '<em>Source State Record</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Source State Record</em>'.
+	 * @generated
+	 */
+	SourceStateRecord createSourceStateRecord();
+
+	/**
+	 * Returns a new object of class '<em>Source Entity</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Source Entity</em>'.
+	 * @generated
+	 */
+	SourceEntity createSourceEntity();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

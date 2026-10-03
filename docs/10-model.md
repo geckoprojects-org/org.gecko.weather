@@ -226,6 +226,7 @@ persistence layer or a Lucene index as later options):
   archive/<siteId>/<providerId>/<productId>/<yyyyMMddTHHmmssZ>.xmi
                                           superseded SourceDataset, append-only
   catalogs/<providerId>/<productId>.xmi   StationCatalog
+  state/<providerId>/<productId>.xmi      SourceStateRecord — ingest validators per URL
 ```
 
 Identifiers are percent-encoded into file names; the issue stamp is UTC without colons so it sorts as

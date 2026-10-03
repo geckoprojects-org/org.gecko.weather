@@ -538,5 +538,32 @@
         <ecoreFeature xsi:type="ecore:EReference" href="weather.ecore#//DayInfo/provenance"/>
       </genFeatures>
     </genClasses>
+    <genClasses>
+      <ecoreClass href="weather.ecore#//SourceStateRecord"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//SourceStateRecord/providerId"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//SourceStateRecord/productId"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//SourceStateRecord/updatedAt"/>
+      </genFeatures>
+      <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="weather.ecore#//SourceStateRecord/entities"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="weather.ecore#//SourceEntity"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//SourceEntity/uri"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//SourceEntity/etag"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="weather.ecore#//SourceEntity/lastModified"/>
+      </genFeatures>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

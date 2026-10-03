@@ -207,6 +207,29 @@ class XmiFolderRepositoryTest {
 	}
 
 	@Test
+	void sourceStateRoundTrips() {
+		org.gecko.weather.model.weather.SourceStateRecord state = F.createSourceStateRecord();
+		state.setProviderId("dwd");
+		state.setProductId("MOSMIX_L");
+		state.setUpdatedAt(T0);
+		org.gecko.weather.model.weather.SourceEntity e = F.createSourceEntity();
+		e.setUri("https://opendata.dwd.de/x.kmz");
+		e.setEtag("\"abc\"");
+		e.setLastModified(T0.minusSeconds(60));
+		state.getEntities().add(e);
+		repo.saveSourceState(state);
+
+		assertThat(tmp.resolve("weather/state/dwd/MOSMIX_L.xmi")).isRegularFile();
+		org.gecko.weather.model.weather.SourceStateRecord loaded = repo.loadSourceState("dwd", "MOSMIX_L").orElseThrow();
+		assertThat(loaded.getEntities()).singleElement().satisfies(x -> {
+			assertThat(x.getUri()).isEqualTo("https://opendata.dwd.de/x.kmz");
+			assertThat(x.getEtag()).isEqualTo("\"abc\"");
+			assertThat(x.getLastModified()).isEqualTo(T0.minusSeconds(60));
+		});
+		assertThat(repo.loadSourceState("dwd", "ICON-D2")).isEmpty();
+	}
+
+	@Test
 	void corruptFileIsReportedNotSwallowed() throws IOException {
 		Files.writeString(tmp.resolve("weather/sites/bad.xmi"), "<not xmi");
 		assertThatThrownBy(() -> repo.loadSite("bad")).isInstanceOf(RepositoryException.class).hasMessageContaining("bad.xmi");

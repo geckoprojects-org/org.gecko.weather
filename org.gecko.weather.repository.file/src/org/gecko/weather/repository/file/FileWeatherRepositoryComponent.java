@@ -23,6 +23,7 @@ import org.eclipse.fennec.emf.osgi.constants.EMFNamespaces;
 import org.gecko.weather.api.repository.WeatherRepository;
 import org.gecko.weather.model.weather.Site;
 import org.gecko.weather.model.weather.SourceDataset;
+import org.gecko.weather.model.weather.SourceStateRecord;
 import org.gecko.weather.model.weather.StationCatalog;
 import org.gecko.weather.model.weather.WeatherReport;
 import org.osgi.service.component.annotations.Activate;
@@ -118,6 +119,16 @@ public class FileWeatherRepositoryComponent implements WeatherRepository {
 	@Override
 	public void saveCatalog(StationCatalog catalog) {
 		delegate.saveCatalog(catalog);
+	}
+
+	@Override
+	public Optional<SourceStateRecord> loadSourceState(String providerId, String productId) {
+		return delegate.loadSourceState(providerId, productId);
+	}
+
+	@Override
+	public void saveSourceState(SourceStateRecord state) {
+		delegate.saveSourceState(state);
 	}
 
 }

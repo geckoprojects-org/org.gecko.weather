@@ -80,7 +80,7 @@ and 2:
 | M.6 | **`provider.dwd.mosmix`** — station catalogue (degrees-and-minutes trap fixed), nearest-station resolver, one KMZ per bound station with conditional requests, decode through the Fennec `net.opengis.kml.model` + `de.dwd.cdc.forecast.model` EMF models (MOSMIX_L only — the all-stations file would need a streaming decoder), ~60 elements mapped to canonical kinds; plus **`transport`** (JDK HttpClient, 304, zip/gzip) | M | **done 2026-10-03** — `F-1`…`F-4` resolved, SPI proven |
 | M.7 | **`solar`** — `SolarService` over NREL SPA (`net.e175.klaus:solarpositioning`, MIT, OSGi bundle; replaced Time4J, LGPL, on 2026-10-03): position per instant, `DayInfo` per civil date in the site's zone (the old service used the platform zone and returned sunset for sunrise); the per-timestep `COMPUTED` dataset is assembled in M.8 | S | **done 2026-10-03** — `INT-4`, `V-8`, resolves `F-18` |
 | M.8 | ~~`compute.merge`~~ **report assembly = `WeatherDataSink`** — `replace` (new issue: swap the product's dataset, archive the previous) and `append` (streams: rolling window per product, archive in buckets); refresh the solar dataset and `DayInfo` for the horizon; the fetch path and push sources both go through it | M | `INT-2` as reworded, `M-17`, [ADR-0013](adr/0013-values-per-source.md) |
-| M.9 | **`ingest`** — per-provider scheduling, conditional GET, bounded backoff | M | `OPS-6`, `OPS-7` |
+| M.9 | **`ingest`** — a polling job per `WeatherProvider` (conditional requests make frequent polls cheap), persisted `SourceState`, results through `WeatherDataSink.replace`, exponential backoff on transport failures, `IngestControl` with status and `runNow` | M | **done 2026-10-03** — `OPS-6`, `OPS-7` (no jitter yet) |
 | M.10 | **In-process service** — report by site id, plus the first reading helpers (timeline per kind across datasets, newest issue per product) | S | `INT-12` in its cheapest form |
 | M.11 | **`provider.dwd.sis`** — NetCDF decoder, 0.05° cell resolver | M | high-cadence global radiation |
 | M.12 | **`provider.dwd.uv`** — GRIB2, health forecasts | S | completes the quantity set |
@@ -248,14 +248,16 @@ coordinates as degrees and minutes (`50.59` = 50°59′), which the old implemen
 and KML coordinates are `lon,lat`, which it read the other way round. 83 plain-JUnit tests across
 seven bundles.
 
-**Next is M.9, the ingest runtime** — the piece that turns the bundles into a running service: per
-`WeatherProvider` a scheduled job on `expectedRefresh`, collecting the active sites' bindings for that
-product, `fetch` with the persisted `SourceState`, results through `WeatherDataSink.replace`, bounded
-exponential backoff on `IOException`, no retry on `FetchException` until the next schedule, per-value
-`skipped` counts to the log. `SourceState` persistence belongs in the repository (one more small
-method pair) so a restart does not re-download everything. Then M.13 (`runtime`: Configurator JSON
-with the repository root, a `launch.bndrun`, first end-to-end run against DWD), then M.15 (UCAR wrap)
-and M.5 (ICON-D2).
+**M.9, the ingest runtime, is done** (same day): `ProviderJob` + `IngestScheduler` + DS component,
+`SourceStateRecord` in the model and `state/` in the repository, `IngestControl` in the API. The
+MOSMIX decoder was also switched from StAX to the Fennec KML/pointforecast EMF models (MOSMIX_L only).
+
+**Next is M.13, the `runtime` bundle** — the first end-to-end run against DWD: Configurator JSON
+(repository `root`, the MOSMIX provider configuration), `launch.bndrun` with Felix, Gogo shell and the
+Fennec EMF runtime, resolve it, register a site from the shell (a small Gogo command set over
+`SiteRegistry`/`WeatherService`/`IngestControl` is worth the hour), `runNow`, and read the report back.
+That is MVP exit criteria 1–3 and 5 demonstrated for MOSMIX. Then M.15 (UCAR wrap) and M.5 (ICON-D2)
+for the gridded half.
 
 Still open, none of it blocking: `M-10` (archive retention, needs `Q-B`), `M-11` (which reading helpers),
 `M-16` (several stations per site by default?), the UV product's exact grid, and how long each DWD

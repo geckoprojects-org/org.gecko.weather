@@ -43,6 +43,8 @@ import org.gecko.weather.model.weather.Quality;
 import org.gecko.weather.model.weather.Site;
 import org.gecko.weather.model.weather.SourceBinding;
 import org.gecko.weather.model.weather.SourceDataset;
+import org.gecko.weather.model.weather.SourceEntity;
+import org.gecko.weather.model.weather.SourceStateRecord;
 import org.gecko.weather.model.weather.Station;
 import org.gecko.weather.model.weather.StationBinding;
 import org.gecko.weather.model.weather.StationCatalog;
@@ -170,6 +172,20 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 	 * @generated
 	 */
 	private EClass dayInfoEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass sourceStateRecordEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass sourceEntityEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1460,6 +1476,96 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getSourceStateRecord() {
+		return sourceStateRecordEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSourceStateRecord_ProviderId() {
+		return (EAttribute)sourceStateRecordEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSourceStateRecord_ProductId() {
+		return (EAttribute)sourceStateRecordEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSourceStateRecord_UpdatedAt() {
+		return (EAttribute)sourceStateRecordEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSourceStateRecord_Entities() {
+		return (EReference)sourceStateRecordEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getSourceEntity() {
+		return sourceEntityEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSourceEntity_Uri() {
+		return (EAttribute)sourceEntityEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSourceEntity_Etag() {
+		return (EAttribute)sourceEntityEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSourceEntity_LastModified() {
+		return (EAttribute)sourceEntityEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getBindingOrigin() {
 		return bindingOriginEEnum;
 	}
@@ -1705,6 +1811,17 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 		createEAttribute(dayInfoEClass, DAY_INFO__MAX_SUN_ELEVATION);
 		createEReference(dayInfoEClass, DAY_INFO__PROVENANCE);
 
+		sourceStateRecordEClass = createEClass(SOURCE_STATE_RECORD);
+		createEAttribute(sourceStateRecordEClass, SOURCE_STATE_RECORD__PROVIDER_ID);
+		createEAttribute(sourceStateRecordEClass, SOURCE_STATE_RECORD__PRODUCT_ID);
+		createEAttribute(sourceStateRecordEClass, SOURCE_STATE_RECORD__UPDATED_AT);
+		createEReference(sourceStateRecordEClass, SOURCE_STATE_RECORD__ENTITIES);
+
+		sourceEntityEClass = createEClass(SOURCE_ENTITY);
+		createEAttribute(sourceEntityEClass, SOURCE_ENTITY__URI);
+		createEAttribute(sourceEntityEClass, SOURCE_ENTITY__ETAG);
+		createEAttribute(sourceEntityEClass, SOURCE_ENTITY__LAST_MODIFIED);
+
 		// Create enums
 		bindingOriginEEnum = createEEnum(BINDING_ORIGIN);
 		measurementKindEEnum = createEEnum(MEASUREMENT_KIND);
@@ -1882,6 +1999,17 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 		initEAttribute(getDayInfo_DayLength(), this.getDuration(), "dayLength", null, 0, 1, DayInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDayInfo_MaxSunElevation(), ecorePackage.getEDouble(), "maxSunElevation", null, 0, 1, DayInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDayInfo_Provenance(), this.getProvenance(), null, "provenance", null, 1, 1, DayInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(sourceStateRecordEClass, SourceStateRecord.class, "SourceStateRecord", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getSourceStateRecord_ProviderId(), ecorePackage.getEString(), "providerId", null, 1, 1, SourceStateRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSourceStateRecord_ProductId(), ecorePackage.getEString(), "productId", null, 1, 1, SourceStateRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSourceStateRecord_UpdatedAt(), this.getInstant(), "updatedAt", null, 0, 1, SourceStateRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSourceStateRecord_Entities(), this.getSourceEntity(), null, "entities", null, 0, -1, SourceStateRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(sourceEntityEClass, SourceEntity.class, "SourceEntity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getSourceEntity_Uri(), ecorePackage.getEString(), "uri", null, 1, 1, SourceEntity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSourceEntity_Etag(), ecorePackage.getEString(), "etag", null, 0, 1, SourceEntity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSourceEntity_LastModified(), this.getInstant(), "lastModified", null, 0, 1, SourceEntity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(bindingOriginEEnum, BindingOrigin.class, "BindingOrigin");

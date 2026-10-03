@@ -19,6 +19,7 @@ import java.util.Optional;
 
 import org.gecko.weather.model.weather.Site;
 import org.gecko.weather.model.weather.SourceDataset;
+import org.gecko.weather.model.weather.SourceStateRecord;
 import org.gecko.weather.model.weather.StationCatalog;
 import org.gecko.weather.model.weather.WeatherReport;
 import org.osgi.annotation.versioning.ConsumerType;
@@ -85,5 +86,13 @@ public interface WeatherRepository {
 	Optional<StationCatalog> loadCatalog(String providerId, String productId);
 
 	void saveCatalog(StationCatalog catalog);
+
+	// --- ingest state --------------------------------------------------------------------
+
+	/** The change-detection state the ingest runtime last saved for a product. */
+	Optional<SourceStateRecord> loadSourceState(String providerId, String productId);
+
+	/** Replaces the change-detection state of a product. */
+	void saveSourceState(SourceStateRecord state);
 
 }

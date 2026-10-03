@@ -1,0 +1,15 @@
+Bundle-Name: Gecko Weather Ingest
+Bundle-Description: The ingest runtime: per WeatherProvider a polling job with conditional requests \
+	and persisted change-detection state, results into the WeatherDataSink, bounded backoff, status \
+	and run-now through IngestControl.
+
+-library: enableEMF
+
+-buildpath: \
+	org.gecko.weather.model;version=snapshot,\
+	org.gecko.weather.api;version=snapshot,\
+	org.osgi.service.metatype.annotations;version=latest
+
+-testpath: \
+	org.gecko.weather.repository.file;version=snapshot,\
+	assertj-core;version=latest

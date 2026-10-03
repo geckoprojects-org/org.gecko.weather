@@ -89,6 +89,8 @@ public class WeatherFactoryImpl extends EFactoryImpl implements WeatherFactory {
 			case WeatherPackage.WEATHER_REPORT: return createWeatherReport();
 			case WeatherPackage.SOURCE_DATASET: return createSourceDataset();
 			case WeatherPackage.DAY_INFO: return createDayInfo();
+			case WeatherPackage.SOURCE_STATE_RECORD: return createSourceStateRecord();
+			case WeatherPackage.SOURCE_ENTITY: return createSourceEntity();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -318,6 +320,28 @@ public class WeatherFactoryImpl extends EFactoryImpl implements WeatherFactory {
 	public DayInfo createDayInfo() {
 		DayInfoImpl dayInfo = new DayInfoImpl();
 		return dayInfo;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SourceStateRecord createSourceStateRecord() {
+		SourceStateRecordImpl sourceStateRecord = new SourceStateRecordImpl();
+		return sourceStateRecord;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SourceEntity createSourceEntity() {
+		SourceEntityImpl sourceEntity = new SourceEntityImpl();
+		return sourceEntity;
 	}
 
 	/**

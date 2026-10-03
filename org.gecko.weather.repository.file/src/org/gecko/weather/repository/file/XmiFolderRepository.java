@@ -46,6 +46,7 @@ import org.gecko.weather.api.repository.WeatherRepository;
 import org.gecko.weather.model.conversion.JavaTimeConversionDelegateFactory;
 import org.gecko.weather.model.weather.Site;
 import org.gecko.weather.model.weather.SourceDataset;
+import org.gecko.weather.model.weather.SourceStateRecord;
 import org.gecko.weather.model.weather.StationCatalog;
 import org.gecko.weather.model.weather.WeatherPackage;
 import org.gecko.weather.model.weather.WeatherReport;
@@ -59,6 +60,7 @@ import org.gecko.weather.model.weather.WeatherReport;
  *   reports/&lt;siteId&gt;.xmi
  *   archive/&lt;siteId&gt;/&lt;providerId&gt;/&lt;productId&gt;/&lt;yyyyMMddTHHmmssZ&gt;.xmi   one per superseded issue
  *   catalogs/&lt;providerId&gt;/&lt;productId&gt;.xmi
+ *   state/&lt;providerId&gt;/&lt;productId&gt;.xmi       SourceStateRecord — the ingest runtime's validators per URL
  * </pre>
  *
  * Identifiers are percent-encoded into file names ({@link FileNames}), so any id works. Writes go to
@@ -76,6 +78,7 @@ public class XmiFolderRepository implements WeatherRepository {
 	private static final String REPORTS = "reports";
 	private static final String ARCHIVE = "archive";
 	private static final String CATALOGS = "catalogs";
+	private static final String STATE = "state";
 
 	private static final Map<Object, Object> SAVE_OPTIONS = Map.of(XMLResource.OPTION_ENCODING, "UTF-8",
 			XMLResource.OPTION_FORMATTED, Boolean.TRUE);
@@ -102,7 +105,7 @@ public class XmiFolderRepository implements WeatherRepository {
 		// EMF caches a missing delegate per data type, so this has to precede the first XMI operation.
 		JavaTimeConversionDelegateFactory.register();
 		try {
-			for (String dir : List.of(SITES, REPORTS, ARCHIVE, CATALOGS)) {
+			for (String dir : List.of(SITES, REPORTS, ARCHIVE, CATALOGS, STATE)) {
 				Files.createDirectories(this.root.resolve(dir));
 			}
 		} catch (IOException e) {
@@ -265,6 +268,23 @@ public class XmiFolderRepository implements WeatherRepository {
 		}
 	}
 
+	// --- ingest state --------------------------------------------------------------------
+
+	@Override
+	public Optional<SourceStateRecord> loadSourceState(String providerId, String productId) {
+		return load(stateFile(providerId, productId), SourceStateRecord.class);
+	}
+
+	@Override
+	public void saveSourceState(SourceStateRecord state) {
+		requireNonNull(state, "state");
+		requireId(state.getProviderId(), "state.providerId");
+		requireId(state.getProductId(), "state.productId");
+		synchronized (lock("state:" + state.getProviderId() + "/" + state.getProductId())) {
+			save(stateFile(state.getProviderId(), state.getProductId()), state);
+		}
+	}
+
 	// --- files ---------------------------------------------------------------------------
 
 	private Path siteFile(String siteId) {
@@ -286,6 +306,12 @@ public class XmiFolderRepository implements WeatherRepository {
 		requireId(providerId, "providerId");
 		requireId(productId, "productId");
 		return archiveDir(siteId).resolve(FileNames.of(providerId)).resolve(FileNames.of(productId));
+	}
+
+	private Path stateFile(String providerId, String productId) {
+		requireId(providerId, "providerId");
+		requireId(productId, "productId");
+		return root.resolve(STATE).resolve(FileNames.of(providerId)).resolve(FileNames.of(productId) + FileNames.XMI);
 	}
 
 	private Path catalogFile(String providerId, String productId) {

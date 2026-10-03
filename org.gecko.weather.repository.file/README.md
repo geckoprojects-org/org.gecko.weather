@@ -10,6 +10,7 @@
                                             superseded SourceDataset, append-only; "-n" suffix if
                                             two share an issue second
   catalogs/<providerId>/<productId>.xmi     StationCatalog
+  state/<providerId>/<productId>.xmi        SourceStateRecord — the ingest runtime's validators per URL
 ```
 
 Identifiers are percent-encoded into file names (`Berlin/Mitte` → `Berlin%2FMitte.xmi`), so any id

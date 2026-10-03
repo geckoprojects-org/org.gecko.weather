@@ -45,7 +45,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * @generated
  */
 @ProviderType
-@EPackage(uri = WeatherPackage.eNS_URI, fingerprint = "fp1:f5ad257535e4fef6530743ee331d9fc9daa14370521fb8d8602b11e3dfeab3be", genModel = "/model/weather.genmodel", genModelSourceLocations = {"model/weather.genmodel","org.gecko.weather.model/model/weather.genmodel"}, ecore = "/model/weather.ecore", ecoreSourceLocations = "/model/weather.ecore")
+@EPackage(uri = WeatherPackage.eNS_URI, fingerprint = "fp1:8e4d744ba820633945789d84a2a5cf061a09bede4982acda808c5adc7cbe80ec", genModel = "/model/weather.genmodel", genModelSourceLocations = {"model/weather.genmodel","org.gecko.weather.model/model/weather.genmodel"}, ecore = "/model/weather.ecore", ecoreSourceLocations = "/model/weather.ecore")
 public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	/**
 	 * The package name.
@@ -1554,6 +1554,125 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	int DAY_INFO_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link org.gecko.weather.model.weather.impl.SourceStateRecordImpl <em>Source State Record</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.gecko.weather.model.weather.impl.SourceStateRecordImpl
+	 * @see org.gecko.weather.model.weather.impl.WeatherPackageImpl#getSourceStateRecord()
+	 * @generated
+	 */
+	int SOURCE_STATE_RECORD = 16;
+
+	/**
+	 * The feature id for the '<em><b>Provider Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SOURCE_STATE_RECORD__PROVIDER_ID = 0;
+
+	/**
+	 * The feature id for the '<em><b>Product Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SOURCE_STATE_RECORD__PRODUCT_ID = 1;
+
+	/**
+	 * The feature id for the '<em><b>Updated At</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SOURCE_STATE_RECORD__UPDATED_AT = 2;
+
+	/**
+	 * The feature id for the '<em><b>Entities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SOURCE_STATE_RECORD__ENTITIES = 3;
+
+	/**
+	 * The number of structural features of the '<em>Source State Record</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SOURCE_STATE_RECORD_FEATURE_COUNT = 4;
+
+	/**
+	 * The number of operations of the '<em>Source State Record</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SOURCE_STATE_RECORD_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link org.gecko.weather.model.weather.impl.SourceEntityImpl <em>Source Entity</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.gecko.weather.model.weather.impl.SourceEntityImpl
+	 * @see org.gecko.weather.model.weather.impl.WeatherPackageImpl#getSourceEntity()
+	 * @generated
+	 */
+	int SOURCE_ENTITY = 17;
+
+	/**
+	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SOURCE_ENTITY__URI = 0;
+
+	/**
+	 * The feature id for the '<em><b>Etag</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SOURCE_ENTITY__ETAG = 1;
+
+	/**
+	 * The feature id for the '<em><b>Last Modified</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SOURCE_ENTITY__LAST_MODIFIED = 2;
+
+	/**
+	 * The number of structural features of the '<em>Source Entity</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SOURCE_ENTITY_FEATURE_COUNT = 3;
+
+	/**
+	 * The number of operations of the '<em>Source Entity</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SOURCE_ENTITY_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link org.gecko.weather.model.weather.BindingOrigin <em>Binding Origin</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1561,7 +1680,7 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @see org.gecko.weather.model.weather.impl.WeatherPackageImpl#getBindingOrigin()
 	 * @generated
 	 */
-	int BINDING_ORIGIN = 16;
+	int BINDING_ORIGIN = 18;
 
 	/**
 	 * The meta object id for the '{@link org.gecko.weather.model.weather.MeasurementKind <em>Measurement Kind</em>}' enum.
@@ -1571,7 +1690,7 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @see org.gecko.weather.model.weather.impl.WeatherPackageImpl#getMeasurementKind()
 	 * @generated
 	 */
-	int MEASUREMENT_KIND = 17;
+	int MEASUREMENT_KIND = 19;
 
 	/**
 	 * The meta object id for the '{@link org.gecko.weather.model.weather.Level <em>Level</em>}' enum.
@@ -1581,7 +1700,7 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @see org.gecko.weather.model.weather.impl.WeatherPackageImpl#getLevel()
 	 * @generated
 	 */
-	int LEVEL = 18;
+	int LEVEL = 20;
 
 	/**
 	 * The meta object id for the '{@link org.gecko.weather.model.weather.Statistic <em>Statistic</em>}' enum.
@@ -1591,7 +1710,7 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @see org.gecko.weather.model.weather.impl.WeatherPackageImpl#getStatistic()
 	 * @generated
 	 */
-	int STATISTIC = 19;
+	int STATISTIC = 21;
 
 	/**
 	 * The meta object id for the '{@link org.gecko.weather.model.weather.Origin <em>Origin</em>}' enum.
@@ -1601,7 +1720,7 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @see org.gecko.weather.model.weather.impl.WeatherPackageImpl#getOrigin()
 	 * @generated
 	 */
-	int ORIGIN = 20;
+	int ORIGIN = 22;
 
 	/**
 	 * The meta object id for the '{@link org.gecko.weather.model.weather.Quality <em>Quality</em>}' enum.
@@ -1611,7 +1730,7 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @see org.gecko.weather.model.weather.impl.WeatherPackageImpl#getQuality()
 	 * @generated
 	 */
-	int QUALITY = 21;
+	int QUALITY = 23;
 
 	/**
 	 * The meta object id for the '<em>Instant</em>' data type.
@@ -1621,7 +1740,7 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @see org.gecko.weather.model.weather.impl.WeatherPackageImpl#getInstant()
 	 * @generated
 	 */
-	int INSTANT = 22;
+	int INSTANT = 24;
 
 	/**
 	 * The meta object id for the '<em>Duration</em>' data type.
@@ -1631,7 +1750,7 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @see org.gecko.weather.model.weather.impl.WeatherPackageImpl#getDuration()
 	 * @generated
 	 */
-	int DURATION = 23;
+	int DURATION = 25;
 
 	/**
 	 * The meta object id for the '<em>Local Date</em>' data type.
@@ -1641,7 +1760,7 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @see org.gecko.weather.model.weather.impl.WeatherPackageImpl#getLocalDate()
 	 * @generated
 	 */
-	int LOCAL_DATE = 24;
+	int LOCAL_DATE = 26;
 
 
 	/**
@@ -2907,6 +3026,103 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	EReference getDayInfo_Provenance();
 
 	/**
+	 * Returns the meta object for class '{@link org.gecko.weather.model.weather.SourceStateRecord <em>Source State Record</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Source State Record</em>'.
+	 * @see org.gecko.weather.model.weather.SourceStateRecord
+	 * @generated
+	 */
+	EClass getSourceStateRecord();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.model.weather.SourceStateRecord#getProviderId <em>Provider Id</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Provider Id</em>'.
+	 * @see org.gecko.weather.model.weather.SourceStateRecord#getProviderId()
+	 * @see #getSourceStateRecord()
+	 * @generated
+	 */
+	EAttribute getSourceStateRecord_ProviderId();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.model.weather.SourceStateRecord#getProductId <em>Product Id</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Product Id</em>'.
+	 * @see org.gecko.weather.model.weather.SourceStateRecord#getProductId()
+	 * @see #getSourceStateRecord()
+	 * @generated
+	 */
+	EAttribute getSourceStateRecord_ProductId();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.model.weather.SourceStateRecord#getUpdatedAt <em>Updated At</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Updated At</em>'.
+	 * @see org.gecko.weather.model.weather.SourceStateRecord#getUpdatedAt()
+	 * @see #getSourceStateRecord()
+	 * @generated
+	 */
+	EAttribute getSourceStateRecord_UpdatedAt();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.gecko.weather.model.weather.SourceStateRecord#getEntities <em>Entities</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Entities</em>'.
+	 * @see org.gecko.weather.model.weather.SourceStateRecord#getEntities()
+	 * @see #getSourceStateRecord()
+	 * @generated
+	 */
+	EReference getSourceStateRecord_Entities();
+
+	/**
+	 * Returns the meta object for class '{@link org.gecko.weather.model.weather.SourceEntity <em>Source Entity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Source Entity</em>'.
+	 * @see org.gecko.weather.model.weather.SourceEntity
+	 * @generated
+	 */
+	EClass getSourceEntity();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.model.weather.SourceEntity#getUri <em>Uri</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Uri</em>'.
+	 * @see org.gecko.weather.model.weather.SourceEntity#getUri()
+	 * @see #getSourceEntity()
+	 * @generated
+	 */
+	EAttribute getSourceEntity_Uri();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.model.weather.SourceEntity#getEtag <em>Etag</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Etag</em>'.
+	 * @see org.gecko.weather.model.weather.SourceEntity#getEtag()
+	 * @see #getSourceEntity()
+	 * @generated
+	 */
+	EAttribute getSourceEntity_Etag();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.model.weather.SourceEntity#getLastModified <em>Last Modified</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Last Modified</em>'.
+	 * @see org.gecko.weather.model.weather.SourceEntity#getLastModified()
+	 * @see #getSourceEntity()
+	 * @generated
+	 */
+	EAttribute getSourceEntity_LastModified();
+
+	/**
 	 * Returns the meta object for enum '{@link org.gecko.weather.model.weather.BindingOrigin <em>Binding Origin</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3993,6 +4209,82 @@ public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 		 * @generated
 		 */
 		EReference DAY_INFO__PROVENANCE = eINSTANCE.getDayInfo_Provenance();
+
+		/**
+		 * The meta object literal for the '{@link org.gecko.weather.model.weather.impl.SourceStateRecordImpl <em>Source State Record</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.gecko.weather.model.weather.impl.SourceStateRecordImpl
+		 * @see org.gecko.weather.model.weather.impl.WeatherPackageImpl#getSourceStateRecord()
+		 * @generated
+		 */
+		EClass SOURCE_STATE_RECORD = eINSTANCE.getSourceStateRecord();
+
+		/**
+		 * The meta object literal for the '<em><b>Provider Id</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SOURCE_STATE_RECORD__PROVIDER_ID = eINSTANCE.getSourceStateRecord_ProviderId();
+
+		/**
+		 * The meta object literal for the '<em><b>Product Id</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SOURCE_STATE_RECORD__PRODUCT_ID = eINSTANCE.getSourceStateRecord_ProductId();
+
+		/**
+		 * The meta object literal for the '<em><b>Updated At</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SOURCE_STATE_RECORD__UPDATED_AT = eINSTANCE.getSourceStateRecord_UpdatedAt();
+
+		/**
+		 * The meta object literal for the '<em><b>Entities</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SOURCE_STATE_RECORD__ENTITIES = eINSTANCE.getSourceStateRecord_Entities();
+
+		/**
+		 * The meta object literal for the '{@link org.gecko.weather.model.weather.impl.SourceEntityImpl <em>Source Entity</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.gecko.weather.model.weather.impl.SourceEntityImpl
+		 * @see org.gecko.weather.model.weather.impl.WeatherPackageImpl#getSourceEntity()
+		 * @generated
+		 */
+		EClass SOURCE_ENTITY = eINSTANCE.getSourceEntity();
+
+		/**
+		 * The meta object literal for the '<em><b>Uri</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SOURCE_ENTITY__URI = eINSTANCE.getSourceEntity_Uri();
+
+		/**
+		 * The meta object literal for the '<em><b>Etag</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SOURCE_ENTITY__ETAG = eINSTANCE.getSourceEntity_Etag();
+
+		/**
+		 * The meta object literal for the '<em><b>Last Modified</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SOURCE_ENTITY__LAST_MODIFIED = eINSTANCE.getSourceEntity_LastModified();
 
 		/**
 		 * The meta object literal for the '{@link org.gecko.weather.model.weather.BindingOrigin <em>Binding Origin</em>}' enum.
