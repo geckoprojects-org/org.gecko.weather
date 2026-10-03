@@ -1,0 +1,102 @@
+# Developer launch: the local launch plus the Fennec Gogo MCP server (http://127.0.0.1:8088/mcp/gogo,
+# loopback only, configured by org.gecko.weather.runtime.dev), so that a running instance can be
+# inspected from an MCP client — bundles, DS components, configurations, and the weather:* commands.
+# Development use only; the MCP server executes arbitrary Gogo commands.
+#
+#   ./gradlew :org.gecko.weather.runtime:resolve.dev
+#   ./gradlew :org.gecko.weather.runtime:export.dev
+#   java -jar org.gecko.weather.runtime/generated/distributions/executable/dev.jar
+#
+# The shell is non-interactive so the process can run in the background; commands go through MCP.
+
+# tilde: what this file defines wins over the included launch defaults
+-include: ~launch.bndrun
+
+-runproperties: \
+	org.osgi.framework.bootdelegation=sun.*,com.sun.*,\
+	gosh.args="--nointeractive --noshutdown"
+
+-runrequires: \
+	bnd.identity;id='org.gecko.weather.runtime',\
+	bnd.identity;id='org.gecko.weather.shell',\
+	bnd.identity;id='org.gecko.weather.core',\
+	bnd.identity;id='org.gecko.weather.repository.file',\
+	bnd.identity;id='org.gecko.weather.solar',\
+	bnd.identity;id='org.gecko.weather.ingest',\
+	bnd.identity;id='org.gecko.weather.provider.dwd.mosmix',\
+	bnd.identity;id='org.eclipse.fennec.emf.osgi.component.minimal',\
+	bnd.identity;id='net.opengis.kml.model',\
+	bnd.identity;id='de.dwd.cdc.forecast.model',\
+	bnd.identity;id='org.apache.felix.configurator',\
+	bnd.identity;id='org.apache.felix.gogo.command',\
+	bnd.identity;id='org.apache.felix.gogo.shell',\
+	osgi.implementation;filter:='(osgi.implementation=mcp.gogo)',\
+	bnd.identity;id='org.gecko.weather.runtime.dev',\
+	bnd.identity;id='slf4j.simple',\
+	bnd.identity;id='org.apache.aries.spifly.dynamic.bundle'
+
+-runbundles: \
+	com.ethlo.time.itu;version='[1.14.0,1.14.1)',\
+	com.fasterxml.jackson.core.jackson-annotations;version='[2.22.0,2.22.1)',\
+	com.networknt.json-schema-validator;version='[3.0.6,3.0.7)',\
+	de.dwd.cdc.forecast.model;version='[1.0.0,1.0.1)',\
+	io.modelcontextprotocol.sdk.mcp-core;version='[2.0.0,2.0.1)',\
+	io.modelcontextprotocol.sdk.mcp-json-jackson3;version='[2.0.0,2.0.1)',\
+	io.projectreactor.reactor-core;version='[3.7.0,3.7.1)',\
+	net.opengis.kml.model;version='[2.2.0,2.2.1)',\
+	org.apache.aries.spifly.dynamic.bundle;version='[1.3.7,1.3.8)',\
+	org.apache.commons.commons-fileupload;version='[1.6.0,1.6.1)',\
+	org.apache.commons.commons-io;version='[2.22.0,2.22.1)',\
+	org.apache.felix.cm.json;version='[2.0.6,2.0.7)',\
+	org.apache.felix.configadmin;version='[1.9.26,1.9.27)',\
+	org.apache.felix.configurator;version='[1.0.18,1.0.19)',\
+	org.apache.felix.gogo.command;version='[1.1.2,1.1.3)',\
+	org.apache.felix.gogo.runtime;version='[1.1.6,1.1.7)',\
+	org.apache.felix.gogo.shell;version='[1.1.4,1.1.5)',\
+	org.apache.felix.http.jetty12;version='[1.1.0,1.1.1)',\
+	org.apache.felix.http.servlet-api;version='[6.1.0,6.1.1)',\
+	org.apache.felix.scr;version='[2.2.12,2.2.13)',\
+	org.eclipse.emf.common;version='[2.44.0,2.44.1)',\
+	org.eclipse.emf.ecore;version='[2.41.0,2.41.1)',\
+	org.eclipse.emf.ecore.xmi;version='[2.39.0,2.39.1)',\
+	org.eclipse.fennec.codec.api;version='[0.1.0,0.1.1)',\
+	org.eclipse.fennec.codec.metadata;version='[0.1.0,0.1.1)',\
+	org.eclipse.fennec.emf.osgi.component.minimal;version='[1.1.0,1.1.1)',\
+	org.eclipse.fennec.emf.osgi.metadata;version='[1.1.0,1.1.1)',\
+	org.eclipse.fennec.mcp.api;version='[0.1.0,0.1.1)',\
+	org.eclipse.fennec.mcp.endpoint;version='[0.1.0,0.1.1)',\
+	org.eclipse.fennec.mcp.gogo.runtime;version='[0.1.0,0.1.1)',\
+	org.eclipse.fennec.mcp.gogo.tools;version='[0.1.0,0.1.1)',\
+	org.eclipse.fennec.mcp.http.component;version='[0.1.0,0.1.1)',\
+	org.eclipse.fennec.mcp.tool.provider;version='[0.1.0,0.1.1)',\
+	org.eclipse.parsson.jakarta.json;version='[1.1.7,1.1.8)',\
+	org.gecko.weather.api;version=snapshot,\
+	org.gecko.weather.core;version=snapshot,\
+	org.gecko.weather.ingest;version=snapshot,\
+	org.gecko.weather.model;version=snapshot,\
+	org.gecko.weather.provider.dwd.mosmix;version=snapshot,\
+	org.gecko.weather.repository.file;version=snapshot,\
+	org.gecko.weather.runtime;version=snapshot,\
+	org.gecko.weather.runtime.dev;version=snapshot,\
+	org.gecko.weather.shell;version=snapshot,\
+	org.gecko.weather.solar;version=snapshot,\
+	org.gecko.weather.transport;version=snapshot,\
+	org.objectweb.asm;version='[9.10.1,9.10.2)',\
+	org.objectweb.asm.commons;version='[9.10.1,9.10.2)',\
+	org.objectweb.asm.tree;version='[9.10.1,9.10.2)',\
+	org.objectweb.asm.tree.analysis;version='[9.10.1,9.10.2)',\
+	org.objectweb.asm.util;version='[9.10.1,9.10.2)',\
+	org.osgi.service.component;version='[1.5.1,1.5.2)',\
+	org.osgi.service.servlet;version='[2.0.0,2.0.1)',\
+	org.osgi.util.converter;version='[1.0.9,1.0.10)',\
+	org.osgi.util.function;version='[1.2.0,1.2.1)',\
+	org.osgi.util.promise;version='[1.3.0,1.3.1)',\
+	org.snakeyaml.engine;version='[3.0.1,3.0.2)',\
+	org.w3.atom.model;version='[1.0.0,1.0.1)',\
+	reactive-streams;version='[1.0.4,1.0.5)',\
+	slf4j.api;version='[2.0.17,2.0.18)',\
+	slf4j.simple;version='[2.0.17,2.0.18)',\
+	solarpositioning-osgi;version='[3.0.1,3.0.2)',\
+	tools.jackson.core.jackson-core;version='[3.2.2,3.2.3)',\
+	tools.jackson.core.jackson-databind;version='[3.2.2,3.2.3)',\
+	tools.jackson.dataformat.jackson-dataformat-yaml;version='[3.2.2,3.2.3)'

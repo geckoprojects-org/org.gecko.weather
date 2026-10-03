@@ -1,0 +1,27 @@
+{
+	":configurator:resource-version": 1,
+
+	"org.apache.felix.http~gogo": {
+		"org.osgi.service.http.port:int": 8088,
+		"org.apache.felix.http.host": "127.0.0.1",
+		"org.apache.felix.http.name": "gogo"
+	},
+
+	"MCPToolProvider~gogoShell": {
+		"name": "gogo_shell_tool_provider",
+		"description": "Gogo shell tools for inspecting the running Gecko Weather framework",
+		"tools.target": "(|(tool.name=execute_gogo)(tool.name=list_commands))",
+		"tools.cardinality.minimum:int": 2
+	},
+
+	"HttpMCPServerComponent~gogoShell": {
+		"server.name": "gecko-weather-gogo-mcp",
+		"server.version": "1.0",
+		"osgi.http.whiteboard.servlet.pattern": "/mcp/gogo",
+		"osgi.http.whiteboard.target": "(org.apache.felix.http.name=gogo)",
+		"has.tool.capability": true,
+		"toolProviders.target": "(name=gogo_shell_tool_provider)",
+		"toolProviders.cardinality.minimum:int": 1,
+		"server.instructions": "Live Gecko Weather OSGi runtime. Use list_commands, then execute_gogo for scr:list, scr:info <id>, lb, and the weather:* commands (register, sites, runNow, status, report, values)."
+	}
+}

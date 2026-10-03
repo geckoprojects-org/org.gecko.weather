@@ -1,0 +1,10 @@
+Bundle-Name: Gecko Weather Runtime Dev Configuration
+Bundle-Description: Developer-only Configurator settings: the Fennec Gogo MCP server on \
+	127.0.0.1:8088 at /mcp/gogo. Deliberately a separate bundle — it must never reach a production \
+	launch; the MCP server executes arbitrary Gogo commands.
+
+-resourceonly: true
+-includeresource: OSGI-INF/configurator/=configs/
+Require-Capability: \
+	osgi.extender;filter:='(osgi.extender=osgi.configurator)',\
+	osgi.implementation;filter:='(&(osgi.implementation=osgi.cm)(version>=1.6.0)(!(version>=2.0.0)))'
