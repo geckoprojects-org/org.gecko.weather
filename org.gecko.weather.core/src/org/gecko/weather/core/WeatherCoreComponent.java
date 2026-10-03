@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.SortedMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gecko.weather.api.SiteRegistration;
 import org.gecko.weather.api.SiteRegistry;
@@ -63,11 +64,13 @@ public class WeatherCoreComponent implements SiteRegistry, WeatherService, Weath
 	@Reference
 	private SolarService solarService;
 
-	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-	private volatile List<WeatherProvider> providers;
-
-	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-	private volatile List<SiteBindingResolver> resolvers;
+	/*
+	 * Dynamic multiple references are bound by method, into collections that exist from field
+	 * initialisation on: DS may bind and unbind at any time, before, during or after activate, on
+	 * another thread. Nothing in activate reads them; the registry asks for the current set per call.
+	 */
+	private final List<WeatherProvider> providers = new CopyOnWriteArrayList<>();
+	private final List<SiteBindingResolver> resolvers = new CopyOnWriteArrayList<>();
 
 	private SiteRegistryImpl registry;
 	private WeatherServiceImpl weather;
@@ -82,6 +85,25 @@ public class WeatherCoreComponent implements SiteRegistry, WeatherService, Weath
 		sink = new ReportAssembler(repository, new SolarDatasets(solarService), settings, clock);
 	}
 
+	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
+	void addProvider(WeatherProvider provider) {
+		providers.add(provider);
+	}
+
+	void removeProvider(WeatherProvider provider) {
+		providers.remove(provider);
+	}
+
+	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
+	void addResolver(SiteBindingResolver resolver) {
+		resolvers.add(resolver);
+	}
+
+	void removeResolver(SiteBindingResolver resolver) {
+		resolvers.remove(resolver);
+	}
+
+	/** A snapshot of the resolvers present right now: every provider's own plus the standalone ones. */
 	private List<SiteBindingResolver> currentResolvers() {
 		List<SiteBindingResolver> all = new ArrayList<>();
 		for (WeatherProvider p : providers) {
