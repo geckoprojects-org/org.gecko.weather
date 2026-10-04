@@ -25,6 +25,7 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -65,7 +66,8 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
  * {@link PvForecast} over the weather and solar services, exported as a remote service through
  * the Remote Service Admin of Fennec Services. Configuration is required. Plants with a meter are
  * read through the {@link PvMeter} service of the meter's type; the readings are stored per plant and
- * day and returned beside the forecast.
+ * day and returned beside the forecast. The forecast of every plant is frozen at fixed local hours for
+ * the later comparison with what was measured.
  *
  * @author Mark Hoffmann
  * @since 04.10.2026
@@ -96,6 +98,12 @@ public class PvForecastComponent implements PvForecast {
 
 		@AttributeDefinition(description = "Read the meters of plants that have one.")
 		boolean metering() default true;
+
+		@AttributeDefinition(description = "Folder for frozen forecasts, one subfolder per plant, one XMI file per plant and hour. Local data.")
+		String snapshotsFolder() default "data/weather/pv-forecasts";
+
+		@AttributeDefinition(description = "Local hours at which every plant's forecast is frozen for the later comparison with the measured output, e.g. 6,18; blank for never.")
+		String snapshotHours() default "6,18";
 	}
 
 	@Reference
@@ -139,16 +147,24 @@ public class PvForecastComponent implements PvForecast {
 		forecaster = new PlantForecaster(config.hours(), config.days(), this::sun);
 		defaultZone = ZoneId.of(config.defaultTimeZone());
 		store = new MeasurementStore(Path.of(config.measurementsFolder()));
-		if (config.metering()) {
-			MeterPoller poller = new MeterPoller(folder::plants, store, type -> Optional.ofNullable(meters.get(type)), this::zone,
-					clock);
+		Set<Integer> snapshotHours = ForecastSnapshots.hours(config.snapshotHours());
+		if (config.metering() || !snapshotHours.isEmpty()) {
 			scheduler = Executors.newSingleThreadScheduledExecutor(r -> {
-				Thread t = new Thread(r, "gecko-weather-pv-meters");
+				Thread t = new Thread(r, "gecko-weather-pv");
 				t.setDaemon(true);
 				return t;
 			});
+		}
+		if (config.metering()) {
+			MeterPoller poller = new MeterPoller(folder::plants, store, type -> Optional.ofNullable(meters.get(type)), this::zone,
+					clock);
 			long tick = MeterPoller.MIN_INTERVAL.toMillis();
 			scheduler.scheduleWithFixedDelay(poller::tick, tick, tick, TimeUnit.MILLISECONDS);
+		}
+		if (!snapshotHours.isEmpty()) {
+			ForecastSnapshots snapshots = new ForecastSnapshots(Path.of(config.snapshotsFolder()), snapshotHours, folder::plants,
+					this::zone, this::forecast);
+			scheduler.scheduleWithFixedDelay(() -> snapshots.tick(clock.instant()), 20, 60, TimeUnit.SECONDS);
 		}
 	}
 

@@ -25,6 +25,8 @@
 		"days": "$[env:WEATHER_PV_DAYS;type=Integer;default=7]",
 		"defaultTimeZone": "Europe/Berlin",
 		"measurementsFolder": "$[env:WEATHER_PV_MEASUREMENTS;default=data/weather/pv-measurements]",
-		"metering": "$[env:WEATHER_PV_METERING;type=Boolean;default=true]"
+		"metering": "$[env:WEATHER_PV_METERING;type=Boolean;default=true]",
+		"snapshotsFolder": "$[env:WEATHER_PV_SNAPSHOTS;default=data/weather/pv-forecasts]",
+		"snapshotHours": "$[env:WEATHER_PV_SNAPSHOT_HOURS;default=6,18]"
 	}
 }

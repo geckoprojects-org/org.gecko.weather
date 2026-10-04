@@ -63,8 +63,15 @@ edited by hand loses its XML comments that way. `PvForecast.measurements(plantId
 PV power) to the hours that have begun and `measuredEnergy` to today; gaps over 15 minutes count as
 nothing. On hybrid inverters the PV power is the DC side — compare it with `dcPower`.
 
+**Frozen forecasts.** The outlook changes with every model run; a comparison with what was
+measured needs it as it stood before. At the local hours in `snapshotHours` (default `6,18`: the
+day itself in the morning, the day ahead in the evening) every plant's outlook is written to
+`snapshotsFolder` (default `data/weather/pv-forecasts`) as `<plantId>/<yyyy-MM-dd>T<HH>.xmi`, once —
+a restart in the same hour writes nothing twice.
+
 Configuration: `measurementsFolder` (env `WEATHER_PV_MEASUREMENTS`), `metering` (env
-`WEATHER_PV_METERING`, true).
+`WEATHER_PV_METERING`, true), `snapshotsFolder` (env `WEATHER_PV_SNAPSHOTS`), `snapshotHours` (env
+`WEATHER_PV_SNAPSHOT_HOURS`).
 
 ## Tests
 
