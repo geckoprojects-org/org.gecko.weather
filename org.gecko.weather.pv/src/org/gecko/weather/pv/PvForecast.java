@@ -34,7 +34,9 @@ public interface PvForecast {
 	PlantDirectory plants();
 
 	/**
-	 * The next 48 hours from the current full hour and the days from today on.
+	 * The hours from the start of today (in the site's time zone) up to 48 hours past the current
+	 * full hour, and the days from today on. The hours already passed today carry the measured power
+	 * beside the forecast when the plant has a meter.
 	 *
 	 * @throws IllegalArgumentException if there is no such plant
 	 * @throws org.gecko.weather.api.UnknownSiteException if the plant's weather site is not registered

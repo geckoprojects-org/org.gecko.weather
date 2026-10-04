@@ -42,12 +42,17 @@ type-check`, `npm run build`.
 | `src/weather.ddsr/` — `DdsrWeatherOutlook`, `model.ts` | `packages/weather.ddsr`, a tsm `@component({ service: [XDP_WEATHER_OUTLOOK] })` like `datasource.ddsr`; the broker URL from `registryConnection()` |
 | `src/weather.ddsr/SampleWeatherOutlook.ts` | the examples the view shows without the registry bundle |
 | `src/view.weather/` — `WeatherPage`, `HourlyForecast`, `DayOverview`, `WeatherIcon`, `weather.ts` | `packages/view.weather`, registered under `XDP_VIEW` |
+| `src/contracts.ts` — `PvForecast` and its plain values | `@xdp/contracts`: a service id of its own, e.g. `XDP_PV_FORECAST` |
+| `src/pv.ddsr/` — `DdsrPvForecast`, `model.ts`, `SamplePvForecast` | `packages/pv.ddsr`, a tsm component like `weather.ddsr` |
+| `src/view.pv/` — `PvPage`, `PvChart`, `PvDays`, `pv.ts` | `packages/view.pv`, registered under `XDP_VIEW` |
+| `src/emf.ts` — registering an ecore, reading values off an EObject | shared by both `.ddsr` packages, or one copy each |
+| `src/App.vue` — the two tabs | nothing — the xdp shell's navigation |
 | `src/styles/` | nothing — copies of `@xdp/ui.tokens`, loaded by the xdp host |
 | `shims/node-crypto.ts` | `scripts/shims/node-crypto.ts` (copied from there) |
 | `vendor/ddsr/` | `vendor/ddsr/` (the same four tarballs, emf.services `82e7f3b`) |
 
-The model is not copied: `model.ts` imports `org.gecko.weather.outlook/model/outlook.ecore`, the
-file the Java side is generated from. In xdp-ui it would be copied into the package, as
+The models are not copied: the `model.ts` files import `org.gecko.weather.outlook/model/outlook.ecore`
+and `org.gecko.weather.pv/model/pv.ecore`, the files the Java side is generated from. In xdp-ui it would be copied into the package, as
 `datasource.ddsr` does with `datasource.ecore`.
 
 ## What the page shows
@@ -69,3 +74,24 @@ file the Java side is generated from. In xdp-ui it would be copied into the pack
 - Colours: the xdp series colours `--s2` (radiation, amber, in two steps for direct/diffuse) and
   `--s1` (precipitation, teal), plus a violet for temperature (`src/styles/weather.css`); the triple
   is validated for both schemes against colour-vision deficiency, all pairs.
+
+## The PV view (`?view=pv`)
+
+The second tab reads the remote service `PvForecast` (`org.gecko.weather.pv`) the same way.
+
+- **Plant line**: total kWp and every array with orientation and tilt.
+- **Tiles**: the latest meter reading (PV generator), today's expected energy and what was measured
+  so far, measured against expected over the complete hours with production, and house load, grid
+  and battery from the latest reading. Without a meter the page says so instead of showing empty
+  comparisons.
+- **Chart**, from the start of today to 48 hours ahead, one axis in kW: the expected DC power of the
+  PV generator per hour as bars (that is what a hybrid inverter reports as PV power); **hatched**
+  where the sun stands behind the horizon or an obstacle such as a forest, so only diffuse light
+  arrives. Over it the meter readings of today as a line (teal, `--s1`) and their hourly means as
+  dots — the value to compare with the bar. Night shaded, "now" marked, each day's best hour labelled.
+  Hover or keyboard focus on an hour shows expected DC and AC power, the measured mean, irradiance on
+  the module and horizontal, cell temperature, sun position, shading and the weather source.
+- **Days**: expected energy, specific yield in kWh/kWp, the best hour, and for today the measured
+  energy.
+
+The page reloads every five minutes; the runtime reads a meter every minute.

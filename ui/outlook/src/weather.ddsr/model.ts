@@ -6,101 +6,20 @@
  * The outlook's metamodel, and reading an answer with it.
  *
  * outlook.ecore is the very file the Java bundle is generated from (org.gecko.weather.outlook),
- * imported raw. It is registered dynamically in the global EPackage registry: the DDSR client
- * parses an answer in a resource set of its own, which falls back to that registry for nsURIs it
- * does not know. Registered once — as in xdp-ui's datasource.ddsr.
+ * imported raw and registered once in the global EPackage registry (see ../emf.ts).
  */
-import {
-  BasicResourceSet,
-  EPackageRegistry,
-  URI,
-  XMIResourceFactory,
-  registerEcorePackage,
-  type EObject,
-  type EPackage,
-  type XMIResource,
-} from '@emfts/core'
+import type { EObject, EPackage } from '@emfts/core'
 import type { DayValue, HourValue, OutlookSnapshot, SiteInfo, SourceInfo } from '../contracts.js'
+import { date, expect, flag, many, num, one, registerPackage, text } from '../emf.js'
 
 import ecoreXml from '../../../../org.gecko.weather.outlook/model/outlook.ecore?raw'
 
+export { parseDate, rootOf } from '../emf.js'
+
 export const NS_URI = 'https://geckoprojects.org/weather/outlook/1.0'
 
-let registered: EPackage | undefined
-
 export function registerOutlookPackage(): EPackage {
-  if (registered) return registered
-  const known = EPackageRegistry.INSTANCE.getEPackage(NS_URI)
-  if (known) return (registered = known)
-  registerEcorePackage()
-  const set = new BasicResourceSet()
-  set.getResourceFactoryRegistry().getExtensionToFactoryMap().set('ecore', new XMIResourceFactory())
-  const resource = set.createResource(URI.createURI('outlook.ecore')) as XMIResource
-  resource.loadFromString(ecoreXml)
-  if (resource.getErrors().length > 0) {
-    console.warn('weather.ddsr: Ecore-Modell mit Warnungen geladen', resource.getErrors())
-  }
-  const loaded = Array.from(resource.getContents())[0] as EPackage
-  EPackageRegistry.INSTANCE.set(NS_URI, loaded)
-  return (registered = loaded)
-}
-
-/** A feature's value, or `undefined` when the object has none or it is unset */
-function value(object: EObject, name: string): unknown {
-  const feature = object.eClass().getEStructuralFeature(name)
-  if (!feature || !object.eIsSet(feature)) return undefined
-  return object.eGet(feature)
-}
-
-function text(object: EObject, name: string): string | undefined {
-  const v = value(object, name)
-  return v == null ? undefined : String(v)
-}
-
-function num(object: EObject, name: string): number | undefined {
-  const v = value(object, name)
-  if (v == null) return undefined
-  const n = typeof v === 'number' ? v : Number(v)
-  return Number.isFinite(n) ? n : undefined
-}
-
-/**
- * An EDate as Java's XMI writes it — `2026-10-04T06:00:00.000+0000`. The offset without a colon is
- * not ISO, and not every browser parses it, hence the colon.
- */
-export function parseDate(raw: unknown): Date | undefined {
-  if (raw == null) return undefined
-  if (raw instanceof Date) return Number.isNaN(raw.getTime()) ? undefined : raw
-  const s = String(raw).replace(/([+-]\d{2})(\d{2})$/, '$1:$2')
-  const d = new Date(s)
-  return Number.isNaN(d.getTime()) ? undefined : d
-}
-
-function date(object: EObject, name: string): Date | undefined {
-  return parseDate(value(object, name))
-}
-
-function flag(object: EObject, name: string): boolean {
-  const feature = object.eClass().getEStructuralFeature(name)
-  const v = feature ? object.eGet(feature) : undefined
-  return v === true || v === 'true'
-}
-
-function one(object: EObject, name: string): EObject | undefined {
-  const v = value(object, name)
-  return v && typeof v === 'object' && 'eClass' in v ? (v as EObject) : undefined
-}
-
-function many(object: EObject, name: string): EObject[] {
-  const feature = object.eClass().getEStructuralFeature(name)
-  const v = feature ? object.eGet(feature) : undefined
-  return v ? (Array.from(v as Iterable<EObject>) as EObject[]) : []
-}
-
-function expect(object: EObject, eClass: string): void {
-  if (object.eClass().getName() !== eClass) {
-    throw new Error(`Antwort ist kein ${eClass}, sondern ${object.eClass().getName()}`)
-  }
+  return registerPackage(NS_URI, ecoreXml, 'outlook.ecore')
 }
 
 function toHour(o: EObject): HourValue {
@@ -183,13 +102,4 @@ export function toSites(directory: EObject): SiteInfo[] {
     longitude: num(o, 'longitude'),
     timeZone: text(o, 'timeZone') ?? 'UTC',
   }))
-}
-
-/** The first root of an answer — the client hands over one EObject or the resource's contents */
-export function rootOf(answer: unknown, what: string): EObject {
-  const root = (Array.isArray(answer) ? answer[0] : answer) as EObject | undefined
-  if (!root || typeof root !== 'object' || !('eClass' in root)) {
-    throw new Error(`${what} hat kein Modell geantwortet`)
-  }
-  return root
 }

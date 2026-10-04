@@ -81,7 +81,7 @@ public class PvForecastComponent implements PvForecast {
 		@AttributeDefinition(description = "Folder with one plant profile (pv:Plant XMI) per file. Local data — profiles name addresses.")
 		String plantsFolder() default "data/weather/plants";
 
-		@AttributeDefinition(description = "Hours from the current full hour on.")
+		@AttributeDefinition(description = "Hours past the current full hour; the outlook starts at the beginning of today.")
 		int hours() default 48;
 
 		@AttributeDefinition(description = "Days from today on.")

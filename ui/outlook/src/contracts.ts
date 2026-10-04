@@ -106,3 +106,107 @@ export interface WeatherOutlook {
   sites(): Promise<SiteInfo[]>
   outlook(siteId: string): Promise<OutlookSnapshot>
 }
+
+// --- PV ------------------------------------------------------------------------------------------
+
+/** A PV plant with a profile */
+export interface PlantInfo {
+  id: string
+  name: string
+  siteId: string
+  /** kWp, all arrays */
+  peakPower?: number
+  timeZone: string
+}
+
+/** One orientation of modules */
+export interface ArrayInfo {
+  name: string
+  azimuth?: number
+  tilt?: number
+  peakPower?: number
+}
+
+/** One hour from `time`; powers are means over the hour in kW, so they are kWh as well. */
+export interface PvHourValue {
+  time: Date
+  /** expected AC output */
+  power?: number
+  /** expected DC output of the generator — what a hybrid inverter reports as PV power */
+  dcPower?: number
+  /** DC per array, in the order of the plant's arrays */
+  arrayPower: number[]
+  /** W/m² on the plane of the largest array */
+  planeIrradiance?: number
+  /** W/m² on the horizontal, from the weather source */
+  globalRadiation?: number
+  cellTemperature?: number
+  sunElevation?: number
+  sunAzimuth?: number
+  /** the sun stands behind the horizon or an obstacle */
+  shaded: boolean
+  /** the inverter caps the output */
+  clipped: boolean
+  /** measured mean PV power of the hour so far, when the plant has a meter */
+  measuredPower?: number
+  source?: string
+}
+
+export interface PvDayValue {
+  /** ISO local date */
+  date: string
+  /** kWh expected */
+  energy?: number
+  peakPower?: number
+  peakTime?: Date
+  /** kWh per kWp */
+  specificYield?: number
+  hoursCovered: number
+  /** kWh measured so far — today only */
+  measuredEnergy?: number
+  source?: string
+}
+
+export interface PvSnapshot {
+  plantId: string
+  plantName: string
+  siteId: string
+  timeZone: string
+  peakPower?: number
+  generatedAt?: Date
+  arrays: ArrayInfo[]
+  /** from the start of today up to 48 hours ahead */
+  hours: PvHourValue[]
+  days: PvDayValue[]
+}
+
+/** One meter reading, powers in kW */
+export interface PvReading {
+  time: Date
+  pvPower?: number
+  acPower?: number
+  /** consumption, positive */
+  loadPower?: number
+  /** positive when drawing from the grid */
+  gridPower?: number
+  /** positive when the battery discharges */
+  batteryPower?: number
+  /** % */
+  stateOfCharge?: number
+}
+
+export interface PvReadings {
+  date: string
+  meterType?: string
+  readings: PvReading[]
+}
+
+/** What the PV view asks */
+export interface PvForecast {
+  origin(): string
+  readonly examples: boolean
+  plants(): Promise<PlantInfo[]>
+  forecast(plantId: string): Promise<PvSnapshot>
+  /** the readings of a local day, today when `date` is empty */
+  measurements(plantId: string, date?: string): Promise<PvReadings>
+}

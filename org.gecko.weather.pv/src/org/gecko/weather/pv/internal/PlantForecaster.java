@@ -133,8 +133,10 @@ public final class PlantForecaster {
 			}
 		}
 
-		for (int h = 0; h < hours; h++) {
-			HourResult r = results.get(firstHour.plus(HOUR.multipliedBy(h)));
+		// from the start of today, so that the hours already measured have their forecast beside them
+		Instant lastHour = firstHour.plus(HOUR.multipliedBy(hours));
+		for (Instant t = from; t.isBefore(lastHour); t = t.plus(HOUR)) {
+			HourResult r = results.get(t);
 			if (r != null) {
 				out.getHours().add(toModel(r));
 			}
