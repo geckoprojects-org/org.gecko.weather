@@ -1,0 +1,63 @@
+# Weather outlook — demo UI
+
+A weather page for a registered site: the next **24 hours by the hour** and the **next two days in
+summary**, read from the Java remote service `WeatherOutlook` through the
+[Fennec Services](https://github.com/eclipse-fennec/emf.services) registry (DDSR). Built in the
+style of [xdp-ui](../../../xdp-ui) — Vue 3, `@emfts/core`, the `@ddsr/*` TypeScript client, the xdp
+tokens and tiles — so that it moves over as two packages.
+
+```
+browser ──/ddsr──▶ DDSR broker :8887        lookup "WeatherOutlook" → endpoint + contract
+        ──/weather──▶ weather runtime :9093  POST …/weatheroutlook/outlook?siteId=home → Outlook (XMI)
+```
+
+## Run it
+
+```bash
+# 1. the broker (emf.services)
+java -Dgosh.args=--nointeractive -jar ../emf.services/org.eclipse.fennec.services.broker.rest/generated/distributions/executable/broker.jar
+
+# 2. the weather runtime with the remote role (dev launch + RSA + WeatherOutlook)
+./gradlew :org.gecko.weather.runtime:export.demo
+WEATHER_PUBLIC_URL=http://localhost:5181/weather \
+  java -jar org.gecko.weather.runtime/generated/distributions/executable/demo.jar
+
+# 3. the page
+cd ui/outlook && npm install && npm run dev      # http://localhost:5181/
+```
+
+Neither broker nor runtime speaks CORS, so the page reaches both under its own origin (the Vite
+proxy), and the runtime announces that origin as its public URL — the same arrangement as xdp-ui
+with the otel-demo inventory. `?theme=light|dark` picks the scheme, `?examples` shows made-up data;
+without a reachable registry the page falls back to examples and says so.
+
+`npm test` (vitest: model mapping against Java-written XMI, icons, formatting), `npm run
+type-check`, `npm run build`.
+
+## Layout — what becomes which xdp-ui package
+
+| Here | In xdp-ui |
+| --- | --- |
+| `src/contracts.ts` — `WeatherOutlook` and its plain values | `@xdp/contracts`: `XDP_WEATHER_OUTLOOK = serviceId<WeatherOutlook>('xdp.weather.outlook')` |
+| `src/weather.ddsr/` — `DdsrWeatherOutlook`, `model.ts` | `packages/weather.ddsr`, a tsm `@component({ service: [XDP_WEATHER_OUTLOOK] })` like `datasource.ddsr`; the broker URL from `registryConnection()` |
+| `src/weather.ddsr/SampleWeatherOutlook.ts` | the examples the view shows without the registry bundle |
+| `src/view.weather/` — `WeatherPage`, `HourlyForecast`, `DayOverview`, `WeatherIcon`, `weather.ts` | `packages/view.weather`, registered under `XDP_VIEW` |
+| `src/styles/` | nothing — copies of `@xdp/ui.tokens`, loaded by the xdp host |
+| `shims/node-crypto.ts` | `scripts/shims/node-crypto.ts` (copied from there) |
+| `vendor/ddsr/` | `vendor/ddsr/` (the same four tarballs, emf.services `82e7f3b`) |
+
+The model is not copied: `model.ts` imports `org.gecko.weather.outlook/model/outlook.ecore`, the
+file the Java side is generated from. In xdp-ui it would be copied into the package, as
+`datasource.ddsr` does with `datasource.ecore`.
+
+## What the page shows
+
+- **24 hours** as columns: time, sky icon (WMO `ww` first, cloud cover for the sky codes, moon at
+  night), temperature; below, two charts on the same columns — temperature as a line, precipitation
+  as bars — rather than one chart with two y-axes; then the hourly rain probability and the wind
+  (arrows point where the air goes). Hover or keyboard focus on an hour shows all its values.
+- **Two days** as xdp tiles: high/low, precipitation, sunshine, UV maximum, mean cloud cover,
+  strongest gust, sunrise, sunset, day length.
+- **Sources**: which dataset each group of quantities came from, how far away, when it was issued.
+- Colours: the xdp series colours (`--s2` temperature, `--s1` precipitation), validated for both
+  schemes against colour-vision deficiency.

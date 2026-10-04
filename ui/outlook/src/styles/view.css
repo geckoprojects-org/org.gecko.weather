@@ -1,0 +1,28 @@
+/* Copied from xdp-ui packages/ui.tokens/src/view.css — the demo wears the xdp look so that its view moves over unchanged. */
+/* ---------- Ansichten ---------- */
+
+/* Sichtbar ist, was der Router gerade einhängt — der Entwurf hielt alle
+   Ansichten gleichzeitig im Dokument und schaltete mit [data-active]. */
+.view { padding: 36px 40px 60px; max-width: 1180px; }
+/* A view that declares itself wide (XdpView.wide) — three columns need it. */
+.view.wide { max-width: 1600px; }
+
+h1 { font-size: 26px; font-weight: 600; letter-spacing: -.022em; margin: 0 0 6px; }
+.intro { color: var(--muted); margin: 0 0 32px; font-size: 14.5px; }
+
+h2.section-title { font-size: 15px; font-weight: 600; margin: 38px 0 16px; letter-spacing: -.01em; }
+
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 34px 0 14px;
+}
+/* Nur das erste Element nach der Überschrift wird nach rechts geschoben; die
+   weiteren folgen ihm mit dem gap der Zeile. Mit `margin-left: auto` an jedem
+   Button verteilten sich zwei davon über die ganze Breite. */
+.section-head .btn:first-of-type { margin-left: auto; }
+.section-head:first-of-type { margin-top: 0; }
+
+/* The line under a view: "Mockup — Beispieldaten." Every view ends with one. */
+.note { margin-top: 32px; font-size: 13px; color: var(--muted); }

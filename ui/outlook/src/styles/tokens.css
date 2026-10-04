@@ -1,0 +1,71 @@
+/* Copied from xdp-ui packages/ui.tokens/src/tokens.css — the demo wears the xdp look so that its view moves over unchanged. */
+/*
+ * Starting values — the Kontrollraum theme, dark. The page is painted with
+ * these before any module runs; the shell then writes the chosen theme's
+ * values onto the root (theme/engine.ts), token for token. What a token is
+ * for stands in @xdp/contracts (TOKEN_GROUPS).
+ */
+:root {
+  --ground:   #0B0F0E;
+  --surface:  #141918;
+  --sunken:   #1A201E;
+  --line:     #242C29;
+  --line-2:   #323B37;
+
+  --ink:      #EAF0ED;
+  --ink-2:    #B2BDB7;
+  --muted:    #7D8983;
+
+  --accent:   #3DB3A4;
+  --accent-2: #14302C;
+
+  --ok:       #4FB077;
+  --warn:     #D2A03F;
+  --crit:     #E0705C;
+
+  /* Serienfarben, auf Rot-/Grünschwäche geprüft */
+  --s1:       #2FA396;
+  --s2:       #BE8629;
+
+  --mono: ui-monospace, "SF Mono", "JetBrains Mono", "DejaVu Sans Mono", Menlo, monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --rail: 64px;
+}
+
+:root[data-theme="light"] {
+  --ground:   #F6F7F6;
+  --surface:  #FFFFFF;
+  --sunken:   #F1F3F1;
+  --line:     #E4E8E5;
+  --line-2:   #D1D6D2;
+
+  --ink:      #161B19;
+  --ink-2:    #414A46;
+  --muted:    #79837E;
+
+  --accent:   #0E6E63;
+  --accent-2: #EBF3F1;
+
+  --ok:       #3A8A5A;
+  --warn:     #A9761A;
+  --crit:     #B14434;
+
+  --s1:       #00897B;
+  --s2:       #B5761F;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+

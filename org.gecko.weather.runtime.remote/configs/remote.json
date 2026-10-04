@@ -1,0 +1,21 @@
+{
+	":configurator:resource-version": 1,
+
+	"org.eclipse.fennec.services.rsa.provider": {
+		"broker.url": "$[env:DDSR_BROKER_URL;default=http://localhost:8887/ddsr/rest]",
+		"http.port": "$[env:WEATHER_HTTP_PORT;default=9093]",
+		"http.id": "weatherRemoteHttp",
+		"context.path": "weather",
+		"public.host": "$[env:WEATHER_PUBLIC_HOST;default=localhost]",
+		"public.url": "$[env:WEATHER_PUBLIC_URL;default=]",
+		"registry.name": "gecko-weather",
+		"provider.heartbeat.seconds": "30",
+		"session.interval.seconds": "0"
+	},
+
+	"org.gecko.weather.outlook.internal.WeatherOutlookComponent": {
+		"hours": "$[env:WEATHER_OUTLOOK_HOURS;type=Integer;default=24]",
+		"days": "$[env:WEATHER_OUTLOOK_DAYS;type=Integer;default=2]",
+		"defaultTimeZone": "Europe/Berlin"
+	}
+}

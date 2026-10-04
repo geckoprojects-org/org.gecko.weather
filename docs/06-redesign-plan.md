@@ -330,6 +330,14 @@ restart for the UV deployment kept all six datasets identical, which is **exit c
 ~1 GB resident set turned out to be an uncapped heap, not a leak (290 MB in use, 505 MB after a full
 GC); `launch.bndrun` now sets `-Xmx768m`.
 
+**A first consumer, as a demo (2026-10-04):** `org.gecko.weather.outlook` builds a weather page's
+view — 24 hours by the hour, two days in summary — from the per-source report by a documented
+picking rule, and offers it as the remote service `WeatherOutlook` through the Remote Service Admin
+of Fennec Services (`demo.bndrun`); `ui/outlook` reads it through the DDSR registry in the style of
+xdp-ui, laid out so that it moves there as `weather.ddsr` + `view.weather`. The picking lives in the
+consumer, as ADR-0013 wants. It also answers `M-11` for this consumer: the helpers a page needs are
+"the value of the nearest source at an hour" and "a day's summary", nothing interpolated.
+
 **Next:** `05-architecture-target.md`, which still describes a `compute.fusion` layer and is the
 next document to re-cut. `IngestScheduler`
 stays single-threaded on purpose (a slow source must not fan out); a ~50 s ICON run delaying the

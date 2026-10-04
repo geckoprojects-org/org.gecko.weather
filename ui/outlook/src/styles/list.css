@@ -1,0 +1,42 @@
+/* Copied from xdp-ui packages/ui.tokens/src/list.css — the demo wears the xdp look so that its view moves over unchanged. */
+/* ---------- Liste ---------- */
+
+.list {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.list table { width: 100%; border-collapse: collapse; }
+.list th {
+  text-align: left;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--muted);
+  padding: 14px 22px 12px;
+  white-space: nowrap;
+}
+.list td {
+  padding: 14px 22px;
+  border-top: 1px solid var(--line);
+  font-size: 13.5px;
+}
+.list tbody tr:hover td { background: var(--sunken); }
+.list .name { font-weight: 500; }
+.list .dim { color: var(--muted); }
+.list .mono { font-family: var(--mono); font-size: 12.5px; color: var(--ink-2); }
+.list .right { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; margin-right: 10px; vertical-align: 1px; }
+.dot.ok       { background: var(--ok); }
+.dot.warning  { background: var(--warn); }
+.dot.critical { background: var(--crit); }
+.dot.off      { background: var(--line-2); }
+
+
+/* A value that reports a problem. In the draft this was a style attribute on
+   the individual cell. */
+.list td.warning { color: var(--warn); }
+
+/* A value that is missing where one is required. */
+.list td.critical { color: var(--crit); }

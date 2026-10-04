@@ -76,6 +76,8 @@ header:
     - 'settings.gradle'
     - 'old/**'
     - 'docs-site/**'
+    # the demo UI follows xdp-ui's conventions (short SPDX headers, copied xdp stylesheets, vendored tarballs)
+    - 'ui/**'
     - '**/*.dragino'
 
   comment: always

@@ -18,6 +18,13 @@ subprojects {
     repositories {
         mavenCentral()
     }
+    // Parameter names in the class files: the Remote Service Admin of Fennec Services derives a
+    // remote contract from a Java interface by reflection, and without -parameters its operations'
+    // parameters read arg0, arg1 — the names a TypeScript consumer has to pass.
+    tasks.withType(JavaCompile).configureEach {
+        options.compilerArgs << '-parameters'
+    }
+
     // Allow gradle to enable JUnit support in submodules
     // Exclude @Tag("perf") (slow) and @Tag("remote") (needs internet) tests from normal
     // builds — run via the perfTest / remoteTest tasks.

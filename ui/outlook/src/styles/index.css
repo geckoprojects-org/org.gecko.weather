@@ -1,0 +1,6 @@
+/* The xdp sheet (copied, see the headers) — in xdp-ui the host loads it, not the view. */
+@import './tokens.css';
+@import './view.css';
+@import './tiles.css';
+@import './list.css';
+@import './chip.css';

@@ -1,0 +1,9 @@
+Bundle-Name: Gecko Weather Runtime Remote Configuration
+Bundle-Description: Configurator defaults that put the weather runtime into a Fennec Services (DDSR) \
+	registry: the Remote Service Admin's provider role and the WeatherOutlook component it exports. \
+	Environment variables override every value (configadmin interpolation plugin).
+
+-resourceonly: true
+-includeresource: OSGI-INF/configurator/=configs/
+Require-Capability: \
+	osgi.extender;filter:='(osgi.extender=osgi.configurator)'

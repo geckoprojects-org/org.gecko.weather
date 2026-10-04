@@ -165,3 +165,20 @@ org.geckoprojects.libraries:org.gecko.ucar.units:5.6.0
 # bzip2 for DWD GRIB2 downloads (transport); compress 1.26+ needs commons-io at runtime
 org.apache.commons:commons-compress:1.27.1
 commons-io:commons-io:2.22.0
+
+# Fennec Services (emf.services): Remote Service Admin over the DDSR broker — the outlook demo
+# exports WeatherOutlook through it. Snapshots from Central, as in otel-demo.
+org.eclipse.fennec.services:org.eclipse.fennec.services.api:0.1.0-SNAPSHOT
+org.eclipse.fennec.services:org.eclipse.fennec.services.model:0.1.0-SNAPSHOT
+org.eclipse.fennec.services:org.eclipse.fennec.services.client.java:0.1.0-SNAPSHOT
+org.eclipse.fennec.services:org.eclipse.fennec.services.client.rest:0.1.0-SNAPSHOT
+org.eclipse.fennec.services:org.eclipse.fennec.services.provider.rest:0.1.0-SNAPSHOT
+org.eclipse.fennec.services:org.eclipse.fennec.services.flavor.rest:0.1.0-SNAPSHOT
+org.eclipse.fennec.services:org.eclipse.fennec.services.xmi.codec:0.1.0-SNAPSHOT
+org.eclipse.fennec.services:org.eclipse.fennec.services.cloudevents:0.1.0-SNAPSHOT
+org.eclipse.fennec.services:org.eclipse.fennec.services.rsa:0.1.0-SNAPSHOT
+org.eclipse.fennec.services:org.eclipse.fennec.services.rsa.config:0.1.0-SNAPSHOT
+org.eclipse.fennec.services:org.eclipse.fennec.services.rsa.distribution.rest:0.1.0-SNAPSHOT
+org.eclipse.fennec.services:org.eclipse.fennec.services.rsa.discovery.rest:0.1.0-SNAPSHOT
+org.eclipse.fennec.services:org.eclipse.fennec.services.rsa.topology:0.1.0-SNAPSHOT
+org.eclipse.fennec.emf:org.eclipse.fennec.emf.osgi.eobject.registry:1.1.0-SNAPSHOT

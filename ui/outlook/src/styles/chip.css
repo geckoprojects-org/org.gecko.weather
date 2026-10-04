@@ -1,0 +1,17 @@
+/* Copied from xdp-ui packages/ui.tokens/src/chip.css — the demo wears the xdp look so that its view moves over unchanged. */
+/* ---------- Filterchip ---------- */
+/* Stand im Entwurf beim Logging; gebraucht wird er auch in der
+   Visualisierung, deshalb hier. */
+
+.chip {
+  border: 1px solid var(--line-2);
+  background: var(--surface);
+  color: var(--ink-2);
+  font: inherit;
+  font-size: 13px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+.chip:hover { border-color: var(--muted); color: var(--ink); }
+.chip[aria-pressed="true"] { background: var(--accent-2); border-color: transparent; color: var(--accent); }

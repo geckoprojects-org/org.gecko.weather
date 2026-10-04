@@ -1,0 +1,26 @@
+Bundle-Name: Gecko Weather Outlook
+Bundle-Description: A weather page's view of a site — the next 24 hours one by one, the next two \
+	days in summary — built from the per-source report by a documented picking rule, and offered as \
+	the remote service WeatherOutlook through the Remote Service Admin of Fennec Services (DDSR). A \
+	consumer of the weather service, not part of it.
+
+src: src-gen,src
+
+-library: enableEMF
+
+-generate: \
+	model/outlook.ecore; \
+		generate=fennecEMF; \
+		ecore=model/outlook.ecore; \
+		output=src-gen
+
+-includeresource.model: model=model
+
+-buildpath: \
+	org.gecko.weather.model;version=snapshot,\
+	org.gecko.weather.api;version=snapshot,\
+	org.osgi.service.component.annotations;version=latest,\
+	org.osgi.service.metatype.annotations;version=latest
+
+-testpath: \
+	assertj-core;version=latest
