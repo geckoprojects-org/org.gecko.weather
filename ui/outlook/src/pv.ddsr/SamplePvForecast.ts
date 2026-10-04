@@ -7,7 +7,7 @@
  * south-west that shades the afternoon, readings every five minutes for today so far that run about
  * a fifth below the forecast. Deterministic for a given clock.
  */
-import type { PlantInfo, PvDayValue, PvForecast, PvHourValue, PvReading, PvReadings, PvSnapshot } from '../contracts.js'
+import type { PlantInfo, PlantProfile, PvDayValue, PvForecast, PvHourValue, PvReading, PvReadings, PvSnapshot } from '../contracts.js'
 
 const HOUR = 3_600_000
 const ZONE = 'Europe/Berlin'
@@ -66,6 +66,29 @@ export class SamplePvForecast implements PvForecast {
 
   async plants(): Promise<PlantInfo[]> {
     return [PLANT]
+  }
+
+  async plant(): Promise<PlantProfile> {
+    // a deciduous forest from south-east to west, 30 to 120 m away, 24 m high
+    const edge = [110, 60, 42, 34, 32, 31, 31, 33, 36, 42, 55, 75, 100, 130]
+    return {
+      id: PLANT.id,
+      name: PLANT.name,
+      mountingHeight: 2.5,
+      arrays: [
+        { name: 'Reihe', azimuth: 225, tilt: 10, peakPower: 2.58, moduleCount: 6 },
+        { name: 'Block', azimuth: 225, tilt: 10, peakPower: 4.3, moduleCount: 10 },
+      ],
+      obstacles: edge.map((d, k) => ({
+        name: `Wald ${150 + 10 * k}`,
+        azimuthFrom: 150 + 10 * k,
+        azimuthTo: 160 + 10 * k,
+        distance: d,
+        height: 24,
+        leafOffTransmittance: 0.3,
+      })),
+      horizon: [],
+    }
   }
 
   async forecast(): Promise<PvSnapshot> {

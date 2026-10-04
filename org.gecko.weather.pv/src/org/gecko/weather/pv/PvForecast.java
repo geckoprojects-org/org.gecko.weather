@@ -13,6 +13,7 @@
  */
 package org.gecko.weather.pv;
 
+import org.gecko.weather.pv.model.pv.Plant;
 import org.gecko.weather.pv.model.pv.PlantDirectory;
 import org.gecko.weather.pv.model.pv.PvMeasurementLog;
 import org.gecko.weather.pv.model.pv.PvOutlook;
@@ -32,6 +33,14 @@ public interface PvForecast {
 
 	/** The plants with a profile. */
 	PlantDirectory plants();
+
+	/**
+	 * A plant's profile — arrays, inverters, obstacles, horizon — for a view that draws it. Without
+	 * the plant's own coordinates: a view needs the geometry relative to the modules, not the address.
+	 *
+	 * @throws IllegalArgumentException if there is no such plant
+	 */
+	Plant plant(String plantId);
 
 	/**
 	 * The hours from the start of today (in the site's time zone) up to 48 hours past the current

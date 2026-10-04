@@ -201,11 +201,44 @@ export interface PvReadings {
   readings: PvReading[]
 }
 
+/** One orientation of modules, as the profile has it */
+export interface ProfileArray extends ArrayInfo {
+  moduleCount?: number
+}
+
+/** Something that hides the sun in a range of directions — a forest, a house */
+export interface ProfileObstacle {
+  name: string
+  /** left edge seen from the plant, clockwise from north */
+  azimuthFrom: number
+  azimuthTo: number
+  /** m from the modules */
+  distance: number
+  /** m above ground */
+  height: number
+  /** share of direct sun passing while leafless, 0 = opaque all year */
+  leafOffTransmittance: number
+}
+
+/** The plant's geometry, relative to its modules — no coordinates */
+export interface PlantProfile {
+  id: string
+  name: string
+  /** m above ground */
+  mountingHeight: number
+  arrays: ProfileArray[]
+  obstacles: ProfileObstacle[]
+  /** a measured horizon line, if any: azimuth → elevation */
+  horizon: { azimuth: number; elevation: number }[]
+}
+
 /** What the PV view asks */
 export interface PvForecast {
   origin(): string
   readonly examples: boolean
   plants(): Promise<PlantInfo[]>
+  /** the plant's geometry, for the 3D view */
+  plant(plantId: string): Promise<PlantProfile>
   forecast(plantId: string): Promise<PvSnapshot>
   /** the readings of a local day, today when `date` is empty */
   measurements(plantId: string, date?: string): Promise<PvReadings>

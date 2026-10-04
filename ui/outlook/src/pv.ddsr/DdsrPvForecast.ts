@@ -8,9 +8,9 @@
  */
 import { DdsrClientImpl, type ServiceLocator } from '@ddsr/client'
 import { RestFlavorPlugin } from '@ddsr/flavor-rest'
-import type { PlantInfo, PvForecast, PvReadings, PvSnapshot } from '../contracts.js'
+import type { PlantInfo, PlantProfile, PvForecast, PvReadings, PvSnapshot } from '../contracts.js'
 import { rootOf } from '../emf.js'
-import { registerPvPackage, toPlants, toPvSnapshot, toReadings } from './model.js'
+import { registerPvPackage, toPlantProfile, toPlants, toPvSnapshot, toReadings } from './model.js'
 
 /** The contract's name in the broker's catalog — the Java interface's simple name */
 export const CONTRACT = 'PvForecast'
@@ -29,6 +29,11 @@ export class DdsrPvForecast implements PvForecast {
   async plants(): Promise<PlantInfo[]> {
     registerPvPackage()
     return toPlants(rootOf(await (await this.find()).invoke('plants'), CONTRACT))
+  }
+
+  async plant(plantId: string): Promise<PlantProfile> {
+    registerPvPackage()
+    return toPlantProfile(rootOf(await (await this.find()).invoke('plant', { plantId }), CONTRACT))
   }
 
   async forecast(plantId: string): Promise<PvSnapshot> {

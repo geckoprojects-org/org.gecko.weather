@@ -7,7 +7,7 @@
  * into the plain values of the PV contract.
  */
 import type { EObject, EPackage } from '@emfts/core'
-import type { ArrayInfo, PlantInfo, PvDayValue, PvHourValue, PvReading, PvReadings, PvSnapshot } from '../contracts.js'
+import type { ArrayInfo, PlantInfo, PlantProfile, PvDayValue, PvHourValue, PvReading, PvReadings, PvSnapshot } from '../contracts.js'
 import { date, expect, flag, many, num, nums, registerPackage, text } from '../emf.js'
 
 import ecoreXml from '../../../../org.gecko.weather.pv/model/pv.ecore?raw'
@@ -101,5 +101,28 @@ export function toReadings(log: EObject): PvReadings {
     date: text(log, 'date') ?? '',
     meterType: text(log, 'meterType'),
     readings: many(log, 'measurements').map(toReading).filter((r) => !Number.isNaN(r.time.getTime())),
+  }
+}
+
+/**
+ * The `Plant` EObject as its geometry. Java EMF leaves default values out: an obstacle that is
+ * opaque all year has no leafOffTransmittance, a plant without mounting height none either.
+ */
+export function toPlantProfile(o: EObject): PlantProfile {
+  expect(o, 'Plant')
+  return {
+    id: text(o, 'id') ?? '',
+    name: text(o, 'name') ?? text(o, 'id') ?? '',
+    mountingHeight: num(o, 'mountingHeight') ?? 0,
+    arrays: many(o, 'arrays').map((a) => ({ ...toArray(a), moduleCount: num(a, 'moduleCount') })),
+    obstacles: many(o, 'obstacles').map((b) => ({
+      name: text(b, 'name') ?? '',
+      azimuthFrom: num(b, 'azimuthFrom') ?? 0,
+      azimuthTo: num(b, 'azimuthTo') ?? 0,
+      distance: num(b, 'distance') ?? 0,
+      height: num(b, 'height') ?? 0,
+      leafOffTransmittance: num(b, 'leafOffTransmittance') ?? 0,
+    })),
+    horizon: many(o, 'horizon').map((h) => ({ azimuth: num(h, 'azimuth') ?? 0, elevation: num(h, 'elevation') ?? 0 })),
   }
 }

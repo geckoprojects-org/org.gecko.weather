@@ -5,10 +5,11 @@
  * without the registry it shows examples and says so.
  */
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
-import type { PlantInfo, PvForecast, PvReadings, PvSnapshot } from '../contracts.js'
+import type { PlantInfo, PlantProfile, PvForecast, PvReadings, PvSnapshot } from '../contracts.js'
 import { hourLabel, whole } from '../view.weather/weather.js'
 import PvChart from './PvChart.vue'
 import PvDays from './PvDays.vue'
+import PvScene from './PvScene.vue'
 import { facing, kw, kwh, latest, measuredRatio, percent } from './pv.js'
 
 const props = defineProps<{ pv: PvForecast; fallback?: PvForecast }>()
@@ -18,6 +19,7 @@ const plants = ref<PlantInfo[]>([])
 const plantId = ref('')
 const snapshot = ref<PvSnapshot | null>(null)
 const readings = ref<PvReadings | null>(null)
+const profile = ref<PlantProfile | null>(null)
 const state = ref<'loading' | 'ready' | 'error'>('loading')
 const error = ref('')
 const now = ref(new Date())
@@ -50,6 +52,8 @@ async function load(): Promise<void> {
     const [s, r] = await Promise.all([source.value.forecast(plantId.value), source.value.measurements(plantId.value)])
     snapshot.value = s
     readings.value = r
+    // the geometry changes only with the profile: read once per plant
+    if (profile.value?.id !== plantId.value) profile.value = await source.value.plant(plantId.value).catch(() => null)
     state.value = 'ready'
   } catch (e) {
     error.value = e instanceof Error ? e.message : String(e)
@@ -136,6 +140,11 @@ function deviation(r: number): string {
           Zähler sie meldet. Schraffiert: Stunden, in denen die Sonne hinter Horizont oder Wald steht; dann kommt nur
           diffuses Licht an.
         </p>
+
+        <template v-if="profile">
+          <h2 class="section-title">Verschattung in 3D</h2>
+          <PvScene :key="profile.id" :profile="profile" :hours="snapshot.hours" :time-zone="timeZone" :now="now" />
+        </template>
 
         <h2 class="section-title">Tage</h2>
         <PvDays :days="snapshot.days" :time-zone="timeZone" :today="today" />

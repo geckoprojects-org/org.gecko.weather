@@ -186,6 +186,14 @@ public class PvForecastComponent implements PvForecast {
 	}
 
 	@Override
+	public Plant plant(String plantId) {
+		Plant plant = folder.plant(plantId).orElseThrow(() -> new IllegalArgumentException("No plant profile " + plantId + " in " + folder.folder()));
+		plant.unsetLatitude();
+		plant.unsetLongitude();
+		return plant;
+	}
+
+	@Override
 	public PvOutlook forecast(String plantId) {
 		Plant plant = folder.plant(plantId).orElseThrow(() -> new IllegalArgumentException("No plant profile " + plantId + " in " + folder.folder()));
 		Site site = sites.get(plant.getSiteId()).orElseThrow(() -> new UnknownSiteException(plant.getSiteId()));

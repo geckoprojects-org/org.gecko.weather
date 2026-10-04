@@ -44,7 +44,7 @@ type-check`, `npm run build`.
 | `src/view.weather/` — `WeatherPage`, `HourlyForecast`, `DayOverview`, `WeatherIcon`, `weather.ts` | `packages/view.weather`, registered under `XDP_VIEW` |
 | `src/contracts.ts` — `PvForecast` and its plain values | `@xdp/contracts`: a service id of its own, e.g. `XDP_PV_FORECAST` |
 | `src/pv.ddsr/` — `DdsrPvForecast`, `model.ts`, `SamplePvForecast` | `packages/pv.ddsr`, a tsm component like `weather.ddsr` |
-| `src/view.pv/` — `PvPage`, `PvChart`, `PvDays`, `pv.ts` | `packages/view.pv`, registered under `XDP_VIEW` |
+| `src/view.pv/` — `PvPage`, `PvChart`, `PvDays`, `PvScene`, `pv.ts`, `pv3d.ts` | `packages/view.pv`, registered under `XDP_VIEW` |
 | `src/emf.ts` — registering an ecore, reading values off an EObject | shared by both `.ddsr` packages, or one copy each |
 | `src/App.vue` — the two tabs | nothing — the xdp shell's navigation |
 | `src/styles/` | nothing — copies of `@xdp/ui.tokens`, loaded by the xdp host |
@@ -91,6 +91,15 @@ The second tab reads the remote service `PvForecast` (`org.gecko.weather.pv`) th
   dots — the value to compare with the bar. Night shaded, "now" marked, each day's best hour labelled.
   Hover or keyboard focus on an hour shows expected DC and AC power, the measured mean, irradiance on
   the module and horizontal, cell temperature, sun position, shading and the weather source.
+- **Shading in 3D** (`PvScene.vue`, three.js): the carport with its modules as the profile says
+  (count, orientation, tilt, mounting height; the layout itself is schematic), the obstacles as
+  trees standing from the profile's forest edge on, the sun of a chosen minute with real shadows
+  (shadow map), the sun's path of the day; a slider runs through the day, the forest turns bare in
+  the leafless season. The line under the picture says it in words — where the sun stands, what hides
+  it, what the forecast expects for the hour — so the picture adds shape, not information one could
+  only get by looking. The geometry (`pv3d.ts`: sun between the forecast hours, horizon angle,
+  beam share, tree positions, module layout) is plain TypeScript and tested. The profile comes from
+  `PvForecast.plant(plantId)`, without the plant's coordinates.
 - **Days**: expected energy, specific yield in kWh/kWp, the best hour, and for today the measured
   energy.
 
