@@ -27,8 +27,8 @@ export class SampleWeatherOutlook implements WeatherOutlook {
   async outlook(): Promise<OutlookSnapshot> {
     const start = Math.floor(this.now().getTime() / HOUR) * HOUR
     const hours: HourValue[] = []
-    for (let h = 0; h < 72; h++) hours.push(hour(new Date(start + h * HOUR)))
-    const days = [1, 2].map((d) => day(new Date(start + d * 24 * HOUR), hours.slice(d * 24 - 6, d * 24 + 18)))
+    for (let h = 0; h < 8 * 24; h++) hours.push(hour(new Date(start + h * HOUR)))
+    const days = [1, 2, 3, 4, 5, 6, 7].map((d) => day(new Date(start + d * 24 * HOUR), hours.slice(d * 24 - 6, d * 24 + 18)))
     const today = day(new Date(start), hours.slice(0, 18))
     return {
       ...SITE,

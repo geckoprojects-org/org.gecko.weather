@@ -32,7 +32,8 @@ public interface WeatherOutlook {
 	SiteDirectory sites();
 
 	/**
-	 * The next 24 hours from the current full hour and the next two days, in the site's time zone.
+	 * The next 24 hours from the current full hour and the days after, as configured (seven by default;
+	 * MOSMIX reaches ten), in the site's time zone.
 	 *
 	 * @throws org.gecko.weather.api.UnknownSiteException if no such site is registered
 	 */

@@ -1,6 +1,6 @@
 # org.gecko.weather.outlook
 
-A weather page's view of a site — the next 24 hours by the hour, the next two days in summary — as
+A weather page's view of a site — the next 24 hours by the hour, the next seven days in summary — as
 the remote service **`WeatherOutlook`**, exported through the Remote Service Admin of
 [Fennec Services](https://github.com/eclipse-fennec/emf.services). A **consumer** of the weather
 service, not part of it: the report keeps every source apart (ADR-0013); this bundle picks one value

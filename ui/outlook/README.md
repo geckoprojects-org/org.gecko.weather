@@ -1,7 +1,7 @@
 # Weather outlook — demo UI
 
-A weather page for a registered site: the next **24 hours by the hour** and the **next two days in
-summary**, read from the Java remote service `WeatherOutlook` through the
+A weather page for a registered site: the next **24 hours by the hour** and the **next seven days in
+summary** (MOSMIX reaches ten; `WEATHER_OUTLOOK_DAYS` says how many), read from the Java remote service `WeatherOutlook` through the
 [Fennec Services](https://github.com/eclipse-fennec/emf.services) registry (DDSR). Built in the
 style of [xdp-ui](../../../xdp-ui) — Vue 3, `@emfts/core`, the `@ddsr/*` TypeScript client, the xdp
 tokens and tiles — so that it moves over as two packages.
@@ -69,7 +69,7 @@ and `org.gecko.weather.pv/model/pv.ecore`, the files the Java side is generated 
   solar noon** — DWD publishes the UV index once per day, so there is no hourly curve to draw. Then
   the hourly rain probability and the wind (arrows point where the air goes). Hover or keyboard
   focus on an hour shows all its values.
-- **Two days** as xdp tiles: high/low, precipitation, sunshine, **insolation in kWh/m²**, UV maximum, mean cloud cover,
+- **Seven days** as xdp tiles, three to a row: high/low, precipitation, sunshine, **insolation in kWh/m²**, UV maximum, mean cloud cover,
   strongest gust, sunrise, sunset, day length.
 - **Sources**: which dataset each group of quantities came from, how far away, when it was issued.
 - Colours: the xdp series colours `--s2` (radiation, amber, in two steps for direct/diffuse) and

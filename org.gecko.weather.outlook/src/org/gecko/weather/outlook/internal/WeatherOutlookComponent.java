@@ -57,7 +57,7 @@ public class WeatherOutlookComponent implements WeatherOutlook {
 		int hours() default 24;
 
 		@AttributeDefinition(description = "Days from tomorrow on.")
-		int days() default 2;
+		int days() default 7;
 
 		@AttributeDefinition(description = "Time zone for a site that names none.")
 		String defaultTimeZone() default "Europe/Berlin";

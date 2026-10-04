@@ -1,5 +1,8 @@
 <script setup lang="ts">
-/** The next days as tiles — the xdp tile with its metrics and foot. */
+/**
+ * The next days as tiles — the xdp tile with its metrics and foot. Three to a row from seven days
+ * on, so that a week does not become a column.
+ */
 import type { DayValue } from '../contracts.js'
 import WeatherIcon from './WeatherIcon.vue'
 import { clock, dayLabel, degrees, fixed1, kmh, skyOf, skyText, whole } from './weather.js'
@@ -14,7 +17,7 @@ function hours(h: number | undefined): string {
 </script>
 
 <template>
-  <div class="tiles">
+  <div class="tiles" :class="{ three: days.length > 4 }">
     <article v-for="d in days" :key="d.date" class="tile day">
       <div class="head">
         <div class="icon"><WeatherIcon :sky="skyOf(d.weatherCode, d.cloudCoverMean)" :size="26" /></div>

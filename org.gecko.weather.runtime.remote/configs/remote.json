@@ -15,7 +15,7 @@
 
 	"org.gecko.weather.outlook.internal.WeatherOutlookComponent": {
 		"hours": "$[env:WEATHER_OUTLOOK_HOURS;type=Integer;default=24]",
-		"days": "$[env:WEATHER_OUTLOOK_DAYS;type=Integer;default=2]",
+		"days": "$[env:WEATHER_OUTLOOK_DAYS;type=Integer;default=7]",
 		"defaultTimeZone": "Europe/Berlin"
 	},
 

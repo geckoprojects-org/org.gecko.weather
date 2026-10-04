@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * The weather of a site: the next 24 hours by the hour, the next two days in summary, and where
+ * The weather of a site: the next 24 hours by the hour, the days after in summary, and where
  * the values come from. In xdp-ui this becomes view.weather, registered under XDP_VIEW; the
  * outlook arrives as a service (XDP_WEATHER_OUTLOOK) and, without the registry bundle, the page
  * shows examples and says so — as view.persistence does.
@@ -56,6 +56,14 @@ watch(siteId, (now, before) => {
   if (before && now !== before) void load()
 })
 
+const NUMBER_WORDS = ['', 'ein', 'zwei', 'drei', 'vier', 'fünf', 'sechs', 'sieben', 'acht', 'neun', 'zehn']
+
+/** "Nächste sieben Tage" — MOSMIX reaches ten days, the configuration says how many are shown */
+function daysTitle(n: number): string {
+  if (n === 1) return 'Morgen'
+  return `Nächste ${NUMBER_WORDS[n] ?? n} Tage`
+}
+
 function dayLength(h: number | undefined): string {
   if (h === undefined) return '–'
   const m = Math.round(h * 60)
@@ -77,7 +85,7 @@ function issued(d: Date | undefined): string {
   <section class="view wide">
     <h1>Wetter{{ snapshot ? ` · ${snapshot.siteName}` : '' }}</h1>
     <p class="intro">
-      Die nächsten 24 Stunden Stunde für Stunde, die nächsten zwei Tage im Überblick — je Größe aus der
+      Die nächsten 24 Stunden Stunde für Stunde, die nächsten Tage im Überblick — je Größe aus der
       Quelle, die für den Standort am nächsten liegt.
     </p>
 
@@ -112,7 +120,7 @@ function issued(d: Date | undefined): string {
         />
         <p v-else class="dim">Für diesen Standort liegen noch keine Werte vor.</p>
 
-        <h2 class="section-title">Nächste zwei Tage</h2>
+        <h2 class="section-title">{{ daysTitle(snapshot.days.length) }}</h2>
         <DayOverview v-if="snapshot.days.length" :days="snapshot.days" :time-zone="timeZone" />
 
         <h2 class="section-title">Quellen</h2>

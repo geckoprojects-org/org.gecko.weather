@@ -44,7 +44,7 @@ describe('weather view helpers', () => {
     const o = await sample.outlook()
     expect(sample.examples).toBe(true)
     expect(o.hours).toHaveLength(24)
-    expect(o.days).toHaveLength(2)
+    expect(o.days).toHaveLength(7)
     expect(o.hours[0].time.toISOString()).toBe('2026-10-04T06:00:00.000Z')
   })
 })
