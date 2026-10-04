@@ -50,7 +50,9 @@ import org.gecko.weather.pv.model.pv.PvPackage;
  * Freezes the forecast of every plant at fixed local hours — the outlook changes with every model
  * run, and a comparison with what was measured needs the forecast as it stood before. One XMI file
  * per plant and hour: {@code <folder>/<plantId>/<yyyy-MM-dd>T<HH>.xmi}. Driven by {@link #tick};
- * a file that exists is not written again, so a restart in the same hour does nothing twice.
+ * a file that exists is not written again, so a restart in the same hour does nothing twice. A
+ * configured hour the runtime slept through is caught up at the next tick, under the hour it was
+ * really taken.
  *
  * @author Mark Hoffmann
  * @since 04.10.2026
@@ -97,6 +99,34 @@ public final class ForecastSnapshots {
 				.filter(h -> h >= 0 && h < 24).toList());
 	}
 
+	/**
+	 * Whether a snapshot is due: in a configured hour, or — the runtime was down then — when the
+	 * last configured hour of the day has passed without any snapshot since. The catch-up file is
+	 * named after the hour it was really taken, so a comparison knows how fresh it is.
+	 */
+	boolean due(Plant plant, Instant now) {
+		ZonedDateTime local = now.atZone(zones.apply(plant));
+		int hour = local.getHour();
+		if (hours.contains(hour)) {
+			return true;
+		}
+		int lastSlot = hours.stream().filter(h -> h < hour).max(Integer::compare).orElse(-1);
+		if (lastSlot < 0) {
+			return false;
+		}
+		Path dir = folder.resolve(plant.getId());
+		String day = local.toLocalDate().toString();
+		if (!Files.isDirectory(dir)) {
+			return true;
+		}
+		try (var listing = Files.list(dir)) {
+			return listing.map(f -> f.getFileName().toString()).filter(n -> n.startsWith(day + "T") && n.endsWith(".xmi"))
+					.mapToInt(n -> Integer.parseInt(n.substring(day.length() + 1, day.length() + 3))).noneMatch(h -> h >= lastSlot);
+		} catch (IOException | NumberFormatException e) {
+			return false;
+		}
+	}
+
 	/** The file a snapshot of this plant taken at this instant has. */
 	public Path file(Plant plant, Instant now) {
 		ZonedDateTime local = now.atZone(zones.apply(plant));
@@ -113,7 +143,7 @@ public final class ForecastSnapshots {
 			return;
 		}
 		for (Plant plant : all) {
-			if (plant.getId() == null || !hours.contains(now.atZone(zones.apply(plant)).getHour())) {
+			if (plant.getId() == null || !due(plant, now)) {
 				continue;
 			}
 			Path file = file(plant, now);

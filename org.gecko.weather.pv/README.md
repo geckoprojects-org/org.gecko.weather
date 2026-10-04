@@ -67,7 +67,9 @@ nothing. On hybrid inverters the PV power is the DC side — compare it with `dc
 measured needs it as it stood before. At the local hours in `snapshotHours` (default `6,18`: the
 day itself in the morning, the day ahead in the evening) every plant's outlook is written to
 `snapshotsFolder` (default `data/weather/pv-forecasts`) as `<plantId>/<yyyy-MM-dd>T<HH>.xmi`, once —
-a restart in the same hour writes nothing twice.
+a restart in the same hour writes nothing twice. A configured hour the runtime slept through is
+caught up at the next start, under the hour it was really taken (`T09` for a runtime started at
+nine), so the file name says how fresh the frozen forecast is.
 
 The snapshots also keep today whole: the weather service holds each source's latest run, and the
 runs of the afternoon begin after the morning, so the report no longer covers the hours already

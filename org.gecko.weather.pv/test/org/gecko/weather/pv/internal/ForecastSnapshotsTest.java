@@ -107,6 +107,33 @@ class ForecastSnapshotsTest {
 	}
 
 	@Test
+	void aMissedHourIsCaughtUpUnderTheRealHour() {
+		AtomicInteger calls = new AtomicInteger();
+		ForecastSnapshots s = new ForecastSnapshots(tmp, Set.of(6, 18), () -> List.of(plant("a")), p -> BERLIN, id -> {
+			calls.incrementAndGet();
+			PvOutlook o = F.createPvOutlook();
+			o.setPlantId(id);
+			return o;
+		});
+		// the runtime starts at 09:20 Berlin: the 06:00 snapshot never happened
+		s.tick(Instant.parse("2026-10-05T07:20:00Z"));
+		assertThat(calls).hasValue(1);
+		assertThat(tmp.resolve("a/2026-10-05T09.xmi")).isRegularFile();
+		// later the same morning: the catch-up counts, nothing more until 18
+		s.tick(Instant.parse("2026-10-05T09:00:00Z"));
+		assertThat(calls).hasValue(1);
+		// 18:30: the regular slot
+		s.tick(Instant.parse("2026-10-05T16:30:00Z"));
+		assertThat(calls).hasValue(2);
+		// 20:00 after a restart: 18 exists, nothing to catch up
+		s.tick(Instant.parse("2026-10-05T18:00:00Z"));
+		assertThat(calls).hasValue(2);
+		// 03:00 the next night: before the first slot, nothing due
+		s.tick(Instant.parse("2026-10-06T01:00:00Z"));
+		assertThat(calls).hasValue(2);
+	}
+
+	@Test
 	void aFailingPlantDoesNotStopTheOthers() throws Exception {
 		ForecastSnapshots s = new ForecastSnapshots(tmp, Set.of(6), () -> List.of(plant("broken"), plant("ok")), p -> BERLIN, id -> {
 			if (id.equals("broken")) {
