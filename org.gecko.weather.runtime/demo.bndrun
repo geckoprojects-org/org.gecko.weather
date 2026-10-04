@@ -46,6 +46,7 @@ jersey.deps:
 	bnd.identity;id='org.gecko.weather.outlook',\
 	bnd.identity;id='org.gecko.weather.pv',\
 	bnd.identity;id='org.gecko.weather.pv.fronius',\
+	bnd.identity;id='org.eclipse.fennec.codec',\
 	bnd.identity;id='org.gecko.weather.runtime.remote',\
 	bnd.identity;id='org.eclipse.fennec.services.rsa',\
 	bnd.identity;id='org.eclipse.fennec.services.rsa.config',\
@@ -184,4 +185,5 @@ jersey.deps:
 	tools.jackson.core.jackson-databind;version='[3.2.2,3.2.3)',\
 	tools.jackson.dataformat.jackson-dataformat-yaml;version='[3.2.2,3.2.3)',\
 	org.gecko.weather.pv;version=snapshot,\
-	org.gecko.weather.pv.fronius;version=snapshot
+	org.gecko.weather.pv.fronius;version=snapshot,\
+	org.eclipse.fennec.codec;version='[0.1.0,0.1.1)'

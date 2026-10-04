@@ -26,9 +26,19 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
-import java.time.OffsetDateTime;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.fennec.codec.resource.CodecResourceFactory;
+import org.eclipse.fennec.codec.util.MetadataServiceFactory;
+import org.eclipse.fennec.emf.osgi.metadata.MetadataWhiteboard;
+
+import org.gecko.weather.pv.fronius.model.solarapi.Inverter;
+import org.gecko.weather.pv.fronius.model.solarapi.PowerFlowData;
+import org.gecko.weather.pv.fronius.model.solarapi.PowerFlowResponse;
+import org.gecko.weather.pv.fronius.model.solarapi.Site;
+import org.gecko.weather.pv.fronius.model.solarapi.SolarApiPackage;
 import org.gecko.weather.pv.model.pv.Meter;
 import org.gecko.weather.pv.model.pv.PvFactory;
 import org.gecko.weather.pv.model.pv.PvMeasurement;
@@ -38,12 +48,28 @@ import org.junit.jupiter.api.Test;
 
 import com.sun.net.httpserver.HttpServer;
 
-/** Parsing, mapping and the HTTP round trip — against made-up answers in the shape the devices give. */
+/**
+ * Reading through the Fennec JSON codec, mapping and the HTTP round trip — against made-up answers in
+ * the shape the devices give. The codec is set up as outside OSGi: a factory over a metadata
+ * whiteboard that knows the solarapi package.
+ */
 class FroniusSolarApiTest {
 
 	private HttpServer server;
 	private final AtomicReference<String> answer = new AtomicReference<>();
 	private final AtomicReference<String> requested = new AtomicReference<>();
+
+	static ResourceSet resourceSet() {
+		MetadataWhiteboard metadata = MetadataServiceFactory.create();
+		metadata.registerPackage(SolarApiPackage.eINSTANCE);
+		ResourceSet rs = new ResourceSetImpl();
+		rs.getResourceFactoryRegistry().getExtensionToFactoryMap().put("json", new CodecResourceFactory(metadata));
+		return rs;
+	}
+
+	static PowerFlowResponse read(String fixture) throws IOException {
+		return PowerFlowReader.read(fixture(fixture), resourceSet());
+	}
 
 	static InputStream fixture(String name) {
 		InputStream in = FroniusSolarApiTest.class.getClassLoader().getResourceAsStream("fixtures/" + name);
@@ -76,20 +102,28 @@ class FroniusSolarApiTest {
 
 	@Test
 	void gen24WithBattery() throws IOException {
-		PowerFlow flow = FroniusSolarApi.parsePowerFlow(fixture("powerflow-gen24-battery.json"));
-		assertThat(flow.version()).isEqualTo("13");
-		assertThat(flow.mode()).isEqualTo("bidirectional");
-		assertThat(flow.pv()).isEqualTo(1544.8);
-		assertThat(flow.load()).isEqualTo(-655.4);
-		assertThat(flow.grid()).isEqualTo(-402.1);
-		assertThat(flow.battery()).isEqualTo(-310.25);
-		assertThat(flow.inverter()).isEqualTo(1210.5);
-		assertThat(flow.stateOfCharge()).isEqualTo(42.5);
-		assertThat(flow.energyTotal()).isEqualTo(512345.6);
-		assertThat(flow.inverters()).isEqualTo(1);
-		assertThat(flow.timestamp()).contains(OffsetDateTime.parse("2026-10-04T11:15:02Z"));
+		PowerFlowResponse answer = read("powerflow-gen24-battery.json");
+		assertThat(answer.getHead().getStatus().getCode()).isZero();
+		assertThat(answer.getHead().getTimestamp()).isEqualTo("2026-10-04T11:15:02+00:00");
+		PowerFlowData data = answer.getBody().getData();
+		assertThat(data.getVersion()).isEqualTo("13");
+		Site site = data.getSite();
+		assertThat(site.getMode()).isEqualTo("bidirectional");
+		assertThat(site.getPowerPv()).isEqualTo(1544.8);
+		assertThat(site.getPowerLoad()).isEqualTo(-655.4);
+		assertThat(site.getPowerGrid()).isEqualTo(-402.1);
+		assertThat(site.getPowerBattery()).isEqualTo(-310.25);
+		assertThat(site.getEnergyDay()).as("null on GEN24").isNull();
+		assertThat(site.getEnergyTotal()).isEqualTo(512345.6);
+		assertThat(site.getMeterLocation()).isEqualTo("grid");
+		assertThat(data.getInverters()).hasSize(1);
+		Inverter inverter = data.getInverters().get("1");
+		assertThat(inverter.getDeviceType()).isEqualTo(1);
+		assertThat(inverter.getPower()).isEqualTo(1210.5);
+		assertThat(inverter.getStateOfCharge()).isEqualTo(42.5);
+		assertThat(inverter.getBatteryMode()).isEqualTo("normal");
 
-		PvMeasurement m = FroniusMeter.measurement(flow);
+		PvMeasurement m = FroniusMeter.measurement(answer);
 		assertThat(m.getPvPower()).isCloseTo(1.5448, within(1e-9));
 		assertThat(m.getAcPower()).isCloseTo(1.2105, within(1e-9));
 		assertThat(m.getLoadPower()).as("consumption positive").isCloseTo(0.6554, within(1e-9));
@@ -102,10 +136,10 @@ class FroniusSolarApiTest {
 
 	@Test
 	void sleepingInverterProducesZeroAndLeavesTheRestUnset() throws IOException {
-		PowerFlow flow = FroniusSolarApi.parsePowerFlow(fixture("powerflow-night-produce-only.json"));
-		assertThat(flow.pv()).isNull();
-		assertThat(flow.inverter()).isNull();
-		PvMeasurement m = FroniusMeter.measurement(flow);
+		PowerFlowResponse answer = read("powerflow-night-produce-only.json");
+		assertThat(answer.getBody().getData().getSite().getPowerPv()).isNull();
+		assertThat(answer.getBody().getData().getInverters().get("1").getPower()).isNull();
+		PvMeasurement m = FroniusMeter.measurement(answer);
 		assertThat(m.isSetPvPower()).isTrue();
 		assertThat(m.getPvPower()).isZero();
 		assertThat(m.isSetAcPower()).isFalse();
@@ -118,24 +152,25 @@ class FroniusSolarApiTest {
 
 	@Test
 	void inverterPowerIsSummedOverAllInverters() throws IOException {
-		PowerFlow flow = FroniusSolarApi.parsePowerFlow(fixture("powerflow-two-inverters.json"));
-		assertThat(flow.inverters()).isEqualTo(2);
-		assertThat(flow.inverter()).isEqualTo(750.0);
-		assertThat(flow.stateOfCharge()).isNull();
+		PowerFlowResponse answer = read("powerflow-two-inverters.json");
+		assertThat(answer.getBody().getData().getInverters().keySet()).containsExactlyInAnyOrder("1", "2");
+		PvMeasurement m = FroniusMeter.measurement(answer);
+		assertThat(m.getAcPower()).isCloseTo(0.75, within(1e-9));
+		assertThat(m.isSetStateOfCharge()).isFalse();
 	}
 
 	@Test
 	void statusCodeIsAnError() {
-		assertThatThrownBy(() -> FroniusSolarApi.parsePowerFlow(fixture("status-device-not-available.json")))
+		assertThatThrownBy(() -> read("status-device-not-available.json"))
 				.isInstanceOf(FroniusException.class).hasMessageContaining("12").hasMessageContaining("DeviceNotAvailable")
 				.satisfies(e -> assertThat(((FroniusException) e).code()).isEqualTo(12));
 	}
 
 	@Test
 	void garbageIsAnIOException() {
-		assertThatThrownBy(() -> FroniusSolarApi.parsePowerFlow(new ByteArrayInputStream("<html>".getBytes(StandardCharsets.UTF_8))))
+		assertThatThrownBy(() -> PowerFlowReader.read(new ByteArrayInputStream("<html>".getBytes(StandardCharsets.UTF_8)), resourceSet()))
 				.isInstanceOf(IOException.class);
-		assertThatThrownBy(() -> FroniusSolarApi.parsePowerFlow(new ByteArrayInputStream("{}".getBytes(StandardCharsets.UTF_8))))
+		assertThatThrownBy(() -> PowerFlowReader.read(new ByteArrayInputStream("{}".getBytes(StandardCharsets.UTF_8)), resourceSet()))
 				.isInstanceOf(IOException.class).hasMessageContaining("Head");
 	}
 
@@ -146,7 +181,7 @@ class FroniusSolarApiTest {
 			Meter meter = PvFactory.eINSTANCE.createMeter();
 			meter.setType(FroniusMeter.TYPE);
 			meter.setUrl(url);
-			PvMeasurement m = new FroniusMeter().read(meter);
+			PvMeasurement m = new FroniusMeter(resourceSet()).read(meter);
 			assertThat(m.getPvPower()).isCloseTo(1.5448, within(1e-9));
 			assertThat(requested.get()).isEqualTo("/solar_api/v1/GetPowerFlowRealtimeData.fcgi");
 		}
@@ -154,7 +189,7 @@ class FroniusSolarApiTest {
 
 	@Test
 	void notFoundHintsAtTheSwitchedOffApi() {
-		FroniusSolarApi api = new FroniusSolarApi(HttpClient.newHttpClient(), URI.create(base() + "/elsewhere/"), Duration.ofSeconds(2));
+		FroniusSolarApi api = new FroniusSolarApi(HttpClient.newHttpClient(), URI.create(base() + "/elsewhere/"), Duration.ofSeconds(2), resourceSet());
 		assertThatThrownBy(api::powerFlow).isInstanceOf(IOException.class).hasMessageContaining("404")
 				.hasMessageContaining("Solar API");
 	}
@@ -167,8 +202,8 @@ class FroniusSolarApiTest {
 		}
 		Meter meter = PvFactory.eINSTANCE.createMeter();
 		meter.setUrl("http://127.0.0.1:" + port);
-		assertThatThrownBy(() -> new FroniusMeter().read(meter)).isInstanceOf(IOException.class);
+		assertThatThrownBy(() -> new FroniusMeter(resourceSet()).read(meter)).isInstanceOf(IOException.class);
 		meter.setUrl("ftp://inverter");
-		assertThatThrownBy(() -> new FroniusMeter().read(meter)).isInstanceOf(IOException.class).hasMessageContaining("URL");
+		assertThatThrownBy(() -> new FroniusMeter(resourceSet()).read(meter)).isInstanceOf(IOException.class).hasMessageContaining("URL");
 	}
 }

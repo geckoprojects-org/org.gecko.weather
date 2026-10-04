@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="solarapi" nsURI="https://geckoprojects.org/fronius/solarapi/1.0" nsPrefix="solarapi">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+    <details key="copyrightText" value="Copyright (c) 2012 - 2026 Data In Motion and others.&#xA;All rights reserved.&#xA;&#xA;This program and the accompanying materials are made&#xA;available under the terms of the Eclipse Public License 2.0&#xA;which is available at https://www.eclipse.org/legal/epl-2.0/&#xA;&#xA;SPDX-License-Identifier: EPL-2.0&#xA;&#xA;Contributors:&#xA;     Data In Motion - initial API and implementation"/>
+    <details key="documentation" value="The answers of the local Fronius Solar API v1 (Fronius document 42,0410,2012) as they come over the wire, read with the Fennec JSON codec. Member names are the API&apos;s, mapped through the codec key annotation. Only GetPowerFlowRealtimeData so far. Units and signs are Fronius&apos;: W, Wh; P_Load negative for consumption, P_Grid positive when drawing, P_Akku positive when discharging. A value the device reports as null is null."/>
+    <details key="complianceLevel" value="21.0"/>
+    <details key="oSGiCompatible" value="true"/>
+    <details key="basePackage" value="org.gecko.weather.pv.fronius.model"/>
+    <details key="prefix" value="SolarApi"/>
+    <details key="modelName" value="SolarApi"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="PowerFlowResponse">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Answer of /solar_api/v1/GetPowerFlowRealtimeData.fcgi."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="head" eType="#//Head" containment="true">
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="Head"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="body" eType="#//PowerFlowBody" containment="true">
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="Body"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Head">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Common response header of every Solar API answer."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="status" eType="#//Status" containment="true">
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="Status"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timestamp" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="RFC 3339 time of the answer in the device&amp;apos;s local time — not when it measured."/>
+      </eAnnotations>
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="Timestamp"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Status">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Whether the request succeeded: code 0 is OK, anything else an error (Solar API error code table)."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="code" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="Code"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="reason" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="Reason"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userMessage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="UserMessage"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PowerFlowBody">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Body of the power flow answer."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="data" eType="#//PowerFlowData" containment="true">
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="Data"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PowerFlowData">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The power flow of the site and its inverters."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="PowerFlowVersion — which fields to expect (12, 13, …)."/>
+      </eAnnotations>
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="Version"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="site" eType="#//Site" containment="true">
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="Site"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inverters" eType="#//InverterEntry" upperBound="-1" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The inverters, keyed by their device number as the API writes them: an object with one member per inverter."/>
+      </eAnnotations>
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="Inverters"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Site">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The site as a whole."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="produce-only, meter, vague-meter, bidirectional or ac-coupled."/>
+      </eAnnotations>
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="Mode"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="batteryStandby" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="BatteryStandby"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="backupMode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="BackupMode"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="powerGrid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="W, positive when drawing from the grid; null without meter."/>
+      </eAnnotations>
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="P_Grid"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="powerLoad" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="W, negative for consumption; null without meter."/>
+      </eAnnotations>
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="P_Load"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="powerBattery" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="W, positive when discharging; null without active battery."/>
+      </eAnnotations>
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="P_Akku"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="powerPv" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="W of the PV generator — DC side on GEN24 and Hybrid; null while the inverter is not running."/>
+      </eAnnotations>
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="P_PV"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="relativeSelfConsumption" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject">
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="rel_SelfConsumption"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="relativeAutonomy" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject">
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="rel_Autonomy"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="meterLocation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="load, grid or unknown."/>
+      </eAnnotations>
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="Meter_Location"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="energyDay" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Wh today; always null on GEN24."/>
+      </eAnnotations>
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="E_Day"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="energyYear" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Wh this year; always null on GEN24."/>
+      </eAnnotations>
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="E_Year"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="energyTotal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Wh ever; on GEN24 updated every 5 minutes."/>
+      </eAnnotations>
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="E_Total"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InverterEntry" instanceClassName="java.util.Map$Entry">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="One member of the Inverters object: the device number and the inverter."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//Inverter" containment="true">
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Inverter">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="One inverter in the power flow."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="deviceType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Device type; GEN24 and Tauro report 1."/>
+      </eAnnotations>
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="DT"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="power" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="AC power in W, null if not running."/>
+      </eAnnotations>
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="P"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stateOfCharge" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Battery state of charge in %."/>
+      </eAnnotations>
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="SOC"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="componentId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject">
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="CID"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="batteryMode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="Battery_Mode"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="energyDay" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject">
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="E_Day"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="energyYear" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject">
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="E_Year"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="energyTotal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject">
+      <eAnnotations source="http://eclipse.org/fennec/codec">
+        <details key="key" value="E_Total"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+</ecore:EPackage>
