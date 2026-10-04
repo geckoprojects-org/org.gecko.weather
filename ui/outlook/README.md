@@ -46,7 +46,8 @@ type-check`, `npm run build`.
 | `src/pv.ddsr/` — `DdsrPvForecast`, `model.ts`, `SamplePvForecast` | `packages/pv.ddsr`, a tsm component like `weather.ddsr` |
 | `src/view.pv/` — `PvPage`, `PvChart`, `PvDays`, `PvScene`, `pv.ts`, `pv3d.ts` | `packages/view.pv`, registered under `XDP_VIEW` |
 | `src/emf.ts` — registering an ecore, reading values off an EObject | shared by both `.ddsr` packages, or one copy each |
-| `src/App.vue` — the two tabs | nothing — the xdp shell's navigation |
+| `src/App.vue` — the tabs: weather, one per plant, a new plant | nothing — the xdp shell's navigation |
+| `src/view.pv/PlantEditor.vue` — the profile as a form | part of `packages/view.pv` |
 | `src/styles/` | nothing — copies of `@xdp/ui.tokens`, loaded by the xdp host |
 | `shims/node-crypto.ts` | `scripts/shims/node-crypto.ts` (copied from there) |
 | `vendor/ddsr/` | `vendor/ddsr/` (the same four tarballs, emf.services `82e7f3b`) |
@@ -75,11 +76,19 @@ and `org.gecko.weather.pv/model/pv.ecore`, the files the Java side is generated 
   `--s1` (precipitation, teal), plus a violet for temperature (`src/styles/weather.css`); the triple
   is validated for both schemes against colour-vision deficiency, all pairs.
 
-## The PV view (`?view=pv`)
+## The PV views (`?plant=<id>`)
 
-The second tab reads the remote service `PvForecast` (`org.gecko.weather.pv`) the same way.
+Every plant with a profile gets a tab of its own, reading the remote service `PvForecast`
+(`org.gecko.weather.pv`) the same way; a last tab creates a plant.
 
-- **Plant line**: total kWp and every array with orientation and tilt.
+- **Plant table**: every array with module count, kWp, orientation, tilt, mounting and inverter;
+  the foot has the total, the mounting height, the number of obstacles and the weather site.
+- **Editing** (`PlantEditor.vue`): "Anlage bearbeiten" opens the profile as a form — plant (id,
+  name, weather site, mounting height, own position, albedo, system losses), arrays, inverters,
+  obstacles; a measured horizon line is kept as it is. Saving calls `PvForecast.savePlant` with the
+  profile as the XMI body (the TypeScript client sends an EObject argument that way), the service
+  writes `<id>.xmi` into its plants folder and the page reloads. The same form behind "+ Anlage"
+  creates a plant. With examples instead of the registry, edits last for the session.
 - **Tiles**: the latest meter reading (PV generator), today's expected energy and what was measured
   so far, measured against expected over the complete hours with production, and house load, grid
   and battery from the latest reading. Without a meter the page says so instead of showing empty

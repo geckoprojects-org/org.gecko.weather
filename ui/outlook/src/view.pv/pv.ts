@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: EPL-2.0
  */
 /** What the PV view derives from the values — formatting and the comparison. No Vue in here. */
-import type { PvHourValue, PvReading } from '../contracts.js'
+import type { Mounting, PvHourValue, PvReading } from '../contracts.js'
 
 const nf = (digits: number) => new Intl.NumberFormat('de-DE', { minimumFractionDigits: digits, maximumFractionDigits: digits })
 const NF0 = nf(0)
@@ -51,4 +51,10 @@ export function measuredRatio(hours: PvHourValue[], now: Date): { ratio: number;
 export function latest(readings: PvReading[], now: Date): PvReading | undefined {
   const last = readings.reduce<PvReading | undefined>((a, r) => (!a || r.time > a.time ? r : a), undefined)
   return last && now.getTime() - last.time.getTime() <= 15 * 60_000 ? last : undefined
+}
+
+const MOUNTING_LABEL: Record<Mounting, string> = { ROOF_MOUNTED: 'Aufdach', ROOF_INTEGRATED: 'Indach', OPEN_RACK: 'frei aufgestellt' }
+
+export function mountingLabel(m: Mounting | undefined): string {
+  return m ? MOUNTING_LABEL[m] : 'Aufdach'
 }

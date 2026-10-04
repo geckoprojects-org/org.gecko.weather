@@ -9,7 +9,9 @@ import { beamShare, direction, ground, horizonAt, layout, leafOff, sunAt, trees 
 const profile: PlantProfile = {
   id: 'p',
   name: 'P',
+  siteId: 'home',
   mountingHeight: 2.1,
+  inverters: [],
   arrays: [
     { name: 'A', azimuth: 225, tilt: 10, peakPower: 2.58, moduleCount: 6 },
     { name: 'B', azimuth: 225, tilt: 10, peakPower: 4.3, moduleCount: 10 },

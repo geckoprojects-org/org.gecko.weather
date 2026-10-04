@@ -6,9 +6,9 @@
  * The PV metamodel — pv.ecore from org.gecko.weather.pv, imported raw — and reading its answers
  * into the plain values of the PV contract.
  */
-import type { EObject, EPackage } from '@emfts/core'
-import type { ArrayInfo, PlantInfo, PlantProfile, PvDayValue, PvHourValue, PvReading, PvReadings, PvSnapshot } from '../contracts.js'
-import { date, expect, flag, many, num, nums, registerPackage, text } from '../emf.js'
+import type { EClass, EEnum, EList, EObject, EPackage } from '@emfts/core'
+import type { ArrayInfo, Mounting, PlantInfo, PlantProfile, ProfileArray, PvDayValue, PvHourValue, PvReading, PvReadings, PvSnapshot } from '../contracts.js'
+import { date, expect, flag, many, num, nums, one, registerPackage, text, value } from '../emf.js'
 
 import ecoreXml from '../../../../org.gecko.weather.pv/model/pv.ecore?raw'
 
@@ -104,17 +104,45 @@ export function toReadings(log: EObject): PvReadings {
   }
 }
 
+const MOUNTINGS: Mounting[] = ['ROOF_MOUNTED', 'ROOF_INTEGRATED', 'OPEN_RACK']
+
+/** An enum attribute: the loader may hold the literal object or its name */
+function mounting(o: EObject): Mounting | undefined {
+  const v = value(o, 'mounting') as { getName?: () => string; getLiteral?: () => string } | string | undefined
+  if (v == null) return undefined
+  const name = typeof v === 'string' ? v : (v.getName?.() ?? v.getLiteral?.() ?? String(v))
+  return MOUNTINGS.includes(name as Mounting) ? (name as Mounting) : undefined
+}
+
 /**
- * The `Plant` EObject as its geometry. Java EMF leaves default values out: an obstacle that is
- * opaque all year has no leafOffTransmittance, a plant without mounting height none either.
+ * The `Plant` EObject as its profile. Java EMF leaves default values out: an obstacle that is
+ * opaque all year has no leafOffTransmittance, a plant with 10 % losses no systemLosses — the
+ * defaults are filled in here so that an editor shows them.
  */
 export function toPlantProfile(o: EObject): PlantProfile {
   expect(o, 'Plant')
+  const inverters = many(o, 'inverters')
   return {
     id: text(o, 'id') ?? '',
     name: text(o, 'name') ?? text(o, 'id') ?? '',
+    siteId: text(o, 'siteId') ?? '',
+    latitude: num(o, 'latitude'),
+    longitude: num(o, 'longitude'),
     mountingHeight: num(o, 'mountingHeight') ?? 0,
-    arrays: many(o, 'arrays').map((a) => ({ ...toArray(a), moduleCount: num(a, 'moduleCount') })),
+    albedo: num(o, 'albedo') ?? 0.2,
+    systemLosses: num(o, 'systemLosses') ?? 10,
+    arrays: many(o, 'arrays').map((a): ProfileArray => {
+      const inv = one(a, 'inverter')
+      const index = inv ? inverters.indexOf(inv) : -1
+      return {
+        ...toArray(a),
+        moduleCount: num(a, 'moduleCount'),
+        temperatureCoefficient: num(a, 'temperatureCoefficient') ?? -0.37,
+        mounting: mounting(a) ?? 'ROOF_MOUNTED',
+        inverter: index >= 0 ? index : undefined,
+      }
+    }),
+    inverters: inverters.map((i) => ({ name: text(i, 'name') ?? '', acPower: num(i, 'acPower'), efficiency: num(i, 'efficiency') ?? 0.96 })),
     obstacles: many(o, 'obstacles').map((b) => ({
       name: text(b, 'name') ?? '',
       azimuthFrom: num(b, 'azimuthFrom') ?? 0,
@@ -125,4 +153,69 @@ export function toPlantProfile(o: EObject): PlantProfile {
     })),
     horizon: many(o, 'horizon').map((h) => ({ azimuth: num(h, 'azimuth') ?? 0, elevation: num(h, 'elevation') ?? 0 })),
   }
+}
+
+function set(o: EObject, name: string, v: unknown): void {
+  const f = o.eClass().getEStructuralFeature(name)
+  if (!f) throw new Error(`${o.eClass().getName()} hat kein Merkmal ${name}`)
+  if (v === undefined || v === null || v === '' || (typeof v === 'number' && Number.isNaN(v))) o.eUnset(f)
+  else o.eSet(f, v)
+}
+
+function list(o: EObject, name: string): EList<EObject> {
+  return o.eGet(o.eClass().getEStructuralFeature(name)!) as EList<EObject>
+}
+
+/** A profile as the `Plant` EObject the service takes — the inverse of {@link toPlantProfile} */
+export function fromPlantProfile(p: PlantProfile): EObject {
+  const pkg = registerPvPackage()
+  const factory = pkg.getEFactoryInstance()
+  const create = (name: string) => factory.create(pkg.getEClassifier(name) as EClass)
+  const plant = create('Plant')
+  set(plant, 'id', p.id.trim())
+  set(plant, 'name', p.name.trim())
+  set(plant, 'siteId', p.siteId.trim())
+  set(plant, 'latitude', p.latitude)
+  set(plant, 'longitude', p.longitude)
+  set(plant, 'mountingHeight', p.mountingHeight)
+  set(plant, 'albedo', p.albedo)
+  set(plant, 'systemLosses', p.systemLosses)
+  const inverters = p.inverters.map((i) => {
+    const o = create('Inverter')
+    set(o, 'name', i.name)
+    set(o, 'acPower', i.acPower)
+    set(o, 'efficiency', i.efficiency)
+    list(plant, 'inverters').add(o)
+    return o
+  })
+  const mountingEnum = (pkg.getEClassifier('Mounting') as EEnum)
+  for (const a of p.arrays) {
+    const o = create('PvArray')
+    set(o, 'name', a.name)
+    set(o, 'azimuth', a.azimuth)
+    set(o, 'tilt', a.tilt)
+    set(o, 'peakPower', a.peakPower)
+    set(o, 'moduleCount', a.moduleCount)
+    set(o, 'temperatureCoefficient', a.temperatureCoefficient)
+    if (a.mounting) set(o, 'mounting', mountingEnum.getEEnumLiteral(a.mounting) ?? a.mounting)
+    if (a.inverter !== undefined && inverters[a.inverter]) set(o, 'inverter', inverters[a.inverter])
+    list(plant, 'arrays').add(o)
+  }
+  for (const b of p.obstacles) {
+    const o = create('Obstacle')
+    set(o, 'name', b.name)
+    set(o, 'azimuthFrom', b.azimuthFrom)
+    set(o, 'azimuthTo', b.azimuthTo)
+    set(o, 'distance', b.distance)
+    set(o, 'height', b.height)
+    set(o, 'leafOffTransmittance', b.leafOffTransmittance)
+    list(plant, 'obstacles').add(o)
+  }
+  for (const h of p.horizon) {
+    const o = create('HorizonPoint')
+    set(o, 'azimuth', h.azimuth)
+    set(o, 'elevation', h.elevation)
+    list(plant, 'horizon').add(o)
+  }
+  return plant
 }

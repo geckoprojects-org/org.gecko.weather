@@ -68,17 +68,25 @@ export class SamplePvForecast implements PvForecast {
     return [PLANT]
   }
 
+  /** Edits are kept for the session only */
+  private profile: PlantProfile | undefined
+
   async plant(): Promise<PlantProfile> {
+    if (this.profile) return structuredClone(this.profile)
     // a deciduous forest from south-east to west, 30 to 120 m away, 24 m high
     const edge = [110, 60, 42, 34, 32, 31, 31, 33, 36, 42, 55, 75, 100, 130]
     return {
       id: PLANT.id,
       name: PLANT.name,
+      siteId: PLANT.siteId,
       mountingHeight: 2.5,
+      albedo: 0.2,
+      systemLosses: 10,
       arrays: [
-        { name: 'Reihe', azimuth: 225, tilt: 10, peakPower: 2.58, moduleCount: 6 },
-        { name: 'Block', azimuth: 225, tilt: 10, peakPower: 4.3, moduleCount: 10 },
+        { name: 'Reihe', azimuth: 225, tilt: 10, peakPower: 2.58, moduleCount: 6, temperatureCoefficient: -0.27, mounting: 'ROOF_MOUNTED', inverter: 0 },
+        { name: 'Block', azimuth: 225, tilt: 10, peakPower: 4.3, moduleCount: 10, temperatureCoefficient: -0.27, mounting: 'ROOF_MOUNTED', inverter: 0 },
       ],
+      inverters: [{ name: 'Hybrid', efficiency: 0.97 }],
       obstacles: edge.map((d, k) => ({
         name: `Wald ${150 + 10 * k}`,
         azimuthFrom: 150 + 10 * k,
@@ -89,6 +97,11 @@ export class SamplePvForecast implements PvForecast {
       })),
       horizon: [],
     }
+  }
+
+  async savePlant(profile: PlantProfile): Promise<PlantProfile> {
+    this.profile = structuredClone(profile)
+    return structuredClone(profile)
   }
 
   async forecast(): Promise<PvSnapshot> {

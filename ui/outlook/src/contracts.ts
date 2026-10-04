@@ -201,9 +201,24 @@ export interface PvReadings {
   readings: PvReading[]
 }
 
+export type Mounting = 'ROOF_MOUNTED' | 'ROOF_INTEGRATED' | 'OPEN_RACK'
+
 /** One orientation of modules, as the profile has it */
 export interface ProfileArray extends ArrayInfo {
   moduleCount?: number
+  /** %/K of Pmax, e.g. −0.37 */
+  temperatureCoefficient?: number
+  mounting?: Mounting
+  /** index into the plant's inverters, undefined for the default inverter */
+  inverter?: number
+}
+
+export interface ProfileInverter {
+  name: string
+  /** kW AC ceiling; undefined or 0 for none */
+  acPower?: number
+  /** 0..1 */
+  efficiency?: number
 }
 
 /** Something that hides the sun in a range of directions — a forest, a house */
@@ -220,13 +235,23 @@ export interface ProfileObstacle {
   leafOffTransmittance: number
 }
 
-/** The plant's geometry, relative to its modules — no coordinates */
+/** A plant's profile as stored: what is installed where, what limits it, what shades it */
 export interface PlantProfile {
   id: string
   name: string
+  /** the weather site feeding the forecast */
+  siteId: string
+  /** own position for the sun; the site's when absent */
+  latitude?: number
+  longitude?: number
   /** m above ground */
   mountingHeight: number
+  /** ground reflectance, 0.2 grass */
+  albedo?: number
+  /** % DC losses not modelled otherwise */
+  systemLosses?: number
   arrays: ProfileArray[]
+  inverters: ProfileInverter[]
   obstacles: ProfileObstacle[]
   /** a measured horizon line, if any: azimuth → elevation */
   horizon: { azimuth: number; elevation: number }[]
@@ -242,4 +267,6 @@ export interface PvForecast {
   forecast(plantId: string): Promise<PvSnapshot>
   /** the readings of a local day, today when `date` is empty */
   measurements(plantId: string, date?: string): Promise<PvReadings>
+  /** stores a profile under its id — a new id creates a plant; returns it as stored */
+  savePlant(profile: PlantProfile): Promise<PlantProfile>
 }

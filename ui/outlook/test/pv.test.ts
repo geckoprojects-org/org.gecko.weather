@@ -5,7 +5,7 @@
 import { BasicResourceSet, URI, XMIResourceFactory, type EObject, type XMIResource } from '@emfts/core'
 import { describe, expect, it } from 'vitest'
 import { rootOf } from '../src/emf.js'
-import { registerPvPackage, toPlants, toPvSnapshot, toReadings } from '../src/pv.ddsr/model.js'
+import { registerPvPackage, toPlantProfile, toPlants, toPvSnapshot, toReadings } from '../src/pv.ddsr/model.js'
 import { SamplePvForecast } from '../src/pv.ddsr/SamplePvForecast.js'
 import { facing, kw, latest, measuredRatio } from '../src/view.pv/pv.js'
 
@@ -121,5 +121,49 @@ describe('pv view helpers', () => {
     const r = await sample.measurements()
     expect(r.readings.at(-1)!.time.getTime()).toBeLessThanOrEqual(now.getTime())
     expect(s.days[0].measuredEnergy).toBeGreaterThan(0)
+  })
+})
+
+describe('plant profile round trip', () => {
+  it('writes a profile as a Plant and reads it back the same, through XMI', async () => {
+    const { XMIResource, URI: EmfURI } = await import('@emfts/core')
+    const { fromPlantProfile } = await import('../src/pv.ddsr/model.js')
+    const profile = {
+      id: 'balkon',
+      name: 'Balkon',
+      siteId: 'home',
+      latitude: 51.05,
+      longitude: 13.74,
+      mountingHeight: 4,
+      albedo: 0.25,
+      systemLosses: 8,
+      arrays: [
+        { name: 'Süd', azimuth: 180, tilt: 70, peakPower: 0.86, moduleCount: 2, temperatureCoefficient: -0.35, mounting: 'OPEN_RACK' as const, inverter: 0 },
+        { name: 'frei', azimuth: 200, tilt: 60, peakPower: 0.43, moduleCount: 1, temperatureCoefficient: -0.35, mounting: 'ROOF_MOUNTED' as const, inverter: undefined },
+      ],
+      inverters: [{ name: 'Micro', acPower: 0.8, efficiency: 0.95 }],
+      obstacles: [{ name: 'Haus', azimuthFrom: 350, azimuthTo: 20, distance: 12, height: 9, leafOffTransmittance: 0 }],
+      horizon: [{ azimuth: 180, elevation: 5 }],
+    }
+    const plant = fromPlantProfile(profile)
+    const resource = new XMIResource(EmfURI.createURI('plant.xmi'))
+    resource.getContents().add(plant)
+    const xml = resource.saveToString()
+    expect(xml).toContain('mountingHeight="4"')
+    expect(xml).toContain('inverter="//@inverters.0"')
+    expect(xml).toContain('OPEN_RACK')
+    const back = toPlantProfile(load(xml))
+    expect(back).toEqual(profile)
+  })
+
+  it('leaves optional values unset', async () => {
+    const { XMIResource, URI: EmfURI } = await import('@emfts/core')
+    const { fromPlantProfile } = await import('../src/pv.ddsr/model.js')
+    const plant = fromPlantProfile({ id: 'x', name: 'X', siteId: 's', mountingHeight: 0, arrays: [], inverters: [], obstacles: [], horizon: [] })
+    const resource = new XMIResource(EmfURI.createURI('plant.xmi'))
+    resource.getContents().add(plant)
+    const xml = resource.saveToString()
+    expect(xml).not.toContain('latitude')
+    expect(xml).not.toContain('albedo')
   })
 })

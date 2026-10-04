@@ -57,8 +57,9 @@ PV, AC, load, grid and battery power in kW, state of charge, energy counter — 
 `pv:PvMeasurementLog` XMI file per plant and local day. A device that cannot be reached is logged
 when its error changes and does not hold up the other plants.
 
-`PvForecast.plant(plantId)` returns the profile without its coordinates — the geometry a view
-draws, not the address. `PvForecast.measurements(plantId, date)` returns a day's log. `forecast` adds `measuredPower` (mean
+`PvForecast.plant(plantId)` returns the profile as stored; `savePlant(plant)` writes one as
+`<id>.xmi` (letters, digits, dot, dash, underscore), replacing a profile of the same id — a file
+edited by hand loses its XML comments that way. `PvForecast.measurements(plantId, date)` returns a day's log. `forecast` adds `measuredPower` (mean
 PV power) to the hours that have begun and `measuredEnergy` to today; gaps over 15 minutes count as
 nothing. On hybrid inverters the PV power is the DC side — compare it with `dcPower`.
 

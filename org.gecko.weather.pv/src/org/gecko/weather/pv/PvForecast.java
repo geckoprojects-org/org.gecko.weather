@@ -35,12 +35,21 @@ public interface PvForecast {
 	PlantDirectory plants();
 
 	/**
-	 * A plant's profile — arrays, inverters, obstacles, horizon — for a view that draws it. Without
-	 * the plant's own coordinates: a view needs the geometry relative to the modules, not the address.
+	 * A plant's profile as stored — arrays, inverters, obstacles, horizon, position — for a view that
+	 * draws or edits it.
 	 *
 	 * @throws IllegalArgumentException if there is no such plant
 	 */
 	Plant plant(String plantId);
+
+	/**
+	 * Stores a profile under its id, replacing one of the same id; a new id creates a plant. The id
+	 * is the file name: letters, digits, dot, dash and underscore.
+	 *
+	 * @return the profile as stored
+	 * @throws IllegalArgumentException if the id is missing or not usable as a file name
+	 */
+	Plant savePlant(Plant plant);
 
 	/**
 	 * The hours from the start of today (in the site's time zone) up to 48 hours past the current

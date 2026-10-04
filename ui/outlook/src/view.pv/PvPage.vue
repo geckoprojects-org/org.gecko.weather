@@ -5,24 +5,32 @@
  * without the registry it shows examples and says so.
  */
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
-import type { PlantInfo, PlantProfile, PvForecast, PvReadings, PvSnapshot } from '../contracts.js'
+import type { PlantProfile, PvForecast, PvReadings, PvSnapshot, SiteInfo } from '../contracts.js'
 import { hourLabel, whole } from '../view.weather/weather.js'
 import PvChart from './PvChart.vue'
+import PlantEditor from './PlantEditor.vue'
 import PvDays from './PvDays.vue'
 import PvScene from './PvScene.vue'
-import { facing, kw, kwh, latest, measuredRatio, percent } from './pv.js'
+import { facing, kw, kwh, latest, measuredRatio, mountingLabel, percent } from './pv.js'
 
-const props = defineProps<{ pv: PvForecast; fallback?: PvForecast }>()
+/**
+ * `plantId` names the plant; `source` is the service the host found working (the host handles the
+ * fallback to examples, so that all tabs agree). `sites` are the weather sites, for the editor.
+ */
+const props = defineProps<{ source: PvForecast; plantId: string; sites: SiteInfo[] }>()
+const emit = defineEmits<{ saved: [profile: PlantProfile] }>()
 
-const source = ref<PvForecast>(props.pv)
-const plants = ref<PlantInfo[]>([])
-const plantId = ref('')
+const source = computed(() => props.source)
+const plantId = computed(() => props.plantId)
 const snapshot = ref<PvSnapshot | null>(null)
 const readings = ref<PvReadings | null>(null)
 const profile = ref<PlantProfile | null>(null)
 const state = ref<'loading' | 'ready' | 'error'>('loading')
 const error = ref('')
 const now = ref(new Date())
+const editing = ref(false)
+const saving = ref(false)
+const saveError = ref('')
 
 const timeZone = computed(() => snapshot.value?.timeZone ?? 'Europe/Berlin')
 const today = computed(() => new Intl.DateTimeFormat('en-CA', { timeZone: timeZone.value }).format(now.value))
@@ -31,22 +39,9 @@ const current = computed(() => (readings.value ? latest(readings.value.readings,
 const ratio = computed(() => (snapshot.value ? measuredRatio(snapshot.value.hours, now.value) : undefined))
 const metered = computed(() => (readings.value?.readings.length ?? 0) > 0)
 
-async function loadPlants(): Promise<void> {
-  try {
-    plants.value = await source.value.plants()
-  } catch (e) {
-    if (!props.fallback || source.value === props.fallback) throw e
-    console.warn('pv: Registry nicht erreichbar, zeige Beispieldaten', e)
-    source.value = props.fallback
-    plants.value = await source.value.plants()
-  }
-  if (!plants.value.some((p) => p.id === plantId.value)) plantId.value = plants.value[0]?.id ?? ''
-}
-
 async function load(): Promise<void> {
   state.value = 'loading'
   try {
-    if (plants.value.length === 0) await loadPlants()
     if (!plantId.value) throw new Error('Keine Anlage mit Profil')
     now.value = new Date()
     const [s, r] = await Promise.all([source.value.forecast(plantId.value), source.value.measurements(plantId.value)])
@@ -69,8 +64,27 @@ onMounted(() => {
 })
 onUnmounted(() => clearInterval(timer))
 watch(plantId, (n, b) => {
-  if (b && n !== b) void load()
+  if (b && n !== b) {
+    profile.value = null
+    editing.value = false
+    void load()
+  }
 })
+
+async function save(p: PlantProfile): Promise<void> {
+  saving.value = true
+  saveError.value = ''
+  try {
+    profile.value = await source.value.savePlant(p)
+    editing.value = false
+    emit('saved', profile.value)
+    await load()
+  } catch (e) {
+    saveError.value = e instanceof Error ? e.message : String(e)
+  } finally {
+    saving.value = false
+  }
+}
 
 function deviation(r: number): string {
   const p = Math.round((r - 1) * 100)
@@ -87,23 +101,45 @@ function deviation(r: number): string {
     </p>
 
     <div class="section-head toolbar">
-      <label v-if="plants.length > 1" class="pick">Anlage
-        <select v-model="plantId">
-          <option v-for="p in plants" :key="p.id" :value="p.id">{{ p.name }}</option>
-        </select>
-      </label>
       <span class="stamp">Stand {{ snapshot?.generatedAt ? hourLabel(snapshot.generatedAt, timeZone) : '–' }}</span>
       <button class="btn small" type="button" :disabled="state === 'loading'" @click="load()">Neu lesen</button>
+      <button v-if="profile && !editing" class="btn small" type="button" @click="editing = true">Anlage bearbeiten</button>
     </div>
+
+    <PlantEditor
+      v-if="profile && editing"
+      :key="profile.id"
+      :profile="profile"
+      :sites="sites"
+      :busy="saving"
+      :error="saveError"
+      @save="save"
+      @cancel="editing = false; saveError = ''"
+    />
 
     <p v-if="state === 'error'" class="problem" role="alert">{{ error }}</p>
 
     <div :class="{ refreshing: state === 'loading' && snapshot }">
       <template v-if="snapshot">
-        <p class="plant">
-          <span><b>{{ kwh(snapshot.peakPower) }} kWp</b></span>
-          <span v-for="a in snapshot.arrays" :key="a.name">{{ a.name }}: {{ kwh(a.peakPower) }} kWp, {{ facing(a.azimuth) }} {{ whole(a.azimuth) }}°, {{ whole(a.tilt) }}° geneigt</span>
-        </p>
+        <table v-if="profile" class="plant">
+          <thead>
+            <tr><th>Modulfläche</th><th class="num">Module</th><th class="num">kWp</th><th>Ausrichtung</th><th class="num">Neigung</th><th>Montage</th><th>Wechselrichter</th></tr>
+          </thead>
+          <tbody>
+            <tr v-for="(a, i) in profile.arrays" :key="i">
+              <td>{{ a.name }}</td>
+              <td class="num">{{ a.moduleCount ?? '–' }}</td>
+              <td class="num">{{ kwh(a.peakPower) }}</td>
+              <td>{{ facing(a.azimuth) }} · {{ whole(a.azimuth) }}°</td>
+              <td class="num">{{ whole(a.tilt) }}°</td>
+              <td>{{ mountingLabel(a.mounting) }}</td>
+              <td>{{ a.inverter !== undefined ? profile.inverters[a.inverter]?.name : 'Standard' }}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr><td>Gesamt</td><td class="num">{{ profile.arrays.reduce((n, a) => n + (a.moduleCount ?? 0), 0) || '–' }}</td><td class="num">{{ kwh(snapshot.peakPower) }}</td><td colspan="4" class="dim">Module {{ profile.mountingHeight.toLocaleString('de-DE') }} m über Grund · {{ profile.obstacles.length }} Hindernis{{ profile.obstacles.length === 1 ? '' : 'se' }} · Wetterstandort {{ sites.find((s) => s.id === profile!.siteId)?.name ?? profile.siteId }}</td></tr>
+          </tfoot>
+        </table>
 
         <div class="tiles now-tiles">
           <article class="tile stat">
@@ -160,12 +196,14 @@ function deviation(r: number): string {
 
 <style scoped>
 .toolbar { margin-top: 0; }
-.pick { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; }
-.pick select { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line-2); border-radius: 8px; padding: 4px 8px; }
 .stamp { color: var(--muted); font-size: 13px; }
 .problem { color: var(--crit); }
-.plant { display: flex; flex-wrap: wrap; gap: 6px 22px; color: var(--muted); font-size: 13px; margin: -4px 0 16px; }
-.plant b { color: var(--ink); font-weight: 600; }
+.plant { border-collapse: collapse; font-size: 13px; margin: -4px 0 18px; width: 100%; max-width: 980px; }
+.plant th { text-align: left; font-weight: 500; color: var(--muted); padding: 0 18px 6px 0; white-space: nowrap; }
+.plant td { padding: 4px 18px 4px 0; border-top: 1px solid var(--line); color: var(--ink); white-space: nowrap; }
+.plant .num { text-align: right; font-variant-numeric: tabular-nums; }
+.plant tfoot td { font-weight: 600; }
+.plant tfoot td.dim { font-weight: 400; color: var(--muted); white-space: normal; }
 .now-tiles { grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); margin-bottom: 8px; }
 .stat .caption { color: var(--muted); font-size: 12.5px; }
 .stat .value { font-size: 26px; font-weight: 600; letter-spacing: -.03em; margin: 4px 0 2px; font-variant-numeric: tabular-nums; }

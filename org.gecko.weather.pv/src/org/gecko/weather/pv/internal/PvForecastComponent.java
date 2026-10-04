@@ -13,6 +13,7 @@
  */
 package org.gecko.weather.pv.internal;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.time.Clock;
 import java.time.DateTimeException;
@@ -187,10 +188,20 @@ public class PvForecastComponent implements PvForecast {
 
 	@Override
 	public Plant plant(String plantId) {
-		Plant plant = folder.plant(plantId).orElseThrow(() -> new IllegalArgumentException("No plant profile " + plantId + " in " + folder.folder()));
-		plant.unsetLatitude();
-		plant.unsetLongitude();
-		return plant;
+		return folder.plant(plantId).orElseThrow(() -> new IllegalArgumentException("No plant profile " + plantId + " in " + folder.folder()));
+	}
+
+	@Override
+	public Plant savePlant(Plant plant) {
+		if (plant == null) {
+			throw new IllegalArgumentException("No plant given");
+		}
+		try {
+			folder.save(plant);
+		} catch (IOException e) {
+			throw new IllegalStateException("Cannot store plant profile " + plant.getId() + ": " + e.getMessage(), e);
+		}
+		return folder.plant(plant.getId()).orElseThrow(() -> new IllegalStateException("Plant profile " + plant.getId() + " vanished after saving"));
 	}
 
 	@Override

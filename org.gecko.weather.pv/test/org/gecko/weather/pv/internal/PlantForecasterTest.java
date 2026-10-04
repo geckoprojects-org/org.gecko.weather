@@ -14,6 +14,7 @@
 package org.gecko.weather.pv.internal;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.within;
 
 import java.io.IOException;
@@ -244,5 +245,14 @@ class PlantForecasterTest {
 		assertThat(back.getArrays().get(1).getInverter()).as("the cross reference survives").isSameAs(back.getInverters().get(0));
 		assertThat(back.getArrays().get(0).getTemperatureCoefficient()).isEqualTo(-0.37);
 		assertThat(folder.plants()).hasSize(1);
+
+		Plant renamed = plant();
+		renamed.setId("../escape");
+		assertThatThrownBy(() -> folder.save(renamed)).isInstanceOf(IllegalArgumentException.class);
+		renamed.setId(null);
+		assertThatThrownBy(() -> folder.save(renamed)).isInstanceOf(IllegalArgumentException.class);
+		renamed.setId("balkon.zuhause");
+		folder.save(renamed);
+		assertThat(folder.plants()).hasSize(2);
 	}
 }

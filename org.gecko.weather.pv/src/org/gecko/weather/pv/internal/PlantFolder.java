@@ -26,6 +26,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -91,9 +92,19 @@ public final class PlantFolder {
 		return plants().stream().filter(p -> id.equals(p.getId())).findFirst();
 	}
 
-	/** Writes a profile as {@code <id>.xmi}, replacing one of the same name. */
+	/** What an id may look like: it becomes the file name. */
+	static final Pattern SAFE_ID = Pattern.compile("[A-Za-z0-9][A-Za-z0-9._-]*");
+
+	/**
+	 * Writes a profile as {@code <id>.xmi}, replacing one of the same name.
+	 *
+	 * @throws IllegalArgumentException if the id is missing or not usable as a file name
+	 */
 	public void save(Plant plant) throws IOException {
-		requireNonNull(plant.getId(), "plant.id");
+		requireNonNull(plant, "plant");
+		if (plant.getId() == null || !SAFE_ID.matcher(plant.getId()).matches()) {
+			throw new IllegalArgumentException("Plant id not usable as a file name: " + plant.getId());
+		}
 		Files.createDirectories(folder);
 		ResourceSet rs = resourceSet();
 		synchronized (rs) {
