@@ -39,6 +39,7 @@ import org.gecko.weather.outlook.model.outlook.OutlookPackage;
  *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.DayOutlookImpl#getPrecipitation <em>Precipitation</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.DayOutlookImpl#getPrecipitationProbability <em>Precipitation Probability</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.DayOutlookImpl#getSunshineHours <em>Sunshine Hours</em>}</li>
+ *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.DayOutlookImpl#getInsolation <em>Insolation</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.DayOutlookImpl#getCloudCoverMean <em>Cloud Cover Mean</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.DayOutlookImpl#getWindGustMax <em>Wind Gust Max</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.DayOutlookImpl#getUvIndexMax <em>Uv Index Max</em>}</li>
@@ -216,6 +217,35 @@ public class DayOutlookImpl extends MinimalEObjectImpl.Container implements DayO
 	 * @ordered
 	 */
 	protected boolean sunshineHoursESet;
+
+	/**
+	 * The default value of the '{@link #getInsolation() <em>Insolation</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getInsolation()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double INSOLATION_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getInsolation() <em>Insolation</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getInsolation()
+	 * @generated
+	 * @ordered
+	 */
+	protected double insolation = INSOLATION_EDEFAULT;
+
+	/**
+	 * This is true if the Insolation attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean insolationESet;
 
 	/**
 	 * The default value of the '{@link #getCloudCoverMean() <em>Cloud Cover Mean</em>}' attribute.
@@ -720,6 +750,56 @@ public class DayOutlookImpl extends MinimalEObjectImpl.Container implements DayO
 	 * @generated
 	 */
 	@Override
+	public double getInsolation() {
+		return insolation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setInsolation(double newInsolation) {
+		double oldInsolation = insolation;
+		insolation = newInsolation;
+		boolean oldInsolationESet = insolationESet;
+		insolationESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, OutlookPackage.DAY_OUTLOOK__INSOLATION, oldInsolation, insolation, !oldInsolationESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetInsolation() {
+		double oldInsolation = insolation;
+		boolean oldInsolationESet = insolationESet;
+		insolation = INSOLATION_EDEFAULT;
+		insolationESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, OutlookPackage.DAY_OUTLOOK__INSOLATION, oldInsolation, INSOLATION_EDEFAULT, oldInsolationESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetInsolation() {
+		return insolationESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public double getCloudCoverMean() {
 		return cloudCoverMean;
 	}
@@ -1053,6 +1133,8 @@ public class DayOutlookImpl extends MinimalEObjectImpl.Container implements DayO
 				return getPrecipitationProbability();
 			case OutlookPackage.DAY_OUTLOOK__SUNSHINE_HOURS:
 				return getSunshineHours();
+			case OutlookPackage.DAY_OUTLOOK__INSOLATION:
+				return getInsolation();
 			case OutlookPackage.DAY_OUTLOOK__CLOUD_COVER_MEAN:
 				return getCloudCoverMean();
 			case OutlookPackage.DAY_OUTLOOK__WIND_GUST_MAX:
@@ -1098,6 +1180,9 @@ public class DayOutlookImpl extends MinimalEObjectImpl.Container implements DayO
 				return;
 			case OutlookPackage.DAY_OUTLOOK__SUNSHINE_HOURS:
 				setSunshineHours((Double)newValue);
+				return;
+			case OutlookPackage.DAY_OUTLOOK__INSOLATION:
+				setInsolation((Double)newValue);
 				return;
 			case OutlookPackage.DAY_OUTLOOK__CLOUD_COVER_MEAN:
 				setCloudCoverMean((Double)newValue);
@@ -1153,6 +1238,9 @@ public class DayOutlookImpl extends MinimalEObjectImpl.Container implements DayO
 			case OutlookPackage.DAY_OUTLOOK__SUNSHINE_HOURS:
 				unsetSunshineHours();
 				return;
+			case OutlookPackage.DAY_OUTLOOK__INSOLATION:
+				unsetInsolation();
+				return;
 			case OutlookPackage.DAY_OUTLOOK__CLOUD_COVER_MEAN:
 				unsetCloudCoverMean();
 				return;
@@ -1201,6 +1289,8 @@ public class DayOutlookImpl extends MinimalEObjectImpl.Container implements DayO
 				return isSetPrecipitationProbability();
 			case OutlookPackage.DAY_OUTLOOK__SUNSHINE_HOURS:
 				return isSetSunshineHours();
+			case OutlookPackage.DAY_OUTLOOK__INSOLATION:
+				return isSetInsolation();
 			case OutlookPackage.DAY_OUTLOOK__CLOUD_COVER_MEAN:
 				return isSetCloudCoverMean();
 			case OutlookPackage.DAY_OUTLOOK__WIND_GUST_MAX:
@@ -1243,6 +1333,8 @@ public class DayOutlookImpl extends MinimalEObjectImpl.Container implements DayO
 		if (precipitationProbabilityESet) result.append(precipitationProbability); else result.append("<unset>");
 		result.append(", sunshineHours: ");
 		if (sunshineHoursESet) result.append(sunshineHours); else result.append("<unset>");
+		result.append(", insolation: ");
+		if (insolationESet) result.append(insolation); else result.append("<unset>");
 		result.append(", cloudCoverMean: ");
 		if (cloudCoverMeanESet) result.append(cloudCoverMean); else result.append("<unset>");
 		result.append(", windGustMax: ");

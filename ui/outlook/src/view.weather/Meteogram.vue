@@ -1,16 +1,19 @@
 <script setup lang="ts">
 /**
- * Temperature, precipitation and the sun in one picture — a meteogram, not a chart with two y-axes.
- * Two bands share the hour columns and the frame: temperature above as a line, precipitation below
- * as bars, each with its own scale and labelled directly (the band, the extremes, every wet hour),
- * so no number is read off the wrong axis. Night hours are shaded, sunrise and sunset marked.
+ * Temperature, radiation, precipitation and the sun in one picture — a meteogram, not a chart with
+ * several y-axes. Three bands share the hour columns and the frame: temperature as a line,
+ * radiation as a stacked area (diffuse below, direct on top — the split a PV estimate needs),
+ * precipitation as bars; each band has its own scale and is labelled directly (the extremes, the
+ * radiation peak, every wet hour), so no number is read off the wrong axis. Where a source does not
+ * split the radiation (MOSMIX beyond ICON-D2's 48 h), the global value is a dashed line. Night hours
+ * are shaded, sunrise and sunset marked.
  *
  * The UV index has no hours: DWD publishes one maximum per day. It sits as a mark at the day's
  * solar noon, where that maximum is reached, when solar noon falls into the window.
  */
 import { computed } from 'vue'
 import type { DayValue, HourValue } from '../contracts.js'
-import { clock, degrees, fixed1, niceRange } from './weather.js'
+import { clock, degrees, fixed1, niceRange, whole } from './weather.js'
 
 const props = defineProps<{
   hours: HourValue[]
@@ -24,10 +27,11 @@ const props = defineProps<{
 const HOUR = 3_600_000
 /** Room above the bands for the sun and UV marks */
 const TOP = 26
-const TEMP_H = 118
+const TEMP_H = 110
 const GAP = 22
-const RAIN_H = 58
-const H = TOP + TEMP_H + GAP + RAIN_H + 6
+const RAD_H = 74
+const RAIN_H = 54
+const H = TOP + TEMP_H + GAP + RAD_H + GAP + RAIN_H + 6
 
 const width = computed(() => props.hours.length * props.col)
 const start = computed(() => props.hours[0]?.time.getTime() ?? 0)
@@ -87,7 +91,69 @@ const extremes = computed(() => {
 
 // --- precipitation band ---------------------------------------------------------------------
 
-const RAIN_TOP = TOP + TEMP_H + GAP
+// --- radiation band ------------------------------------------------------------------------
+
+const RAD_TOP = TOP + TEMP_H + GAP
+const RAD_BASE = RAD_TOP + RAD_H
+
+/** full scale in whole hundreds, at least 400 W/m² so a grey day looks grey */
+const radMax = computed(() => Math.max(400, Math.ceil(Math.max(...props.hours.map((h) => h.globalRadiation ?? 0)) / 100) * 100))
+
+function yRad(w: number): number {
+  return RAD_BASE - (RAD_H - 12) * (w / radMax.value)
+}
+
+const split = (h: HourValue) => h.directRadiation !== undefined && h.diffuseRadiation !== undefined
+
+/** Runs of consecutive hours with direct and diffuse — areas are drawn per run */
+const runs = computed(() => {
+  const out: number[][] = []
+  props.hours.forEach((h, i) => {
+    if (!split(h)) return
+    const last = out[out.length - 1]
+    if (last && last[last.length - 1] === i - 1) last.push(i)
+    else out.push([i])
+  })
+  return out
+})
+
+/** An area between two curves over a run, closed */
+function area(run: number[], lower: (h: HourValue) => number, upper: (h: HourValue) => number): string {
+  const x = (i: number) => (run.length === 1 ? [i * props.col + 8, (i + 1) * props.col - 8] : [xCenter(i)])
+  const top = run.flatMap((i) => x(i).map((xx) => `${xx},${yRad(upper(props.hours[i])).toFixed(1)}`))
+  const bottom = [...run].reverse().flatMap((i) => [...x(i)].reverse().map((xx) => `${xx},${yRad(lower(props.hours[i])).toFixed(1)}`))
+  return `M${top.join('L')}L${bottom.join('L')}Z`
+}
+
+const diffuseAreas = computed(() => runs.value.map((r) => area(r, () => 0, (h) => h.diffuseRadiation!)))
+const directAreas = computed(() =>
+  runs.value.map((r) => area(r, (h) => h.diffuseRadiation!, (h) => h.diffuseRadiation! + h.directRadiation!)),
+)
+
+/** Global radiation where it is not split — a dashed line */
+const globalOnly = computed(() => {
+  let d = ''
+  let pen = false
+  props.hours.forEach((h, i) => {
+    if (split(h) || h.globalRadiation === undefined) {
+      pen = false
+      return
+    }
+    d += `${pen ? 'L' : 'M'}${xCenter(i)},${yRad(h.globalRadiation).toFixed(1)}`
+    pen = true
+  })
+  return d
+})
+
+/** The brightest hour, labelled */
+const radPeak = computed(() => {
+  const known = props.hours.map((h, i) => ({ i, w: h.globalRadiation })).filter((e): e is { i: number; w: number } => e.w !== undefined && e.w > 0)
+  return known.length ? known.reduce((a, b) => (b.w > a.w ? b : a)) : undefined
+})
+
+// --- precipitation band ---------------------------------------------------------------------
+
+const RAIN_TOP = RAD_BASE + GAP
 const RAIN_BASE = RAIN_TOP + RAIN_H
 
 /** at least 2 mm full scale, so a drizzle does not look like a cloudburst */
@@ -157,6 +223,10 @@ function anchor(x: number): 'start' | 'end' {
         <line :x1="0" :x2="width" :y1="yTemp(g)" :y2="yTemp(g)" />
         <text class="axis" x="4" :y="yTemp(g) - 4">{{ g }}°</text>
       </template>
+      <line class="separator" :x1="0" :x2="width" :y1="RAD_TOP - GAP / 2" :y2="RAD_TOP - GAP / 2" />
+      <line :x1="0" :x2="width" :y1="yRad(radMax)" :y2="yRad(radMax)" />
+      <text class="axis" x="4" :y="yRad(radMax) - 4">{{ radMax }} W/m²</text>
+      <line class="baseline" :x1="0" :x2="width" :y1="RAD_BASE + 0.5" :y2="RAD_BASE + 0.5" />
       <line class="separator" :x1="0" :x2="width" :y1="RAIN_TOP - GAP / 2" :y2="RAIN_TOP - GAP / 2" />
       <text class="axis" x="4" :y="RAIN_TOP + 2">mm</text>
       <line class="baseline" :x1="0" :x2="width" :y1="RAIN_BASE + 0.5" :y2="RAIN_BASE + 0.5" />
@@ -172,6 +242,12 @@ function anchor(x: number): 'start' | 'end' {
       <circle :cx="u.x" :cy="TOP - 14" r="3.5" />
       <text :x="u.x + 8" :y="TOP - 10">{{ u.label }}</text>
     </g>
+
+    <path v-for="(d, k) in diffuseAreas" :key="'df' + k" class="rad diffuse" :d="d" />
+    <path v-for="(d, k) in directAreas" :key="'dr' + k" class="rad direct" :d="d" />
+    <path class="rad global" :d="globalOnly" />
+    <text v-if="radPeak" class="peak" :x="xCenter(radPeak.i)" :y="yRad(radPeak.w) - 5" text-anchor="middle">{{ whole(radPeak.w) }} W/m²</text>
+    <line v-if="active !== null" class="cursor" :x1="xCenter(active)" :x2="xCenter(active)" :y1="RAD_TOP" :y2="RAD_BASE" />
 
     <path class="line temp" :d="tempPath" />
     <g v-for="e in extremes" :key="'x' + e.i" class="extreme">
@@ -207,10 +283,18 @@ svg { display: block; overflow: visible; }
 .grid .baseline { stroke: var(--line-2); }
 .axis { font-size: 10.5px; fill: var(--muted); }
 .line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
-.line.temp { stroke: var(--s2); }
-.extreme circle { fill: var(--s2); stroke: var(--surface); stroke-width: 2; }
+.line.temp { stroke: var(--w-temp); }
+.extreme circle { fill: var(--w-temp); stroke: var(--surface); stroke-width: 2; }
 .extreme text { font-size: 11.5px; font-weight: 600; fill: var(--ink); }
-.marker.temp { fill: var(--s2); stroke: var(--surface); stroke-width: 2; }
+.marker.temp { fill: var(--w-temp); stroke: var(--surface); stroke-width: 2; }
+.rad.direct { fill: var(--s2); }
+/* the lighter step of the same hue: one quantity in two parts, not two series */
+.rad.diffuse { fill: color-mix(in srgb, var(--s2) 42%, var(--surface)); }
+/* a 2px surface seam between the stacked parts */
+.rad.direct, .rad.diffuse { stroke: var(--surface); stroke-width: 1; stroke-linejoin: round; }
+.rad.global { fill: none; stroke: var(--s2); stroke-width: 2; stroke-dasharray: 5 4; }
+.peak { font-size: 11px; font-weight: 600; fill: var(--ink); }
+.cursor { stroke: var(--ink-2); stroke-width: 1; opacity: .5; }
 .bar.rain { fill: var(--s1); }
 .bar.rain.lit { fill: color-mix(in srgb, var(--s1) 75%, var(--ink)); }
 .bar-label { font-size: 10.5px; fill: var(--ink-2); font-variant-numeric: tabular-nums; }

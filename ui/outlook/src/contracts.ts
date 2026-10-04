@@ -37,9 +37,15 @@ export interface HourValue {
   windGust?: number
   /** degrees the wind comes from, 0 = north */
   windDirection?: number
-  /** mean W/m² over the hour */
+  /** mean W/m² over the hour, on a horizontal surface */
   globalRadiation?: number
+  /** the direct part of it — only where a source splits (ICON-D2, 48 h) */
+  directRadiation?: number
+  /** the diffuse part */
+  diffuseRadiation?: number
   sunElevation?: number
+  /** degrees clockwise from north */
+  sunAzimuth?: number
   /** WMO present-weather code ww */
   weatherCode?: number
   daylight: boolean
@@ -54,6 +60,8 @@ export interface DayValue {
   precipitation?: number
   precipitationProbability?: number
   sunshineHours?: number
+  /** global radiation summed over the day, kWh/m² on a horizontal surface */
+  insolation?: number
   cloudCoverMean?: number
   windGustMax?: number
   uvIndexMax?: number

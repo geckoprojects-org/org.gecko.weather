@@ -110,12 +110,17 @@ class OutlookBuilderTest {
 		// ICON-D2 covers 06:00..11:00: cloud from ICON (1000 + hour), radiation = direct + diffuse ending 07:00
 		assertThat(first.getCloudCover()).isEqualTo(1006.0);
 		assertThat(first.getGlobalRadiation()).isEqualTo(70.0 + 7.0);
+		assertThat(first.getDirectRadiation()).isEqualTo(70.0);
+		assertThat(first.getDiffuseRadiation()).isEqualTo(7.0);
+		assertThat(first.getSunAzimuth()).isEqualTo(96.0);
 		assertThat(first.getSunElevation()).isEqualTo(6.0);
 		assertThat(first.isDaylight()).as("06:30 UTC is after sunrise 05:15").isTrue();
 
 		HourOutlook noon = o.getHours().get(6); // 12:00 UTC: ICON no longer covers it
 		assertThat(noon.getCloudCover()).as("MOSMIX N where ICON-D2 ends").isEqualTo(12.0);
 		assertThat(noon.getGlobalRadiation()).as("MOSMIX Rad1h ending 13:00").isEqualTo(130.0);
+		assertThat(noon.isSetDirectRadiation()).as("MOSMIX does not split").isFalse();
+		assertThat(noon.isSetDiffuseRadiation()).isFalse();
 
 		HourOutlook night = o.getHours().get(14); // 20:00 UTC
 		assertThat(night.isDaylight()).isFalse();
@@ -138,6 +143,8 @@ class OutlookBuilderTest {
 		assertThat(tomorrow.getPrecipitation()).isCloseTo(expected, within(1e-9));
 		assertThat(tomorrow.getPrecipitationProbability()).isEqualTo(230.0);
 		assertThat(tomorrow.getSunshineHours()).isCloseTo(24 * 600 / 3600.0, within(1e-9));
+		// Rad1h = 10 × UTC hour, periods ending 23:00 (4th) .. 22:00 (5th): 230 + 10 × (1 + … + 22) Wh/m²
+		assertThat(tomorrow.getInsolation()).isCloseTo((230 + 10 * (22 * 23 / 2)) / 1000.0, within(1e-9));
 		assertThat(tomorrow.getWindGustMax()).isEqualTo(23.0);
 		assertThat(tomorrow.getWeatherCode()).as("rain 61 is more significant than fog 45 or clouds 3").isEqualTo(61);
 		assertThat(tomorrow.getUvIndexMax()).isEqualTo(2.7);
@@ -168,6 +175,7 @@ class OutlookBuilderTest {
 		assertThat(o.getSources().get(0).getLocation()).isEqualTo("Station 10487");
 		assertThat(o.getSources().get(0).getDistanceMeters()).isEqualTo(466.0);
 		assertThat(o.getSources().get(0).getQuantities()).contains("Bewölkung/Strahlung wo ICON-D2 fehlt");
+		assertThat(o.getSources().get(1).getQuantities()).isEqualTo("Bewölkung, Strahlung direkt und diffus");
 		assertThat(o.getSources().get(1).getLocation()).isEqualTo("Zelle 884,393 (icon-d2-regular-lat-lon)");
 		assertThat(o.getSources().get(1).getIssuedAt()).isEqualTo(Date.from(Instant.parse("2026-10-04T00:00:00Z")));
 	}
@@ -268,6 +276,7 @@ class OutlookBuilderTest {
 		for (int i = 0; i < 48; i++) {
 			Instant t = Instant.parse("2026-10-04T00:00:00Z").plus(H.multipliedBy(i));
 			add(ds, MeasurementKind.SUN_ELEVATION, Level.UNSPECIFIED, Statistic.INSTANT, null, t, i % 24);
+			add(ds, MeasurementKind.SUN_AZIMUTH, Level.UNSPECIFIED, Statistic.INSTANT, null, t, 90 + i % 24);
 		}
 		return ds;
 	}

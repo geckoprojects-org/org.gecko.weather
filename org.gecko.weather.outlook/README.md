@@ -19,6 +19,8 @@ per quantity and hour by a fixed rule and says which datasets it picked from.
 | --- | --- |
 | temperature, dew point, wind, gusts, precipitation and its probability (> 0.1 mm), weather code, sunshine | MOSMIX_L of the rank-0 station (nearest, unless assigned by hand) |
 | cloud cover, global radiation | the ICON-D2 cell where it covers the hour, MOSMIX otherwise; ICON radiation = direct + diffuse |
+| direct and diffuse radiation | ICON-D2 only (48 h) — the split a PV estimate for a tilted module needs, with the sun's elevation and azimuth from the solar dataset, which every hour carries too |
+| insolation per day | the hourly global radiation summed, kWh/m² on a horizontal surface |
 | UV index | the daily maximum of the UV product |
 | sun elevation, sunrise, sunset, day length | the computed solar dataset and day events |
 

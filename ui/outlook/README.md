@@ -54,15 +54,18 @@ file the Java side is generated from. In xdp-ui it would be copied into the pack
 
 - **Today** in one line above the hours: sunrise, sunset, day length, UV maximum and when it is reached.
 - **24 hours** as columns: time, sky icon (WMO `ww` first, cloud cover for the sky codes, moon at
-  night), temperature; below, on the same columns, a **meteogram** — temperature, precipitation,
-  night, sun and UV in one picture without a second y-axis: two bands in one frame, temperature
-  above as a line (warmest and coldest hour labelled), precipitation below as bars (every wet hour
+  night), temperature; below, on the same columns, a **meteogram** — temperature, radiation,
+  precipitation, night, sun and UV in one picture without a second y-axis: three bands in one frame,
+  temperature as a line (warmest and coldest hour labelled), **radiation as a stacked area, diffuse
+  below and direct on top** (hourly means in W/m², ICON-D2 for 48 h; the peak labelled; MOSMIX
+  global radiation as a dashed line where nothing splits it), precipitation as bars (every wet hour
   labelled), night hours shaded, sunrise and sunset as marks, the day's **UV maximum as a mark at
   solar noon** — DWD publishes the UV index once per day, so there is no hourly curve to draw. Then
   the hourly rain probability and the wind (arrows point where the air goes). Hover or keyboard
   focus on an hour shows all its values.
-- **Two days** as xdp tiles: high/low, precipitation, sunshine, UV maximum, mean cloud cover,
+- **Two days** as xdp tiles: high/low, precipitation, sunshine, **insolation in kWh/m²**, UV maximum, mean cloud cover,
   strongest gust, sunrise, sunset, day length.
 - **Sources**: which dataset each group of quantities came from, how far away, when it was issued.
-- Colours: the xdp series colours (`--s2` temperature, `--s1` precipitation), validated for both
-  schemes against colour-vision deficiency.
+- Colours: the xdp series colours `--s2` (radiation, amber, in two steps for direct/diffuse) and
+  `--s1` (precipitation, teal), plus a violet for temperature (`src/styles/weather.css`); the triple
+  is validated for both schemes against colour-vision deficiency, all pairs.

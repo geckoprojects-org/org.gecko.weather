@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /**
  * The next 24 hours as columns: time, sky, temperature, then the meteogram on the same columns —
- * temperature, precipitation, night, sun and UV in one picture (see Meteogram) — and below it the
+ * temperature, radiation, precipitation, night, sun and UV in one picture (see Meteogram) — and below it the
  * rain probability and the wind.
  *
  * Wind arrows point where the air goes (a wind from the west points east).
@@ -90,6 +90,9 @@ const tooltipLeft = computed(() => {
       <figure class="chart">
         <figcaption class="legend">
           <span><i class="key line temp" />Temperatur · °C</span>
+          <span><i class="key box direct" />Strahlung direkt</span>
+          <span><i class="key box diffuse" />diffus · W/m², Stundenmittel</span>
+          <span><i class="key dash" />global, ohne Aufteilung</span>
           <span><i class="key box rain" />Niederschlag · mm pro Stunde</span>
           <span><i class="key night" />Nacht</span>
           <span><i class="key uv" />UV-Index, Tagesmaximum</span>
@@ -124,7 +127,8 @@ const tooltipLeft = computed(() => {
           <dt><i class="key box rain" />Niederschlag</dt><dd>{{ fixed1(hovered.precipitation) }} mm<em>{{ whole(hovered.precipitationProbability) }} %</em></dd>
           <dt>Bewölkung</dt><dd>{{ whole(hovered.cloudCover) }} %</dd>
           <dt>Wind</dt><dd>{{ kmh(hovered.windSpeed) }} km/h {{ compass(hovered.windDirection) }}<em>Böen {{ kmh(hovered.windGust) }}</em></dd>
-          <dt>Strahlung</dt><dd>{{ whole(hovered.globalRadiation) }} W/m²</dd>
+          <dt><i class="key box direct" />Strahlung</dt><dd>{{ whole(hovered.globalRadiation) }} W/m²<em v-if="hovered.directRadiation !== undefined">direkt {{ whole(hovered.directRadiation) }} · diffus {{ whole(hovered.diffuseRadiation) }}</em><em v-else>ohne Aufteilung</em></dd>
+          <dt>Sonne</dt><dd>{{ whole(hovered.sunElevation) }}° hoch<em>Azimut {{ whole(hovered.sunAzimuth) }}°</em></dd>
         </dl>
       </div>
     </div>
@@ -178,7 +182,10 @@ const tooltipLeft = computed(() => {
 .key { display: inline-block; }
 .key.line { width: 14px; height: 2px; border-radius: 1px; }
 .key.box { width: 10px; height: 10px; border-radius: 2px; }
-.key.temp { background: var(--s2); }
+.key.temp { background: var(--w-temp); }
+.key.direct { background: var(--s2); }
+.key.diffuse { background: color-mix(in srgb, var(--s2) 42%, var(--surface)); }
+.key.dash { width: 14px; height: 0; border-top: 2px dashed var(--s2); }
 .key.rain { background: var(--s1); }
 .key.night { width: 12px; height: 10px; border-radius: 2px; background: color-mix(in srgb, var(--ink) 9%, transparent); }
 .key.uv { width: 8px; height: 8px; border-radius: 50%; border: 1.4px solid var(--ink-2); }
@@ -210,5 +217,6 @@ dl { display: grid; grid-template-columns: auto 1fr; gap: 3px 10px; margin: 0; }
 dt { color: var(--muted); display: flex; align-items: center; gap: 6px; }
 dd { margin: 0; text-align: right; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
 dd em { display: block; font-style: normal; font-weight: 400; color: var(--muted); font-size: 11.5px; }
-dt .key { width: 12px; height: 2px; border-radius: 1px; }
+dt .key.line { width: 12px; height: 2px; border-radius: 1px; }
+dt .key.box { width: 9px; height: 9px; border-radius: 2px; }
 </style>

@@ -1,0 +1,9 @@
+/*
+ * The weather view's own series colours, beside the xdp series --s1 (precipitation, teal) and --s2
+ * (radiation, amber — the sun). Temperature is a third hue; the triple is validated against
+ * colour-vision deficiency for both schemes (dataviz validator, all pairs): in the dark scheme the
+ * tritan distance teal/violet sits in the 6–8 floor band, which is legal because the three never
+ * share a mark type (line, area, bars) and are labelled directly.
+ */
+:root { --w-temp: #8A87E8; }
+:root[data-theme="light"] { --w-temp: #5C57C9; }

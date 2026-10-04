@@ -115,7 +115,10 @@ function toHour(o: EObject): HourValue {
     windGust: num(o, 'windGust'),
     windDirection: num(o, 'windDirection'),
     globalRadiation: num(o, 'globalRadiation'),
+    directRadiation: num(o, 'directRadiation'),
+    diffuseRadiation: num(o, 'diffuseRadiation'),
     sunElevation: num(o, 'sunElevation'),
+    sunAzimuth: num(o, 'sunAzimuth'),
     weatherCode: num(o, 'weatherCode'),
     daylight: flag(o, 'daylight'),
   }
@@ -129,6 +132,7 @@ function toDay(o: EObject): DayValue {
     precipitation: num(o, 'precipitation'),
     precipitationProbability: num(o, 'precipitationProbability'),
     sunshineHours: num(o, 'sunshineHours'),
+    insolation: num(o, 'insolation'),
     cloudCoverMean: num(o, 'cloudCoverMean'),
     windGustMax: num(o, 'windGustMax'),
     uvIndexMax: num(o, 'uvIndexMax'),

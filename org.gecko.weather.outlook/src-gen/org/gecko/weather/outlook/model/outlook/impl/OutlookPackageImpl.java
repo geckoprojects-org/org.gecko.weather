@@ -444,7 +444,7 @@ public class OutlookPackageImpl extends EPackageImpl implements OutlookPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getHourOutlook_SunElevation() {
+	public EAttribute getHourOutlook_DirectRadiation() {
 		return (EAttribute)hourOutlookEClass.getEStructuralFeatures().get(10);
 	}
 
@@ -454,7 +454,7 @@ public class OutlookPackageImpl extends EPackageImpl implements OutlookPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getHourOutlook_WeatherCode() {
+	public EAttribute getHourOutlook_DiffuseRadiation() {
 		return (EAttribute)hourOutlookEClass.getEStructuralFeatures().get(11);
 	}
 
@@ -464,8 +464,38 @@ public class OutlookPackageImpl extends EPackageImpl implements OutlookPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getHourOutlook_Daylight() {
+	public EAttribute getHourOutlook_SunElevation() {
 		return (EAttribute)hourOutlookEClass.getEStructuralFeatures().get(12);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getHourOutlook_SunAzimuth() {
+		return (EAttribute)hourOutlookEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getHourOutlook_WeatherCode() {
+		return (EAttribute)hourOutlookEClass.getEStructuralFeatures().get(14);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getHourOutlook_Daylight() {
+		return (EAttribute)hourOutlookEClass.getEStructuralFeatures().get(15);
 	}
 
 	/**
@@ -544,7 +574,7 @@ public class OutlookPackageImpl extends EPackageImpl implements OutlookPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getDayOutlook_CloudCoverMean() {
+	public EAttribute getDayOutlook_Insolation() {
 		return (EAttribute)dayOutlookEClass.getEStructuralFeatures().get(6);
 	}
 
@@ -554,7 +584,7 @@ public class OutlookPackageImpl extends EPackageImpl implements OutlookPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getDayOutlook_WindGustMax() {
+	public EAttribute getDayOutlook_CloudCoverMean() {
 		return (EAttribute)dayOutlookEClass.getEStructuralFeatures().get(7);
 	}
 
@@ -564,7 +594,7 @@ public class OutlookPackageImpl extends EPackageImpl implements OutlookPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getDayOutlook_UvIndexMax() {
+	public EAttribute getDayOutlook_WindGustMax() {
 		return (EAttribute)dayOutlookEClass.getEStructuralFeatures().get(8);
 	}
 
@@ -574,7 +604,7 @@ public class OutlookPackageImpl extends EPackageImpl implements OutlookPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getDayOutlook_WeatherCode() {
+	public EAttribute getDayOutlook_UvIndexMax() {
 		return (EAttribute)dayOutlookEClass.getEStructuralFeatures().get(9);
 	}
 
@@ -584,7 +614,7 @@ public class OutlookPackageImpl extends EPackageImpl implements OutlookPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getDayOutlook_Sunrise() {
+	public EAttribute getDayOutlook_WeatherCode() {
 		return (EAttribute)dayOutlookEClass.getEStructuralFeatures().get(10);
 	}
 
@@ -594,7 +624,7 @@ public class OutlookPackageImpl extends EPackageImpl implements OutlookPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getDayOutlook_Sunset() {
+	public EAttribute getDayOutlook_Sunrise() {
 		return (EAttribute)dayOutlookEClass.getEStructuralFeatures().get(11);
 	}
 
@@ -604,7 +634,7 @@ public class OutlookPackageImpl extends EPackageImpl implements OutlookPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getDayOutlook_SolarNoon() {
+	public EAttribute getDayOutlook_Sunset() {
 		return (EAttribute)dayOutlookEClass.getEStructuralFeatures().get(12);
 	}
 
@@ -614,8 +644,18 @@ public class OutlookPackageImpl extends EPackageImpl implements OutlookPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getDayOutlook_DaylightHours() {
+	public EAttribute getDayOutlook_SolarNoon() {
 		return (EAttribute)dayOutlookEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getDayOutlook_DaylightHours() {
+		return (EAttribute)dayOutlookEClass.getEStructuralFeatures().get(14);
 	}
 
 	/**
@@ -750,7 +790,10 @@ public class OutlookPackageImpl extends EPackageImpl implements OutlookPackage {
 		createEAttribute(hourOutlookEClass, HOUR_OUTLOOK__WIND_GUST);
 		createEAttribute(hourOutlookEClass, HOUR_OUTLOOK__WIND_DIRECTION);
 		createEAttribute(hourOutlookEClass, HOUR_OUTLOOK__GLOBAL_RADIATION);
+		createEAttribute(hourOutlookEClass, HOUR_OUTLOOK__DIRECT_RADIATION);
+		createEAttribute(hourOutlookEClass, HOUR_OUTLOOK__DIFFUSE_RADIATION);
 		createEAttribute(hourOutlookEClass, HOUR_OUTLOOK__SUN_ELEVATION);
+		createEAttribute(hourOutlookEClass, HOUR_OUTLOOK__SUN_AZIMUTH);
 		createEAttribute(hourOutlookEClass, HOUR_OUTLOOK__WEATHER_CODE);
 		createEAttribute(hourOutlookEClass, HOUR_OUTLOOK__DAYLIGHT);
 
@@ -761,6 +804,7 @@ public class OutlookPackageImpl extends EPackageImpl implements OutlookPackage {
 		createEAttribute(dayOutlookEClass, DAY_OUTLOOK__PRECIPITATION);
 		createEAttribute(dayOutlookEClass, DAY_OUTLOOK__PRECIPITATION_PROBABILITY);
 		createEAttribute(dayOutlookEClass, DAY_OUTLOOK__SUNSHINE_HOURS);
+		createEAttribute(dayOutlookEClass, DAY_OUTLOOK__INSOLATION);
 		createEAttribute(dayOutlookEClass, DAY_OUTLOOK__CLOUD_COVER_MEAN);
 		createEAttribute(dayOutlookEClass, DAY_OUTLOOK__WIND_GUST_MAX);
 		createEAttribute(dayOutlookEClass, DAY_OUTLOOK__UV_INDEX_MAX);
@@ -842,7 +886,10 @@ public class OutlookPackageImpl extends EPackageImpl implements OutlookPackage {
 		initEAttribute(getHourOutlook_WindGust(), ecorePackage.getEDouble(), "windGust", null, 0, 1, HourOutlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getHourOutlook_WindDirection(), ecorePackage.getEDouble(), "windDirection", null, 0, 1, HourOutlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getHourOutlook_GlobalRadiation(), ecorePackage.getEDouble(), "globalRadiation", null, 0, 1, HourOutlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getHourOutlook_DirectRadiation(), ecorePackage.getEDouble(), "directRadiation", null, 0, 1, HourOutlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getHourOutlook_DiffuseRadiation(), ecorePackage.getEDouble(), "diffuseRadiation", null, 0, 1, HourOutlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getHourOutlook_SunElevation(), ecorePackage.getEDouble(), "sunElevation", null, 0, 1, HourOutlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getHourOutlook_SunAzimuth(), ecorePackage.getEDouble(), "sunAzimuth", null, 0, 1, HourOutlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getHourOutlook_WeatherCode(), ecorePackage.getEInt(), "weatherCode", null, 0, 1, HourOutlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getHourOutlook_Daylight(), ecorePackage.getEBoolean(), "daylight", null, 0, 1, HourOutlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -853,6 +900,7 @@ public class OutlookPackageImpl extends EPackageImpl implements OutlookPackage {
 		initEAttribute(getDayOutlook_Precipitation(), ecorePackage.getEDouble(), "precipitation", null, 0, 1, DayOutlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDayOutlook_PrecipitationProbability(), ecorePackage.getEDouble(), "precipitationProbability", null, 0, 1, DayOutlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDayOutlook_SunshineHours(), ecorePackage.getEDouble(), "sunshineHours", null, 0, 1, DayOutlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDayOutlook_Insolation(), ecorePackage.getEDouble(), "insolation", null, 0, 1, DayOutlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDayOutlook_CloudCoverMean(), ecorePackage.getEDouble(), "cloudCoverMean", null, 0, 1, DayOutlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDayOutlook_WindGustMax(), ecorePackage.getEDouble(), "windGustMax", null, 0, 1, DayOutlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDayOutlook_UvIndexMax(), ecorePackage.getEDouble(), "uvIndexMax", null, 0, 1, DayOutlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

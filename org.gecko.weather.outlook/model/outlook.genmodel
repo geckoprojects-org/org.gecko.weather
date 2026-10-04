@@ -100,7 +100,16 @@
         <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//HourOutlook/globalRadiation"/>
       </genFeatures>
       <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//HourOutlook/directRadiation"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//HourOutlook/diffuseRadiation"/>
+      </genFeatures>
+      <genFeatures createChild="false">
         <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//HourOutlook/sunElevation"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//HourOutlook/sunAzimuth"/>
       </genFeatures>
       <genFeatures createChild="false">
         <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//HourOutlook/weatherCode"/>
@@ -128,6 +137,9 @@
       </genFeatures>
       <genFeatures createChild="false">
         <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//DayOutlook/sunshineHours"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//DayOutlook/insolation"/>
       </genFeatures>
       <genFeatures createChild="false">
         <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//DayOutlook/cloudCoverMean"/>

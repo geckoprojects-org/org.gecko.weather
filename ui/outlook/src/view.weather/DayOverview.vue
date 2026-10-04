@@ -37,6 +37,10 @@ function hours(h: number | undefined): string {
           <div class="caption">Sonnenschein</div>
         </div>
         <div class="metric">
+          <div class="value">{{ fixed1(d.insolation) }} <em>kWh/m²</em></div>
+          <div class="caption">Einstrahlung, horizontal</div>
+        </div>
+        <div class="metric">
           <div class="value">{{ fixed1(d.uvIndexMax) }}</div>
           <div class="caption">UV-Index, Maximum</div>
         </div>

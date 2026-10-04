@@ -43,7 +43,10 @@ import org.gecko.weather.outlook.model.outlook.OutlookPackage;
  *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.HourOutlookImpl#getWindGust <em>Wind Gust</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.HourOutlookImpl#getWindDirection <em>Wind Direction</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.HourOutlookImpl#getGlobalRadiation <em>Global Radiation</em>}</li>
+ *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.HourOutlookImpl#getDirectRadiation <em>Direct Radiation</em>}</li>
+ *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.HourOutlookImpl#getDiffuseRadiation <em>Diffuse Radiation</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.HourOutlookImpl#getSunElevation <em>Sun Elevation</em>}</li>
+ *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.HourOutlookImpl#getSunAzimuth <em>Sun Azimuth</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.HourOutlookImpl#getWeatherCode <em>Weather Code</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.HourOutlookImpl#isDaylight <em>Daylight</em>}</li>
  * </ul>
@@ -333,6 +336,64 @@ public class HourOutlookImpl extends MinimalEObjectImpl.Container implements Hou
 	protected boolean globalRadiationESet;
 
 	/**
+	 * The default value of the '{@link #getDirectRadiation() <em>Direct Radiation</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDirectRadiation()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double DIRECT_RADIATION_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getDirectRadiation() <em>Direct Radiation</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDirectRadiation()
+	 * @generated
+	 * @ordered
+	 */
+	protected double directRadiation = DIRECT_RADIATION_EDEFAULT;
+
+	/**
+	 * This is true if the Direct Radiation attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean directRadiationESet;
+
+	/**
+	 * The default value of the '{@link #getDiffuseRadiation() <em>Diffuse Radiation</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDiffuseRadiation()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double DIFFUSE_RADIATION_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getDiffuseRadiation() <em>Diffuse Radiation</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDiffuseRadiation()
+	 * @generated
+	 * @ordered
+	 */
+	protected double diffuseRadiation = DIFFUSE_RADIATION_EDEFAULT;
+
+	/**
+	 * This is true if the Diffuse Radiation attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean diffuseRadiationESet;
+
+	/**
 	 * The default value of the '{@link #getSunElevation() <em>Sun Elevation</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -360,6 +421,35 @@ public class HourOutlookImpl extends MinimalEObjectImpl.Container implements Hou
 	 * @ordered
 	 */
 	protected boolean sunElevationESet;
+
+	/**
+	 * The default value of the '{@link #getSunAzimuth() <em>Sun Azimuth</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSunAzimuth()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double SUN_AZIMUTH_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getSunAzimuth() <em>Sun Azimuth</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSunAzimuth()
+	 * @generated
+	 * @ordered
+	 */
+	protected double sunAzimuth = SUN_AZIMUTH_EDEFAULT;
+
+	/**
+	 * This is true if the Sun Azimuth attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean sunAzimuthESet;
 
 	/**
 	 * The default value of the '{@link #getWeatherCode() <em>Weather Code</em>}' attribute.
@@ -908,6 +998,106 @@ public class HourOutlookImpl extends MinimalEObjectImpl.Container implements Hou
 	 * @generated
 	 */
 	@Override
+	public double getDirectRadiation() {
+		return directRadiation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setDirectRadiation(double newDirectRadiation) {
+		double oldDirectRadiation = directRadiation;
+		directRadiation = newDirectRadiation;
+		boolean oldDirectRadiationESet = directRadiationESet;
+		directRadiationESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, OutlookPackage.HOUR_OUTLOOK__DIRECT_RADIATION, oldDirectRadiation, directRadiation, !oldDirectRadiationESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetDirectRadiation() {
+		double oldDirectRadiation = directRadiation;
+		boolean oldDirectRadiationESet = directRadiationESet;
+		directRadiation = DIRECT_RADIATION_EDEFAULT;
+		directRadiationESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, OutlookPackage.HOUR_OUTLOOK__DIRECT_RADIATION, oldDirectRadiation, DIRECT_RADIATION_EDEFAULT, oldDirectRadiationESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetDirectRadiation() {
+		return directRadiationESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public double getDiffuseRadiation() {
+		return diffuseRadiation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setDiffuseRadiation(double newDiffuseRadiation) {
+		double oldDiffuseRadiation = diffuseRadiation;
+		diffuseRadiation = newDiffuseRadiation;
+		boolean oldDiffuseRadiationESet = diffuseRadiationESet;
+		diffuseRadiationESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, OutlookPackage.HOUR_OUTLOOK__DIFFUSE_RADIATION, oldDiffuseRadiation, diffuseRadiation, !oldDiffuseRadiationESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetDiffuseRadiation() {
+		double oldDiffuseRadiation = diffuseRadiation;
+		boolean oldDiffuseRadiationESet = diffuseRadiationESet;
+		diffuseRadiation = DIFFUSE_RADIATION_EDEFAULT;
+		diffuseRadiationESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, OutlookPackage.HOUR_OUTLOOK__DIFFUSE_RADIATION, oldDiffuseRadiation, DIFFUSE_RADIATION_EDEFAULT, oldDiffuseRadiationESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetDiffuseRadiation() {
+		return diffuseRadiationESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public double getSunElevation() {
 		return sunElevation;
 	}
@@ -950,6 +1140,56 @@ public class HourOutlookImpl extends MinimalEObjectImpl.Container implements Hou
 	@Override
 	public boolean isSetSunElevation() {
 		return sunElevationESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public double getSunAzimuth() {
+		return sunAzimuth;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setSunAzimuth(double newSunAzimuth) {
+		double oldSunAzimuth = sunAzimuth;
+		sunAzimuth = newSunAzimuth;
+		boolean oldSunAzimuthESet = sunAzimuthESet;
+		sunAzimuthESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, OutlookPackage.HOUR_OUTLOOK__SUN_AZIMUTH, oldSunAzimuth, sunAzimuth, !oldSunAzimuthESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetSunAzimuth() {
+		double oldSunAzimuth = sunAzimuth;
+		boolean oldSunAzimuthESet = sunAzimuthESet;
+		sunAzimuth = SUN_AZIMUTH_EDEFAULT;
+		sunAzimuthESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, OutlookPackage.HOUR_OUTLOOK__SUN_AZIMUTH, oldSunAzimuth, SUN_AZIMUTH_EDEFAULT, oldSunAzimuthESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetSunAzimuth() {
+		return sunAzimuthESet;
 	}
 
 	/**
@@ -1053,8 +1293,14 @@ public class HourOutlookImpl extends MinimalEObjectImpl.Container implements Hou
 				return getWindDirection();
 			case OutlookPackage.HOUR_OUTLOOK__GLOBAL_RADIATION:
 				return getGlobalRadiation();
+			case OutlookPackage.HOUR_OUTLOOK__DIRECT_RADIATION:
+				return getDirectRadiation();
+			case OutlookPackage.HOUR_OUTLOOK__DIFFUSE_RADIATION:
+				return getDiffuseRadiation();
 			case OutlookPackage.HOUR_OUTLOOK__SUN_ELEVATION:
 				return getSunElevation();
+			case OutlookPackage.HOUR_OUTLOOK__SUN_AZIMUTH:
+				return getSunAzimuth();
 			case OutlookPackage.HOUR_OUTLOOK__WEATHER_CODE:
 				return getWeatherCode();
 			case OutlookPackage.HOUR_OUTLOOK__DAYLIGHT:
@@ -1101,8 +1347,17 @@ public class HourOutlookImpl extends MinimalEObjectImpl.Container implements Hou
 			case OutlookPackage.HOUR_OUTLOOK__GLOBAL_RADIATION:
 				setGlobalRadiation((Double)newValue);
 				return;
+			case OutlookPackage.HOUR_OUTLOOK__DIRECT_RADIATION:
+				setDirectRadiation((Double)newValue);
+				return;
+			case OutlookPackage.HOUR_OUTLOOK__DIFFUSE_RADIATION:
+				setDiffuseRadiation((Double)newValue);
+				return;
 			case OutlookPackage.HOUR_OUTLOOK__SUN_ELEVATION:
 				setSunElevation((Double)newValue);
+				return;
+			case OutlookPackage.HOUR_OUTLOOK__SUN_AZIMUTH:
+				setSunAzimuth((Double)newValue);
 				return;
 			case OutlookPackage.HOUR_OUTLOOK__WEATHER_CODE:
 				setWeatherCode((Integer)newValue);
@@ -1152,8 +1407,17 @@ public class HourOutlookImpl extends MinimalEObjectImpl.Container implements Hou
 			case OutlookPackage.HOUR_OUTLOOK__GLOBAL_RADIATION:
 				unsetGlobalRadiation();
 				return;
+			case OutlookPackage.HOUR_OUTLOOK__DIRECT_RADIATION:
+				unsetDirectRadiation();
+				return;
+			case OutlookPackage.HOUR_OUTLOOK__DIFFUSE_RADIATION:
+				unsetDiffuseRadiation();
+				return;
 			case OutlookPackage.HOUR_OUTLOOK__SUN_ELEVATION:
 				unsetSunElevation();
+				return;
+			case OutlookPackage.HOUR_OUTLOOK__SUN_AZIMUTH:
+				unsetSunAzimuth();
 				return;
 			case OutlookPackage.HOUR_OUTLOOK__WEATHER_CODE:
 				unsetWeatherCode();
@@ -1193,8 +1457,14 @@ public class HourOutlookImpl extends MinimalEObjectImpl.Container implements Hou
 				return isSetWindDirection();
 			case OutlookPackage.HOUR_OUTLOOK__GLOBAL_RADIATION:
 				return isSetGlobalRadiation();
+			case OutlookPackage.HOUR_OUTLOOK__DIRECT_RADIATION:
+				return isSetDirectRadiation();
+			case OutlookPackage.HOUR_OUTLOOK__DIFFUSE_RADIATION:
+				return isSetDiffuseRadiation();
 			case OutlookPackage.HOUR_OUTLOOK__SUN_ELEVATION:
 				return isSetSunElevation();
+			case OutlookPackage.HOUR_OUTLOOK__SUN_AZIMUTH:
+				return isSetSunAzimuth();
 			case OutlookPackage.HOUR_OUTLOOK__WEATHER_CODE:
 				return isSetWeatherCode();
 			case OutlookPackage.HOUR_OUTLOOK__DAYLIGHT:
@@ -1233,8 +1503,14 @@ public class HourOutlookImpl extends MinimalEObjectImpl.Container implements Hou
 		if (windDirectionESet) result.append(windDirection); else result.append("<unset>");
 		result.append(", globalRadiation: ");
 		if (globalRadiationESet) result.append(globalRadiation); else result.append("<unset>");
+		result.append(", directRadiation: ");
+		if (directRadiationESet) result.append(directRadiation); else result.append("<unset>");
+		result.append(", diffuseRadiation: ");
+		if (diffuseRadiationESet) result.append(diffuseRadiation); else result.append("<unset>");
 		result.append(", sunElevation: ");
 		if (sunElevationESet) result.append(sunElevation); else result.append("<unset>");
+		result.append(", sunAzimuth: ");
+		if (sunAzimuthESet) result.append(sunAzimuth); else result.append("<unset>");
 		result.append(", weatherCode: ");
 		if (weatherCodeESet) result.append(weatherCode); else result.append("<unset>");
 		result.append(", daylight: ");

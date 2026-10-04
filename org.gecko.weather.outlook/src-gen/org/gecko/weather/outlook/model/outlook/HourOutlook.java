@@ -42,7 +42,10 @@ import org.osgi.annotation.versioning.ProviderType;
  *   <li>{@link org.gecko.weather.outlook.model.outlook.HourOutlook#getWindGust <em>Wind Gust</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.HourOutlook#getWindDirection <em>Wind Direction</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.HourOutlook#getGlobalRadiation <em>Global Radiation</em>}</li>
+ *   <li>{@link org.gecko.weather.outlook.model.outlook.HourOutlook#getDirectRadiation <em>Direct Radiation</em>}</li>
+ *   <li>{@link org.gecko.weather.outlook.model.outlook.HourOutlook#getDiffuseRadiation <em>Diffuse Radiation</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.HourOutlook#getSunElevation <em>Sun Elevation</em>}</li>
+ *   <li>{@link org.gecko.weather.outlook.model.outlook.HourOutlook#getSunAzimuth <em>Sun Azimuth</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.HourOutlook#getWeatherCode <em>Weather Code</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.HourOutlook#isDaylight <em>Daylight</em>}</li>
  * </ul>
@@ -538,6 +541,110 @@ public interface HourOutlook extends EObject {
 	boolean isSetGlobalRadiation();
 
 	/**
+	 * Returns the value of the '<em><b>Direct Radiation</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Mean direct shortwave radiation on a horizontal surface over the hour, W/m² — only where a source splits it (ICON-D2). With diffuseRadiation and the sun's position it is what a PV computation needs for a tilted module.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Direct Radiation</em>' attribute.
+	 * @see #isSetDirectRadiation()
+	 * @see #unsetDirectRadiation()
+	 * @see #setDirectRadiation(double)
+	 * @see org.gecko.weather.outlook.model.outlook.OutlookPackage#getHourOutlook_DirectRadiation()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	double getDirectRadiation();
+
+	/**
+	 * Sets the value of the '{@link org.gecko.weather.outlook.model.outlook.HourOutlook#getDirectRadiation <em>Direct Radiation</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Direct Radiation</em>' attribute.
+	 * @see #isSetDirectRadiation()
+	 * @see #unsetDirectRadiation()
+	 * @see #getDirectRadiation()
+	 * @generated
+	 */
+	void setDirectRadiation(double value);
+
+	/**
+	 * Unsets the value of the '{@link org.gecko.weather.outlook.model.outlook.HourOutlook#getDirectRadiation <em>Direct Radiation</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetDirectRadiation()
+	 * @see #getDirectRadiation()
+	 * @see #setDirectRadiation(double)
+	 * @generated
+	 */
+	void unsetDirectRadiation();
+
+	/**
+	 * Returns whether the value of the '{@link org.gecko.weather.outlook.model.outlook.HourOutlook#getDirectRadiation <em>Direct Radiation</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Direct Radiation</em>' attribute is set.
+	 * @see #unsetDirectRadiation()
+	 * @see #getDirectRadiation()
+	 * @see #setDirectRadiation(double)
+	 * @generated
+	 */
+	boolean isSetDirectRadiation();
+
+	/**
+	 * Returns the value of the '<em><b>Diffuse Radiation</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Mean diffuse shortwave radiation on a horizontal surface over the hour, W/m².
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Diffuse Radiation</em>' attribute.
+	 * @see #isSetDiffuseRadiation()
+	 * @see #unsetDiffuseRadiation()
+	 * @see #setDiffuseRadiation(double)
+	 * @see org.gecko.weather.outlook.model.outlook.OutlookPackage#getHourOutlook_DiffuseRadiation()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	double getDiffuseRadiation();
+
+	/**
+	 * Sets the value of the '{@link org.gecko.weather.outlook.model.outlook.HourOutlook#getDiffuseRadiation <em>Diffuse Radiation</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Diffuse Radiation</em>' attribute.
+	 * @see #isSetDiffuseRadiation()
+	 * @see #unsetDiffuseRadiation()
+	 * @see #getDiffuseRadiation()
+	 * @generated
+	 */
+	void setDiffuseRadiation(double value);
+
+	/**
+	 * Unsets the value of the '{@link org.gecko.weather.outlook.model.outlook.HourOutlook#getDiffuseRadiation <em>Diffuse Radiation</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetDiffuseRadiation()
+	 * @see #getDiffuseRadiation()
+	 * @see #setDiffuseRadiation(double)
+	 * @generated
+	 */
+	void unsetDiffuseRadiation();
+
+	/**
+	 * Returns whether the value of the '{@link org.gecko.weather.outlook.model.outlook.HourOutlook#getDiffuseRadiation <em>Diffuse Radiation</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Diffuse Radiation</em>' attribute is set.
+	 * @see #unsetDiffuseRadiation()
+	 * @see #getDiffuseRadiation()
+	 * @see #setDiffuseRadiation(double)
+	 * @generated
+	 */
+	boolean isSetDiffuseRadiation();
+
+	/**
 	 * Returns the value of the '<em><b>Sun Elevation</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -585,6 +692,58 @@ public interface HourOutlook extends EObject {
 	 * @generated
 	 */
 	boolean isSetSunElevation();
+
+	/**
+	 * Returns the value of the '<em><b>Sun Azimuth</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Degrees clockwise from north.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Sun Azimuth</em>' attribute.
+	 * @see #isSetSunAzimuth()
+	 * @see #unsetSunAzimuth()
+	 * @see #setSunAzimuth(double)
+	 * @see org.gecko.weather.outlook.model.outlook.OutlookPackage#getHourOutlook_SunAzimuth()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	double getSunAzimuth();
+
+	/**
+	 * Sets the value of the '{@link org.gecko.weather.outlook.model.outlook.HourOutlook#getSunAzimuth <em>Sun Azimuth</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Sun Azimuth</em>' attribute.
+	 * @see #isSetSunAzimuth()
+	 * @see #unsetSunAzimuth()
+	 * @see #getSunAzimuth()
+	 * @generated
+	 */
+	void setSunAzimuth(double value);
+
+	/**
+	 * Unsets the value of the '{@link org.gecko.weather.outlook.model.outlook.HourOutlook#getSunAzimuth <em>Sun Azimuth</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetSunAzimuth()
+	 * @see #getSunAzimuth()
+	 * @see #setSunAzimuth(double)
+	 * @generated
+	 */
+	void unsetSunAzimuth();
+
+	/**
+	 * Returns whether the value of the '{@link org.gecko.weather.outlook.model.outlook.HourOutlook#getSunAzimuth <em>Sun Azimuth</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Sun Azimuth</em>' attribute is set.
+	 * @see #unsetSunAzimuth()
+	 * @see #getSunAzimuth()
+	 * @see #setSunAzimuth(double)
+	 * @generated
+	 */
+	boolean isSetSunAzimuth();
 
 	/**
 	 * Returns the value of the '<em><b>Weather Code</b></em>' attribute.

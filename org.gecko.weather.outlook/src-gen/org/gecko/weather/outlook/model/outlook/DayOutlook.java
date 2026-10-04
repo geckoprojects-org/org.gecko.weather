@@ -38,6 +38,7 @@ import org.osgi.annotation.versioning.ProviderType;
  *   <li>{@link org.gecko.weather.outlook.model.outlook.DayOutlook#getPrecipitation <em>Precipitation</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.DayOutlook#getPrecipitationProbability <em>Precipitation Probability</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.DayOutlook#getSunshineHours <em>Sunshine Hours</em>}</li>
+ *   <li>{@link org.gecko.weather.outlook.model.outlook.DayOutlook#getInsolation <em>Insolation</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.DayOutlook#getCloudCoverMean <em>Cloud Cover Mean</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.DayOutlook#getWindGustMax <em>Wind Gust Max</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.DayOutlook#getUvIndexMax <em>Uv Index Max</em>}</li>
@@ -329,6 +330,58 @@ public interface DayOutlook extends EObject {
 	 * @generated
 	 */
 	boolean isSetSunshineHours();
+
+	/**
+	 * Returns the value of the '<em><b>Insolation</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Global radiation summed over the day's hours, kWh/m² on a horizontal surface — the daily energy a PV estimate starts from. From the same hourly values as HourOutlook.globalRadiation.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Insolation</em>' attribute.
+	 * @see #isSetInsolation()
+	 * @see #unsetInsolation()
+	 * @see #setInsolation(double)
+	 * @see org.gecko.weather.outlook.model.outlook.OutlookPackage#getDayOutlook_Insolation()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	double getInsolation();
+
+	/**
+	 * Sets the value of the '{@link org.gecko.weather.outlook.model.outlook.DayOutlook#getInsolation <em>Insolation</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Insolation</em>' attribute.
+	 * @see #isSetInsolation()
+	 * @see #unsetInsolation()
+	 * @see #getInsolation()
+	 * @generated
+	 */
+	void setInsolation(double value);
+
+	/**
+	 * Unsets the value of the '{@link org.gecko.weather.outlook.model.outlook.DayOutlook#getInsolation <em>Insolation</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetInsolation()
+	 * @see #getInsolation()
+	 * @see #setInsolation(double)
+	 * @generated
+	 */
+	void unsetInsolation();
+
+	/**
+	 * Returns whether the value of the '{@link org.gecko.weather.outlook.model.outlook.DayOutlook#getInsolation <em>Insolation</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Insolation</em>' attribute is set.
+	 * @see #unsetInsolation()
+	 * @see #getInsolation()
+	 * @see #setInsolation(double)
+	 * @generated
+	 */
+	boolean isSetInsolation();
 
 	/**
 	 * Returns the value of the '<em><b>Cloud Cover Mean</b></em>' attribute.

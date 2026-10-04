@@ -42,7 +42,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * @generated
  */
 @ProviderType
-@EPackage(uri = OutlookPackage.eNS_URI, fingerprint = "fp1:d6bf9efea49e17df2e6570568b692d4e83be7e2ca3d31497c3aef68d6a8b2d24", genModel = "/model/outlook.genmodel", genModelSourceLocations = {"model/outlook.genmodel","org.gecko.weather.outlook/model/outlook.genmodel"}, ecore = "/model/outlook.ecore", ecoreSourceLocations = "/model/outlook.ecore")
+@EPackage(uri = OutlookPackage.eNS_URI, fingerprint = "fp1:e8884841780624de5dee64196b38a6e0c19ffb72c463ffc03836fccc41153efc", genModel = "/model/outlook.genmodel", genModelSourceLocations = {"model/outlook.genmodel","org.gecko.weather.outlook/model/outlook.genmodel"}, ecore = "/model/outlook.ecore", ecoreSourceLocations = "/model/outlook.ecore")
 public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	/**
 	 * The package name.
@@ -405,13 +405,40 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	int HOUR_OUTLOOK__GLOBAL_RADIATION = 9;
 
 	/**
+	 * The feature id for the '<em><b>Direct Radiation</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HOUR_OUTLOOK__DIRECT_RADIATION = 10;
+
+	/**
+	 * The feature id for the '<em><b>Diffuse Radiation</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HOUR_OUTLOOK__DIFFUSE_RADIATION = 11;
+
+	/**
 	 * The feature id for the '<em><b>Sun Elevation</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int HOUR_OUTLOOK__SUN_ELEVATION = 10;
+	int HOUR_OUTLOOK__SUN_ELEVATION = 12;
+
+	/**
+	 * The feature id for the '<em><b>Sun Azimuth</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HOUR_OUTLOOK__SUN_AZIMUTH = 13;
 
 	/**
 	 * The feature id for the '<em><b>Weather Code</b></em>' attribute.
@@ -420,7 +447,7 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int HOUR_OUTLOOK__WEATHER_CODE = 11;
+	int HOUR_OUTLOOK__WEATHER_CODE = 14;
 
 	/**
 	 * The feature id for the '<em><b>Daylight</b></em>' attribute.
@@ -429,7 +456,7 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int HOUR_OUTLOOK__DAYLIGHT = 12;
+	int HOUR_OUTLOOK__DAYLIGHT = 15;
 
 	/**
 	 * The number of structural features of the '<em>Hour Outlook</em>' class.
@@ -438,7 +465,7 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int HOUR_OUTLOOK_FEATURE_COUNT = 13;
+	int HOUR_OUTLOOK_FEATURE_COUNT = 16;
 
 	/**
 	 * The number of operations of the '<em>Hour Outlook</em>' class.
@@ -514,13 +541,22 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	int DAY_OUTLOOK__SUNSHINE_HOURS = 5;
 
 	/**
+	 * The feature id for the '<em><b>Insolation</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DAY_OUTLOOK__INSOLATION = 6;
+
+	/**
 	 * The feature id for the '<em><b>Cloud Cover Mean</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DAY_OUTLOOK__CLOUD_COVER_MEAN = 6;
+	int DAY_OUTLOOK__CLOUD_COVER_MEAN = 7;
 
 	/**
 	 * The feature id for the '<em><b>Wind Gust Max</b></em>' attribute.
@@ -529,7 +565,7 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DAY_OUTLOOK__WIND_GUST_MAX = 7;
+	int DAY_OUTLOOK__WIND_GUST_MAX = 8;
 
 	/**
 	 * The feature id for the '<em><b>Uv Index Max</b></em>' attribute.
@@ -538,7 +574,7 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DAY_OUTLOOK__UV_INDEX_MAX = 8;
+	int DAY_OUTLOOK__UV_INDEX_MAX = 9;
 
 	/**
 	 * The feature id for the '<em><b>Weather Code</b></em>' attribute.
@@ -547,7 +583,7 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DAY_OUTLOOK__WEATHER_CODE = 9;
+	int DAY_OUTLOOK__WEATHER_CODE = 10;
 
 	/**
 	 * The feature id for the '<em><b>Sunrise</b></em>' attribute.
@@ -556,7 +592,7 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DAY_OUTLOOK__SUNRISE = 10;
+	int DAY_OUTLOOK__SUNRISE = 11;
 
 	/**
 	 * The feature id for the '<em><b>Sunset</b></em>' attribute.
@@ -565,7 +601,7 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DAY_OUTLOOK__SUNSET = 11;
+	int DAY_OUTLOOK__SUNSET = 12;
 
 	/**
 	 * The feature id for the '<em><b>Solar Noon</b></em>' attribute.
@@ -574,7 +610,7 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DAY_OUTLOOK__SOLAR_NOON = 12;
+	int DAY_OUTLOOK__SOLAR_NOON = 13;
 
 	/**
 	 * The feature id for the '<em><b>Daylight Hours</b></em>' attribute.
@@ -583,7 +619,7 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DAY_OUTLOOK__DAYLIGHT_HOURS = 13;
+	int DAY_OUTLOOK__DAYLIGHT_HOURS = 14;
 
 	/**
 	 * The number of structural features of the '<em>Day Outlook</em>' class.
@@ -592,7 +628,7 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DAY_OUTLOOK_FEATURE_COUNT = 14;
+	int DAY_OUTLOOK_FEATURE_COUNT = 15;
 
 	/**
 	 * The number of operations of the '<em>Day Outlook</em>' class.
@@ -1013,6 +1049,28 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	EAttribute getHourOutlook_GlobalRadiation();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.HourOutlook#getDirectRadiation <em>Direct Radiation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Direct Radiation</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.HourOutlook#getDirectRadiation()
+	 * @see #getHourOutlook()
+	 * @generated
+	 */
+	EAttribute getHourOutlook_DirectRadiation();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.HourOutlook#getDiffuseRadiation <em>Diffuse Radiation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Diffuse Radiation</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.HourOutlook#getDiffuseRadiation()
+	 * @see #getHourOutlook()
+	 * @generated
+	 */
+	EAttribute getHourOutlook_DiffuseRadiation();
+
+	/**
 	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.HourOutlook#getSunElevation <em>Sun Elevation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1022,6 +1080,17 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 */
 	EAttribute getHourOutlook_SunElevation();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.HourOutlook#getSunAzimuth <em>Sun Azimuth</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Sun Azimuth</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.HourOutlook#getSunAzimuth()
+	 * @see #getHourOutlook()
+	 * @generated
+	 */
+	EAttribute getHourOutlook_SunAzimuth();
 
 	/**
 	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.HourOutlook#getWeatherCode <em>Weather Code</em>}'.
@@ -1120,6 +1189,17 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 */
 	EAttribute getDayOutlook_SunshineHours();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.DayOutlook#getInsolation <em>Insolation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Insolation</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.DayOutlook#getInsolation()
+	 * @see #getDayOutlook()
+	 * @generated
+	 */
+	EAttribute getDayOutlook_Insolation();
 
 	/**
 	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.DayOutlook#getCloudCoverMean <em>Cloud Cover Mean</em>}'.
@@ -1557,12 +1637,36 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 		EAttribute HOUR_OUTLOOK__GLOBAL_RADIATION = eINSTANCE.getHourOutlook_GlobalRadiation();
 
 		/**
+		 * The meta object literal for the '<em><b>Direct Radiation</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute HOUR_OUTLOOK__DIRECT_RADIATION = eINSTANCE.getHourOutlook_DirectRadiation();
+
+		/**
+		 * The meta object literal for the '<em><b>Diffuse Radiation</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute HOUR_OUTLOOK__DIFFUSE_RADIATION = eINSTANCE.getHourOutlook_DiffuseRadiation();
+
+		/**
 		 * The meta object literal for the '<em><b>Sun Elevation</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute HOUR_OUTLOOK__SUN_ELEVATION = eINSTANCE.getHourOutlook_SunElevation();
+
+		/**
+		 * The meta object literal for the '<em><b>Sun Azimuth</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute HOUR_OUTLOOK__SUN_AZIMUTH = eINSTANCE.getHourOutlook_SunAzimuth();
 
 		/**
 		 * The meta object literal for the '<em><b>Weather Code</b></em>' attribute feature.
@@ -1637,6 +1741,14 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 		 * @generated
 		 */
 		EAttribute DAY_OUTLOOK__SUNSHINE_HOURS = eINSTANCE.getDayOutlook_SunshineHours();
+
+		/**
+		 * The meta object literal for the '<em><b>Insolation</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DAY_OUTLOOK__INSOLATION = eINSTANCE.getDayOutlook_Insolation();
 
 		/**
 		 * The meta object literal for the '<em><b>Cloud Cover Mean</b></em>' attribute feature.

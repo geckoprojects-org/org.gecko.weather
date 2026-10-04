@@ -135,7 +135,10 @@ public final class OutlookBuilder {
 		s.mosmix(MeasurementKind.WIND_DIRECTION, Level.GROUND_10M, Statistic.INSTANT, null, t).ifPresent(h::setWindDirection);
 		s.mosmix(MeasurementKind.WIND_GUST, Level.GROUND_10M, Statistic.MAX, HOUR, end).ifPresent(h::setWindGust);
 		s.globalRadiation(end).ifPresent(h::setGlobalRadiation);
+		s.icon(MeasurementKind.DIRECT_RADIATION, end).ifPresent(h::setDirectRadiation);
+		s.icon(MeasurementKind.DIFFUSE_RADIATION, end).ifPresent(h::setDiffuseRadiation);
 		s.weatherCode(end).ifPresent(h::setWeatherCode);
+		s.sunAzimuth(t).ifPresent(h::setSunAzimuth);
 		OptionalDouble elevation = s.sunElevation(t);
 		elevation.ifPresent(h::setSunElevation);
 		h.setDaylight(daylight(report, t.plus(Duration.ofMinutes(30)), elevation));
@@ -176,6 +179,14 @@ public final class OutlookBuilder {
 		List<Double> sun = s.mosmixSeries(MeasurementKind.SUNSHINE_DURATION, Level.SURFACE, Statistic.ACCUMULATED, HOUR, periodEndIn);
 		if (!sun.isEmpty()) {
 			d.setSunshineHours(sun.stream().mapToDouble(Double::doubleValue).sum() / 3600.0);
+		}
+		// Wh/m² per hour = mean W/m² over the hour; summed and divided by 1000 → kWh/m²
+		List<Double> radiation = new ArrayList<>();
+		for (Instant t = from; t.isBefore(to); t = t.plus(HOUR)) {
+			s.globalRadiation(t.plus(HOUR)).ifPresent(radiation::add);
+		}
+		if (!radiation.isEmpty()) {
+			d.setInsolation(radiation.stream().mapToDouble(Double::doubleValue).sum() / 1000.0);
 		}
 		List<Double> clouds = new ArrayList<>();
 		for (Instant t = from; t.isBefore(to); t = t.plus(HOUR)) {
@@ -315,6 +326,18 @@ public final class OutlookBuilder {
 			return fromMosmix;
 		}
 
+		/** A radiation component of ICON-D2, the hourly mean ending at {@code end}. */
+		Optional<Double> icon(MeasurementKind kind, Instant end) {
+			Optional<Double> v = number(iconIndex.get(key(kind, Level.SURFACE, Statistic.MEAN, HOUR, end)));
+			v.ifPresent(x -> iconUsed = true);
+			return v;
+		}
+
+		OptionalDouble sunAzimuth(Instant at) {
+			MeasuredValue v = solarIndex.get(key(MeasurementKind.SUN_AZIMUTH, Level.UNSPECIFIED, Statistic.INSTANT, null, at));
+			return v != null && v.isSetValue() ? OptionalDouble.of(v.getValue()) : OptionalDouble.empty();
+		}
+
 		Optional<Double> precipitationProbability(Instant end) {
 			return mosmixValues(v -> v.getKind() == MeasurementKind.PRECIPITATION && v.getStatistic() == Statistic.PROBABILITY
 					&& HOUR.equals(v.getPeriod()) && v.isSetThreshold() && Math.abs(v.getThreshold() - 0.1) < 1e-9
@@ -373,7 +396,7 @@ public final class OutlookBuilder {
 						: "Temperatur, Wind, Niederschlag, Wetter, Sonnenschein");
 			}
 			if (icon != null && iconUsed) {
-				used.put(icon, "Bewölkung, Globalstrahlung (direkt + diffus)");
+				used.put(icon, "Bewölkung, Strahlung direkt und diffus");
 			}
 			if (uv != null && !outlook.getDays().stream().noneMatch(DayOutlook::isSetUvIndexMax)) {
 				used.put(uv, "UV-Index (Tagesmaximum)");
