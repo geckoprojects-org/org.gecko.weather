@@ -37,10 +37,39 @@ function pick(event: PointerEvent): void {
 }
 
 const hovered = computed(() => (active.value === null ? null : props.hours[active.value]))
+
+/**
+ * One row per value — label left, value right-aligned with tabular digits — so that nothing but
+ * the digits moves when the pointer goes from hour to hour. Rows drawn in the meteogram carry the
+ * key of their mark; secondary rows are indented under their quantity.
+ */
+const tooltipRows = computed(() => {
+  const h = hovered.value
+  if (!h) return []
+  const split = h.directRadiation !== undefined && h.diffuseRadiation !== undefined
+  return [
+    { label: 'Temperatur', value: `${degrees(h.temperature)}C`, key: 'line temp' },
+    { label: 'Taupunkt', value: `${degrees(h.dewPoint)}C`, sub: true },
+    { label: 'Strahlung global', value: `${whole(h.globalRadiation)} W/m²`, key: split ? '' : 'dash' },
+    ...(split
+      ? [
+          { label: 'direkt', value: `${whole(h.directRadiation)} W/m²`, key: 'box direct', sub: true },
+          { label: 'diffus', value: `${whole(h.diffuseRadiation)} W/m²`, key: 'box diffuse', sub: true },
+        ]
+      : []),
+    { label: 'Niederschlag', value: `${fixed1(h.precipitation)} mm`, key: 'box rain' },
+    { label: 'Wahrscheinlichkeit', value: `${whole(h.precipitationProbability)} %`, sub: true },
+    { label: 'Bewölkung', value: `${whole(h.cloudCover)} %` },
+    { label: 'Wind', value: `${kmh(h.windSpeed)} km/h ${compass(h.windDirection)}`.trim() },
+    { label: 'Böen', value: `${kmh(h.windGust)} km/h`, sub: true },
+    { label: 'Sonnenhöhe', value: `${whole(h.sunElevation)}°` },
+    { label: 'Azimut', value: `${whole(h.sunAzimuth)}°`, sub: true },
+  ] as { label: string; value: string; key?: string; sub?: boolean }[]
+})
 const tooltipLeft = computed(() => {
   if (active.value === null) return 0
   const x = xCenter(active.value)
-  return Math.min(Math.max(x - 100, 0), width.value - 200)
+  return Math.min(Math.max(x - 134, 0), width.value - 268)
 })
 </script>
 
@@ -90,9 +119,11 @@ const tooltipLeft = computed(() => {
       <figure class="chart">
         <figcaption class="legend">
           <span><i class="key line temp" />Temperatur · °C</span>
-          <span><i class="key box direct" />Strahlung direkt</span>
-          <span><i class="key box diffuse" />diffus · W/m², Stundenmittel</span>
-          <span><i class="key dash" />global, ohne Aufteilung</span>
+          <span class="group">Strahlung · W/m², Stundenmittel:
+            <span><i class="key box direct" />direkt</span>
+            <span><i class="key box diffuse" />diffus</span>
+            <span><i class="key dash" />global, wo nicht aufgeteilt</span>
+          </span>
           <span><i class="key box rain" />Niederschlag · mm pro Stunde</span>
           <span><i class="key night" />Nacht</span>
           <span><i class="key uv" />UV-Index, Tagesmaximum</span>
@@ -123,12 +154,10 @@ const tooltipLeft = computed(() => {
       <div v-if="hovered && active !== null" class="tooltip" :style="{ left: `${tooltipLeft}px` }" role="status">
         <div class="tt-head">{{ shortDay(hovered.time, timeZone) }}, {{ hourLabel(hovered.time, timeZone) }} · {{ skyText(skyOf(hovered.weatherCode, hovered.cloudCover)) }}</div>
         <dl>
-          <dt><i class="key line temp" />Temperatur</dt><dd>{{ degrees(hovered.temperature) }}<em>Taupunkt {{ degrees(hovered.dewPoint) }}</em></dd>
-          <dt><i class="key box rain" />Niederschlag</dt><dd>{{ fixed1(hovered.precipitation) }} mm<em>{{ whole(hovered.precipitationProbability) }} %</em></dd>
-          <dt>Bewölkung</dt><dd>{{ whole(hovered.cloudCover) }} %</dd>
-          <dt>Wind</dt><dd>{{ kmh(hovered.windSpeed) }} km/h {{ compass(hovered.windDirection) }}<em>Böen {{ kmh(hovered.windGust) }}</em></dd>
-          <dt><i class="key box direct" />Strahlung</dt><dd>{{ whole(hovered.globalRadiation) }} W/m²<em v-if="hovered.directRadiation !== undefined">direkt {{ whole(hovered.directRadiation) }} · diffus {{ whole(hovered.diffuseRadiation) }}</em><em v-else>ohne Aufteilung</em></dd>
-          <dt>Sonne</dt><dd>{{ whole(hovered.sunElevation) }}° hoch<em>Azimut {{ whole(hovered.sunAzimuth) }}°</em></dd>
+          <template v-for="row in tooltipRows" :key="row.label">
+            <dt :class="{ sub: row.sub }"><span class="slot"><i v-if="row.key" class="key" :class="row.key" /></span>{{ row.label }}</dt>
+            <dd :class="{ sub: row.sub }">{{ row.value }}</dd>
+          </template>
         </dl>
       </div>
     </div>
@@ -179,6 +208,7 @@ const tooltipLeft = computed(() => {
   width: max-content;
 }
 .legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend .group { gap: 12px; }
 .key { display: inline-block; }
 .key.line { width: 14px; height: 2px; border-radius: 1px; }
 .key.box { width: 10px; height: 10px; border-radius: 2px; }
@@ -202,7 +232,7 @@ const tooltipLeft = computed(() => {
 .tooltip {
   position: absolute;
   top: 56px;
-  width: 200px;
+  width: 268px;
   background: var(--sunken);
   border: 1px solid var(--line-2);
   border-radius: 8px;
@@ -213,10 +243,15 @@ const tooltipLeft = computed(() => {
   z-index: 2;
 }
 .tt-head { color: var(--muted); margin-bottom: 6px; }
-dl { display: grid; grid-template-columns: auto 1fr; gap: 3px 10px; margin: 0; }
-dt { color: var(--muted); display: flex; align-items: center; gap: 6px; }
-dd { margin: 0; text-align: right; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
-dd em { display: block; font-style: normal; font-weight: 400; color: var(--muted); font-size: 11.5px; }
-dt .key.line { width: 12px; height: 2px; border-radius: 1px; }
+dl { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; margin: 0; }
+dt { color: var(--muted); display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+/* every row has the same key slot, empty or not, so the labels line up */
+dt .slot { flex: none; width: 14px; display: inline-flex; align-items: center; justify-content: center; }
+dt .slot .key { width: 12px; }
+dd { margin: 0; text-align: right; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+dt.sub { padding-left: 18px; font-size: 11.5px; }
+dd.sub { font-weight: 400; color: var(--ink-2); font-size: 11.5px; }
+dt .key.line { height: 2px; border-radius: 1px; }
 dt .key.box { width: 9px; height: 9px; border-radius: 2px; }
+dt .key.dash { height: 0; border-top: 2px dashed var(--s2); }
 </style>
