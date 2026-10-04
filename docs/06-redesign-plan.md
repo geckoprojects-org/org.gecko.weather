@@ -338,8 +338,15 @@ xdp-ui, laid out so that it moves there as `weather.ddsr` + `view.weather`. The 
 consumer, as ADR-0013 wants. It also answers `M-11` for this consumer: the helpers a page needs are
 "the value of the nearest source at an hour" and "a day's summary", nothing interpolated.
 
-**Next:** `05-architecture-target.md`, which still describes a `compute.fusion` layer and is the
-next document to re-cut. `IngestScheduler`
+**The PV add-on exists (M-15, 2026-10-04):** `org.gecko.weather.pv` reads plant profiles (arrays with
+orientation and temperature coefficient, inverters, obstacles, horizon) from a local folder and
+computes the expected output per hour (48 h) and per day (7 days) from the weather service — ICON-D2
+direct/diffuse where it covers, MOSMIX global split by Erbs beyond, Hay–Davies onto the plane, Faiman
+cell temperature, inverter clipping — offered as the remote service `PvForecast`. A real plant is
+being profiled with its owners; its data stays out of the repository.
+
+**Next:** calibrate the PV forecast against a real plant's measured yields; `05-architecture-target.md`,
+which still describes a `compute.fusion` layer, is the next document to re-cut. `IngestScheduler`
 stays single-threaded on purpose (a slow source must not fan out); a ~50 s ICON run delaying the
 polls behind it is accepted for now.
 

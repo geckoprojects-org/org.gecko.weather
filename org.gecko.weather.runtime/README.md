@@ -17,7 +17,7 @@ Deployment glue, no domain logic.
 | `launch.bndrun` | Felix, Gogo shell + `weather` commands, Configurator, Fennec EMF runtime, all weather bundles, the MOSMIX_L, ICON-D2, SIS and UV providers (the gridded ones bring netCDF-Java, Guava, protobuf, joda-time, commons-compress + commons-io) |
 | `smoke.bndrun` | the same without an interactive shell, `SmokeRun` armed; exits 0 when a report with temperatures, sun elevations and day events exists for a freshly registered site |
 | `dev.bndrun` | the launch plus the Fennec Gogo MCP server on `127.0.0.1:8088/mcp/gogo` (configured by `org.gecko.weather.runtime.dev`, never in production), non-interactive shell so it can run in the background; commands go through MCP — `.mcp.json` at the workspace root points a Claude Code session at it |
-| `demo.bndrun` | the dev launch plus the remote role: Remote Service Admin of Fennec Services and the `WeatherOutlook` service (`org.gecko.weather.outlook`), served on `:9093/weather` and announced to a DDSR broker on `:8887`; configured by `org.gecko.weather.runtime.remote`, environment-overridable (`DDSR_BROKER_URL`, `WEATHER_PUBLIC_URL`, …). The UI is `ui/outlook` |
+| `demo.bndrun` | the dev launch plus the remote role: Remote Service Admin of Fennec Services and the `WeatherOutlook` (`org.gecko.weather.outlook`) and `PvForecast` (`org.gecko.weather.pv`, plant profiles in `data/weather/plants`) services, served on `:9093/weather` and announced to a DDSR broker on `:8887`; configured by `org.gecko.weather.runtime.remote`, environment-overridable (`DDSR_BROKER_URL`, `WEATHER_PUBLIC_URL`, …). The UI is `ui/outlook` |
 
 ```
 ./gradlew :org.gecko.weather.runtime:resolve :org.gecko.weather.runtime:resolve.smoke :org.gecko.weather.runtime:resolve.dev

@@ -1,0 +1,26 @@
+Bundle-Name: Gecko Weather PV
+Bundle-Description: The PV add-on (M-15): plant profiles — arrays with orientation, inverters, \
+	obstacles and horizon — and the expected output of a plant, hour by hour and per day, computed \
+	from a weather site's report (direct and diffuse radiation, temperature, wind) and the sun's \
+	position. Offered as the remote service PvForecast. Not part of the weather service, a consumer of it.
+
+src: src-gen,src
+
+-library: enableEMF
+
+-generate: \
+	model/pv.ecore; \
+		generate=fennecEMF; \
+		ecore=model/pv.ecore; \
+		output=src-gen
+
+-includeresource.model: model=model
+
+-buildpath: \
+	org.gecko.weather.model;version=snapshot,\
+	org.gecko.weather.api;version=snapshot,\
+	org.osgi.service.component.annotations;version=latest,\
+	org.osgi.service.metatype.annotations;version=latest
+
+-testpath: \
+	assertj-core;version=latest

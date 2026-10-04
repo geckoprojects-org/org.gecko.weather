@@ -17,5 +17,12 @@
 		"hours": "$[env:WEATHER_OUTLOOK_HOURS;type=Integer;default=24]",
 		"days": "$[env:WEATHER_OUTLOOK_DAYS;type=Integer;default=2]",
 		"defaultTimeZone": "Europe/Berlin"
+	},
+
+	"org.gecko.weather.pv.internal.PvForecastComponent": {
+		"plantsFolder": "$[env:WEATHER_PV_PLANTS;default=data/weather/plants]",
+		"hours": "$[env:WEATHER_PV_HOURS;type=Integer;default=48]",
+		"days": "$[env:WEATHER_PV_DAYS;type=Integer;default=7]",
+		"defaultTimeZone": "Europe/Berlin"
 	}
 }

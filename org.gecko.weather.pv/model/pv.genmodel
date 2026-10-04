@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel"
+    copyrightText="Copyright (c) 2012 - 2026 Data In Motion and others.&#xA;All rights reserved.&#xA;&#xA;This program and the accompanying materials are made&#xA;available under the terms of the Eclipse Public License 2.0&#xA;which is available at https://www.eclipse.org/legal/epl-2.0/&#xA;&#xA;SPDX-License-Identifier: EPL-2.0&#xA;&#xA;Contributors:&#xA;     Data In Motion - initial API and implementation"
+    modelDirectory="/org.gecko.weather.pv/src-gen" modelPluginID="org.gecko.weather.pv"
+    modelName="Pv" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.emf.importer.ecore" bundleManifest="false" complianceLevel="17.0"
+    copyrightFields="false" operationReflection="true" importOrganizing="true" oSGiCompatible="true">
+  <foreignModel>pv.ecore</foreignModel>
+  <genPackages prefix="Pv" basePackage="org.gecko.weather.pv.model" resource="XMI"
+      disposableProviderFactory="true">
+    <ecorePackage href="pv.ecore#/"/>
+    <genEnums typeSafeEnumCompatible="false">
+      <ecoreEnum href="pv.ecore#//Mounting"/>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="pv.ecore#//Mounting/ROOF_MOUNTED"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="pv.ecore#//Mounting/ROOF_INTEGRATED"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="pv.ecore#//Mounting/OPEN_RACK"/>
+      </genEnumLiterals>
+    </genEnums>
+    <genClasses>
+      <ecoreClass href="pv.ecore#//Plant"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//Plant/id"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//Plant/name"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//Plant/siteId"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//Plant/latitude"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//Plant/longitude"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//Plant/mountingHeight"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//Plant/albedo"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//Plant/systemLosses"/>
+      </genFeatures>
+      <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="pv.ecore#//Plant/arrays"/>
+      </genFeatures>
+      <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="pv.ecore#//Plant/inverters"/>
+      </genFeatures>
+      <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="pv.ecore#//Plant/obstacles"/>
+      </genFeatures>
+      <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="pv.ecore#//Plant/horizon"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="pv.ecore#//PvArray"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvArray/name"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvArray/azimuth"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvArray/tilt"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvArray/peakPower"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvArray/moduleCount"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvArray/temperatureCoefficient"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvArray/mounting"/>
+      </genFeatures>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="pv.ecore#//PvArray/inverter"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="pv.ecore#//Inverter"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//Inverter/name"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//Inverter/acPower"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//Inverter/efficiency"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="pv.ecore#//Obstacle"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//Obstacle/name"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//Obstacle/azimuthFrom"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//Obstacle/azimuthTo"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//Obstacle/distance"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//Obstacle/height"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="pv.ecore#//HorizonPoint"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//HorizonPoint/azimuth"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//HorizonPoint/elevation"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="pv.ecore#//PlantDirectory"/>
+      <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="pv.ecore#//PlantDirectory/plants"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="pv.ecore#//PlantEntry"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PlantEntry/id"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PlantEntry/name"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PlantEntry/siteId"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PlantEntry/peakPower"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PlantEntry/timeZone"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="pv.ecore#//PvOutlook"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvOutlook/plantId"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvOutlook/plantName"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvOutlook/siteId"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvOutlook/timeZone"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvOutlook/peakPower"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvOutlook/generatedAt"/>
+      </genFeatures>
+      <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="pv.ecore#//PvOutlook/hours"/>
+      </genFeatures>
+      <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="pv.ecore#//PvOutlook/days"/>
+      </genFeatures>
+      <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="pv.ecore#//PvOutlook/arrays"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="pv.ecore#//PvArrayInfo"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvArrayInfo/name"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvArrayInfo/azimuth"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvArrayInfo/tilt"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvArrayInfo/peakPower"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="pv.ecore#//PvHour"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvHour/time"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvHour/power"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvHour/dcPower"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvHour/arrayPower"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvHour/planeIrradiance"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvHour/globalRadiation"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvHour/cellTemperature"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvHour/sunElevation"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvHour/sunAzimuth"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvHour/shaded"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvHour/clipped"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvHour/source"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="pv.ecore#//PvDay"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvDay/date"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvDay/energy"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvDay/peakPower"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvDay/peakTime"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvDay/specificYield"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvDay/hoursCovered"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvDay/source"/>
+      </genFeatures>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>
