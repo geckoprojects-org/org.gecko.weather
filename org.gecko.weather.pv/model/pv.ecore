@@ -151,7 +151,12 @@
         <details key="documentation" value="Height of the obstacle above ground in m."/>
       </eAnnotations>
     </eStructuralFeatures>
-  </eClassifiers>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="leafOffTransmittance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" defaultValueLiteral="0.0">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Share of the direct sun that passes the obstacle while it is leafless — a deciduous forest from mid-November to the end of April. 0 for an obstacle that is opaque all year (a house, conifers); about 0.3 for the edge of a bare oak or beech forest."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+</eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="HorizonPoint">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="One point of a measured horizon line; between points the elevation is interpolated."/>

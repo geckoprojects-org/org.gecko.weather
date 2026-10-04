@@ -157,7 +157,8 @@ public final class PlantForecaster {
 			diffuse = PvPhysics.erbsDiffuse(w.global(), elevation, i0);
 			direct = Math.max(0, w.global() - diffuse);
 		}
-		boolean blocked = elevation > 0 && horizon.hides(elevation, azimuth);
+		double beamShare = elevation > 0 ? horizon.beamShare(elevation, azimuth, t.atZone(ZoneOffset.UTC).toLocalDate()) : 1;
+		boolean blocked = beamShare < 1;
 		List<PvArray> arrays = plant.getArrays();
 		double[] arrayDc = new double[arrays.size()];
 		Map<Inverter, Double> perInverter = new LinkedHashMap<>();
@@ -168,7 +169,7 @@ public final class PlantForecaster {
 		for (int k = 0; k < arrays.size(); k++) {
 			PvArray a = arrays.get(k);
 			PlaneIrradiance p = PvPhysics.plane(direct, diffuse, elevation, azimuth, a.getTilt(), a.getAzimuth(), plant.getAlbedo(), i0,
-					blocked, skyLoss);
+					beamShare, skyLoss);
 			double tc = PvPhysics.cellTemperature(w.airTemperature(), p.total(), w.windSpeed(), heatLoss(a.getMounting()));
 			arrayDc[k] = PvPhysics.dcPower(a.getPeakPower(), p.total(), tc, a.getTemperatureCoefficient(), plant.getSystemLosses());
 			if (a.getInverter() != null) {

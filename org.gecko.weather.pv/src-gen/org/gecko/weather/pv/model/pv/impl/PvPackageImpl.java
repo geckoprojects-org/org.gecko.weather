@@ -547,6 +547,16 @@ public class PvPackageImpl extends EPackageImpl implements PvPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getObstacle_LeafOffTransmittance() {
+		return (EAttribute)obstacleEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getHorizonPoint() {
 		return horizonPointEClass;
 	}
@@ -1296,6 +1306,7 @@ public class PvPackageImpl extends EPackageImpl implements PvPackage {
 		createEAttribute(obstacleEClass, OBSTACLE__AZIMUTH_TO);
 		createEAttribute(obstacleEClass, OBSTACLE__DISTANCE);
 		createEAttribute(obstacleEClass, OBSTACLE__HEIGHT);
+		createEAttribute(obstacleEClass, OBSTACLE__LEAF_OFF_TRANSMITTANCE);
 
 		horizonPointEClass = createEClass(HORIZON_POINT);
 		createEAttribute(horizonPointEClass, HORIZON_POINT__AZIMUTH);
@@ -1445,6 +1456,7 @@ public class PvPackageImpl extends EPackageImpl implements PvPackage {
 		initEAttribute(getObstacle_AzimuthTo(), ecorePackage.getEDouble(), "azimuthTo", null, 0, 1, Obstacle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getObstacle_Distance(), ecorePackage.getEDouble(), "distance", null, 0, 1, Obstacle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getObstacle_Height(), ecorePackage.getEDouble(), "height", null, 0, 1, Obstacle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getObstacle_LeafOffTransmittance(), ecorePackage.getEDouble(), "leafOffTransmittance", "0.0", 0, 1, Obstacle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(horizonPointEClass, HorizonPoint.class, "HorizonPoint", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getHorizonPoint_Azimuth(), ecorePackage.getEDouble(), "azimuth", null, 0, 1, HorizonPoint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

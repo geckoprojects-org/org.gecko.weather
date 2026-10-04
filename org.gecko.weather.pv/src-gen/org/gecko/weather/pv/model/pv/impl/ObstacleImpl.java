@@ -36,6 +36,7 @@ import org.gecko.weather.pv.model.pv.PvPackage;
  *   <li>{@link org.gecko.weather.pv.model.pv.impl.ObstacleImpl#getAzimuthTo <em>Azimuth To</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.impl.ObstacleImpl#getDistance <em>Distance</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.impl.ObstacleImpl#getHeight <em>Height</em>}</li>
+ *   <li>{@link org.gecko.weather.pv.model.pv.impl.ObstacleImpl#getLeafOffTransmittance <em>Leaf Off Transmittance</em>}</li>
  * </ul>
  *
  * @generated
@@ -140,6 +141,26 @@ public class ObstacleImpl extends MinimalEObjectImpl.Container implements Obstac
 	 * @ordered
 	 */
 	protected double height = HEIGHT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getLeafOffTransmittance() <em>Leaf Off Transmittance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLeafOffTransmittance()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double LEAF_OFF_TRANSMITTANCE_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getLeafOffTransmittance() <em>Leaf Off Transmittance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLeafOffTransmittance()
+	 * @generated
+	 * @ordered
+	 */
+	protected double leafOffTransmittance = LEAF_OFF_TRANSMITTANCE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -281,6 +302,29 @@ public class ObstacleImpl extends MinimalEObjectImpl.Container implements Obstac
 	 * @generated
 	 */
 	@Override
+	public double getLeafOffTransmittance() {
+		return leafOffTransmittance;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setLeafOffTransmittance(double newLeafOffTransmittance) {
+		double oldLeafOffTransmittance = leafOffTransmittance;
+		leafOffTransmittance = newLeafOffTransmittance;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PvPackage.OBSTACLE__LEAF_OFF_TRANSMITTANCE, oldLeafOffTransmittance, leafOffTransmittance));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case PvPackage.OBSTACLE__NAME:
@@ -293,6 +337,8 @@ public class ObstacleImpl extends MinimalEObjectImpl.Container implements Obstac
 				return getDistance();
 			case PvPackage.OBSTACLE__HEIGHT:
 				return getHeight();
+			case PvPackage.OBSTACLE__LEAF_OFF_TRANSMITTANCE:
+				return getLeafOffTransmittance();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -319,6 +365,9 @@ public class ObstacleImpl extends MinimalEObjectImpl.Container implements Obstac
 				return;
 			case PvPackage.OBSTACLE__HEIGHT:
 				setHeight((Double)newValue);
+				return;
+			case PvPackage.OBSTACLE__LEAF_OFF_TRANSMITTANCE:
+				setLeafOffTransmittance((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -347,6 +396,9 @@ public class ObstacleImpl extends MinimalEObjectImpl.Container implements Obstac
 			case PvPackage.OBSTACLE__HEIGHT:
 				setHeight(HEIGHT_EDEFAULT);
 				return;
+			case PvPackage.OBSTACLE__LEAF_OFF_TRANSMITTANCE:
+				setLeafOffTransmittance(LEAF_OFF_TRANSMITTANCE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -369,6 +421,8 @@ public class ObstacleImpl extends MinimalEObjectImpl.Container implements Obstac
 				return distance != DISTANCE_EDEFAULT;
 			case PvPackage.OBSTACLE__HEIGHT:
 				return height != HEIGHT_EDEFAULT;
+			case PvPackage.OBSTACLE__LEAF_OFF_TRANSMITTANCE:
+				return leafOffTransmittance != LEAF_OFF_TRANSMITTANCE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -393,6 +447,8 @@ public class ObstacleImpl extends MinimalEObjectImpl.Container implements Obstac
 		result.append(distance);
 		result.append(", height: ");
 		result.append(height);
+		result.append(", leafOffTransmittance: ");
+		result.append(leafOffTransmittance);
 		result.append(')');
 		return result.toString();
 	}

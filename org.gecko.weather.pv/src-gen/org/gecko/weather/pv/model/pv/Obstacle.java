@@ -35,6 +35,7 @@ import org.osgi.annotation.versioning.ProviderType;
  *   <li>{@link org.gecko.weather.pv.model.pv.Obstacle#getAzimuthTo <em>Azimuth To</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.Obstacle#getDistance <em>Distance</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.Obstacle#getHeight <em>Height</em>}</li>
+ *   <li>{@link org.gecko.weather.pv.model.pv.Obstacle#getLeafOffTransmittance <em>Leaf Off Transmittance</em>}</li>
  * </ul>
  *
  * @see org.gecko.weather.pv.model.pv.PvPackage#getObstacle()
@@ -164,5 +165,31 @@ public interface Obstacle extends EObject {
 	 * @generated
 	 */
 	void setHeight(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Leaf Off Transmittance</b></em>' attribute.
+	 * The default value is <code>"0.0"</code>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Share of the direct sun that passes the obstacle while it is leafless — a deciduous forest from mid-November to the end of April. 0 for an obstacle that is opaque all year (a house, conifers); about 0.3 for the edge of a bare oak or beech forest.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Leaf Off Transmittance</em>' attribute.
+	 * @see #setLeafOffTransmittance(double)
+	 * @see org.gecko.weather.pv.model.pv.PvPackage#getObstacle_LeafOffTransmittance()
+	 * @model default="0.0"
+	 * @generated
+	 */
+	double getLeafOffTransmittance();
+
+	/**
+	 * Sets the value of the '{@link org.gecko.weather.pv.model.pv.Obstacle#getLeafOffTransmittance <em>Leaf Off Transmittance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Leaf Off Transmittance</em>' attribute.
+	 * @see #getLeafOffTransmittance()
+	 * @generated
+	 */
+	void setLeafOffTransmittance(double value);
 
 } // Obstacle

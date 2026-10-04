@@ -86,12 +86,13 @@ public final class PvPhysics {
 	 *
 	 * @param directHorizontal  beam on the horizontal, W/m²
 	 * @param diffuseHorizontal diffuse on the horizontal, W/m²
-	 * @param sunBlocked        the sun is behind the horizon line for this plane: no beam, no
-	 *                          circumsolar part
+	 * @param beamShare         share of the direct sun that passes the horizon: 1 free, 0 behind
+	 *                          an obstacle (no beam, no circumsolar part), in between through a
+	 *                          leafless forest
 	 * @param skyViewLoss       share of the isotropic sky the horizon hides, 0..1
 	 */
 	public static PlaneIrradiance plane(double directHorizontal, double diffuseHorizontal, double sunElevation, double sunAzimuth,
-			double tilt, double planeAzimuth, double albedo, double extraterrestrial, boolean sunBlocked, double skyViewLoss) {
+			double tilt, double planeAzimuth, double albedo, double extraterrestrial, double beamShare, double skyViewLoss) {
 		double global = directHorizontal + diffuseHorizontal;
 		double ground = global * albedo * (1 - Math.cos(Math.toRadians(tilt))) / 2;
 		double isotropicView = (1 + Math.cos(Math.toRadians(tilt))) / 2 * (1 - skyViewLoss);
@@ -104,8 +105,8 @@ public final class PvPhysics {
 		double cosTheta = cosIncidence(sunElevation, sunAzimuth, tilt, planeAzimuth);
 		double anisotropy = Math.max(0, Math.min(1, dni / extraterrestrial));
 		double rb = Math.max(0, cosTheta) / Math.max(sinE, Math.cos(Math.toRadians(85)));
-		double beam = sunBlocked ? 0 : dni * Math.max(0, cosTheta);
-		double circumsolar = sunBlocked ? 0 : diffuseHorizontal * anisotropy * rb;
+		double beam = beamShare * dni * Math.max(0, cosTheta);
+		double circumsolar = beamShare * diffuseHorizontal * anisotropy * rb;
 		double isotropic = diffuseHorizontal * (1 - anisotropy) * isotropicView;
 		return new PlaneIrradiance(beam, circumsolar + isotropic, ground);
 	}

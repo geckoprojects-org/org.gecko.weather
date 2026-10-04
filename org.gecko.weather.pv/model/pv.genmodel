@@ -120,6 +120,9 @@
       <genFeatures createChild="false">
         <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//Obstacle/height"/>
       </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//Obstacle/leafOffTransmittance"/>
+      </genFeatures>
     </genClasses>
     <genClasses>
       <ecoreClass href="pv.ecore#//HorizonPoint"/>

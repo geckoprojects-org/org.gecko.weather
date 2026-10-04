@@ -16,6 +16,8 @@ package org.gecko.weather.pv.internal;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
 
+import java.time.LocalDate;
+
 import org.gecko.weather.pv.internal.PvPhysics.HeatLoss;
 import org.gecko.weather.pv.internal.PvPhysics.PlaneIrradiance;
 import org.gecko.weather.pv.model.pv.Mounting;
@@ -47,7 +49,7 @@ class PvPhysicsTest {
 
 	@Test
 	void aHorizontalPlaneReceivesExactlyTheGlobalRadiation() {
-		PlaneIrradiance p = PvPhysics.plane(400, 150, 35, 170, 0, 180, 0.2, I0, false, 0);
+		PlaneIrradiance p = PvPhysics.plane(400, 150, 35, 170, 0, 180, 0.2, I0, 1, 0);
 		assertThat(p.total()).isCloseTo(550, within(1e-9));
 		assertThat(p.beam()).isCloseTo(400, within(1e-9));
 		assertThat(p.ground()).isZero();
@@ -56,7 +58,7 @@ class PvPhysicsTest {
 	@Test
 	void transpositionOfASouthRoof() {
 		// 35° south roof, sun 40° high due south: the beam meets it at 15°
-		PlaneIrradiance p = PvPhysics.plane(500, 100, 40, 180, 35, 180, 0.2, I0, false, 0);
+		PlaneIrradiance p = PvPhysics.plane(500, 100, 40, 180, 35, 180, 0.2, I0, 1, 0);
 		double dni = 500 / Math.sin(Math.toRadians(40));
 		assertThat(p.beam()).isCloseTo(dni * Math.cos(Math.toRadians(15)), within(1e-6));
 		double ai = dni / I0;
@@ -68,13 +70,13 @@ class PvPhysicsTest {
 
 	@Test
 	void aBlockedSunLeavesOnlyTheSkyAndTheGround() {
-		PlaneIrradiance open = PvPhysics.plane(500, 100, 20, 180, 35, 180, 0.2, I0, false, 0);
-		PlaneIrradiance blocked = PvPhysics.plane(500, 100, 20, 180, 35, 180, 0.2, I0, true, 0);
+		PlaneIrradiance open = PvPhysics.plane(500, 100, 20, 180, 35, 180, 0.2, I0, 1, 0);
+		PlaneIrradiance blocked = PvPhysics.plane(500, 100, 20, 180, 35, 180, 0.2, I0, 0, 0);
 		assertThat(blocked.beam()).isZero();
 		assertThat(blocked.skyDiffuse()).isLessThan(open.skyDiffuse()); // the circumsolar part is gone too
 		assertThat(blocked.ground()).isEqualTo(open.ground());
 		// the sun below the horizon in the middle of the hour: all of it isotropic diffuse
-		PlaneIrradiance twilight = PvPhysics.plane(5, 20, -1, 270, 0, 180, 0.2, I0, false, 0);
+		PlaneIrradiance twilight = PvPhysics.plane(5, 20, -1, 270, 0, 180, 0.2, I0, 1, 0);
 		assertThat(twilight.beam()).isZero();
 		assertThat(twilight.total()).isCloseTo(25, within(1e-9));
 	}
@@ -142,5 +144,40 @@ class PvPhysicsTest {
 		assertThat(Horizon.within(10, 340, 20)).isTrue();
 		assertThat(Horizon.within(-10, 340, 20)).isTrue();
 		assertThat(Horizon.within(100, 340, 20)).isFalse();
+	}
+
+	@Test
+	void leaflessForestLetsPartOfTheSunThroughInWinterOnly() {
+		Plant plant = PvFactory.eINSTANCE.createPlant();
+		plant.setMountingHeight(3);
+		Obstacle forest = PvFactory.eINSTANCE.createObstacle();
+		forest.setAzimuthFrom(150);
+		forest.setAzimuthTo(280);
+		forest.setDistance(35);
+		forest.setHeight(25);
+		forest.setLeafOffTransmittance(0.3);
+		plant.getObstacles().add(forest);
+		Obstacle house = PvFactory.eINSTANCE.createObstacle();
+		house.setAzimuthFrom(200);
+		house.setAzimuthTo(210);
+		house.setDistance(10);
+		house.setHeight(8);
+		plant.getObstacles().add(house);
+		Horizon h = Horizon.of(plant);
+		LocalDate october = LocalDate.of(2026, 10, 4);
+		LocalDate december = LocalDate.of(2026, 12, 21);
+		LocalDate may = LocalDate.of(2026, 5, 1);
+		assertThat(h.beamShare(20, 180, october)).as("leaves on").isZero();
+		assertThat(h.beamShare(15, 180, december)).as("bare crowns").isCloseTo(0.3, within(1e-9));
+		assertThat(h.beamShare(15, 180, may)).as("leaves out again").isZero();
+		assertThat(h.beamShare(20, 205, december)).as("the house is opaque all year").isZero();
+		assertThat(h.beamShare(40, 180, october)).as("above the trees").isEqualTo(1);
+		assertThat(Horizon.leafOff(LocalDate.of(2026, 11, 15))).isTrue();
+		assertThat(Horizon.leafOff(LocalDate.of(2026, 11, 14))).isFalse();
+		assertThat(Horizon.leafOff(LocalDate.of(2026, 4, 30))).isTrue();
+
+		PlaneIrradiance free = PvPhysics.plane(400, 100, 15, 180, 10, 225, 0.2, I0, 1, 0);
+		PlaneIrradiance thinned = PvPhysics.plane(400, 100, 15, 180, 10, 225, 0.2, I0, 0.3, 0);
+		assertThat(thinned.beam()).isCloseTo(0.3 * free.beam(), within(1e-9));
 	}
 }

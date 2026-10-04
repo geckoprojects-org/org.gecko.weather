@@ -16,7 +16,7 @@ One `pv:Plant` XMI file per plant in the plants folder (`plantsFolder`, default
 | `Plant` | `id`, `name`, `siteId` (the weather site feeding it — register one at the plant first), optional own `latitude`/`longitude`, `mountingHeight` (m, for obstacle angles), `albedo` (0.2), `systemLosses` (% for wiring, soiling, mismatch, ageing; 10) |
 | `PvArray` | one orientation: `azimuth` (180 = south), `tilt`, `peakPower` kWp, `moduleCount`, `temperatureCoefficient` (%/K of Pmax, data sheet), `mounting` (`ROOF_MOUNTED`, `ROOF_INTEGRATED`, `OPEN_RACK`), `inverter` |
 | `Inverter` | `acPower` kW (output above it is clipped), `efficiency` (0.96) |
-| `Obstacle` | a forest, a house: `azimuthFrom`/`azimuthTo` (may cross north), `distance`, `height` — its top appears under atan((height − mountingHeight) / distance) |
+| `Obstacle` | a forest, a house: `azimuthFrom`/`azimuthTo` (may cross north), `distance`, `height` — its top appears under atan((height − mountingHeight) / distance); `leafOffTransmittance` (0) is the share of direct sun a deciduous obstacle lets through while leafless, 15 November to 30 April — about 0.3 for a bare oak or beech edge |
 | `HorizonPoint` | a measured horizon line, interpolated; the higher of horizon and obstacles wins |
 | `Meter` | where the actual output can be read: `type` (selects the `PvMeter` reader, e.g. `fronius-solar-api`), `url` of the device, `interval` in s (60, at least 5), `enabled` |
 
@@ -71,7 +71,7 @@ horizontal plane receives exactly the global radiation; a plane facing the sun h
 three clearness indices; Faiman; derating; clipping; a horizon from obstacles across north.
 `PlantForecasterTest` on a made-up east/west plant with a synthetic sun and report: east beats west
 in the morning, ICON → MOSMIX hand-over, inverter clipping, day sums, a clear midsummer day within
-4–8 kWh/kWp, a forest in the west costing the evening, profiles round-tripping through the folder.
+4–8 kWh/kWp, a forest in the west costing the evening, a leafless forest letting part of the sun through in winter only, profiles round-tripping through the folder.
 `MeteringTest`: the store per plant and day, mean power and energy with gaps, the poller with its
 intervals, a failing and an unknown meter, the measured values in the outlook.
 
