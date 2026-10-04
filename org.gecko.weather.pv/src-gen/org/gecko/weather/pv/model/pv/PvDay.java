@@ -38,6 +38,7 @@ import org.osgi.annotation.versioning.ProviderType;
  *   <li>{@link org.gecko.weather.pv.model.pv.PvDay#getPeakTime <em>Peak Time</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.PvDay#getSpecificYield <em>Specific Yield</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.PvDay#getHoursCovered <em>Hours Covered</em>}</li>
+ *   <li>{@link org.gecko.weather.pv.model.pv.PvDay#getMeasuredEnergy <em>Measured Energy</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.PvDay#getSource <em>Source</em>}</li>
  * </ul>
  *
@@ -274,6 +275,58 @@ public interface PvDay extends EObject {
 	 * @generated
 	 */
 	void setHoursCovered(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Measured Energy</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Measured PV generator energy in kWh of the day so far, integrated from the meter readings; gaps longer than 15 minutes count as nothing.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Measured Energy</em>' attribute.
+	 * @see #isSetMeasuredEnergy()
+	 * @see #unsetMeasuredEnergy()
+	 * @see #setMeasuredEnergy(double)
+	 * @see org.gecko.weather.pv.model.pv.PvPackage#getPvDay_MeasuredEnergy()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	double getMeasuredEnergy();
+
+	/**
+	 * Sets the value of the '{@link org.gecko.weather.pv.model.pv.PvDay#getMeasuredEnergy <em>Measured Energy</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Measured Energy</em>' attribute.
+	 * @see #isSetMeasuredEnergy()
+	 * @see #unsetMeasuredEnergy()
+	 * @see #getMeasuredEnergy()
+	 * @generated
+	 */
+	void setMeasuredEnergy(double value);
+
+	/**
+	 * Unsets the value of the '{@link org.gecko.weather.pv.model.pv.PvDay#getMeasuredEnergy <em>Measured Energy</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetMeasuredEnergy()
+	 * @see #getMeasuredEnergy()
+	 * @see #setMeasuredEnergy(double)
+	 * @generated
+	 */
+	void unsetMeasuredEnergy();
+
+	/**
+	 * Returns whether the value of the '{@link org.gecko.weather.pv.model.pv.PvDay#getMeasuredEnergy <em>Measured Energy</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Measured Energy</em>' attribute is set.
+	 * @see #unsetMeasuredEnergy()
+	 * @see #getMeasuredEnergy()
+	 * @see #setMeasuredEnergy(double)
+	 * @generated
+	 */
+	boolean isSetMeasuredEnergy();
 
 	/**
 	 * Returns the value of the '<em><b>Source</b></em>' attribute.

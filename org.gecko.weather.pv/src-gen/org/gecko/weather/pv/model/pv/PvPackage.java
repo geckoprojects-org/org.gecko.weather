@@ -43,7 +43,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * @generated
  */
 @ProviderType
-@EPackage(uri = PvPackage.eNS_URI, fingerprint = "fp1:e0ada57fb21762ef3e30784aabafd4c741b0a802eba0cc8b2923331254478164", genModel = "/model/pv.genmodel", genModelSourceLocations = {"model/pv.genmodel","org.gecko.weather.pv/model/pv.genmodel"}, ecore = "/model/pv.ecore", ecoreSourceLocations = "/model/pv.ecore")
+@EPackage(uri = PvPackage.eNS_URI, fingerprint = "fp1:cda520cb831d9092e192fecd3924e5fe766175306d642653ae6ab2c770d5e3d8", genModel = "/model/pv.genmodel", genModelSourceLocations = {"model/pv.genmodel","org.gecko.weather.pv/model/pv.genmodel"}, ecore = "/model/pv.ecore", ecoreSourceLocations = "/model/pv.ecore")
 public interface PvPackage extends org.eclipse.emf.ecore.EPackage {
 	/**
 	 * The package name.
@@ -187,13 +187,22 @@ public interface PvPackage extends org.eclipse.emf.ecore.EPackage {
 	int PLANT__OBSTACLES = 10;
 
 	/**
+	 * The feature id for the '<em><b>Meter</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PLANT__METER = 11;
+
+	/**
 	 * The feature id for the '<em><b>Horizon</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PLANT__HORIZON = 11;
+	int PLANT__HORIZON = 12;
 
 	/**
 	 * The number of structural features of the '<em>Plant</em>' class.
@@ -202,7 +211,7 @@ public interface PvPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PLANT_FEATURE_COUNT = 12;
+	int PLANT_FEATURE_COUNT = 13;
 
 	/**
 	 * The number of operations of the '<em>Plant</em>' class.
@@ -880,13 +889,22 @@ public interface PvPackage extends org.eclipse.emf.ecore.EPackage {
 	int PV_HOUR__CLIPPED = 10;
 
 	/**
+	 * The feature id for the '<em><b>Measured Power</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PV_HOUR__MEASURED_POWER = 11;
+
+	/**
 	 * The feature id for the '<em><b>Source</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PV_HOUR__SOURCE = 11;
+	int PV_HOUR__SOURCE = 12;
 
 	/**
 	 * The number of structural features of the '<em>Hour</em>' class.
@@ -895,7 +913,7 @@ public interface PvPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PV_HOUR_FEATURE_COUNT = 12;
+	int PV_HOUR_FEATURE_COUNT = 13;
 
 	/**
 	 * The number of operations of the '<em>Hour</em>' class.
@@ -971,13 +989,22 @@ public interface PvPackage extends org.eclipse.emf.ecore.EPackage {
 	int PV_DAY__HOURS_COVERED = 5;
 
 	/**
+	 * The feature id for the '<em><b>Measured Energy</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PV_DAY__MEASURED_ENERGY = 6;
+
+	/**
 	 * The feature id for the '<em><b>Source</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PV_DAY__SOURCE = 6;
+	int PV_DAY__SOURCE = 7;
 
 	/**
 	 * The number of structural features of the '<em>Day</em>' class.
@@ -986,7 +1013,7 @@ public interface PvPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PV_DAY_FEATURE_COUNT = 7;
+	int PV_DAY_FEATURE_COUNT = 8;
 
 	/**
 	 * The number of operations of the '<em>Day</em>' class.
@@ -998,6 +1025,234 @@ public interface PvPackage extends org.eclipse.emf.ecore.EPackage {
 	int PV_DAY_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link org.gecko.weather.pv.model.pv.impl.MeterImpl <em>Meter</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.gecko.weather.pv.model.pv.impl.MeterImpl
+	 * @see org.gecko.weather.pv.model.pv.impl.PvPackageImpl#getMeter()
+	 * @generated
+	 */
+	int METER = 11;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int METER__TYPE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Url</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int METER__URL = 1;
+
+	/**
+	 * The feature id for the '<em><b>Interval</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int METER__INTERVAL = 2;
+
+	/**
+	 * The feature id for the '<em><b>Enabled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int METER__ENABLED = 3;
+
+	/**
+	 * The number of structural features of the '<em>Meter</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int METER_FEATURE_COUNT = 4;
+
+	/**
+	 * The number of operations of the '<em>Meter</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int METER_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link org.gecko.weather.pv.model.pv.impl.PvMeasurementImpl <em>Measurement</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.gecko.weather.pv.model.pv.impl.PvMeasurementImpl
+	 * @see org.gecko.weather.pv.model.pv.impl.PvPackageImpl#getPvMeasurement()
+	 * @generated
+	 */
+	int PV_MEASUREMENT = 12;
+
+	/**
+	 * The feature id for the '<em><b>Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PV_MEASUREMENT__TIME = 0;
+
+	/**
+	 * The feature id for the '<em><b>Pv Power</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PV_MEASUREMENT__PV_POWER = 1;
+
+	/**
+	 * The feature id for the '<em><b>Ac Power</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PV_MEASUREMENT__AC_POWER = 2;
+
+	/**
+	 * The feature id for the '<em><b>Load Power</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PV_MEASUREMENT__LOAD_POWER = 3;
+
+	/**
+	 * The feature id for the '<em><b>Grid Power</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PV_MEASUREMENT__GRID_POWER = 4;
+
+	/**
+	 * The feature id for the '<em><b>Battery Power</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PV_MEASUREMENT__BATTERY_POWER = 5;
+
+	/**
+	 * The feature id for the '<em><b>State Of Charge</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PV_MEASUREMENT__STATE_OF_CHARGE = 6;
+
+	/**
+	 * The feature id for the '<em><b>Energy Total</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PV_MEASUREMENT__ENERGY_TOTAL = 7;
+
+	/**
+	 * The number of structural features of the '<em>Measurement</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PV_MEASUREMENT_FEATURE_COUNT = 8;
+
+	/**
+	 * The number of operations of the '<em>Measurement</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PV_MEASUREMENT_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link org.gecko.weather.pv.model.pv.impl.PvMeasurementLogImpl <em>Measurement Log</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.gecko.weather.pv.model.pv.impl.PvMeasurementLogImpl
+	 * @see org.gecko.weather.pv.model.pv.impl.PvPackageImpl#getPvMeasurementLog()
+	 * @generated
+	 */
+	int PV_MEASUREMENT_LOG = 13;
+
+	/**
+	 * The feature id for the '<em><b>Plant Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PV_MEASUREMENT_LOG__PLANT_ID = 0;
+
+	/**
+	 * The feature id for the '<em><b>Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PV_MEASUREMENT_LOG__DATE = 1;
+
+	/**
+	 * The feature id for the '<em><b>Meter Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PV_MEASUREMENT_LOG__METER_TYPE = 2;
+
+	/**
+	 * The feature id for the '<em><b>Measurements</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PV_MEASUREMENT_LOG__MEASUREMENTS = 3;
+
+	/**
+	 * The number of structural features of the '<em>Measurement Log</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PV_MEASUREMENT_LOG_FEATURE_COUNT = 4;
+
+	/**
+	 * The number of operations of the '<em>Measurement Log</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PV_MEASUREMENT_LOG_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link org.gecko.weather.pv.model.pv.Mounting <em>Mounting</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1005,7 +1260,7 @@ public interface PvPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @see org.gecko.weather.pv.model.pv.impl.PvPackageImpl#getMounting()
 	 * @generated
 	 */
-	int MOUNTING = 11;
+	int MOUNTING = 14;
 
 
 	/**
@@ -1138,6 +1393,17 @@ public interface PvPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 */
 	EReference getPlant_Obstacles();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link org.gecko.weather.pv.model.pv.Plant#getMeter <em>Meter</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Meter</em>'.
+	 * @see org.gecko.weather.pv.model.pv.Plant#getMeter()
+	 * @see #getPlant()
+	 * @generated
+	 */
+	EReference getPlant_Meter();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link org.gecko.weather.pv.model.pv.Plant#getHorizon <em>Horizon</em>}'.
@@ -1769,6 +2035,17 @@ public interface PvPackage extends org.eclipse.emf.ecore.EPackage {
 	EAttribute getPvHour_Clipped();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.pv.model.pv.PvHour#getMeasuredPower <em>Measured Power</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Measured Power</em>'.
+	 * @see org.gecko.weather.pv.model.pv.PvHour#getMeasuredPower()
+	 * @see #getPvHour()
+	 * @generated
+	 */
+	EAttribute getPvHour_MeasuredPower();
+
+	/**
 	 * Returns the meta object for the attribute '{@link org.gecko.weather.pv.model.pv.PvHour#getSource <em>Source</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1856,6 +2133,17 @@ public interface PvPackage extends org.eclipse.emf.ecore.EPackage {
 	EAttribute getPvDay_HoursCovered();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.pv.model.pv.PvDay#getMeasuredEnergy <em>Measured Energy</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Measured Energy</em>'.
+	 * @see org.gecko.weather.pv.model.pv.PvDay#getMeasuredEnergy()
+	 * @see #getPvDay()
+	 * @generated
+	 */
+	EAttribute getPvDay_MeasuredEnergy();
+
+	/**
 	 * Returns the meta object for the attribute '{@link org.gecko.weather.pv.model.pv.PvDay#getSource <em>Source</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1865,6 +2153,212 @@ public interface PvPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 */
 	EAttribute getPvDay_Source();
+
+	/**
+	 * Returns the meta object for class '{@link org.gecko.weather.pv.model.pv.Meter <em>Meter</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Meter</em>'.
+	 * @see org.gecko.weather.pv.model.pv.Meter
+	 * @generated
+	 */
+	EClass getMeter();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.pv.model.pv.Meter#getType <em>Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Type</em>'.
+	 * @see org.gecko.weather.pv.model.pv.Meter#getType()
+	 * @see #getMeter()
+	 * @generated
+	 */
+	EAttribute getMeter_Type();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.pv.model.pv.Meter#getUrl <em>Url</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Url</em>'.
+	 * @see org.gecko.weather.pv.model.pv.Meter#getUrl()
+	 * @see #getMeter()
+	 * @generated
+	 */
+	EAttribute getMeter_Url();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.pv.model.pv.Meter#getInterval <em>Interval</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Interval</em>'.
+	 * @see org.gecko.weather.pv.model.pv.Meter#getInterval()
+	 * @see #getMeter()
+	 * @generated
+	 */
+	EAttribute getMeter_Interval();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.pv.model.pv.Meter#isEnabled <em>Enabled</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Enabled</em>'.
+	 * @see org.gecko.weather.pv.model.pv.Meter#isEnabled()
+	 * @see #getMeter()
+	 * @generated
+	 */
+	EAttribute getMeter_Enabled();
+
+	/**
+	 * Returns the meta object for class '{@link org.gecko.weather.pv.model.pv.PvMeasurement <em>Measurement</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Measurement</em>'.
+	 * @see org.gecko.weather.pv.model.pv.PvMeasurement
+	 * @generated
+	 */
+	EClass getPvMeasurement();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.pv.model.pv.PvMeasurement#getTime <em>Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Time</em>'.
+	 * @see org.gecko.weather.pv.model.pv.PvMeasurement#getTime()
+	 * @see #getPvMeasurement()
+	 * @generated
+	 */
+	EAttribute getPvMeasurement_Time();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.pv.model.pv.PvMeasurement#getPvPower <em>Pv Power</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Pv Power</em>'.
+	 * @see org.gecko.weather.pv.model.pv.PvMeasurement#getPvPower()
+	 * @see #getPvMeasurement()
+	 * @generated
+	 */
+	EAttribute getPvMeasurement_PvPower();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.pv.model.pv.PvMeasurement#getAcPower <em>Ac Power</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Ac Power</em>'.
+	 * @see org.gecko.weather.pv.model.pv.PvMeasurement#getAcPower()
+	 * @see #getPvMeasurement()
+	 * @generated
+	 */
+	EAttribute getPvMeasurement_AcPower();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.pv.model.pv.PvMeasurement#getLoadPower <em>Load Power</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Load Power</em>'.
+	 * @see org.gecko.weather.pv.model.pv.PvMeasurement#getLoadPower()
+	 * @see #getPvMeasurement()
+	 * @generated
+	 */
+	EAttribute getPvMeasurement_LoadPower();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.pv.model.pv.PvMeasurement#getGridPower <em>Grid Power</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Grid Power</em>'.
+	 * @see org.gecko.weather.pv.model.pv.PvMeasurement#getGridPower()
+	 * @see #getPvMeasurement()
+	 * @generated
+	 */
+	EAttribute getPvMeasurement_GridPower();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.pv.model.pv.PvMeasurement#getBatteryPower <em>Battery Power</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Battery Power</em>'.
+	 * @see org.gecko.weather.pv.model.pv.PvMeasurement#getBatteryPower()
+	 * @see #getPvMeasurement()
+	 * @generated
+	 */
+	EAttribute getPvMeasurement_BatteryPower();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.pv.model.pv.PvMeasurement#getStateOfCharge <em>State Of Charge</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>State Of Charge</em>'.
+	 * @see org.gecko.weather.pv.model.pv.PvMeasurement#getStateOfCharge()
+	 * @see #getPvMeasurement()
+	 * @generated
+	 */
+	EAttribute getPvMeasurement_StateOfCharge();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.pv.model.pv.PvMeasurement#getEnergyTotal <em>Energy Total</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Energy Total</em>'.
+	 * @see org.gecko.weather.pv.model.pv.PvMeasurement#getEnergyTotal()
+	 * @see #getPvMeasurement()
+	 * @generated
+	 */
+	EAttribute getPvMeasurement_EnergyTotal();
+
+	/**
+	 * Returns the meta object for class '{@link org.gecko.weather.pv.model.pv.PvMeasurementLog <em>Measurement Log</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Measurement Log</em>'.
+	 * @see org.gecko.weather.pv.model.pv.PvMeasurementLog
+	 * @generated
+	 */
+	EClass getPvMeasurementLog();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.pv.model.pv.PvMeasurementLog#getPlantId <em>Plant Id</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Plant Id</em>'.
+	 * @see org.gecko.weather.pv.model.pv.PvMeasurementLog#getPlantId()
+	 * @see #getPvMeasurementLog()
+	 * @generated
+	 */
+	EAttribute getPvMeasurementLog_PlantId();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.pv.model.pv.PvMeasurementLog#getDate <em>Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Date</em>'.
+	 * @see org.gecko.weather.pv.model.pv.PvMeasurementLog#getDate()
+	 * @see #getPvMeasurementLog()
+	 * @generated
+	 */
+	EAttribute getPvMeasurementLog_Date();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.pv.model.pv.PvMeasurementLog#getMeterType <em>Meter Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Meter Type</em>'.
+	 * @see org.gecko.weather.pv.model.pv.PvMeasurementLog#getMeterType()
+	 * @see #getPvMeasurementLog()
+	 * @generated
+	 */
+	EAttribute getPvMeasurementLog_MeterType();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.gecko.weather.pv.model.pv.PvMeasurementLog#getMeasurements <em>Measurements</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Measurements</em>'.
+	 * @see org.gecko.weather.pv.model.pv.PvMeasurementLog#getMeasurements()
+	 * @see #getPvMeasurementLog()
+	 * @generated
+	 */
+	EReference getPvMeasurementLog_Measurements();
 
 	/**
 	 * Returns the meta object for enum '{@link org.gecko.weather.pv.model.pv.Mounting <em>Mounting</em>}'.
@@ -1996,6 +2490,14 @@ public interface PvPackage extends org.eclipse.emf.ecore.EPackage {
 		 * @generated
 		 */
 		EReference PLANT__OBSTACLES = eINSTANCE.getPlant_Obstacles();
+
+		/**
+		 * The meta object literal for the '<em><b>Meter</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PLANT__METER = eINSTANCE.getPlant_Meter();
 
 		/**
 		 * The meta object literal for the '<em><b>Horizon</b></em>' containment reference list feature.
@@ -2480,6 +2982,14 @@ public interface PvPackage extends org.eclipse.emf.ecore.EPackage {
 		EAttribute PV_HOUR__CLIPPED = eINSTANCE.getPvHour_Clipped();
 
 		/**
+		 * The meta object literal for the '<em><b>Measured Power</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PV_HOUR__MEASURED_POWER = eINSTANCE.getPvHour_MeasuredPower();
+
+		/**
 		 * The meta object literal for the '<em><b>Source</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2546,12 +3056,178 @@ public interface PvPackage extends org.eclipse.emf.ecore.EPackage {
 		EAttribute PV_DAY__HOURS_COVERED = eINSTANCE.getPvDay_HoursCovered();
 
 		/**
+		 * The meta object literal for the '<em><b>Measured Energy</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PV_DAY__MEASURED_ENERGY = eINSTANCE.getPvDay_MeasuredEnergy();
+
+		/**
 		 * The meta object literal for the '<em><b>Source</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute PV_DAY__SOURCE = eINSTANCE.getPvDay_Source();
+
+		/**
+		 * The meta object literal for the '{@link org.gecko.weather.pv.model.pv.impl.MeterImpl <em>Meter</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.gecko.weather.pv.model.pv.impl.MeterImpl
+		 * @see org.gecko.weather.pv.model.pv.impl.PvPackageImpl#getMeter()
+		 * @generated
+		 */
+		EClass METER = eINSTANCE.getMeter();
+
+		/**
+		 * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute METER__TYPE = eINSTANCE.getMeter_Type();
+
+		/**
+		 * The meta object literal for the '<em><b>Url</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute METER__URL = eINSTANCE.getMeter_Url();
+
+		/**
+		 * The meta object literal for the '<em><b>Interval</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute METER__INTERVAL = eINSTANCE.getMeter_Interval();
+
+		/**
+		 * The meta object literal for the '<em><b>Enabled</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute METER__ENABLED = eINSTANCE.getMeter_Enabled();
+
+		/**
+		 * The meta object literal for the '{@link org.gecko.weather.pv.model.pv.impl.PvMeasurementImpl <em>Measurement</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.gecko.weather.pv.model.pv.impl.PvMeasurementImpl
+		 * @see org.gecko.weather.pv.model.pv.impl.PvPackageImpl#getPvMeasurement()
+		 * @generated
+		 */
+		EClass PV_MEASUREMENT = eINSTANCE.getPvMeasurement();
+
+		/**
+		 * The meta object literal for the '<em><b>Time</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PV_MEASUREMENT__TIME = eINSTANCE.getPvMeasurement_Time();
+
+		/**
+		 * The meta object literal for the '<em><b>Pv Power</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PV_MEASUREMENT__PV_POWER = eINSTANCE.getPvMeasurement_PvPower();
+
+		/**
+		 * The meta object literal for the '<em><b>Ac Power</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PV_MEASUREMENT__AC_POWER = eINSTANCE.getPvMeasurement_AcPower();
+
+		/**
+		 * The meta object literal for the '<em><b>Load Power</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PV_MEASUREMENT__LOAD_POWER = eINSTANCE.getPvMeasurement_LoadPower();
+
+		/**
+		 * The meta object literal for the '<em><b>Grid Power</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PV_MEASUREMENT__GRID_POWER = eINSTANCE.getPvMeasurement_GridPower();
+
+		/**
+		 * The meta object literal for the '<em><b>Battery Power</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PV_MEASUREMENT__BATTERY_POWER = eINSTANCE.getPvMeasurement_BatteryPower();
+
+		/**
+		 * The meta object literal for the '<em><b>State Of Charge</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PV_MEASUREMENT__STATE_OF_CHARGE = eINSTANCE.getPvMeasurement_StateOfCharge();
+
+		/**
+		 * The meta object literal for the '<em><b>Energy Total</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PV_MEASUREMENT__ENERGY_TOTAL = eINSTANCE.getPvMeasurement_EnergyTotal();
+
+		/**
+		 * The meta object literal for the '{@link org.gecko.weather.pv.model.pv.impl.PvMeasurementLogImpl <em>Measurement Log</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.gecko.weather.pv.model.pv.impl.PvMeasurementLogImpl
+		 * @see org.gecko.weather.pv.model.pv.impl.PvPackageImpl#getPvMeasurementLog()
+		 * @generated
+		 */
+		EClass PV_MEASUREMENT_LOG = eINSTANCE.getPvMeasurementLog();
+
+		/**
+		 * The meta object literal for the '<em><b>Plant Id</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PV_MEASUREMENT_LOG__PLANT_ID = eINSTANCE.getPvMeasurementLog_PlantId();
+
+		/**
+		 * The meta object literal for the '<em><b>Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PV_MEASUREMENT_LOG__DATE = eINSTANCE.getPvMeasurementLog_Date();
+
+		/**
+		 * The meta object literal for the '<em><b>Meter Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PV_MEASUREMENT_LOG__METER_TYPE = eINSTANCE.getPvMeasurementLog_MeterType();
+
+		/**
+		 * The meta object literal for the '<em><b>Measurements</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PV_MEASUREMENT_LOG__MEASUREMENTS = eINSTANCE.getPvMeasurementLog_Measurements();
 
 		/**
 		 * The meta object literal for the '{@link org.gecko.weather.pv.model.pv.Mounting <em>Mounting</em>}' enum.

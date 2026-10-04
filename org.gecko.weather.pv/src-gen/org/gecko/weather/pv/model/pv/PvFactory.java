@@ -135,6 +135,33 @@ public interface PvFactory extends EFactory {
 	PvDay createPvDay();
 
 	/**
+	 * Returns a new object of class '<em>Meter</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Meter</em>'.
+	 * @generated
+	 */
+	Meter createMeter();
+
+	/**
+	 * Returns a new object of class '<em>Measurement</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Measurement</em>'.
+	 * @generated
+	 */
+	PvMeasurement createPvMeasurement();
+
+	/**
+	 * Returns a new object of class '<em>Measurement Log</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Measurement Log</em>'.
+	 * @generated
+	 */
+	PvMeasurementLog createPvMeasurementLog();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

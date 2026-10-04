@@ -1,0 +1,15 @@
+Bundle-Name: Gecko Weather PV Fronius
+Bundle-Description: Meter reader for Fronius inverters through the local Solar API v1 \
+	(GetPowerFlowRealtimeData): PV generator, load, grid and battery power, state of charge and the \
+	energy counter. A PvMeter of type fronius-solar-api for the PV add-on; talks HTTP to the device \
+	in the local network, nothing to the Solar.web cloud.
+
+-library: enableEMF
+
+-buildpath: \
+	org.gecko.weather.pv;version=snapshot,\
+	org.eclipse.parsson.jakarta.json;version=latest,\
+	org.osgi.service.component.annotations;version=latest
+
+-testpath: \
+	assertj-core;version=latest

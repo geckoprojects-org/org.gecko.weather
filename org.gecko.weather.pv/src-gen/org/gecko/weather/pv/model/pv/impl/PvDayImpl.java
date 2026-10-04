@@ -39,6 +39,7 @@ import org.gecko.weather.pv.model.pv.PvPackage;
  *   <li>{@link org.gecko.weather.pv.model.pv.impl.PvDayImpl#getPeakTime <em>Peak Time</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.impl.PvDayImpl#getSpecificYield <em>Specific Yield</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.impl.PvDayImpl#getHoursCovered <em>Hours Covered</em>}</li>
+ *   <li>{@link org.gecko.weather.pv.model.pv.impl.PvDayImpl#getMeasuredEnergy <em>Measured Energy</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.impl.PvDayImpl#getSource <em>Source</em>}</li>
  * </ul>
  *
@@ -191,6 +192,35 @@ public class PvDayImpl extends MinimalEObjectImpl.Container implements PvDay {
 	 * @ordered
 	 */
 	protected int hoursCovered = HOURS_COVERED_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getMeasuredEnergy() <em>Measured Energy</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMeasuredEnergy()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double MEASURED_ENERGY_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getMeasuredEnergy() <em>Measured Energy</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMeasuredEnergy()
+	 * @generated
+	 * @ordered
+	 */
+	protected double measuredEnergy = MEASURED_ENERGY_EDEFAULT;
+
+	/**
+	 * This is true if the Measured Energy attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean measuredEnergyESet;
 
 	/**
 	 * The default value of the '{@link #getSource() <em>Source</em>}' attribute.
@@ -456,6 +486,56 @@ public class PvDayImpl extends MinimalEObjectImpl.Container implements PvDay {
 	 * @generated
 	 */
 	@Override
+	public double getMeasuredEnergy() {
+		return measuredEnergy;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setMeasuredEnergy(double newMeasuredEnergy) {
+		double oldMeasuredEnergy = measuredEnergy;
+		measuredEnergy = newMeasuredEnergy;
+		boolean oldMeasuredEnergyESet = measuredEnergyESet;
+		measuredEnergyESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PvPackage.PV_DAY__MEASURED_ENERGY, oldMeasuredEnergy, measuredEnergy, !oldMeasuredEnergyESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetMeasuredEnergy() {
+		double oldMeasuredEnergy = measuredEnergy;
+		boolean oldMeasuredEnergyESet = measuredEnergyESet;
+		measuredEnergy = MEASURED_ENERGY_EDEFAULT;
+		measuredEnergyESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, PvPackage.PV_DAY__MEASURED_ENERGY, oldMeasuredEnergy, MEASURED_ENERGY_EDEFAULT, oldMeasuredEnergyESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetMeasuredEnergy() {
+		return measuredEnergyESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public String getSource() {
 		return source;
 	}
@@ -493,6 +573,8 @@ public class PvDayImpl extends MinimalEObjectImpl.Container implements PvDay {
 				return getSpecificYield();
 			case PvPackage.PV_DAY__HOURS_COVERED:
 				return getHoursCovered();
+			case PvPackage.PV_DAY__MEASURED_ENERGY:
+				return getMeasuredEnergy();
 			case PvPackage.PV_DAY__SOURCE:
 				return getSource();
 		}
@@ -524,6 +606,9 @@ public class PvDayImpl extends MinimalEObjectImpl.Container implements PvDay {
 				return;
 			case PvPackage.PV_DAY__HOURS_COVERED:
 				setHoursCovered((Integer)newValue);
+				return;
+			case PvPackage.PV_DAY__MEASURED_ENERGY:
+				setMeasuredEnergy((Double)newValue);
 				return;
 			case PvPackage.PV_DAY__SOURCE:
 				setSource((String)newValue);
@@ -558,6 +643,9 @@ public class PvDayImpl extends MinimalEObjectImpl.Container implements PvDay {
 			case PvPackage.PV_DAY__HOURS_COVERED:
 				setHoursCovered(HOURS_COVERED_EDEFAULT);
 				return;
+			case PvPackage.PV_DAY__MEASURED_ENERGY:
+				unsetMeasuredEnergy();
+				return;
 			case PvPackage.PV_DAY__SOURCE:
 				setSource(SOURCE_EDEFAULT);
 				return;
@@ -585,6 +673,8 @@ public class PvDayImpl extends MinimalEObjectImpl.Container implements PvDay {
 				return isSetSpecificYield();
 			case PvPackage.PV_DAY__HOURS_COVERED:
 				return hoursCovered != HOURS_COVERED_EDEFAULT;
+			case PvPackage.PV_DAY__MEASURED_ENERGY:
+				return isSetMeasuredEnergy();
 			case PvPackage.PV_DAY__SOURCE:
 				return SOURCE_EDEFAULT == null ? source != null : !SOURCE_EDEFAULT.equals(source);
 		}
@@ -613,6 +703,8 @@ public class PvDayImpl extends MinimalEObjectImpl.Container implements PvDay {
 		if (specificYieldESet) result.append(specificYield); else result.append("<unset>");
 		result.append(", hoursCovered: ");
 		result.append(hoursCovered);
+		result.append(", measuredEnergy: ");
+		if (measuredEnergyESet) result.append(measuredEnergy); else result.append("<unset>");
 		result.append(", source: ");
 		result.append(source);
 		result.append(')');

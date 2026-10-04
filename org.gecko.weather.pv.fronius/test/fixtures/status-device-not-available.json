@@ -1,0 +1,8 @@
+{
+	"Body" : { "Data" : {} },
+	"Head" : {
+		"RequestArguments" : {},
+		"Status" : { "Code" : 12, "Reason" : "Device not available", "UserMessage" : "" },
+		"Timestamp" : "2026-10-04T11:15:02+00:00"
+	}
+}

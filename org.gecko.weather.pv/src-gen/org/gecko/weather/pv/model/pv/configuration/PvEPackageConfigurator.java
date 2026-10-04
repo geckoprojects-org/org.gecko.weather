@@ -41,7 +41,7 @@ public class PvEPackageConfigurator implements EPackageConfigurator {
 	 * service property.
 	 * @generated
 	 */
-	public static final String FINGERPRINT = "fp1:e0ada57fb21762ef3e30784aabafd4c741b0a802eba0cc8b2923331254478164";
+	public static final String FINGERPRINT = "fp1:cda520cb831d9092e192fecd3924e5fe766175306d642653ae6ab2c770d5e3d8";
 
 	private PvPackage ePackage;
 

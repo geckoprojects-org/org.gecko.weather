@@ -58,6 +58,9 @@
         <ecoreFeature xsi:type="ecore:EReference" href="pv.ecore#//Plant/obstacles"/>
       </genFeatures>
       <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="pv.ecore#//Plant/meter"/>
+      </genFeatures>
+      <genFeatures property="None" children="true" createChild="true">
         <ecoreFeature xsi:type="ecore:EReference" href="pv.ecore#//Plant/horizon"/>
       </genFeatures>
     </genClasses>
@@ -232,6 +235,9 @@
         <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvHour/clipped"/>
       </genFeatures>
       <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvHour/measuredPower"/>
+      </genFeatures>
+      <genFeatures createChild="false">
         <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvHour/source"/>
       </genFeatures>
     </genClasses>
@@ -256,7 +262,67 @@
         <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvDay/hoursCovered"/>
       </genFeatures>
       <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvDay/measuredEnergy"/>
+      </genFeatures>
+      <genFeatures createChild="false">
         <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvDay/source"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="pv.ecore#//Meter"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//Meter/type"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//Meter/url"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//Meter/interval"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//Meter/enabled"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="pv.ecore#//PvMeasurement"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvMeasurement/time"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvMeasurement/pvPower"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvMeasurement/acPower"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvMeasurement/loadPower"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvMeasurement/gridPower"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvMeasurement/batteryPower"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvMeasurement/stateOfCharge"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvMeasurement/energyTotal"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="pv.ecore#//PvMeasurementLog"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvMeasurementLog/plantId"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvMeasurementLog/date"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="pv.ecore#//PvMeasurementLog/meterType"/>
+      </genFeatures>
+      <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="pv.ecore#//PvMeasurementLog/measurements"/>
       </genFeatures>
     </genClasses>
   </genPackages>

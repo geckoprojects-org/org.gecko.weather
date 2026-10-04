@@ -45,6 +45,7 @@ import org.osgi.annotation.versioning.ProviderType;
  *   <li>{@link org.gecko.weather.pv.model.pv.PvHour#getSunAzimuth <em>Sun Azimuth</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.PvHour#isShaded <em>Shaded</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.PvHour#isClipped <em>Clipped</em>}</li>
+ *   <li>{@link org.gecko.weather.pv.model.pv.PvHour#getMeasuredPower <em>Measured Power</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.PvHour#getSource <em>Source</em>}</li>
  * </ul>
  *
@@ -471,6 +472,58 @@ public interface PvHour extends EObject {
 	 * @generated
 	 */
 	void setClipped(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Measured Power</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Measured mean PV generator power in kW over the hour (or the part of it measured so far), when the plant has a meter. On hybrid inverters this is the DC side — compare with dcPower.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Measured Power</em>' attribute.
+	 * @see #isSetMeasuredPower()
+	 * @see #unsetMeasuredPower()
+	 * @see #setMeasuredPower(double)
+	 * @see org.gecko.weather.pv.model.pv.PvPackage#getPvHour_MeasuredPower()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	double getMeasuredPower();
+
+	/**
+	 * Sets the value of the '{@link org.gecko.weather.pv.model.pv.PvHour#getMeasuredPower <em>Measured Power</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Measured Power</em>' attribute.
+	 * @see #isSetMeasuredPower()
+	 * @see #unsetMeasuredPower()
+	 * @see #getMeasuredPower()
+	 * @generated
+	 */
+	void setMeasuredPower(double value);
+
+	/**
+	 * Unsets the value of the '{@link org.gecko.weather.pv.model.pv.PvHour#getMeasuredPower <em>Measured Power</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetMeasuredPower()
+	 * @see #getMeasuredPower()
+	 * @see #setMeasuredPower(double)
+	 * @generated
+	 */
+	void unsetMeasuredPower();
+
+	/**
+	 * Returns whether the value of the '{@link org.gecko.weather.pv.model.pv.PvHour#getMeasuredPower <em>Measured Power</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Measured Power</em>' attribute is set.
+	 * @see #unsetMeasuredPower()
+	 * @see #getMeasuredPower()
+	 * @see #setMeasuredPower(double)
+	 * @generated
+	 */
+	boolean isSetMeasuredPower();
 
 	/**
 	 * Returns the value of the '<em><b>Source</b></em>' attribute.

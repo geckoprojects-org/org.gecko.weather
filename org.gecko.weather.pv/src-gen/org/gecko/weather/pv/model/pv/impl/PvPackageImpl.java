@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import org.gecko.weather.pv.model.pv.HorizonPoint;
 import org.gecko.weather.pv.model.pv.Inverter;
+import org.gecko.weather.pv.model.pv.Meter;
 import org.gecko.weather.pv.model.pv.Mounting;
 import org.gecko.weather.pv.model.pv.Obstacle;
 import org.gecko.weather.pv.model.pv.Plant;
@@ -33,6 +34,8 @@ import org.gecko.weather.pv.model.pv.PvArrayInfo;
 import org.gecko.weather.pv.model.pv.PvDay;
 import org.gecko.weather.pv.model.pv.PvFactory;
 import org.gecko.weather.pv.model.pv.PvHour;
+import org.gecko.weather.pv.model.pv.PvMeasurement;
+import org.gecko.weather.pv.model.pv.PvMeasurementLog;
 import org.gecko.weather.pv.model.pv.PvOutlook;
 import org.gecko.weather.pv.model.pv.PvPackage;
 
@@ -119,6 +122,27 @@ public class PvPackageImpl extends EPackageImpl implements PvPackage {
 	 * @generated
 	 */
 	private EClass pvDayEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass meterEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass pvMeasurementEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass pvMeasurementLogEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -313,8 +337,18 @@ public class PvPackageImpl extends EPackageImpl implements PvPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getPlant_Horizon() {
+	public EReference getPlant_Meter() {
 		return (EReference)plantEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getPlant_Horizon() {
+		return (EReference)plantEClass.getEStructuralFeatures().get(12);
 	}
 
 	/**
@@ -893,8 +927,18 @@ public class PvPackageImpl extends EPackageImpl implements PvPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getPvHour_Source() {
+	public EAttribute getPvHour_MeasuredPower() {
 		return (EAttribute)pvHourEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPvHour_Source() {
+		return (EAttribute)pvHourEClass.getEStructuralFeatures().get(12);
 	}
 
 	/**
@@ -973,8 +1017,208 @@ public class PvPackageImpl extends EPackageImpl implements PvPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getPvDay_Source() {
+	public EAttribute getPvDay_MeasuredEnergy() {
 		return (EAttribute)pvDayEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPvDay_Source() {
+		return (EAttribute)pvDayEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getMeter() {
+		return meterEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getMeter_Type() {
+		return (EAttribute)meterEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getMeter_Url() {
+		return (EAttribute)meterEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getMeter_Interval() {
+		return (EAttribute)meterEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getMeter_Enabled() {
+		return (EAttribute)meterEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getPvMeasurement() {
+		return pvMeasurementEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPvMeasurement_Time() {
+		return (EAttribute)pvMeasurementEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPvMeasurement_PvPower() {
+		return (EAttribute)pvMeasurementEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPvMeasurement_AcPower() {
+		return (EAttribute)pvMeasurementEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPvMeasurement_LoadPower() {
+		return (EAttribute)pvMeasurementEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPvMeasurement_GridPower() {
+		return (EAttribute)pvMeasurementEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPvMeasurement_BatteryPower() {
+		return (EAttribute)pvMeasurementEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPvMeasurement_StateOfCharge() {
+		return (EAttribute)pvMeasurementEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPvMeasurement_EnergyTotal() {
+		return (EAttribute)pvMeasurementEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getPvMeasurementLog() {
+		return pvMeasurementLogEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPvMeasurementLog_PlantId() {
+		return (EAttribute)pvMeasurementLogEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPvMeasurementLog_Date() {
+		return (EAttribute)pvMeasurementLogEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPvMeasurementLog_MeterType() {
+		return (EAttribute)pvMeasurementLogEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getPvMeasurementLog_Measurements() {
+		return (EReference)pvMeasurementLogEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -1028,6 +1272,7 @@ public class PvPackageImpl extends EPackageImpl implements PvPackage {
 		createEReference(plantEClass, PLANT__ARRAYS);
 		createEReference(plantEClass, PLANT__INVERTERS);
 		createEReference(plantEClass, PLANT__OBSTACLES);
+		createEReference(plantEClass, PLANT__METER);
 		createEReference(plantEClass, PLANT__HORIZON);
 
 		pvArrayEClass = createEClass(PV_ARRAY);
@@ -1095,6 +1340,7 @@ public class PvPackageImpl extends EPackageImpl implements PvPackage {
 		createEAttribute(pvHourEClass, PV_HOUR__SUN_AZIMUTH);
 		createEAttribute(pvHourEClass, PV_HOUR__SHADED);
 		createEAttribute(pvHourEClass, PV_HOUR__CLIPPED);
+		createEAttribute(pvHourEClass, PV_HOUR__MEASURED_POWER);
 		createEAttribute(pvHourEClass, PV_HOUR__SOURCE);
 
 		pvDayEClass = createEClass(PV_DAY);
@@ -1104,7 +1350,30 @@ public class PvPackageImpl extends EPackageImpl implements PvPackage {
 		createEAttribute(pvDayEClass, PV_DAY__PEAK_TIME);
 		createEAttribute(pvDayEClass, PV_DAY__SPECIFIC_YIELD);
 		createEAttribute(pvDayEClass, PV_DAY__HOURS_COVERED);
+		createEAttribute(pvDayEClass, PV_DAY__MEASURED_ENERGY);
 		createEAttribute(pvDayEClass, PV_DAY__SOURCE);
+
+		meterEClass = createEClass(METER);
+		createEAttribute(meterEClass, METER__TYPE);
+		createEAttribute(meterEClass, METER__URL);
+		createEAttribute(meterEClass, METER__INTERVAL);
+		createEAttribute(meterEClass, METER__ENABLED);
+
+		pvMeasurementEClass = createEClass(PV_MEASUREMENT);
+		createEAttribute(pvMeasurementEClass, PV_MEASUREMENT__TIME);
+		createEAttribute(pvMeasurementEClass, PV_MEASUREMENT__PV_POWER);
+		createEAttribute(pvMeasurementEClass, PV_MEASUREMENT__AC_POWER);
+		createEAttribute(pvMeasurementEClass, PV_MEASUREMENT__LOAD_POWER);
+		createEAttribute(pvMeasurementEClass, PV_MEASUREMENT__GRID_POWER);
+		createEAttribute(pvMeasurementEClass, PV_MEASUREMENT__BATTERY_POWER);
+		createEAttribute(pvMeasurementEClass, PV_MEASUREMENT__STATE_OF_CHARGE);
+		createEAttribute(pvMeasurementEClass, PV_MEASUREMENT__ENERGY_TOTAL);
+
+		pvMeasurementLogEClass = createEClass(PV_MEASUREMENT_LOG);
+		createEAttribute(pvMeasurementLogEClass, PV_MEASUREMENT_LOG__PLANT_ID);
+		createEAttribute(pvMeasurementLogEClass, PV_MEASUREMENT_LOG__DATE);
+		createEAttribute(pvMeasurementLogEClass, PV_MEASUREMENT_LOG__METER_TYPE);
+		createEReference(pvMeasurementLogEClass, PV_MEASUREMENT_LOG__MEASUREMENTS);
 
 		// Create enums
 		mountingEEnum = createEEnum(MOUNTING);
@@ -1152,6 +1421,7 @@ public class PvPackageImpl extends EPackageImpl implements PvPackage {
 		initEReference(getPlant_Arrays(), this.getPvArray(), null, "arrays", null, 0, -1, Plant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPlant_Inverters(), this.getInverter(), null, "inverters", null, 0, -1, Plant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPlant_Obstacles(), this.getObstacle(), null, "obstacles", null, 0, -1, Plant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPlant_Meter(), this.getMeter(), null, "meter", null, 0, 1, Plant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPlant_Horizon(), this.getHorizonPoint(), null, "horizon", null, 0, -1, Plant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(pvArrayEClass, PvArray.class, "PvArray", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1219,6 +1489,7 @@ public class PvPackageImpl extends EPackageImpl implements PvPackage {
 		initEAttribute(getPvHour_SunAzimuth(), ecorePackage.getEDouble(), "sunAzimuth", null, 0, 1, PvHour.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPvHour_Shaded(), ecorePackage.getEBoolean(), "shaded", null, 0, 1, PvHour.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPvHour_Clipped(), ecorePackage.getEBoolean(), "clipped", null, 0, 1, PvHour.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPvHour_MeasuredPower(), ecorePackage.getEDouble(), "measuredPower", null, 0, 1, PvHour.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPvHour_Source(), ecorePackage.getEString(), "source", null, 0, 1, PvHour.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(pvDayEClass, PvDay.class, "PvDay", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1228,7 +1499,30 @@ public class PvPackageImpl extends EPackageImpl implements PvPackage {
 		initEAttribute(getPvDay_PeakTime(), ecorePackage.getEDate(), "peakTime", null, 0, 1, PvDay.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPvDay_SpecificYield(), ecorePackage.getEDouble(), "specificYield", null, 0, 1, PvDay.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPvDay_HoursCovered(), ecorePackage.getEInt(), "hoursCovered", null, 0, 1, PvDay.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPvDay_MeasuredEnergy(), ecorePackage.getEDouble(), "measuredEnergy", null, 0, 1, PvDay.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPvDay_Source(), ecorePackage.getEString(), "source", null, 0, 1, PvDay.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(meterEClass, Meter.class, "Meter", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getMeter_Type(), ecorePackage.getEString(), "type", null, 0, 1, Meter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMeter_Url(), ecorePackage.getEString(), "url", null, 0, 1, Meter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMeter_Interval(), ecorePackage.getEInt(), "interval", "60", 0, 1, Meter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMeter_Enabled(), ecorePackage.getEBoolean(), "enabled", "true", 0, 1, Meter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(pvMeasurementEClass, PvMeasurement.class, "PvMeasurement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getPvMeasurement_Time(), ecorePackage.getEDate(), "time", null, 0, 1, PvMeasurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPvMeasurement_PvPower(), ecorePackage.getEDouble(), "pvPower", null, 0, 1, PvMeasurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPvMeasurement_AcPower(), ecorePackage.getEDouble(), "acPower", null, 0, 1, PvMeasurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPvMeasurement_LoadPower(), ecorePackage.getEDouble(), "loadPower", null, 0, 1, PvMeasurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPvMeasurement_GridPower(), ecorePackage.getEDouble(), "gridPower", null, 0, 1, PvMeasurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPvMeasurement_BatteryPower(), ecorePackage.getEDouble(), "batteryPower", null, 0, 1, PvMeasurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPvMeasurement_StateOfCharge(), ecorePackage.getEDouble(), "stateOfCharge", null, 0, 1, PvMeasurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPvMeasurement_EnergyTotal(), ecorePackage.getEDouble(), "energyTotal", null, 0, 1, PvMeasurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(pvMeasurementLogEClass, PvMeasurementLog.class, "PvMeasurementLog", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getPvMeasurementLog_PlantId(), ecorePackage.getEString(), "plantId", null, 0, 1, PvMeasurementLog.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPvMeasurementLog_Date(), ecorePackage.getEString(), "date", null, 0, 1, PvMeasurementLog.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPvMeasurementLog_MeterType(), ecorePackage.getEString(), "meterType", null, 0, 1, PvMeasurementLog.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPvMeasurementLog_Measurements(), this.getPvMeasurement(), null, "measurements", null, 0, -1, PvMeasurementLog.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(mountingEEnum, Mounting.class, "Mounting");

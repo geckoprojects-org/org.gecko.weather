@@ -49,6 +49,7 @@ import org.gecko.weather.pv.model.pv.PvPackage;
  *   <li>{@link org.gecko.weather.pv.model.pv.impl.PvHourImpl#getSunAzimuth <em>Sun Azimuth</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.impl.PvHourImpl#isShaded <em>Shaded</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.impl.PvHourImpl#isClipped <em>Clipped</em>}</li>
+ *   <li>{@link org.gecko.weather.pv.model.pv.impl.PvHourImpl#getMeasuredPower <em>Measured Power</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.impl.PvHourImpl#getSource <em>Source</em>}</li>
  * </ul>
  *
@@ -318,6 +319,35 @@ public class PvHourImpl extends MinimalEObjectImpl.Container implements PvHour {
 	 * @ordered
 	 */
 	protected boolean clipped = CLIPPED_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getMeasuredPower() <em>Measured Power</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMeasuredPower()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double MEASURED_POWER_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getMeasuredPower() <em>Measured Power</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMeasuredPower()
+	 * @generated
+	 * @ordered
+	 */
+	protected double measuredPower = MEASURED_POWER_EDEFAULT;
+
+	/**
+	 * This is true if the Measured Power attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean measuredPowerESet;
 
 	/**
 	 * The default value of the '{@link #getSource() <em>Source</em>}' attribute.
@@ -769,6 +799,56 @@ public class PvHourImpl extends MinimalEObjectImpl.Container implements PvHour {
 	 * @generated
 	 */
 	@Override
+	public double getMeasuredPower() {
+		return measuredPower;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setMeasuredPower(double newMeasuredPower) {
+		double oldMeasuredPower = measuredPower;
+		measuredPower = newMeasuredPower;
+		boolean oldMeasuredPowerESet = measuredPowerESet;
+		measuredPowerESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PvPackage.PV_HOUR__MEASURED_POWER, oldMeasuredPower, measuredPower, !oldMeasuredPowerESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetMeasuredPower() {
+		double oldMeasuredPower = measuredPower;
+		boolean oldMeasuredPowerESet = measuredPowerESet;
+		measuredPower = MEASURED_POWER_EDEFAULT;
+		measuredPowerESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, PvPackage.PV_HOUR__MEASURED_POWER, oldMeasuredPower, MEASURED_POWER_EDEFAULT, oldMeasuredPowerESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetMeasuredPower() {
+		return measuredPowerESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public String getSource() {
 		return source;
 	}
@@ -816,6 +896,8 @@ public class PvHourImpl extends MinimalEObjectImpl.Container implements PvHour {
 				return isShaded();
 			case PvPackage.PV_HOUR__CLIPPED:
 				return isClipped();
+			case PvPackage.PV_HOUR__MEASURED_POWER:
+				return getMeasuredPower();
 			case PvPackage.PV_HOUR__SOURCE:
 				return getSource();
 		}
@@ -865,6 +947,9 @@ public class PvHourImpl extends MinimalEObjectImpl.Container implements PvHour {
 			case PvPackage.PV_HOUR__CLIPPED:
 				setClipped((Boolean)newValue);
 				return;
+			case PvPackage.PV_HOUR__MEASURED_POWER:
+				setMeasuredPower((Double)newValue);
+				return;
 			case PvPackage.PV_HOUR__SOURCE:
 				setSource((String)newValue);
 				return;
@@ -913,6 +998,9 @@ public class PvHourImpl extends MinimalEObjectImpl.Container implements PvHour {
 			case PvPackage.PV_HOUR__CLIPPED:
 				setClipped(CLIPPED_EDEFAULT);
 				return;
+			case PvPackage.PV_HOUR__MEASURED_POWER:
+				unsetMeasuredPower();
+				return;
 			case PvPackage.PV_HOUR__SOURCE:
 				setSource(SOURCE_EDEFAULT);
 				return;
@@ -950,6 +1038,8 @@ public class PvHourImpl extends MinimalEObjectImpl.Container implements PvHour {
 				return shaded != SHADED_EDEFAULT;
 			case PvPackage.PV_HOUR__CLIPPED:
 				return clipped != CLIPPED_EDEFAULT;
+			case PvPackage.PV_HOUR__MEASURED_POWER:
+				return isSetMeasuredPower();
 			case PvPackage.PV_HOUR__SOURCE:
 				return SOURCE_EDEFAULT == null ? source != null : !SOURCE_EDEFAULT.equals(source);
 		}
@@ -988,6 +1078,8 @@ public class PvHourImpl extends MinimalEObjectImpl.Container implements PvHour {
 		result.append(shaded);
 		result.append(", clipped: ");
 		result.append(clipped);
+		result.append(", measuredPower: ");
+		if (measuredPowerESet) result.append(measuredPower); else result.append("<unset>");
 		result.append(", source: ");
 		result.append(source);
 		result.append(')');

@@ -23,6 +23,8 @@
 		"plantsFolder": "$[env:WEATHER_PV_PLANTS;default=data/weather/plants]",
 		"hours": "$[env:WEATHER_PV_HOURS;type=Integer;default=48]",
 		"days": "$[env:WEATHER_PV_DAYS;type=Integer;default=7]",
-		"defaultTimeZone": "Europe/Berlin"
+		"defaultTimeZone": "Europe/Berlin",
+		"measurementsFolder": "$[env:WEATHER_PV_MEASUREMENTS;default=data/weather/pv-measurements]",
+		"metering": "$[env:WEATHER_PV_METERING;type=Boolean;default=true]"
 	}
 }

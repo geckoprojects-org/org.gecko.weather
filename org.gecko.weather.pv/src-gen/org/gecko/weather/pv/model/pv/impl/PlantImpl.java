@@ -31,6 +31,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.gecko.weather.pv.model.pv.HorizonPoint;
 import org.gecko.weather.pv.model.pv.Inverter;
+import org.gecko.weather.pv.model.pv.Meter;
 import org.gecko.weather.pv.model.pv.Obstacle;
 import org.gecko.weather.pv.model.pv.Plant;
 import org.gecko.weather.pv.model.pv.PvArray;
@@ -55,6 +56,7 @@ import org.gecko.weather.pv.model.pv.PvPackage;
  *   <li>{@link org.gecko.weather.pv.model.pv.impl.PlantImpl#getArrays <em>Arrays</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.impl.PlantImpl#getInverters <em>Inverters</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.impl.PlantImpl#getObstacles <em>Obstacles</em>}</li>
+ *   <li>{@link org.gecko.weather.pv.model.pv.impl.PlantImpl#getMeter <em>Meter</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.impl.PlantImpl#getHorizon <em>Horizon</em>}</li>
  * </ul>
  *
@@ -277,6 +279,16 @@ public class PlantImpl extends MinimalEObjectImpl.Container implements Plant {
 	 * @ordered
 	 */
 	protected EList<Obstacle> obstacles;
+
+	/**
+	 * The cached value of the '{@link #getMeter() <em>Meter</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMeter()
+	 * @generated
+	 * @ordered
+	 */
+	protected Meter meter;
 
 	/**
 	 * The cached value of the '{@link #getHorizon() <em>Horizon</em>}' containment reference list.
@@ -617,6 +629,51 @@ public class PlantImpl extends MinimalEObjectImpl.Container implements Plant {
 	 * @generated
 	 */
 	@Override
+	public Meter getMeter() {
+		return meter;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetMeter(Meter newMeter, NotificationChain msgs) {
+		Meter oldMeter = meter;
+		meter = newMeter;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PvPackage.PLANT__METER, oldMeter, newMeter);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setMeter(Meter newMeter) {
+		if (newMeter != meter) {
+			NotificationChain msgs = null;
+			if (meter != null)
+				msgs = ((InternalEObject)meter).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PvPackage.PLANT__METER, null, msgs);
+			if (newMeter != null)
+				msgs = ((InternalEObject)newMeter).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PvPackage.PLANT__METER, null, msgs);
+			msgs = basicSetMeter(newMeter, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PvPackage.PLANT__METER, newMeter, newMeter));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EList<HorizonPoint> getHorizon() {
 		if (horizon == null) {
 			horizon = new EObjectContainmentEList<HorizonPoint>(HorizonPoint.class, this, PvPackage.PLANT__HORIZON);
@@ -638,6 +695,8 @@ public class PlantImpl extends MinimalEObjectImpl.Container implements Plant {
 				return ((InternalEList<?>)getInverters()).basicRemove(otherEnd, msgs);
 			case PvPackage.PLANT__OBSTACLES:
 				return ((InternalEList<?>)getObstacles()).basicRemove(otherEnd, msgs);
+			case PvPackage.PLANT__METER:
+				return basicSetMeter(null, msgs);
 			case PvPackage.PLANT__HORIZON:
 				return ((InternalEList<?>)getHorizon()).basicRemove(otherEnd, msgs);
 		}
@@ -674,6 +733,8 @@ public class PlantImpl extends MinimalEObjectImpl.Container implements Plant {
 				return getInverters();
 			case PvPackage.PLANT__OBSTACLES:
 				return getObstacles();
+			case PvPackage.PLANT__METER:
+				return getMeter();
 			case PvPackage.PLANT__HORIZON:
 				return getHorizon();
 		}
@@ -725,6 +786,9 @@ public class PlantImpl extends MinimalEObjectImpl.Container implements Plant {
 				getObstacles().clear();
 				getObstacles().addAll((Collection<? extends Obstacle>)newValue);
 				return;
+			case PvPackage.PLANT__METER:
+				setMeter((Meter)newValue);
+				return;
 			case PvPackage.PLANT__HORIZON:
 				getHorizon().clear();
 				getHorizon().addAll((Collection<? extends HorizonPoint>)newValue);
@@ -774,6 +838,9 @@ public class PlantImpl extends MinimalEObjectImpl.Container implements Plant {
 			case PvPackage.PLANT__OBSTACLES:
 				getObstacles().clear();
 				return;
+			case PvPackage.PLANT__METER:
+				setMeter((Meter)null);
+				return;
 			case PvPackage.PLANT__HORIZON:
 				getHorizon().clear();
 				return;
@@ -811,6 +878,8 @@ public class PlantImpl extends MinimalEObjectImpl.Container implements Plant {
 				return inverters != null && !inverters.isEmpty();
 			case PvPackage.PLANT__OBSTACLES:
 				return obstacles != null && !obstacles.isEmpty();
+			case PvPackage.PLANT__METER:
+				return meter != null;
 			case PvPackage.PLANT__HORIZON:
 				return horizon != null && !horizon.isEmpty();
 		}

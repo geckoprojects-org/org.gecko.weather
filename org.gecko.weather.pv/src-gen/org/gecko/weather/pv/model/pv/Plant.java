@@ -43,6 +43,7 @@ import org.osgi.annotation.versioning.ProviderType;
  *   <li>{@link org.gecko.weather.pv.model.pv.Plant#getArrays <em>Arrays</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.Plant#getInverters <em>Inverters</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.Plant#getObstacles <em>Obstacles</em>}</li>
+ *   <li>{@link org.gecko.weather.pv.model.pv.Plant#getMeter <em>Meter</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.Plant#getHorizon <em>Horizon</em>}</li>
  * </ul>
  *
@@ -361,6 +362,31 @@ public interface Plant extends EObject {
 	 * @generated
 	 */
 	EList<Obstacle> getObstacles();
+
+	/**
+	 * Returns the value of the '<em><b>Meter</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Where the plant's actual output can be read — an inverter or data logger in the local network. Without one, nothing is measured.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Meter</em>' containment reference.
+	 * @see #setMeter(Meter)
+	 * @see org.gecko.weather.pv.model.pv.PvPackage#getPlant_Meter()
+	 * @model containment="true"
+	 * @generated
+	 */
+	Meter getMeter();
+
+	/**
+	 * Sets the value of the '{@link org.gecko.weather.pv.model.pv.Plant#getMeter <em>Meter</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Meter</em>' containment reference.
+	 * @see #getMeter()
+	 * @generated
+	 */
+	void setMeter(Meter value);
 
 	/**
 	 * Returns the value of the '<em><b>Horizon</b></em>' containment reference list.

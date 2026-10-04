@@ -18,6 +18,7 @@ One `pv:Plant` XMI file per plant in the plants folder (`plantsFolder`, default
 | `Inverter` | `acPower` kW (output above it is clipped), `efficiency` (0.96) |
 | `Obstacle` | a forest, a house: `azimuthFrom`/`azimuthTo` (may cross north), `distance`, `height` — its top appears under atan((height − mountingHeight) / distance) |
 | `HorizonPoint` | a measured horizon line, interpolated; the higher of horizon and obstacles wins |
+| `Meter` | where the actual output can be read: `type` (selects the `PvMeter` reader, e.g. `fronius-solar-api`), `url` of the device, `interval` in s (60, at least 5), `enabled` |
 
 ```xml
 <pv:Plant xmlns:xmi="http://www.omg.org/XMI" xmlns:pv="https://geckoprojects.org/weather/pv/1.0" xmi:version="2.0"
@@ -47,6 +48,22 @@ Radiation values are hourly means, so the mean power of an hour in kW is its ene
 Days sum the hours of the calendar day in the site's time zone; `specificYield` is kWh/kWp,
 `hoursCovered` says how many hours had weather, `source` which products fed the day.
 
+## Measurements
+
+A plant with a `Meter` is read at its interval through the `PvMeter` service of the meter's type
+(SPI `org.gecko.weather.pv.spi`; the Fronius reader is `org.gecko.weather.pv.fronius`). Readings —
+PV, AC, load, grid and battery power in kW, state of charge, energy counter — go to
+`measurementsFolder` (default `data/weather/pv-measurements`, local data), one
+`pv:PvMeasurementLog` XMI file per plant and local day. A device that cannot be reached is logged
+when its error changes and does not hold up the other plants.
+
+`PvForecast.measurements(plantId, date)` returns a day's log. `forecast` adds `measuredPower` (mean
+PV power) to the hours that have begun and `measuredEnergy` to today; gaps over 15 minutes count as
+nothing. On hybrid inverters the PV power is the DC side — compare it with `dcPower`.
+
+Configuration: `measurementsFolder` (env `WEATHER_PV_MEASUREMENTS`), `metering` (env
+`WEATHER_PV_METERING`, true).
+
 ## Tests
 
 Plain JUnit, no network. `PvPhysicsTest` against hand-computed values and invariants — a
@@ -55,6 +72,8 @@ three clearness indices; Faiman; derating; clipping; a horizon from obstacles ac
 `PlantForecasterTest` on a made-up east/west plant with a synthetic sun and report: east beats west
 in the morning, ICON → MOSMIX hand-over, inverter clipping, day sums, a clear midsummer day within
 4–8 kWh/kWp, a forest in the west costing the evening, profiles round-tripping through the folder.
+`MeteringTest`: the store per plant and day, mean power and energy with gaps, the poller with its
+intervals, a failing and an unknown meter, the measured values in the outlook.
 
 ## Calibration
 

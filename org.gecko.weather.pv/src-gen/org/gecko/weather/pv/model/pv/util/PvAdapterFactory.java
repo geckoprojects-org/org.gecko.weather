@@ -123,6 +123,18 @@ public class PvAdapterFactory extends AdapterFactoryImpl {
 				return createPvDayAdapter();
 			}
 			@Override
+			public Adapter caseMeter(Meter object) {
+				return createMeterAdapter();
+			}
+			@Override
+			public Adapter casePvMeasurement(PvMeasurement object) {
+				return createPvMeasurementAdapter();
+			}
+			@Override
+			public Adapter casePvMeasurementLog(PvMeasurementLog object) {
+				return createPvMeasurementLogAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -293,6 +305,48 @@ public class PvAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPvDayAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.gecko.weather.pv.model.pv.Meter <em>Meter</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.gecko.weather.pv.model.pv.Meter
+	 * @generated
+	 */
+	public Adapter createMeterAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.gecko.weather.pv.model.pv.PvMeasurement <em>Measurement</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.gecko.weather.pv.model.pv.PvMeasurement
+	 * @generated
+	 */
+	public Adapter createPvMeasurementAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.gecko.weather.pv.model.pv.PvMeasurementLog <em>Measurement Log</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.gecko.weather.pv.model.pv.PvMeasurementLog
+	 * @generated
+	 */
+	public Adapter createPvMeasurementLogAdapter() {
 		return null;
 	}
 

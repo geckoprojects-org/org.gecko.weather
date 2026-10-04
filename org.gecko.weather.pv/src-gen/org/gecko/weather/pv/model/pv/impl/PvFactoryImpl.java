@@ -79,6 +79,9 @@ public class PvFactoryImpl extends EFactoryImpl implements PvFactory {
 			case PvPackage.PV_ARRAY_INFO: return createPvArrayInfo();
 			case PvPackage.PV_HOUR: return createPvHour();
 			case PvPackage.PV_DAY: return createPvDay();
+			case PvPackage.METER: return createMeter();
+			case PvPackage.PV_MEASUREMENT: return createPvMeasurement();
+			case PvPackage.PV_MEASUREMENT_LOG: return createPvMeasurementLog();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -233,6 +236,39 @@ public class PvFactoryImpl extends EFactoryImpl implements PvFactory {
 	public PvDay createPvDay() {
 		PvDayImpl pvDay = new PvDayImpl();
 		return pvDay;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Meter createMeter() {
+		MeterImpl meter = new MeterImpl();
+		return meter;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public PvMeasurement createPvMeasurement() {
+		PvMeasurementImpl pvMeasurement = new PvMeasurementImpl();
+		return pvMeasurement;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public PvMeasurementLog createPvMeasurementLog() {
+		PvMeasurementLogImpl pvMeasurementLog = new PvMeasurementLogImpl();
+		return pvMeasurementLog;
 	}
 
 	/**

@@ -143,6 +143,24 @@ public class PvSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case PvPackage.METER: {
+				Meter meter = (Meter)theEObject;
+				T result = caseMeter(meter);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PvPackage.PV_MEASUREMENT: {
+				PvMeasurement pvMeasurement = (PvMeasurement)theEObject;
+				T result = casePvMeasurement(pvMeasurement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PvPackage.PV_MEASUREMENT_LOG: {
+				PvMeasurementLog pvMeasurementLog = (PvMeasurementLog)theEObject;
+				T result = casePvMeasurementLog(pvMeasurementLog);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -309,6 +327,51 @@ public class PvSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T casePvDay(PvDay object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Meter</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Meter</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMeter(Meter object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Measurement</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Measurement</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T casePvMeasurement(PvMeasurement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Measurement Log</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Measurement Log</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T casePvMeasurementLog(PvMeasurementLog object) {
 		return null;
 	}
 
