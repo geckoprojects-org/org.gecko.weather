@@ -322,9 +322,16 @@ share it without one provider depending on the other. The quantity set of the MV
 cloud cover by layer, direct/diffuse/global radiation, UV index — gridded; temperature, wind and the
 rest station-only from MOSMIX.
 
+**The long run is done (night of 2026-10-03/04, eleven hours against the real DWD, details in the
+runtime README):** every product updated on the first poll after publication — MOSMIX_L 21 and 03
+UTC, ICON-D2 18 and 00 UTC (incomplete runs probed with one 404 and left alone), SISfc hourly, SIS
+every quarter hour, the new UV file — with **zero failures, warnings or exceptions**. The deliberate
+restart for the UV deployment kept all six datasets identical, which is **exit criterion 3**. The
+~1 GB resident set turned out to be an uncapped heap, not a leak (290 MB in use, 505 MB after a full
+GC); `launch.bndrun` now sets `-Xmx768m`.
+
 **Next:** `05-architecture-target.md`, which still describes a `compute.fusion` layer and is the
-next document to re-cut; then the long-run observations (see the runtime README) decide whether the
-~1 GB resident set after an ICON run needs a heap cap or a smaller decode buffer. `IngestScheduler`
+next document to re-cut. `IngestScheduler`
 stays single-threaded on purpose (a slow source must not fan out); a ~50 s ICON run delaying the
 polls behind it is accepted for now.
 
