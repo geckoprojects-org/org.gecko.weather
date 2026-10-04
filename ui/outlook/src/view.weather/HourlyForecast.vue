@@ -1,8 +1,8 @@
 <script setup lang="ts">
 /**
- * The next 24 hours as columns: time, sky, temperature, then two small charts sharing the columns —
- * temperature as a line, precipitation as bars — and the wind. Two charts rather than one with two
- * y-axes: temperature and millimetres have nothing in common but the hour.
+ * The next 24 hours as columns: time, sky, temperature, then the meteogram on the same columns —
+ * temperature, precipitation, night, sun and UV in one picture (see Meteogram) — and below it the
+ * rain probability and the wind.
  *
  * Wind arrows point where the air goes (a wind from the west points east).
  *
@@ -10,68 +10,23 @@
  * one could only get by hovering. Hover or focus on a column shows all of its values at once.
  */
 import { computed, ref } from 'vue'
-import type { HourValue } from '../contracts.js'
+import type { DayValue, HourValue } from '../contracts.js'
+import Meteogram from './Meteogram.vue'
 import WeatherIcon from './WeatherIcon.vue'
-import { compass, degrees, fixed1, hourLabel, isMidnight, kmh, niceRange, shortDay, skyOf, skyText, whole } from './weather.js'
+import { compass, degrees, fixed1, hourLabel, isMidnight, kmh, shortDay, skyOf, skyText, whole } from './weather.js'
 
-const props = defineProps<{ hours: HourValue[]; timeZone: string }>()
+const props = defineProps<{ hours: HourValue[]; today?: DayValue; days: DayValue[]; timeZone: string }>()
 
 /** Width of one hour */
 const COL = 56
-const TEMP_H = 110
-const RAIN_H = 64
-const PAD = 14
 
 const width = computed(() => props.hours.length * COL)
 const active = ref<number | null>(null)
-
-const temps = computed(() => props.hours.map((h) => h.temperature).filter((t): t is number => t !== undefined))
-const tempRange = computed(() => niceRange(temps.value, 2, 6))
-
-function yTemp(t: number): number {
-  const [lo, hi] = tempRange.value
-  return PAD + (TEMP_H - 2 * PAD) * (1 - (t - lo) / (hi - lo))
-}
+/** Today and the next days — the meteogram places their sun events and UV marks */
+const sunDays = computed(() => (props.today ? [props.today, ...props.days] : props.days))
 
 function xCenter(i: number): number {
   return i * COL + COL / 2
-}
-
-/** The line, broken where a temperature is missing */
-const tempPath = computed(() => {
-  let d = ''
-  let pen = false
-  props.hours.forEach((h, i) => {
-    if (h.temperature === undefined) {
-      pen = false
-      return
-    }
-    d += `${pen ? 'L' : 'M'}${xCenter(i)},${yTemp(h.temperature).toFixed(1)}`
-    pen = true
-  })
-  return d
-})
-
-const tempGrid = computed(() => {
-  const [lo, hi] = tempRange.value
-  const step = (hi - lo) / 2
-  return [lo, lo + step, hi]
-})
-
-/** mm scale: at least 2 mm so a drizzle does not look like a cloudburst */
-const rainMax = computed(() => Math.max(2, ...props.hours.map((h) => h.precipitation ?? 0)))
-const dry = computed(() => props.hours.every((h) => !h.precipitation))
-
-/** A bar with 4px rounded top, anchored at the baseline; the 16px gap keeps neighbours apart */
-function rainBar(i: number, mm: number | undefined): string {
-  if (!mm || mm <= 0) return ''
-  const w = COL - 16
-  const x = i * COL + 8
-  const base = RAIN_H - 1
-  const h = Math.max(3, (RAIN_H - 8) * (mm / rainMax.value))
-  const r = Math.min(4, h, w / 2)
-  const top = base - h
-  return `M${x},${base}V${top + r}Q${x},${top} ${x + r},${top}H${x + w - r}Q${x + w},${top} ${x + w},${top + r}V${base}Z`
 }
 
 function pick(event: PointerEvent): void {
@@ -133,38 +88,13 @@ const tooltipLeft = computed(() => {
       </div>
 
       <figure class="chart">
-        <figcaption>Temperatur · °C</figcaption>
-        <svg :width="width" :height="TEMP_H" :viewBox="`0 0 ${width} ${TEMP_H}`" role="img" aria-label="Temperaturverlauf der nächsten 24 Stunden">
-          <g class="grid">
-            <template v-for="g in tempGrid" :key="'g' + g">
-              <line :x1="0" :x2="width" :y1="yTemp(g)" :y2="yTemp(g)" />
-              <text class="axis" x="4" :y="yTemp(g) - 4">{{ g }}°</text>
-            </template>
-          </g>
-          <path class="line temp" :d="tempPath" />
-          <circle
-            v-if="hovered?.temperature !== undefined && active !== null"
-            class="marker temp"
-            :cx="xCenter(active)"
-            :cy="yTemp(hovered!.temperature!)"
-            r="4.5"
-          />
-        </svg>
-      </figure>
-
-      <figure class="chart">
-        <figcaption>Niederschlag · mm pro Stunde</figcaption>
-        <svg :width="width" :height="RAIN_H" :viewBox="`0 0 ${width} ${RAIN_H}`" role="img" aria-label="Niederschlag der nächsten 24 Stunden">
-          <line class="baseline" :x1="0" :x2="width" :y1="RAIN_H - 0.5" :y2="RAIN_H - 0.5" />
-          <text v-if="dry" class="axis" x="8" :y="RAIN_H - 10">kein Niederschlag erwartet</text>
-          <path
-            v-for="(h, i) in hours"
-            :key="'r' + i"
-            class="bar rain"
-            :class="{ lit: active === i }"
-            :d="rainBar(i, h.precipitation)"
-          />
-        </svg>
+        <figcaption class="legend">
+          <span><i class="key line temp" />Temperatur · °C</span>
+          <span><i class="key box rain" />Niederschlag · mm pro Stunde</span>
+          <span><i class="key night" />Nacht</span>
+          <span><i class="key uv" />UV-Index, Tagesmaximum</span>
+        </figcaption>
+        <Meteogram :hours="hours" :days="sunDays" :time-zone="timeZone" :col="COL" :active="active" />
       </figure>
 
       <div class="row prob" aria-hidden="true">
@@ -190,8 +120,8 @@ const tooltipLeft = computed(() => {
       <div v-if="hovered && active !== null" class="tooltip" :style="{ left: `${tooltipLeft}px` }" role="status">
         <div class="tt-head">{{ shortDay(hovered.time, timeZone) }}, {{ hourLabel(hovered.time, timeZone) }} · {{ skyText(skyOf(hovered.weatherCode, hovered.cloudCover)) }}</div>
         <dl>
-          <dt><i class="key temp" />Temperatur</dt><dd>{{ degrees(hovered.temperature) }}<em>Taupunkt {{ degrees(hovered.dewPoint) }}</em></dd>
-          <dt><i class="key rain" />Niederschlag</dt><dd>{{ fixed1(hovered.precipitation) }} mm<em>{{ whole(hovered.precipitationProbability) }} %</em></dd>
+          <dt><i class="key line temp" />Temperatur</dt><dd>{{ degrees(hovered.temperature) }}<em>Taupunkt {{ degrees(hovered.dewPoint) }}</em></dd>
+          <dt><i class="key box rain" />Niederschlag</dt><dd>{{ fixed1(hovered.precipitation) }} mm<em>{{ whole(hovered.precipitationProbability) }} %</em></dd>
           <dt>Bewölkung</dt><dd>{{ whole(hovered.cloudCover) }} %</dd>
           <dt>Wind</dt><dd>{{ kmh(hovered.windSpeed) }} km/h {{ compass(hovered.windDirection) }}<em>Böen {{ kmh(hovered.windGust) }}</em></dd>
           <dt>Strahlung</dt><dd>{{ whole(hovered.globalRadiation) }} W/m²</dd>
@@ -232,17 +162,26 @@ const tooltipLeft = computed(() => {
 .wind { margin-top: 6px; }
 .arrow { stroke: currentColor; stroke-width: 1.4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
 
-.chart { margin: 10px 0 0; }
-figcaption { font-size: 12px; color: var(--muted); padding: 0 8px 2px; }
-svg { display: block; overflow: visible; }
-.grid line { stroke: var(--line); stroke-width: 1; }
-.axis { font-size: 10.5px; fill: var(--muted); }
-.baseline { stroke: var(--line-2); stroke-width: 1; }
-.line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
-.line.temp { stroke: var(--s2); }
-.marker.temp { fill: var(--s2); stroke: var(--surface); stroke-width: 2; }
-.bar.rain { fill: var(--s1); }
-.bar.rain.lit { fill: color-mix(in srgb, var(--s1) 75%, var(--ink)); }
+.chart { margin: 8px 0 0; }
+.legend {
+  position: sticky;
+  left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+  font-size: 12px;
+  color: var(--muted);
+  padding: 0 8px 4px;
+  width: max-content;
+}
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.key { display: inline-block; }
+.key.line { width: 14px; height: 2px; border-radius: 1px; }
+.key.box { width: 10px; height: 10px; border-radius: 2px; }
+.key.temp { background: var(--s2); }
+.key.rain { background: var(--s1); }
+.key.night { width: 12px; height: 10px; border-radius: 2px; background: color-mix(in srgb, var(--ink) 9%, transparent); }
+.key.uv { width: 8px; height: 8px; border-radius: 50%; border: 1.4px solid var(--ink-2); }
 
 .band {
   position: absolute;
@@ -271,7 +210,5 @@ dl { display: grid; grid-template-columns: auto 1fr; gap: 3px 10px; margin: 0; }
 dt { color: var(--muted); display: flex; align-items: center; gap: 6px; }
 dd { margin: 0; text-align: right; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
 dd em { display: block; font-style: normal; font-weight: 400; color: var(--muted); font-size: 11.5px; }
-.key { display: inline-block; width: 12px; height: 2px; border-radius: 1px; }
-.key.temp { background: var(--s2); }
-.key.rain { background: var(--s1); }
+dt .key { width: 12px; height: 2px; border-radius: 1px; }
 </style>

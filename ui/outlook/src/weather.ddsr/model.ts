@@ -86,6 +86,11 @@ function flag(object: EObject, name: string): boolean {
   return v === true || v === 'true'
 }
 
+function one(object: EObject, name: string): EObject | undefined {
+  const v = value(object, name)
+  return v && typeof v === 'object' && 'eClass' in v ? (v as EObject) : undefined
+}
+
 function many(object: EObject, name: string): EObject[] {
   const feature = object.eClass().getEStructuralFeature(name)
   const v = feature ? object.eGet(feature) : undefined
@@ -130,6 +135,7 @@ function toDay(o: EObject): DayValue {
     weatherCode: num(o, 'weatherCode'),
     sunrise: date(o, 'sunrise'),
     sunset: date(o, 'sunset'),
+    solarNoon: date(o, 'solarNoon'),
     daylightHours: num(o, 'daylightHours'),
   }
 }
@@ -148,6 +154,7 @@ function toSource(o: EObject): SourceInfo {
 /** The `Outlook` EObject as the plain values the contract speaks */
 export function toSnapshot(outlook: EObject): OutlookSnapshot {
   expect(outlook, 'Outlook')
+  const today = one(outlook, 'today')
   return {
     siteId: text(outlook, 'siteId') ?? '',
     siteName: text(outlook, 'siteName') ?? text(outlook, 'siteId') ?? '',
@@ -156,6 +163,7 @@ export function toSnapshot(outlook: EObject): OutlookSnapshot {
     timeZone: text(outlook, 'timeZone') ?? 'UTC',
     generatedAt: date(outlook, 'generatedAt'),
     hours: many(outlook, 'hours').map(toHour),
+    today: today ? toDay(today) : undefined,
     days: many(outlook, 'days').map(toDay),
     sources: many(outlook, 'sources').map(toSource),
   }

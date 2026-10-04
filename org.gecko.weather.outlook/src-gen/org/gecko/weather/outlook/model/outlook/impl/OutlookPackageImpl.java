@@ -304,7 +304,7 @@ public class OutlookPackageImpl extends EPackageImpl implements OutlookPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getOutlook_Days() {
+	public EReference getOutlook_Today() {
 		return (EReference)outlookEClass.getEStructuralFeatures().get(7);
 	}
 
@@ -314,8 +314,18 @@ public class OutlookPackageImpl extends EPackageImpl implements OutlookPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getOutlook_Sources() {
+	public EReference getOutlook_Days() {
 		return (EReference)outlookEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getOutlook_Sources() {
+		return (EReference)outlookEClass.getEStructuralFeatures().get(9);
 	}
 
 	/**
@@ -594,8 +604,18 @@ public class OutlookPackageImpl extends EPackageImpl implements OutlookPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getDayOutlook_DaylightHours() {
+	public EAttribute getDayOutlook_SolarNoon() {
 		return (EAttribute)dayOutlookEClass.getEStructuralFeatures().get(12);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getDayOutlook_DaylightHours() {
+		return (EAttribute)dayOutlookEClass.getEStructuralFeatures().get(13);
 	}
 
 	/**
@@ -715,6 +735,7 @@ public class OutlookPackageImpl extends EPackageImpl implements OutlookPackage {
 		createEAttribute(outlookEClass, OUTLOOK__TIME_ZONE);
 		createEAttribute(outlookEClass, OUTLOOK__GENERATED_AT);
 		createEReference(outlookEClass, OUTLOOK__HOURS);
+		createEReference(outlookEClass, OUTLOOK__TODAY);
 		createEReference(outlookEClass, OUTLOOK__DAYS);
 		createEReference(outlookEClass, OUTLOOK__SOURCES);
 
@@ -746,6 +767,7 @@ public class OutlookPackageImpl extends EPackageImpl implements OutlookPackage {
 		createEAttribute(dayOutlookEClass, DAY_OUTLOOK__WEATHER_CODE);
 		createEAttribute(dayOutlookEClass, DAY_OUTLOOK__SUNRISE);
 		createEAttribute(dayOutlookEClass, DAY_OUTLOOK__SUNSET);
+		createEAttribute(dayOutlookEClass, DAY_OUTLOOK__SOLAR_NOON);
 		createEAttribute(dayOutlookEClass, DAY_OUTLOOK__DAYLIGHT_HOURS);
 
 		sourceNoteEClass = createEClass(SOURCE_NOTE);
@@ -805,6 +827,7 @@ public class OutlookPackageImpl extends EPackageImpl implements OutlookPackage {
 		initEAttribute(getOutlook_TimeZone(), ecorePackage.getEString(), "timeZone", null, 0, 1, Outlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getOutlook_GeneratedAt(), ecorePackage.getEDate(), "generatedAt", null, 0, 1, Outlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOutlook_Hours(), this.getHourOutlook(), null, "hours", null, 0, -1, Outlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getOutlook_Today(), this.getDayOutlook(), null, "today", null, 0, 1, Outlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOutlook_Days(), this.getDayOutlook(), null, "days", null, 0, -1, Outlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOutlook_Sources(), this.getSourceNote(), null, "sources", null, 0, -1, Outlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -836,6 +859,7 @@ public class OutlookPackageImpl extends EPackageImpl implements OutlookPackage {
 		initEAttribute(getDayOutlook_WeatherCode(), ecorePackage.getEInt(), "weatherCode", null, 0, 1, DayOutlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDayOutlook_Sunrise(), ecorePackage.getEDate(), "sunrise", null, 0, 1, DayOutlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDayOutlook_Sunset(), ecorePackage.getEDate(), "sunset", null, 0, 1, DayOutlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDayOutlook_SolarNoon(), ecorePackage.getEDate(), "solarNoon", null, 0, 1, DayOutlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDayOutlook_DaylightHours(), ecorePackage.getEDouble(), "daylightHours", null, 0, 1, DayOutlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(sourceNoteEClass, SourceNote.class, "SourceNote", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

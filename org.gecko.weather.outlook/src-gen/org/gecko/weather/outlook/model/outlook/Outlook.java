@@ -41,6 +41,7 @@ import org.osgi.annotation.versioning.ProviderType;
  *   <li>{@link org.gecko.weather.outlook.model.outlook.Outlook#getTimeZone <em>Time Zone</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.Outlook#getGeneratedAt <em>Generated At</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.Outlook#getHours <em>Hours</em>}</li>
+ *   <li>{@link org.gecko.weather.outlook.model.outlook.Outlook#getToday <em>Today</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.Outlook#getDays <em>Days</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.Outlook#getSources <em>Sources</em>}</li>
  * </ul>
@@ -194,6 +195,31 @@ public interface Outlook extends EObject {
 	 * @generated
 	 */
 	EList<HourOutlook> getHours();
+
+	/**
+	 * Returns the value of the '<em><b>Today</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Today in the site's time zone, summarised like the days — mainly for its sun events and UV maximum; temperatures cover only the hours the sources still have.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Today</em>' containment reference.
+	 * @see #setToday(DayOutlook)
+	 * @see org.gecko.weather.outlook.model.outlook.OutlookPackage#getOutlook_Today()
+	 * @model containment="true"
+	 * @generated
+	 */
+	DayOutlook getToday();
+
+	/**
+	 * Sets the value of the '{@link org.gecko.weather.outlook.model.outlook.Outlook#getToday <em>Today</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Today</em>' containment reference.
+	 * @see #getToday()
+	 * @generated
+	 */
+	void setToday(DayOutlook value);
 
 	/**
 	 * Returns the value of the '<em><b>Days</b></em>' containment reference list.

@@ -60,6 +60,8 @@ export interface DayValue {
   weatherCode?: number
   sunrise?: Date
   sunset?: Date
+  /** when the sun is highest — where a daily maximum such as the UV index sits on a time axis */
+  solarNoon?: Date
   daylightHours?: number
 }
 
@@ -81,6 +83,8 @@ export interface OutlookSnapshot {
   timeZone: string
   generatedAt?: Date
   hours: HourValue[]
+  /** today, mainly for its sun events and UV maximum; temperatures only cover the hours still known */
+  today?: DayValue
   days: DayValue[]
   sources: SourceInfo[]
 }

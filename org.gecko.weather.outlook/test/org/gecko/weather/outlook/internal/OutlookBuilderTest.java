@@ -20,6 +20,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.Optional;
 
@@ -144,6 +145,20 @@ class OutlookBuilderTest {
 		assertThat(tomorrow.getSunset()).isEqualTo(Date.from(Instant.parse("2026-10-05T16:43:00Z")));
 		assertThat(tomorrow.getDaylightHours()).isCloseTo(11.0 + 26.0 / 60, within(1e-9));
 		assertThat(o.getDays().get(1).getUvIndexMax()).isEqualTo(2.8);
+		assertThat(tomorrow.getSolarNoon()).isEqualTo(Date.from(Instant.parse("2026-10-05T11:00:00Z")));
+	}
+
+	@Test
+	void todayCarriesSunEventsAndUv() {
+		Outlook o = new OutlookBuilder(24, 2).build(site, Optional.of(report), BERLIN, NOW);
+		DayOutlook today = o.getToday();
+		assertThat(today).isNotNull();
+		assertThat(today.getDate()).isEqualTo("2026-10-04");
+		assertThat(today.getSunrise()).isEqualTo(Date.from(Instant.parse("2026-10-04T05:15:00Z")));
+		assertThat(today.getSunset()).isEqualTo(Date.from(Instant.parse("2026-10-04T16:45:00Z")));
+		assertThat(today.getSolarNoon()).isEqualTo(Date.from(Instant.parse("2026-10-04T11:00:00Z")));
+		assertThat(today.getUvIndexMax()).as("the UV value ending 5 Oct 00:00 UTC").isEqualTo(2.0);
+		assertThat(today.getTemperatureMax()).isEqualTo(21.0);
 	}
 
 	@Test
@@ -164,6 +179,7 @@ class OutlookBuilderTest {
 		assertThat(o.getHours()).isEmpty();
 		assertThat(o.getDays()).isEmpty();
 		assertThat(o.getSources()).isEmpty();
+		assertThat(o.getToday()).isNull();
 	}
 
 	@Test
@@ -262,6 +278,7 @@ class OutlookBuilderTest {
 		d.setSunrise(Instant.parse(sunrise));
 		d.setSunset(Instant.parse(sunset));
 		d.setDayLength(Duration.between(Instant.parse(sunrise), Instant.parse(sunset)));
+		d.setSolarNoon(date.atTime(11, 0).toInstant(ZoneOffset.UTC));
 		return d;
 	}
 

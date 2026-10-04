@@ -29,12 +29,14 @@ export class SampleWeatherOutlook implements WeatherOutlook {
     const hours: HourValue[] = []
     for (let h = 0; h < 72; h++) hours.push(hour(new Date(start + h * HOUR)))
     const days = [1, 2].map((d) => day(new Date(start + d * 24 * HOUR), hours.slice(d * 24 - 6, d * 24 + 18)))
+    const today = day(new Date(start), hours.slice(0, 18))
     return {
       ...SITE,
       siteId: SITE.id,
       siteName: SITE.name,
       generatedAt: this.now(),
       hours: hours.slice(0, 24),
+      today,
       days,
       sources: [
         { quantities: 'alle Werte', providerId: 'beispiel', productId: 'erfunden', location: '—' },
@@ -80,6 +82,7 @@ function day(at: Date, hours: HourValue[]): DayValue {
     weatherCode: 61,
     sunrise: new Date(Date.UTC(at.getUTCFullYear(), at.getUTCMonth(), at.getUTCDate(), 5, 17)),
     sunset: new Date(Date.UTC(at.getUTCFullYear(), at.getUTCMonth(), at.getUTCDate(), 16, 43)),
+    solarNoon: new Date(Date.UTC(at.getUTCFullYear(), at.getUTCMonth(), at.getUTCDate(), 11, 0)),
     daylightHours: 11.4,
   }
 }

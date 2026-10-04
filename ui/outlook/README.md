@@ -52,10 +52,15 @@ file the Java side is generated from. In xdp-ui it would be copied into the pack
 
 ## What the page shows
 
+- **Today** in one line above the hours: sunrise, sunset, day length, UV maximum and when it is reached.
 - **24 hours** as columns: time, sky icon (WMO `ww` first, cloud cover for the sky codes, moon at
-  night), temperature; below, two charts on the same columns — temperature as a line, precipitation
-  as bars — rather than one chart with two y-axes; then the hourly rain probability and the wind
-  (arrows point where the air goes). Hover or keyboard focus on an hour shows all its values.
+  night), temperature; below, on the same columns, a **meteogram** — temperature, precipitation,
+  night, sun and UV in one picture without a second y-axis: two bands in one frame, temperature
+  above as a line (warmest and coldest hour labelled), precipitation below as bars (every wet hour
+  labelled), night hours shaded, sunrise and sunset as marks, the day's **UV maximum as a mark at
+  solar noon** — DWD publishes the UV index once per day, so there is no hourly curve to draw. Then
+  the hourly rain probability and the wind (arrows point where the air goes). Hover or keyboard
+  focus on an hour shows all its values.
 - **Two days** as xdp tiles: high/low, precipitation, sunshine, UV maximum, mean cloud cover,
   strongest gust, sunrise, sunset, day length.
 - **Sources**: which dataset each group of quantities came from, how far away, when it was issued.

@@ -42,7 +42,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * @generated
  */
 @ProviderType
-@EPackage(uri = OutlookPackage.eNS_URI, fingerprint = "fp1:d87cd65e0dcffdd7ba2e891fa4259cfea80da355881c54a715e52e1d1a74b635", genModel = "/model/outlook.genmodel", genModelSourceLocations = {"model/outlook.genmodel","org.gecko.weather.outlook/model/outlook.genmodel"}, ecore = "/model/outlook.ecore", ecoreSourceLocations = "/model/outlook.ecore")
+@EPackage(uri = OutlookPackage.eNS_URI, fingerprint = "fp1:d6bf9efea49e17df2e6570568b692d4e83be7e2ca3d31497c3aef68d6a8b2d24", genModel = "/model/outlook.genmodel", genModelSourceLocations = {"model/outlook.genmodel","org.gecko.weather.outlook/model/outlook.genmodel"}, ecore = "/model/outlook.ecore", ecoreSourceLocations = "/model/outlook.ecore")
 public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	/**
 	 * The package name.
@@ -260,13 +260,22 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	int OUTLOOK__HOURS = 6;
 
 	/**
+	 * The feature id for the '<em><b>Today</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OUTLOOK__TODAY = 7;
+
+	/**
 	 * The feature id for the '<em><b>Days</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OUTLOOK__DAYS = 7;
+	int OUTLOOK__DAYS = 8;
 
 	/**
 	 * The feature id for the '<em><b>Sources</b></em>' containment reference list.
@@ -275,7 +284,7 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OUTLOOK__SOURCES = 8;
+	int OUTLOOK__SOURCES = 9;
 
 	/**
 	 * The number of structural features of the '<em>Outlook</em>' class.
@@ -284,7 +293,7 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OUTLOOK_FEATURE_COUNT = 9;
+	int OUTLOOK_FEATURE_COUNT = 10;
 
 	/**
 	 * The number of operations of the '<em>Outlook</em>' class.
@@ -559,13 +568,22 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	int DAY_OUTLOOK__SUNSET = 11;
 
 	/**
+	 * The feature id for the '<em><b>Solar Noon</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DAY_OUTLOOK__SOLAR_NOON = 12;
+
+	/**
 	 * The feature id for the '<em><b>Daylight Hours</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DAY_OUTLOOK__DAYLIGHT_HOURS = 12;
+	int DAY_OUTLOOK__DAYLIGHT_HOURS = 13;
 
 	/**
 	 * The number of structural features of the '<em>Day Outlook</em>' class.
@@ -574,7 +592,7 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DAY_OUTLOOK_FEATURE_COUNT = 13;
+	int DAY_OUTLOOK_FEATURE_COUNT = 14;
 
 	/**
 	 * The number of operations of the '<em>Day Outlook</em>' class.
@@ -840,6 +858,17 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 */
 	EReference getOutlook_Hours();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link org.gecko.weather.outlook.model.outlook.Outlook#getToday <em>Today</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Today</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.Outlook#getToday()
+	 * @see #getOutlook()
+	 * @generated
+	 */
+	EReference getOutlook_Today();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link org.gecko.weather.outlook.model.outlook.Outlook#getDays <em>Days</em>}'.
@@ -1159,6 +1188,17 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	EAttribute getDayOutlook_Sunset();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.DayOutlook#getSolarNoon <em>Solar Noon</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Solar Noon</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.DayOutlook#getSolarNoon()
+	 * @see #getDayOutlook()
+	 * @generated
+	 */
+	EAttribute getDayOutlook_SolarNoon();
+
+	/**
 	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.DayOutlook#getDaylightHours <em>Daylight Hours</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1403,6 +1443,14 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 		EReference OUTLOOK__HOURS = eINSTANCE.getOutlook_Hours();
 
 		/**
+		 * The meta object literal for the '<em><b>Today</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference OUTLOOK__TODAY = eINSTANCE.getOutlook_Today();
+
+		/**
 		 * The meta object literal for the '<em><b>Days</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1637,6 +1685,14 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 		 * @generated
 		 */
 		EAttribute DAY_OUTLOOK__SUNSET = eINSTANCE.getDayOutlook_Sunset();
+
+		/**
+		 * The meta object literal for the '<em><b>Solar Noon</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DAY_OUTLOOK__SOLAR_NOON = eINSTANCE.getDayOutlook_SolarNoon();
 
 		/**
 		 * The meta object literal for the '<em><b>Daylight Hours</b></em>' attribute feature.

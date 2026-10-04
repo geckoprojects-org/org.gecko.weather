@@ -8,7 +8,7 @@ per quantity and hour by a fixed rule and says which datasets it picked from.
 
 | Piece | Does |
 | --- | --- |
-| `model/outlook.ecore` | `SiteDirectory`/`SiteEntry`, `Outlook` with `HourOutlook`, `DayOutlook`, `SourceNote`. Plain types only (`EDate`, `EDouble`, `EInt`, `EString`, unsettable numbers for "no value") so that the TypeScript client reads it without the `java.time` conversion delegate |
+| `model/outlook.ecore` | `SiteDirectory`/`SiteEntry`, `Outlook` with `HourOutlook`, `today` and `days` as `DayOutlook` (with `solarNoon`, where a daily maximum such as the UV index belongs on a time axis), `SourceNote`. Plain types only (`EDate`, `EDouble`, `EInt`, `EString`, unsettable numbers for "no value") so that the TypeScript client reads it without the `java.time` conversion delegate |
 | `WeatherOutlook` | `sites()` and `outlook(siteId)` — the interface the contract is derived from (Gradle compiles with `-parameters`, so the parameter is called `siteId` on the wire) |
 | `internal.OutlookBuilder` | the picking rule, plain Java |
 | `internal.WeatherOutlookComponent` | the DS service with `service.exported.interfaces=*`, `service.exported.configs=fennec.rest`, `ddsr.provider.name=gecko-weather`; configuration required |
@@ -24,7 +24,8 @@ per quantity and hour by a fixed rule and says which datasets it picked from.
 
 Instant quantities are read at the hour's start, period quantities from the value ending one hour
 later: the hour from 14:00 shows the rain that falls until 15:00. Days are calendar days in the
-site's time zone, from tomorrow on; their weather code is the most significant of the day
+site's time zone, from tomorrow on, plus `today` for its sun events and UV maximum (its temperatures
+cover only the hours the sources still have); their weather code is the most significant of the day
 (thunder > snow > rain > drizzle > fog > cloud codes).
 
 ## Configuration and launch

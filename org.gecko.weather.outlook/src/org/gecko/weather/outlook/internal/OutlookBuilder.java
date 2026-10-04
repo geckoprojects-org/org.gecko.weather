@@ -50,7 +50,7 @@ import org.gecko.weather.outlook.model.outlook.OutlookFactory;
 import org.gecko.weather.outlook.model.outlook.SourceNote;
 
 /**
- * Builds an {@link Outlook} from a site's report. The report keeps every source apart (ADR-0013);
+ * Builds an {@link Outlook} from a site's report: the hours, today and the days after it. The report keeps every source apart (ADR-0013);
  * a weather page needs one number per quantity and hour, so this consumer picks — by a fixed rule,
  * and the outlook names the datasets it picked from:
  * <ul>
@@ -112,6 +112,7 @@ public final class OutlookBuilder {
 			outlook.getHours().add(hour(s, start.plus(HOUR.multipliedBy(h)), report.get()));
 		}
 		LocalDate today = LocalDate.ofInstant(now, zone);
+		outlook.setToday(day(s, today, zone, report.get()));
 		for (int d = 1; d <= days; d++) {
 			outlook.getDays().add(day(s, today.plusDays(d), zone, report.get()));
 		}
@@ -194,6 +195,9 @@ public final class OutlookBuilder {
 			}
 			if (i.getSunset() != null) {
 				d.setSunset(Date.from(i.getSunset()));
+			}
+			if (i.getSolarNoon() != null) {
+				d.setSolarNoon(Date.from(i.getSolarNoon()));
 			}
 			if (i.getDayLength() != null) {
 				d.setDaylightHours(i.getDayLength().toSeconds() / 3600.0);

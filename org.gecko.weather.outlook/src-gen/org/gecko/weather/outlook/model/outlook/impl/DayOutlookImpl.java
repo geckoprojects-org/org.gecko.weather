@@ -45,6 +45,7 @@ import org.gecko.weather.outlook.model.outlook.OutlookPackage;
  *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.DayOutlookImpl#getWeatherCode <em>Weather Code</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.DayOutlookImpl#getSunrise <em>Sunrise</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.DayOutlookImpl#getSunset <em>Sunset</em>}</li>
+ *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.DayOutlookImpl#getSolarNoon <em>Solar Noon</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.DayOutlookImpl#getDaylightHours <em>Daylight Hours</em>}</li>
  * </ul>
  *
@@ -371,6 +372,26 @@ public class DayOutlookImpl extends MinimalEObjectImpl.Container implements DayO
 	 * @ordered
 	 */
 	protected Date sunset = SUNSET_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getSolarNoon() <em>Solar Noon</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSolarNoon()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final Date SOLAR_NOON_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getSolarNoon() <em>Solar Noon</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSolarNoon()
+	 * @generated
+	 * @ordered
+	 */
+	protected Date solarNoon = SOLAR_NOON_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getDaylightHours() <em>Daylight Hours</em>}' attribute.
@@ -945,6 +966,29 @@ public class DayOutlookImpl extends MinimalEObjectImpl.Container implements DayO
 	 * @generated
 	 */
 	@Override
+	public Date getSolarNoon() {
+		return solarNoon;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setSolarNoon(Date newSolarNoon) {
+		Date oldSolarNoon = solarNoon;
+		solarNoon = newSolarNoon;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, OutlookPackage.DAY_OUTLOOK__SOLAR_NOON, oldSolarNoon, solarNoon));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public double getDaylightHours() {
 		return daylightHours;
 	}
@@ -1021,6 +1065,8 @@ public class DayOutlookImpl extends MinimalEObjectImpl.Container implements DayO
 				return getSunrise();
 			case OutlookPackage.DAY_OUTLOOK__SUNSET:
 				return getSunset();
+			case OutlookPackage.DAY_OUTLOOK__SOLAR_NOON:
+				return getSolarNoon();
 			case OutlookPackage.DAY_OUTLOOK__DAYLIGHT_HOURS:
 				return getDaylightHours();
 		}
@@ -1070,6 +1116,9 @@ public class DayOutlookImpl extends MinimalEObjectImpl.Container implements DayO
 				return;
 			case OutlookPackage.DAY_OUTLOOK__SUNSET:
 				setSunset((Date)newValue);
+				return;
+			case OutlookPackage.DAY_OUTLOOK__SOLAR_NOON:
+				setSolarNoon((Date)newValue);
 				return;
 			case OutlookPackage.DAY_OUTLOOK__DAYLIGHT_HOURS:
 				setDaylightHours((Double)newValue);
@@ -1122,6 +1171,9 @@ public class DayOutlookImpl extends MinimalEObjectImpl.Container implements DayO
 			case OutlookPackage.DAY_OUTLOOK__SUNSET:
 				setSunset(SUNSET_EDEFAULT);
 				return;
+			case OutlookPackage.DAY_OUTLOOK__SOLAR_NOON:
+				setSolarNoon(SOLAR_NOON_EDEFAULT);
+				return;
 			case OutlookPackage.DAY_OUTLOOK__DAYLIGHT_HOURS:
 				unsetDaylightHours();
 				return;
@@ -1161,6 +1213,8 @@ public class DayOutlookImpl extends MinimalEObjectImpl.Container implements DayO
 				return SUNRISE_EDEFAULT == null ? sunrise != null : !SUNRISE_EDEFAULT.equals(sunrise);
 			case OutlookPackage.DAY_OUTLOOK__SUNSET:
 				return SUNSET_EDEFAULT == null ? sunset != null : !SUNSET_EDEFAULT.equals(sunset);
+			case OutlookPackage.DAY_OUTLOOK__SOLAR_NOON:
+				return SOLAR_NOON_EDEFAULT == null ? solarNoon != null : !SOLAR_NOON_EDEFAULT.equals(solarNoon);
 			case OutlookPackage.DAY_OUTLOOK__DAYLIGHT_HOURS:
 				return isSetDaylightHours();
 		}
@@ -1201,6 +1255,8 @@ public class DayOutlookImpl extends MinimalEObjectImpl.Container implements DayO
 		result.append(sunrise);
 		result.append(", sunset: ");
 		result.append(sunset);
+		result.append(", solarNoon: ");
+		result.append(solarNoon);
 		result.append(", daylightHours: ");
 		if (daylightHoursESet) result.append(daylightHours); else result.append("<unset>");
 		result.append(')');

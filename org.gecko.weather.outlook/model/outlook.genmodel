@@ -58,6 +58,9 @@
         <ecoreFeature xsi:type="ecore:EReference" href="outlook.ecore#//Outlook/hours"/>
       </genFeatures>
       <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="outlook.ecore#//Outlook/today"/>
+      </genFeatures>
+      <genFeatures property="None" children="true" createChild="true">
         <ecoreFeature xsi:type="ecore:EReference" href="outlook.ecore#//Outlook/days"/>
       </genFeatures>
       <genFeatures property="None" children="true" createChild="true">
@@ -143,6 +146,9 @@
       </genFeatures>
       <genFeatures createChild="false">
         <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//DayOutlook/sunset"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//DayOutlook/solarNoon"/>
       </genFeatures>
       <genFeatures createChild="false">
         <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//DayOutlook/daylightHours"/>

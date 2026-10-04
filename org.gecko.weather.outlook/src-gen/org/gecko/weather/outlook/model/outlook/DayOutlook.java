@@ -44,6 +44,7 @@ import org.osgi.annotation.versioning.ProviderType;
  *   <li>{@link org.gecko.weather.outlook.model.outlook.DayOutlook#getWeatherCode <em>Weather Code</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.DayOutlook#getSunrise <em>Sunrise</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.DayOutlook#getSunset <em>Sunset</em>}</li>
+ *   <li>{@link org.gecko.weather.outlook.model.outlook.DayOutlook#getSolarNoon <em>Solar Noon</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.DayOutlook#getDaylightHours <em>Daylight Hours</em>}</li>
  * </ul>
  *
@@ -571,6 +572,31 @@ public interface DayOutlook extends EObject {
 	 * @generated
 	 */
 	void setSunset(Date value);
+
+	/**
+	 * Returns the value of the '<em><b>Solar Noon</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * When the sun is highest — where a daily maximum like the UV index belongs on a time axis.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Solar Noon</em>' attribute.
+	 * @see #setSolarNoon(Date)
+	 * @see org.gecko.weather.outlook.model.outlook.OutlookPackage#getDayOutlook_SolarNoon()
+	 * @model
+	 * @generated
+	 */
+	Date getSolarNoon();
+
+	/**
+	 * Sets the value of the '{@link org.gecko.weather.outlook.model.outlook.DayOutlook#getSolarNoon <em>Solar Noon</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Solar Noon</em>' attribute.
+	 * @see #getSolarNoon()
+	 * @generated
+	 */
+	void setSolarNoon(Date value);
 
 	/**
 	 * Returns the value of the '<em><b>Daylight Hours</b></em>' attribute.

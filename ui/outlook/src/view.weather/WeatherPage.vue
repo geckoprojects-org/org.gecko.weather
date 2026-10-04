@@ -9,7 +9,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import type { OutlookSnapshot, SiteInfo, WeatherOutlook } from '../contracts.js'
 import DayOverview from './DayOverview.vue'
 import HourlyForecast from './HourlyForecast.vue'
-import { hourLabel } from './weather.js'
+import { clock, fixed1, hourLabel } from './weather.js'
 
 const props = defineProps<{ outlook: WeatherOutlook; fallback?: WeatherOutlook }>()
 
@@ -56,6 +56,12 @@ watch(siteId, (now, before) => {
   if (before && now !== before) void load()
 })
 
+function dayLength(h: number | undefined): string {
+  if (h === undefined) return '–'
+  const m = Math.round(h * 60)
+  return `${Math.floor(m / 60)} h ${String(m % 60).padStart(2, '0')} min`
+}
+
 function distance(m: number | undefined): string {
   if (m === undefined) return ''
   return m < 1000 ? `${Math.round(m)} m` : `${(m / 1000).toLocaleString('de-DE', { maximumFractionDigits: 1 })} km`
@@ -90,7 +96,20 @@ function issued(d: Date | undefined): string {
     <div :class="{ refreshing: state === 'loading' && snapshot }">
       <template v-if="snapshot">
         <h2 class="section-title">Nächste 24 Stunden</h2>
-        <HourlyForecast v-if="snapshot.hours.length" :hours="snapshot.hours" :time-zone="timeZone" />
+        <p v-if="snapshot.today" class="today" aria-label="Heute">
+          <span class="label">Heute</span>
+          <span>Sonnenaufgang <b>{{ clock(snapshot.today.sunrise, timeZone) }}</b></span>
+          <span>Sonnenuntergang <b>{{ clock(snapshot.today.sunset, timeZone) }}</b></span>
+          <span>Tageslänge <b>{{ dayLength(snapshot.today.daylightHours) }}</b></span>
+          <span>UV-Index max. <b>{{ fixed1(snapshot.today.uvIndexMax) }}</b>{{ snapshot.today.solarNoon ? ` um ${clock(snapshot.today.solarNoon, timeZone)}` : '' }}</span>
+        </p>
+        <HourlyForecast
+          v-if="snapshot.hours.length"
+          :hours="snapshot.hours"
+          :today="snapshot.today"
+          :days="snapshot.days"
+          :time-zone="timeZone"
+        />
         <p v-else class="dim">Für diesen Standort liegen noch keine Werte vor.</p>
 
         <h2 class="section-title">Nächste zwei Tage</h2>
@@ -127,6 +146,9 @@ function issued(d: Date | undefined): string {
 }
 .stamp { color: var(--muted); font-size: 13px; }
 .problem { color: var(--crit); }
+.today { display: flex; flex-wrap: wrap; gap: 6px 22px; align-items: baseline; margin: -4px 0 14px; color: var(--muted); font-size: 13px; }
+.today b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.today .label { color: var(--ink); font-weight: 600; }
 .refreshing { opacity: .55; transition: opacity .2s; }
 .sources li { display: grid; grid-template-columns: 170px 1fr auto; gap: 16px; align-items: baseline; }
 .product { font-family: var(--mono); font-size: 12.5px; }

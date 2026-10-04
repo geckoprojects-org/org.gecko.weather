@@ -41,7 +41,7 @@ public class OutlookEPackageConfigurator implements EPackageConfigurator {
 	 * service property.
 	 * @generated
 	 */
-	public static final String FINGERPRINT = "fp1:d87cd65e0dcffdd7ba2e891fa4259cfea80da355881c54a715e52e1d1a74b635";
+	public static final String FINGERPRINT = "fp1:d6bf9efea49e17df2e6570568b692d4e83be7e2ca3d31497c3aef68d6a8b2d24";
 
 	private OutlookPackage ePackage;
 

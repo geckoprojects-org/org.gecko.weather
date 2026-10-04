@@ -51,6 +51,7 @@ import org.gecko.weather.outlook.model.outlook.SourceNote;
  *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.OutlookImpl#getTimeZone <em>Time Zone</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.OutlookImpl#getGeneratedAt <em>Generated At</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.OutlookImpl#getHours <em>Hours</em>}</li>
+ *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.OutlookImpl#getToday <em>Today</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.OutlookImpl#getDays <em>Days</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.OutlookImpl#getSources <em>Sources</em>}</li>
  * </ul>
@@ -187,6 +188,16 @@ public class OutlookImpl extends MinimalEObjectImpl.Container implements Outlook
 	 * @ordered
 	 */
 	protected EList<HourOutlook> hours;
+
+	/**
+	 * The cached value of the '{@link #getToday() <em>Today</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getToday()
+	 * @generated
+	 * @ordered
+	 */
+	protected DayOutlook today;
 
 	/**
 	 * The cached value of the '{@link #getDays() <em>Days</em>}' containment reference list.
@@ -384,6 +395,51 @@ public class OutlookImpl extends MinimalEObjectImpl.Container implements Outlook
 	 * @generated
 	 */
 	@Override
+	public DayOutlook getToday() {
+		return today;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetToday(DayOutlook newToday, NotificationChain msgs) {
+		DayOutlook oldToday = today;
+		today = newToday;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, OutlookPackage.OUTLOOK__TODAY, oldToday, newToday);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setToday(DayOutlook newToday) {
+		if (newToday != today) {
+			NotificationChain msgs = null;
+			if (today != null)
+				msgs = ((InternalEObject)today).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - OutlookPackage.OUTLOOK__TODAY, null, msgs);
+			if (newToday != null)
+				msgs = ((InternalEObject)newToday).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - OutlookPackage.OUTLOOK__TODAY, null, msgs);
+			msgs = basicSetToday(newToday, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, OutlookPackage.OUTLOOK__TODAY, newToday, newToday));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EList<DayOutlook> getDays() {
 		if (days == null) {
 			days = new EObjectContainmentEList<DayOutlook>(DayOutlook.class, this, OutlookPackage.OUTLOOK__DAYS);
@@ -414,6 +470,8 @@ public class OutlookImpl extends MinimalEObjectImpl.Container implements Outlook
 		switch (featureID) {
 			case OutlookPackage.OUTLOOK__HOURS:
 				return ((InternalEList<?>)getHours()).basicRemove(otherEnd, msgs);
+			case OutlookPackage.OUTLOOK__TODAY:
+				return basicSetToday(null, msgs);
 			case OutlookPackage.OUTLOOK__DAYS:
 				return ((InternalEList<?>)getDays()).basicRemove(otherEnd, msgs);
 			case OutlookPackage.OUTLOOK__SOURCES:
@@ -444,6 +502,8 @@ public class OutlookImpl extends MinimalEObjectImpl.Container implements Outlook
 				return getGeneratedAt();
 			case OutlookPackage.OUTLOOK__HOURS:
 				return getHours();
+			case OutlookPackage.OUTLOOK__TODAY:
+				return getToday();
 			case OutlookPackage.OUTLOOK__DAYS:
 				return getDays();
 			case OutlookPackage.OUTLOOK__SOURCES:
@@ -482,6 +542,9 @@ public class OutlookImpl extends MinimalEObjectImpl.Container implements Outlook
 			case OutlookPackage.OUTLOOK__HOURS:
 				getHours().clear();
 				getHours().addAll((Collection<? extends HourOutlook>)newValue);
+				return;
+			case OutlookPackage.OUTLOOK__TODAY:
+				setToday((DayOutlook)newValue);
 				return;
 			case OutlookPackage.OUTLOOK__DAYS:
 				getDays().clear();
@@ -524,6 +587,9 @@ public class OutlookImpl extends MinimalEObjectImpl.Container implements Outlook
 			case OutlookPackage.OUTLOOK__HOURS:
 				getHours().clear();
 				return;
+			case OutlookPackage.OUTLOOK__TODAY:
+				setToday((DayOutlook)null);
+				return;
 			case OutlookPackage.OUTLOOK__DAYS:
 				getDays().clear();
 				return;
@@ -556,6 +622,8 @@ public class OutlookImpl extends MinimalEObjectImpl.Container implements Outlook
 				return GENERATED_AT_EDEFAULT == null ? generatedAt != null : !GENERATED_AT_EDEFAULT.equals(generatedAt);
 			case OutlookPackage.OUTLOOK__HOURS:
 				return hours != null && !hours.isEmpty();
+			case OutlookPackage.OUTLOOK__TODAY:
+				return today != null;
 			case OutlookPackage.OUTLOOK__DAYS:
 				return days != null && !days.isEmpty();
 			case OutlookPackage.OUTLOOK__SOURCES:
