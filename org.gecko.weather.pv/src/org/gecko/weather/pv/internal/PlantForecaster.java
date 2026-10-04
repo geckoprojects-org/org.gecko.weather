@@ -88,7 +88,18 @@ public final class PlantForecaster {
 	}
 
 	public PvOutlook forecast(Plant plant, Site site, Optional<WeatherReport> report, ZoneId zone, Instant now) {
+		return forecast(plant, site, report, zone, now, Map.of());
+	}
+
+	/**
+	 * As {@link #forecast(Plant, Site, Optional, ZoneId, Instant)}, with hours frozen earlier: an hour
+	 * the report no longer covers — the model runs of the afternoon begin after the morning — is taken
+	 * from them, marked in its source, so that today keeps its morning and its energy.
+	 */
+	public PvOutlook forecast(Plant plant, Site site, Optional<WeatherReport> report, ZoneId zone, Instant now,
+			Map<Instant, PvHour> frozen) {
 		requireNonNull(plant, "plant");
+		requireNonNull(frozen, "frozen");
 		requireNonNull(site, "site");
 		PvFactory f = PvFactory.eINSTANCE;
 		PvOutlook out = f.createPvOutlook();
@@ -126,6 +137,8 @@ public final class PlantForecaster {
 			Optional<HourWeather> w = weather.hour(t);
 			if (w.isPresent()) {
 				results.put(t, hour(plant, t, s[0], s[1], w.get(), horizon, skyLoss));
+			} else if (frozen.containsKey(t)) {
+				results.put(t, fromFrozen(frozen.get(t), plant.getArrays().size()));
 			} else if (s[0] <= 0) {
 				// night needs no weather to be known: nothing comes from the modules
 				results.put(t, new HourResult(t, 0, 0, new double[plant.getArrays().size()], 0, Double.NaN, 0, s[0], s[1], false,
@@ -197,6 +210,22 @@ public final class PlantForecaster {
 		}
 		return new HourResult(t, ac, dc, arrayDc, plane, cell, w.global(), elevation, azimuth, blocked, clipped, w.source());
 	}
+
+	/** A frozen hour as a result again; what the snapshot did not hold stays NaN or zero. */
+	static HourResult fromFrozen(PvHour h, int arrays) {
+		double[] arrayDc = new double[arrays];
+		for (int k = 0; k < Math.min(arrays, h.getArrayPower().size()); k++) {
+			arrayDc[k] = h.getArrayPower().get(k);
+		}
+		String source = h.getSource() == null ? FROZEN : h.getSource().endsWith(FROZEN) ? h.getSource() : h.getSource() + " " + FROZEN;
+		return new HourResult(h.getTime().toInstant(), h.getPower(), h.isSetDcPower() ? h.getDcPower() : h.getPower(), arrayDc,
+				h.isSetPlaneIrradiance() ? h.getPlaneIrradiance() : 0, h.isSetCellTemperature() ? h.getCellTemperature() : Double.NaN,
+				h.isSetGlobalRadiation() ? h.getGlobalRadiation() : 0, h.isSetSunElevation() ? h.getSunElevation() : 0,
+				h.isSetSunAzimuth() ? h.getSunAzimuth() : 0, h.isShaded(), h.isClipped(), source);
+	}
+
+	/** Marks an hour taken from a snapshot rather than computed from the current report. */
+	public static final String FROZEN = "(eingefroren)";
 
 	private static PvHour toModel(HourResult r) {
 		PvHour h = PvFactory.eINSTANCE.createPvHour();

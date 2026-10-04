@@ -69,6 +69,12 @@ day itself in the morning, the day ahead in the evening) every plant's outlook i
 `snapshotsFolder` (default `data/weather/pv-forecasts`) as `<plantId>/<yyyy-MM-dd>T<HH>.xmi`, once —
 a restart in the same hour writes nothing twice.
 
+The snapshots also keep today whole: the weather service holds each source's latest run, and the
+runs of the afternoon begin after the morning, so the report no longer covers the hours already
+passed. `forecast` fills such hours of today from the day's snapshots (and the evening before's),
+newer over older, marked `(eingefroren)` in the hour's source — the day's energy no longer shrinks
+as the day goes on. A snapshot itself is always computed from the current report only.
+
 Configuration: `measurementsFolder` (env `WEATHER_PV_MEASUREMENTS`), `metering` (env
 `WEATHER_PV_METERING`, true), `snapshotsFolder` (env `WEATHER_PV_SNAPSHOTS`), `snapshotHours` (env
 `WEATHER_PV_SNAPSHOT_HOURS`).

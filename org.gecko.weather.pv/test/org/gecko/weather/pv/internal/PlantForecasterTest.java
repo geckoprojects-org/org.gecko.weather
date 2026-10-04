@@ -24,6 +24,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Map;
 import java.util.Optional;
 
 import org.gecko.weather.model.weather.Level;
@@ -231,6 +232,32 @@ class PlantForecasterTest {
 		assertThat(o.getPlantId()).isEqualTo("demo");
 		assertThat(o.getHours()).isEmpty();
 		assertThat(o.getDays()).isEmpty();
+	}
+
+	@Test
+	void frozenHoursFillWhatTheReportNoLongerCovers() {
+		// a report that begins at noon, as the afternoon runs do
+		WeatherReport late = report();
+		late.getDatasets().forEach(d -> d.getValues().removeIf(v -> v.getValidAt() != null && v.getValidAt().isBefore(DAY.plus(Duration.ofHours(12)))));
+		PlantForecaster f = new PlantForecaster(48, 2, SUN);
+		PvOutlook bare = f.forecast(plant(), site(), Optional.of(late), UTC, DAY.plus(Duration.ofHours(14)));
+		assertThat(bare.getHours().stream().map(h -> h.getTime().toInstant())).as("the morning is gone")
+				.doesNotContain(DAY.plus(Duration.ofHours(9)));
+
+		PvHour frozenNine = PvFactory.eINSTANCE.createPvHour();
+		frozenNine.setTime(Date.from(DAY.plus(Duration.ofHours(9))));
+		frozenNine.setPower(1.5);
+		frozenNine.setDcPower(1.6);
+		frozenNine.setSunElevation(40);
+		frozenNine.setSunAzimuth(135);
+		frozenNine.setSource("ICON-D2");
+		PvOutlook filled = f.forecast(plant(), site(), Optional.of(late), UTC, DAY.plus(Duration.ofHours(14)),
+				Map.of(DAY.plus(Duration.ofHours(9)), frozenNine));
+		PvHour nine = filled.getHours().stream().filter(h -> h.getTime().toInstant().equals(DAY.plus(Duration.ofHours(9)))).findFirst().orElseThrow();
+		assertThat(nine.getPower()).isEqualTo(1.5);
+		assertThat(nine.getSource()).isEqualTo("ICON-D2 " + PlantForecaster.FROZEN);
+		assertThat(nine.getSunAzimuth()).isEqualTo(135);
+		assertThat(filled.getDays().get(0).getEnergy()).as("the frozen hour counts for the day").isGreaterThan(bare.getDays().get(0).getEnergy() + 1.4);
 	}
 
 	@Test

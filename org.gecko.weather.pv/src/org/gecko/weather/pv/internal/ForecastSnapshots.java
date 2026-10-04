@@ -22,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -31,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -40,13 +42,14 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.gecko.weather.pv.model.pv.Plant;
+import org.gecko.weather.pv.model.pv.PvHour;
 import org.gecko.weather.pv.model.pv.PvOutlook;
 import org.gecko.weather.pv.model.pv.PvPackage;
 
 /**
  * Freezes the forecast of every plant at fixed local hours — the outlook changes with every model
  * run, and a comparison with what was measured needs the forecast as it stood before. One XMI file
- * per plant and hour: {@code <folder>/<plantId>/<yyyy-MM-dd>T<HH>.xmi}. Driven by {@link #tick()};
+ * per plant and hour: {@code <folder>/<plantId>/<yyyy-MM-dd>T<HH>.xmi}. Driven by {@link #tick};
  * a file that exists is not written again, so a restart in the same hour does nothing twice.
  *
  * @author Mark Hoffmann
@@ -128,6 +131,59 @@ public final class ForecastSnapshots {
 					LOG.log(Level.WARNING, "cannot freeze the forecast of plant " + plant.getId() + ": " + error);
 				}
 			}
+		}
+	}
+
+	/**
+	 * The frozen hours of a local day: from every snapshot of that day and of the evening before,
+	 * oldest first so that a newer snapshot overrides an older one. Empty without snapshots. Used to
+	 * fill the hours of today that the current model runs no longer cover.
+	 */
+	public synchronized Map<Instant, PvHour> frozenHours(Plant plant, LocalDate date) {
+		Map<Instant, PvHour> hours = new TreeMap<>();
+		Path dir = folder.resolve(plant.getId());
+		if (plant.getId() == null || !Files.isDirectory(dir)) {
+			return hours;
+		}
+		String today = date.toString();
+		String yesterday = date.minusDays(1).toString();
+		List<Path> files;
+		try (var listing = Files.list(dir)) {
+			files = listing.filter(f -> f.getFileName().toString().endsWith(".xmi"))
+					.filter(f -> f.getFileName().toString().startsWith(today) || f.getFileName().toString().startsWith(yesterday))
+					.sorted().toList();
+		} catch (IOException e) {
+			LOG.log(Level.WARNING, "cannot list snapshots in " + dir + ": " + e.getMessage());
+			return hours;
+		}
+		for (Path file : files) {
+			try {
+				for (PvHour h : read(file).getHours()) {
+					if (h.getTime() != null) {
+						hours.put(h.getTime().toInstant(), h);
+					}
+				}
+			} catch (IOException | RuntimeException e) {
+				LOG.log(Level.WARNING, "skipping snapshot " + file + ": " + e.getMessage());
+			}
+		}
+		return hours;
+	}
+
+	private PvOutlook read(Path file) throws IOException {
+		ResourceSet rs = resourceSets.get();
+		rs.getPackageRegistry().putIfAbsent(PvPackage.eNS_URI, PvPackage.eINSTANCE);
+		rs.getResourceFactoryRegistry().getExtensionToFactoryMap().putIfAbsent("xmi", new XMIResourceFactoryImpl());
+		Resource resource = rs.createResource(URI.createFileURI(file.toString()));
+		try {
+			resource.load(null);
+			if (resource.getContents().isEmpty() || !(resource.getContents().get(0) instanceof PvOutlook outlook)) {
+				throw new IOException("not a PvOutlook");
+			}
+			resource.getContents().clear();
+			return outlook;
+		} finally {
+			rs.getResources().remove(resource);
 		}
 	}
 

@@ -136,6 +136,7 @@ public class PvForecastComponent implements PvForecast {
 
 	private PlantFolder folder;
 	private MeasurementStore store;
+	private ForecastSnapshots snapshots;
 	private ScheduledExecutorService scheduler;
 	private PlantForecaster forecaster;
 	private ZoneId defaultZone;
@@ -161,9 +162,8 @@ public class PvForecastComponent implements PvForecast {
 			long tick = MeterPoller.MIN_INTERVAL.toMillis();
 			scheduler.scheduleWithFixedDelay(poller::tick, tick, tick, TimeUnit.MILLISECONDS);
 		}
+		snapshots = new ForecastSnapshots(Path.of(config.snapshotsFolder()), snapshotHours, folder::plants, this::zone, this::fresh);
 		if (!snapshotHours.isEmpty()) {
-			ForecastSnapshots snapshots = new ForecastSnapshots(Path.of(config.snapshotsFolder()), snapshotHours, folder::plants,
-					this::zone, this::forecast);
 			scheduler.scheduleWithFixedDelay(() -> snapshots.tick(clock.instant()), 20, 60, TimeUnit.SECONDS);
 		}
 	}
@@ -222,11 +222,21 @@ public class PvForecastComponent implements PvForecast {
 
 	@Override
 	public PvOutlook forecast(String plantId) {
+		return forecast(plantId, true);
+	}
+
+	/** What a snapshot freezes: computed from the current report only, never from older snapshots. */
+	private PvOutlook fresh(String plantId) {
+		return forecast(plantId, false);
+	}
+
+	private PvOutlook forecast(String plantId, boolean fillFromSnapshots) {
 		Plant plant = folder.plant(plantId).orElseThrow(() -> new IllegalArgumentException("No plant profile " + plantId + " in " + folder.folder()));
 		Site site = sites.get(plant.getSiteId()).orElseThrow(() -> new UnknownSiteException(plant.getSiteId()));
 		Instant now = clock.instant();
 		ZoneId zone = zone(site);
-		PvOutlook outlook = forecaster.forecast(plant, site, weather.report(site.getId()), zone, now);
+		Map<Instant, PvHour> frozen = fillFromSnapshots ? snapshots.frozenHours(plant, LocalDate.ofInstant(now, zone)) : Map.of();
+		PvOutlook outlook = forecaster.forecast(plant, site, weather.report(site.getId()), zone, now, frozen);
 		if (plant.getMeter() != null) {
 			store.log(plant.getId(), LocalDate.ofInstant(now, zone)).ifPresent(log -> addMeasured(outlook, log.getMeasurements(), zone, now));
 		}

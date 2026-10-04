@@ -104,7 +104,9 @@ Every plant with a profile gets a tab of its own, reading the remote service `Pv
   (count, orientation, tilt, mounting height; the layout itself is schematic), the obstacles as
   trees standing from the profile's forest edge on, the sun of a chosen minute with real shadows
   (shadow map), the sun's path of the day; a slider runs through the day, the forest turns bare in
-  the leafless season. The line under the picture says it in words — where the sun stands, what hides
+  the leafless season. The sun comes from the clock and the position (NOAA approximation,
+  `solarPosition` in `pv3d.ts`), not from the forecast's hours: the weather no longer covers the
+  morning once the afternoon's model runs are in, the picture must. The line under the picture says it in words — where the sun stands, what hides
   it, what the forecast expects for the hour — so the picture adds shape, not information one could
   only get by looking. The geometry (`pv3d.ts`: sun between the forecast hours, horizon angle,
   beam share, tree positions, module layout) is plain TypeScript and tested. The profile comes from

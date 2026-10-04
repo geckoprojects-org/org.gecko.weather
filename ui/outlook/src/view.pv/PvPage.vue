@@ -179,7 +179,15 @@ function deviation(r: number): string {
 
         <template v-if="profile">
           <h2 class="section-title">Verschattung in 3D</h2>
-          <PvScene :key="profile.id" :profile="profile" :hours="snapshot.hours" :time-zone="timeZone" :now="now" />
+          <PvScene
+            :key="profile.id"
+            :profile="profile"
+            :hours="snapshot.hours"
+            :time-zone="timeZone"
+            :now="now"
+            :latitude="profile.latitude ?? sites.find((s) => s.id === profile!.siteId)?.latitude"
+            :longitude="profile.longitude ?? sites.find((s) => s.id === profile!.siteId)?.longitude"
+          />
         </template>
 
         <h2 class="section-title">Tage</h2>

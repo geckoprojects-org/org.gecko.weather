@@ -4,7 +4,7 @@
  */
 import { describe, expect, it } from 'vitest'
 import type { PlantProfile, PvHourValue } from '../src/contracts.js'
-import { beamShare, direction, ground, horizonAt, layout, leafOff, sunAt, trees } from '../src/view.pv/pv3d.js'
+import { beamShare, direction, ground, horizonAt, layout, leafOff, solarPosition, sunAt, trees } from '../src/view.pv/pv3d.js'
 
 const profile: PlantProfile = {
   id: 'p',
@@ -97,5 +97,35 @@ describe('pv3d geometry', () => {
     const us = modules.map((m) => m.u)
     expect(Math.min(...us)).toBeCloseTo(-Math.max(...us), 5)
     expect(layout([{ name: 'x', peakPower: 0.86 }]).modules).toHaveLength(2)
+  })
+})
+
+describe('solar position', () => {
+  it('puts the midsummer sun at 62° over Dresden at solar noon, due south', () => {
+    // solar noon at 13.74° E on 21 June: about 13:07 CEST = 11:07 UTC
+    const s = solarPosition(51.05, 13.74, Date.parse('2026-06-21T11:07:00Z'))
+    expect(s.elevation).toBeCloseTo(90 - 51.05 + 23.44, 0)
+    expect(Math.abs(s.azimuth - 180)).toBeLessThan(1.5)
+  })
+  it('has the sun below the horizon at midnight and rising in the east', () => {
+    expect(solarPosition(51.05, 13.74, Date.parse('2026-10-04T23:00:00Z')).elevation).toBeLessThan(-30)
+    const morning = solarPosition(51.05, 13.74, Date.parse('2026-10-04T06:00:00Z'))
+    expect(morning.elevation).toBeGreaterThan(0)
+    expect(morning.elevation).toBeLessThan(15)
+    expect(morning.azimuth).toBeGreaterThan(95)
+    expect(morning.azimuth).toBeLessThan(125)
+    const evening = solarPosition(51.05, 13.74, Date.parse('2026-10-04T15:30:00Z'))
+    expect(evening.azimuth).toBeGreaterThan(235)
+    expect(evening.azimuth).toBeLessThan(265)
+  })
+  it('crosses the horizon within a few minutes of the published sunrise and sunset', () => {
+    // DWD/our solar service for a site at about 51 °N, 12.3 °E on 4 Oct 2026: 07:15 / 18:42 CEST
+    const rise = solarPosition(50.9, 12.27, Date.parse('2026-10-04T05:15:00Z')).elevation
+    const set = solarPosition(50.9, 12.27, Date.parse('2026-10-04T16:42:00Z')).elevation
+    // refraction lifts the visible sun by ~0.8° at the horizon; geometric elevation is then about −0.8°
+    expect(rise).toBeGreaterThan(-1.5)
+    expect(rise).toBeLessThan(0.2)
+    expect(set).toBeGreaterThan(-1.5)
+    expect(set).toBeLessThan(0.2)
   })
 })

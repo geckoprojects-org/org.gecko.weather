@@ -5,7 +5,8 @@
  * puts the forest edge, and the sun at a chosen time with real shadows (three.js shadow map). A
  * slider runs through the day, "Abspielen" lets it run. The line under the picture says in words
  * what the picture shows: where the sun stands, whether and by what it is hidden, what the forecast
- * expects for that hour.
+ * expects for that hour. The sun comes from the clock and the position, not from the forecast: the
+ * weather no longer covers the morning once the afternoon's model runs are in.
  */
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
@@ -13,9 +14,10 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { PlantProfile, PvHourValue } from '../contracts.js'
 import { dayLabel, hourLabel, whole } from '../view.weather/weather.js'
 import { kw } from './pv.js'
-import { MODULE, beamShare, direction, ground, horizonAt, layout, leafOff, sunAt, trees } from './pv3d.js'
+import { MODULE, beamShare, direction, ground, horizonAt, layout, leafOff, solarPosition, sunAt, trees } from './pv3d.js'
 
-const props = defineProps<{ profile: PlantProfile; hours: PvHourValue[]; timeZone: string; now: Date }>()
+/** `latitude`/`longitude`: the plant's or its site's position — the sun is computed here, not read from the hours */
+const props = defineProps<{ profile: PlantProfile; hours: PvHourValue[]; timeZone: string; now: Date; latitude?: number; longitude?: number }>()
 
 const RAD = Math.PI / 180
 const MINUTE = 60_000
@@ -39,7 +41,12 @@ const playing = ref(false)
 
 const day = computed(() => days.value[dayIndex.value])
 const instant = computed(() => (day.value ? day.value.start + minute.value * MINUTE : props.now.getTime()))
-const sun = computed(() => sunAt(props.hours, instant.value))
+/** From the clock when the position is known; the forecast's hours only as a fallback */
+function sunFor(t: number): { azimuth: number; elevation: number } | undefined {
+  if (props.latitude !== undefined && props.longitude !== undefined) return solarPosition(props.latitude, props.longitude, t)
+  return sunAt(props.hours, t)
+}
+const sun = computed(() => sunFor(instant.value))
 const share = computed(() => (sun.value && day.value ? beamShare(props.profile, sun.value.azimuth, sun.value.elevation, day.value.date) : 0))
 const blocker = computed(() => (sun.value ? horizonAt(props.profile, sun.value.azimuth) : undefined))
 const hour = computed(() => props.hours.find((h) => h.time.getTime() <= instant.value && instant.value < h.time.getTime() + 3_600_000))
@@ -251,7 +258,7 @@ function buildSunPath(): void {
   if (!day.value) return
   const pts: THREE.Vector3[] = []
   for (let t = day.value.start; t < day.value.start + 24 * 3_600_000; t += 10 * MINUTE) {
-    const s = sunAt(props.hours, t)
+    const s = sunFor(t)
     if (!s || s.elevation <= 0) continue
     const d = direction(s.azimuth, s.elevation)
     pts.push(new THREE.Vector3(d.x * 240, d.y * 240, d.z * 240))

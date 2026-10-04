@@ -17,13 +17,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.time.Instant;
 import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.gecko.weather.pv.model.pv.Plant;
+import org.gecko.weather.pv.model.pv.PvHour;
 import org.gecko.weather.pv.model.pv.PvFactory;
 import org.gecko.weather.pv.model.pv.PvOutlook;
 import org.junit.jupiter.api.Test;
@@ -76,6 +79,31 @@ class ForecastSnapshotsTest {
 		s.tick(Instant.parse("2026-10-05T16:05:00Z"));
 		assertThat(calls).hasValue(4);
 		assertThat(tmp.resolve("a/2026-10-05T18.xmi")).isRegularFile();
+	}
+
+	@Test
+	void frozenHoursOfADayComeFromItsSnapshotsNewerOverOlder() {
+		AtomicInteger issue = new AtomicInteger();
+		ForecastSnapshots s = new ForecastSnapshots(tmp, Set.of(6, 18), () -> List.of(plant("a")), p -> BERLIN, id -> {
+			PvOutlook o = F.createPvOutlook();
+			o.setPlantId(id);
+			int n = issue.incrementAndGet();
+			for (int h = 0; h < 3; h++) {
+				PvHour hour = F.createPvHour();
+				hour.setTime(Date.from(Instant.parse("2026-10-05T0" + (6 + h) + ":00:00Z")));
+				hour.setPower(n); // which snapshot an hour came from
+				hour.setSource("ICON-D2");
+				o.getHours().add(hour);
+			}
+			return o;
+		});
+		s.tick(Instant.parse("2026-10-04T16:05:00Z")); // 18:05 the evening before: issue 1
+		s.tick(Instant.parse("2026-10-05T04:05:00Z")); // 06:05 that morning: issue 2
+		s.tick(Instant.parse("2026-10-06T04:05:00Z")); // the next day, not ours: issue 3
+		var frozen = s.frozenHours(plant("a"), LocalDate.of(2026, 10, 5));
+		assertThat(frozen).hasSize(3);
+		assertThat(frozen.get(Instant.parse("2026-10-05T07:00:00Z")).getPower()).as("the morning snapshot wins").isEqualTo(2.0);
+		assertThat(s.frozenHours(plant("nobody"), LocalDate.of(2026, 10, 5))).isEmpty();
 	}
 
 	@Test
