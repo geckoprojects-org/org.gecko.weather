@@ -39,12 +39,15 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
 import org.gecko.weather.api.spi.FetchException;
 import org.gecko.weather.api.spi.FetchRequest;
 import org.gecko.weather.api.spi.FetchRequest.SiteBindings;
 import org.gecko.weather.api.spi.FetchResult;
+import org.gecko.weather.api.spi.GridField;
+import org.gecko.weather.api.spi.GridFieldListener;
 import org.gecko.weather.api.spi.RegularGridBindingResolver;
 import org.gecko.weather.api.spi.RegularLatLonGrid.Cell;
 import org.gecko.weather.api.spi.SiteBindingResolver;
@@ -179,12 +182,21 @@ public class IconProvider implements WeatherProvider {
 	private final ByteSource source;
 	private final Clock clock;
 	private final SiteBindingResolver resolver;
+	private final GridFieldListener fields;
 
 	public IconProvider(Settings settings, ByteSource source, Clock clock) {
+		this(settings, source, clock, null);
+	}
+
+	/**
+	 * @param fields told about every whole field read, for maps; {@code null} for none
+	 */
+	public IconProvider(Settings settings, ByteSource source, Clock clock, GridFieldListener fields) {
 		this.settings = requireNonNull(settings, "settings");
 		this.source = requireNonNull(source, "source");
 		this.clock = requireNonNull(clock, "clock");
 		this.resolver = new RegularGridBindingResolver(IconD2Grid.GRID, PROVIDER_ID, PRODUCT_ID, clock);
+		this.fields = fields;
 	}
 
 	public Settings settings() {
@@ -274,6 +286,7 @@ public class IconProvider implements WeatherProvider {
 		Map<URI, SourceState.Entity> validators = new LinkedHashMap<>();
 		long transferred = 0;
 		long decoded = 0;
+		announce(l -> l.runStarted(PROVIDER_ID, PRODUCT_ID, run));
 		for (FileRef file : files) {
 			ByteSource.Result result;
 			try {
@@ -296,6 +309,7 @@ public class IconProvider implements WeatherProvider {
 				field = Grib2Reader.read(message, validAt);
 			}
 			verify(file, run, field);
+			handOn(file.parameter(), field);
 			for (Cell cell : cells) {
 				float value = field.valueAt(cell.i(), cell.j());
 				if (!Float.isNaN(value)) {
@@ -305,6 +319,7 @@ public class IconProvider implements WeatherProvider {
 			}
 			validators.put(file.uri(), content.validators());
 		}
+		announce(l -> l.runComplete(PROVIDER_ID, PRODUCT_ID, run));
 		LOG.log(Level.INFO, "[{0}/{1}] run {2}: {3} files, {4} MB transferred, {5} MB decoded, {6} cell(s)", PROVIDER_ID,
 				PRODUCT_ID, run, files.size(), transferred / (1024 * 1024), decoded / (1024 * 1024), cells.size());
 		return Optional.of(new RunData(raw, validators));
@@ -376,6 +391,28 @@ public class IconProvider implements WeatherProvider {
 			out.put(e.getKey(), means);
 		}
 		return out;
+	}
+
+	// --- whole fields for maps ----------------------------------------------------------------
+
+	private void handOn(Parameter parameter, Grib2Field field) {
+		if (fields != null) {
+			GridField whole = new GridField(PROVIDER_ID, PRODUCT_ID, parameter.name(), parameter.unit(), field.referenceTime(),
+					field.validAt(), IconD2Grid.GRID, field.data());
+			announce(l -> l.field(whole));
+		}
+	}
+
+	/** A listener's failure is its own: logged, the fetch goes on. */
+	private void announce(Consumer<GridFieldListener> call) {
+		if (fields == null) {
+			return;
+		}
+		try {
+			call.accept(fields);
+		} catch (RuntimeException e) {
+			LOG.log(Level.WARNING, "[" + PROVIDER_ID + "/" + PRODUCT_ID + "] field listener failed", e);
+		}
 	}
 
 	// --- helpers -----------------------------------------------------------------------------

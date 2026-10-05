@@ -18,5 +18,5 @@
  * read for a site. Nothing here knows a vendor.
  */
 @org.osgi.annotation.bundle.Export
-@org.osgi.annotation.versioning.Version("1.0.0")
+@org.osgi.annotation.versioning.Version("1.1.0")
 package org.gecko.weather.api.spi;
