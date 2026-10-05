@@ -28,5 +28,17 @@
 		"metering": "$[env:WEATHER_PV_METERING;type=Boolean;default=true]",
 		"snapshotsFolder": "$[env:WEATHER_PV_SNAPSHOTS;default=data/weather/pv-forecasts]",
 		"snapshotHours": "$[env:WEATHER_PV_SNAPSHOT_HOURS;default=6,18]"
+	},
+
+	"org.eclipse.fennec.ogc.features.servlet~weather": {
+		"title": "Gecko Weather Karten",
+		"description": "Karten aus den Gitterfeldern des Wetter-Backends: die Bewölkung des neuesten ICON-D2-Laufs in Vierteln, eine Fläche je Band und Stunde. Datenbasis: Deutscher Wetterdienst.",
+		"maxLimit:Integer": 10000,
+		"baseUrl": "$[env:WEATHER_OGC_URL;default=]",
+		"osgi.http.whiteboard.target": "(id=weatherRemoteHttp)"
+	},
+
+	"org.eclipse.fennec.ogc.features.viewer~weather": {
+		"osgi.http.whiteboard.target": "(id=weatherRemoteHttp)"
 	}
 }

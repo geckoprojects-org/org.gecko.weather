@@ -182,3 +182,18 @@ org.eclipse.fennec.services:org.eclipse.fennec.services.rsa.distribution.rest:0.
 org.eclipse.fennec.services:org.eclipse.fennec.services.rsa.discovery.rest:0.1.0-SNAPSHOT
 org.eclipse.fennec.services:org.eclipse.fennec.services.rsa.topology:0.1.0-SNAPSHOT
 org.eclipse.fennec.emf:org.eclipse.fennec.emf.osgi.eobject.registry:1.1.0-SNAPSHOT
+
+# OGC API Features of Fennec (emf.ogc.features, snapshot branch) — the cloud-cover bands of
+# org.gecko.weather.map served as a collection, with its MapLibre viewer; JTS and the ANTLR runtime
+# are what its geometry and CQL2 bundles need.
+org.eclipse.fennec.ogc:org.eclipse.fennec.ogc.features.api:0.1.0-SNAPSHOT
+org.eclipse.fennec.ogc:org.eclipse.fennec.ogc.features.geo:0.1.0-SNAPSHOT
+org.eclipse.fennec.ogc:org.eclipse.fennec.ogc.features.cql2:0.1.0-SNAPSHOT
+org.eclipse.fennec.ogc:org.eclipse.fennec.codec.cql2:0.1.0-SNAPSHOT
+org.eclipse.fennec.ogc:net.opengis.cql2.model:0.1.0-SNAPSHOT
+org.eclipse.fennec.ogc:org.qgis.project.model:0.1.0-SNAPSHOT
+org.eclipse.fennec.ogc:org.eclipse.fennec.ogc.features.source.memory:0.1.0-SNAPSHOT
+org.eclipse.fennec.ogc:org.eclipse.fennec.ogc.features.runtime:0.1.0-SNAPSHOT
+org.eclipse.fennec.ogc:org.eclipse.fennec.ogc.features.viewer:0.1.0-SNAPSHOT
+org.locationtech.jts:jts-core:1.20.0
+org.antlr:antlr4-runtime:4.13.2

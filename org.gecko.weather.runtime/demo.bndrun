@@ -2,6 +2,8 @@
 # as remote services — Remote Service Admin of Fennec Services derives the WeatherOutlook contract, serves it
 # over REST on :9093/weather and announces it to the DDSR broker. The UI under ui/outlook finds it
 # there. Needs a running broker (emf.services, port 8887); see ui/outlook/README.md.
+# On the same Jetty: the cloud cover map of org.gecko.weather.map as OGC API Features
+# (:9093/weather/ogc) with the MapLibre viewer of Fennec OGC Features (:9093/weather/ogc/viewer/).
 #
 #   ./gradlew :org.gecko.weather.runtime:resolve.demo
 #   ./gradlew :org.gecko.weather.runtime:export.demo
@@ -59,7 +61,15 @@ jersey.deps:
 	bnd.identity;id='org.eclipse.fennec.services.provider.rest',\
 	bnd.identity;id='org.apache.felix.http.jetty12',\
 	bnd.identity;id='org.eclipse.parsson.jakarta.json',\
-	bnd.identity;id='org.apache.felix.configadmin.plugin.interpolation'
+	bnd.identity;id='org.apache.felix.configadmin.plugin.interpolation',\
+	bnd.identity;id='org.gecko.weather.map',\
+	bnd.identity;id='org.eclipse.fennec.ogc.features.runtime',\
+	bnd.identity;id='org.eclipse.fennec.ogc.features.viewer',\
+	bnd.identity;id='org.eclipse.fennec.ogc.features.source.memory',\
+	bnd.identity;id='org.eclipse.fennec.ogc.features.cql2',\
+	bnd.identity;id='org.eclipse.fennec.codec.cql2',\
+	bnd.identity;id='org.eclipse.fennec.ogc.features.geo',\
+	bnd.identity;id='org.eclipse.fennec.codec.geojson'
 
 -runblacklist: \
 	bnd.identity;id='org.osgi.service.cm',\
@@ -186,4 +196,18 @@ jersey.deps:
 	tools.jackson.dataformat.jackson-dataformat-yaml;version='[3.2.2,3.2.3)',\
 	org.gecko.weather.pv;version=snapshot,\
 	org.gecko.weather.pv.fronius;version=snapshot,\
-	org.eclipse.fennec.codec;version='[0.1.0,0.1.1)'
+	org.eclipse.fennec.codec;version='[0.1.0,0.1.1)',\
+	net.opengis.cql2.model;version='[0.1.0,0.1.1)',\
+	org.antlr.antlr4-runtime;version='[4.13.2,4.13.3)',\
+	org.eclipse.fennec.codec.cql2;version='[0.1.0,0.1.1)',\
+	org.eclipse.fennec.codec.geojson;version='[0.1.0,0.1.1)',\
+	org.eclipse.fennec.ogc.features.api;version='[0.1.0,0.1.1)',\
+	org.eclipse.fennec.ogc.features.cql2;version='[0.1.0,0.1.1)',\
+	org.eclipse.fennec.ogc.features.geo;version='[0.1.0,0.1.1)',\
+	org.eclipse.fennec.ogc.features.runtime;version='[0.1.0,0.1.1)',\
+	org.eclipse.fennec.ogc.features.source.memory;version='[0.1.0,0.1.1)',\
+	org.eclipse.fennec.ogc.features.viewer;version='[0.1.0,0.1.1)',\
+	org.gecko.weather.map;version=snapshot,\
+	org.geojson.model;version='[0.0.1,0.0.2)',\
+	org.locationtech.jts.jts-core;version='[1.20.0,1.20.1)',\
+	org.qgis.project.model;version='[0.1.0,0.1.1)'
