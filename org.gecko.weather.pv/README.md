@@ -37,13 +37,18 @@ Radiation values are hourly means, so the mean power of an hour in kW is its ene
    it covers (48 h); beyond, MOSMIX global radiation of the rank-0 station, split by **Erbs**.
    Air temperature and wind in the middle of the hour from the same station.
 2. **Sun** in the middle of the hour (NREL SPA through `SolarService`).
-3. **Horizon** (`Horizon`): is the sun behind an obstacle or the horizon line? The hidden share of
-   the sky dome reduces the isotropic diffuse part.
+3. **Horizon** (`Horizon`): is the sun behind an obstacle or the horizon line? Asked for six sun
+   positions in the hour, each weighted by how squarely it shines on the array — the sun going
+   behind a forest at 15:40 costs a third of the hour, not all or nothing. The hidden share of the
+   sky dome reduces the isotropic diffuse part.
 4. **Plane irradiance** per array (`PvPhysics.plane`): beam by the angle of incidence, sky diffuse
    by **Hay–Davies** (circumsolar part follows the beam's shading), ground reflection isotropic.
-5. **Cell temperature** by **Faiman** with coefficients per mounting, **DC power** linear in
-   irradiance with the temperature coefficient and the system losses.
-6. **Inverters**: efficiency and AC ceiling (clipping); arrays without one get 96 % and no ceiling.
+5. **Reflection at the glass** by **Martin and Ruiz** (a_r 0.16): the beam by its angle of
+   incidence, sky and ground light by their diffuse approximations — what reaches the cells. The
+   reported plane irradiance stays what a sensor in the plane would read.
+6. **Cell temperature** by **Faiman** with coefficients per mounting, **DC power** linear in the
+   irradiance reaching the cells with the temperature coefficient and the system losses.
+7. **Inverters**: efficiency and AC ceiling (clipping); arrays without one get 96 % and no ceiling.
 
 Days sum the hours of the calendar day in the site's time zone; `specificYield` is kWh/kWp,
 `hoursCovered` says how many hours had weather, `source` which products fed the day.
@@ -97,3 +102,14 @@ intervals, a failing and an unknown meter, the measured values in the outlook.
 The models are standard and uncalibrated. `systemLosses` and the obstacle heights are the knobs;
 compare a few weeks of forecast with the inverter's measured yields and adjust them, rather than
 the physics.
+
+## Replaying clear days
+
+`ClearDayReplayTest` runs measured weather through the real `PlantForecaster`: hourly direct and
+diffuse radiation, air temperature and wind from CSVs (prepared, e.g., from DWD CDC 10-minute station
+data) stand in for ICON-D2 and the station, the plant comes from a plants folder, the hourly DC and AC
+power is written beside the input. It runs only with `REPLAY_DIR`, `REPLAY_PLANTS`, `REPLAY_PLANT` and
+`REPLAY_SITE_FILE` set — local data, skipped everywhere else. Comparing the result with the plant's
+meter by the sun's azimuth separates orientation and tilt (a trend over the day) from losses (a
+level) and shading (a step behind the obstacles).
+

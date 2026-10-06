@@ -23,4 +23,6 @@ src: src-gen,src
 	org.osgi.service.metatype.annotations;version=latest
 
 -testpath: \
-	assertj-core;version=latest
+	assertj-core;version=latest,\
+	org.gecko.weather.solar;version=snapshot,\
+	solarpositioning-osgi;version=latest
