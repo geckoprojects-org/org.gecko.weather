@@ -8,3 +8,5 @@ bin_test/
 /cnf/cache
 # runtime data of a local launch
 /data/
+# the DDSR broker of emf.services keeps its state in its working directory
+/broker-state.xmi
