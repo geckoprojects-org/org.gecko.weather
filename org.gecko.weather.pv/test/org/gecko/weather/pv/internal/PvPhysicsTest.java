@@ -180,4 +180,33 @@ class PvPhysicsTest {
 		PlaneIrradiance thinned = PvPhysics.plane(400, 100, 15, 180, 10, 225, 0.2, I0, 0.3, 0);
 		assertThat(thinned.beam()).isCloseTo(0.3 * free.beam(), within(1e-9));
 	}
+
+	@Test
+	void theGlassReflectsFlatLight() {
+		assertThat(PvPhysics.incidenceModifier(1)).isCloseTo(1, within(1e-12));
+		assertThat(PvPhysics.incidenceModifier(Math.cos(Math.toRadians(60)))).as("Martin–Ruiz, a_r 0.16").isCloseTo(0.958, within(0.001));
+		assertThat(PvPhysics.incidenceModifier(Math.cos(Math.toRadians(80)))).isCloseTo(0.664, within(0.001));
+		assertThat(PvPhysics.incidenceModifier(0)).isZero();
+		assertThat(PvPhysics.incidenceModifier(-0.2)).as("sun behind the plane").isZero();
+
+		double[] flat = PvPhysics.diffuseModifiers(0);
+		assertThat(flat[0]).as("sky on a flat plane").isCloseTo(0.952, within(0.002));
+		assertThat(flat[1]).as("a flat plane sees no ground").isLessThan(0.01);
+		double[] steep = PvPhysics.diffuseModifiers(60);
+		assertThat(steep[0]).as("the sky part hardly depends on the tilt").isCloseTo(0.957, within(0.002));
+		assertThat(steep[1]).as("ground light comes in steeper the steeper the plane").isCloseTo(0.923, within(0.002));
+		assertThat(PvPhysics.diffuseModifiers(10)[1]).isCloseTo(0.446, within(0.002));
+	}
+
+	@Test
+	void theCellsGetLessThanThePlaneReceives() {
+		PlaneIrradiance p = PvPhysics.plane(500, 100, 40, 180, 35, 180, 0.2, I0, 1, 0);
+		double cos = PvPhysics.cosIncidence(40, 180, 35, 180);
+		double effective = PvPhysics.effective(p, cos, 35);
+		assertThat(effective).isLessThan(p.total()).isGreaterThan(0.95 * p.total());
+		PlaneIrradiance low = PvPhysics.plane(150, 60, 8, 260, 10, 225, 0.2, I0, 1, 0);
+		double cosLow = PvPhysics.cosIncidence(8, 260, 10, 225);
+		assertThat(PvPhysics.effective(low, cosLow, 10) / low.total()).as("evening sun at a grazing angle")
+				.isLessThan(effective / p.total());
+	}
 }

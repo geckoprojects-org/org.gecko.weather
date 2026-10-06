@@ -62,6 +62,8 @@ public final class PlantForecaster {
 	}
 
 	static final Duration HOUR = Duration.ofHours(1);
+	/** Sun positions per hour for the shading: the sun may go behind a forest in the middle of the hour. */
+	static final int SHADING_STEPS = 6;
 	static final double DEFAULT_EFFICIENCY = 0.96;
 
 	private final int hours;
@@ -136,7 +138,12 @@ public final class PlantForecaster {
 			double[] s = sun.at(lat, lon, t.plus(Duration.ofMinutes(30)));
 			Optional<HourWeather> w = weather.hour(t);
 			if (w.isPresent()) {
-				results.put(t, hour(plant, t, s[0], s[1], w.get(), horizon, skyLoss));
+				double[][] steps = new double[SHADING_STEPS][];
+				long minutes = HOUR.toMinutes() / SHADING_STEPS;
+				for (int k = 0; k < SHADING_STEPS; k++) {
+					steps[k] = sun.at(lat, lon, t.plus(Duration.ofMinutes(k * minutes + minutes / 2)));
+				}
+				results.put(t, hour(plant, t, s[0], s[1], steps, w.get(), horizon, skyLoss));
 			} else if (frozen.containsKey(t)) {
 				results.put(t, fromFrozen(frozen.get(t), plant.getArrays().size()));
 			} else if (s[0] <= 0) {
@@ -160,7 +167,8 @@ public final class PlantForecaster {
 		return out;
 	}
 
-	private HourResult hour(Plant plant, Instant t, double elevation, double azimuth, HourWeather w, Horizon horizon, double skyLoss) {
+	private HourResult hour(Plant plant, Instant t, double elevation, double azimuth, double[][] steps, HourWeather w, Horizon horizon,
+			double skyLoss) {
 		int doy = t.atZone(ZoneOffset.UTC).getDayOfYear();
 		double i0 = PvPhysics.extraterrestrial(doy);
 		double direct;
@@ -172,8 +180,19 @@ public final class PlantForecaster {
 			diffuse = PvPhysics.erbsDiffuse(w.global(), elevation, i0);
 			direct = Math.max(0, w.global() - diffuse);
 		}
-		double beamShare = elevation > 0 ? horizon.beamShare(elevation, azimuth, t.atZone(ZoneOffset.UTC).toLocalDate()) : 1;
-		boolean blocked = beamShare < 1;
+		LocalDate date = t.atZone(ZoneOffset.UTC).toLocalDate();
+		double[] shares = new double[steps.length];
+		double sum = 0;
+		for (int k = 0; k < steps.length; k++) {
+			shares[k] = steps[k][0] > 0 ? horizon.beamShare(steps[k][0], steps[k][1], date) : 0;
+			sum += shares[k];
+		}
+		double meanShare = sum / steps.length;
+		// the sun set or rose within the hour is no shade
+		boolean blocked = false;
+		for (int k = 0; k < steps.length; k++) {
+			blocked |= steps[k][0] > 0 && shares[k] < 1;
+		}
 		List<PvArray> arrays = plant.getArrays();
 		double[] arrayDc = new double[arrays.size()];
 		Map<Inverter, Double> perInverter = new LinkedHashMap<>();
@@ -183,10 +202,13 @@ public final class PlantForecaster {
 		double cell = Double.NaN;
 		for (int k = 0; k < arrays.size(); k++) {
 			PvArray a = arrays.get(k);
+			double beamShare = beamShare(shares, steps, a, meanShare);
 			PlaneIrradiance p = PvPhysics.plane(direct, diffuse, elevation, azimuth, a.getTilt(), a.getAzimuth(), plant.getAlbedo(), i0,
 					beamShare, skyLoss);
 			double tc = PvPhysics.cellTemperature(w.airTemperature(), p.total(), w.windSpeed(), heatLoss(a.getMounting()));
-			arrayDc[k] = PvPhysics.dcPower(a.getPeakPower(), p.total(), tc, a.getTemperatureCoefficient(), plant.getSystemLosses());
+			double cosTheta = PvPhysics.cosIncidence(elevation, azimuth, a.getTilt(), a.getAzimuth());
+			arrayDc[k] = PvPhysics.dcPower(a.getPeakPower(), PvPhysics.effective(p, cosTheta, a.getTilt()), tc,
+					a.getTemperatureCoefficient(), plant.getSystemLosses());
 			if (a.getInverter() != null) {
 				perInverter.merge(a.getInverter(), arrayDc[k], Double::sum);
 			} else {
@@ -209,6 +231,26 @@ public final class PlantForecaster {
 			dc += v;
 		}
 		return new HourResult(t, ac, dc, arrayDc, plane, cell, w.global(), elevation, azimuth, blocked, clipped, w.source());
+	}
+
+	/**
+	 * The share of the hour's direct sun that reaches an array: the shares at the sun positions of
+	 * the hour, each weighted by how squarely that position shines on the array — the beam on the
+	 * plane goes with the cosine of incidence. Without any sun on the plane the plain mean.
+	 */
+	static double beamShare(double[] shares, double[][] steps, PvArray array, double meanShare) {
+		double weighted = 0;
+		double weights = 0;
+		for (int k = 0; k < steps.length; k++) {
+			if (steps[k][0] <= 0) {
+				continue;
+			}
+			// the direct normal irradiance taken as constant over the hour
+			double w = Math.max(0, PvPhysics.cosIncidence(steps[k][0], steps[k][1], array.getTilt(), array.getAzimuth()));
+			weighted += shares[k] * w;
+			weights += w;
+		}
+		return weights > 0 ? weighted / weights : meanShare;
 	}
 
 	/** A frozen hour as a result again; what the snapshot did not hold stays NaN or zero. */

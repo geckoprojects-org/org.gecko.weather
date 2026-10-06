@@ -227,6 +227,24 @@ class PlantForecasterTest {
 	}
 
 	@Test
+	void theShadeIsAveragedOverTheHour() {
+		PvArray south = F.createPvArray();
+		south.setTilt(10);
+		south.setAzimuth(180);
+		// the sun of an hour moving from 230° to 250° at 20° elevation, a forest edge at 240°
+		double[][] steps = new double[6][];
+		double[] shares = new double[6];
+		for (int k = 0; k < 6; k++) {
+			steps[k] = new double[] { 20, 230 + k * 4 };
+			shares[k] = steps[k][1] < 240 ? 1 : 0;
+		}
+		double share = PlantForecaster.beamShare(shares, steps, south, 0.5);
+		assertThat(share).as("half of the hour behind the trees, the earlier half shining more squarely").isBetween(0.5, 0.6);
+		assertThat(PlantForecaster.beamShare(new double[6], new double[][] { { -1, 0 }, { -1, 0 }, { -1, 0 }, { -1, 0 }, { -1, 0 },
+				{ -1, 0 } }, south, 0.25)).as("no sun on the plane: the plain mean").isEqualTo(0.25);
+	}
+
+	@Test
 	void withoutReportOnlyTheHead() {
 		PvOutlook o = new PlantForecaster(48, 7, SUN).forecast(plant(), site(), Optional.empty(), UTC, NOW);
 		assertThat(o.getPlantId()).isEqualTo("demo");

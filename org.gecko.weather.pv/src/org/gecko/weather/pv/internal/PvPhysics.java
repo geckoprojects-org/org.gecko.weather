@@ -22,6 +22,8 @@ package org.gecko.weather.pv.internal;
  * Klein, Duffie (1982);</li>
  * <li>transposition onto the plane — beam by the angle of incidence, sky diffuse by Hay and Davies
  * (1980), ground reflection isotropic;</li>
+ * <li>reflection at the module glass — Martin and Ruiz (2001): by the angle of incidence for the
+ * direct sun, by their diffuse approximations for sky and ground light;</li>
  * <li>cell temperature — Faiman (2008), with heat-loss coefficients per mounting;</li>
  * <li>DC power — linear in irradiance with the temperature coefficient of Pmax.</li>
  * </ul>
@@ -36,6 +38,8 @@ public final class PvPhysics {
 	static final double SOLAR_CONSTANT = 1361.0;
 	/** Below this elevation the direct normal irradiance is not divided out — it would explode. */
 	static final double MIN_ELEVATION_FOR_BEAM = 2.0;
+	/** Angular losses coefficient of Martin and Ruiz for a glass front, as for crystalline modules. */
+	static final double ANGULAR_LOSS = 0.16;
 
 	private PvPhysics() {
 	}
@@ -109,6 +113,42 @@ public final class PvPhysics {
 		double circumsolar = beamShare * diffuseHorizontal * anisotropy * rb;
 		double isotropic = diffuseHorizontal * (1 - anisotropy) * isotropicView;
 		return new PlaneIrradiance(beam, circumsolar + isotropic, ground);
+	}
+
+	/**
+	 * Martin and Ruiz: the share of direct light that passes the glass at an angle of incidence,
+	 * relative to normal incidence — 1 head-on, 0.96 at 60°, 0 grazing.
+	 */
+	public static double incidenceModifier(double cosIncidence) {
+		if (cosIncidence <= 0) {
+			return 0;
+		}
+		return (1 - Math.exp(-cosIncidence / ANGULAR_LOSS)) / (1 - Math.exp(-1 / ANGULAR_LOSS));
+	}
+
+	/**
+	 * Martin and Ruiz, diffuse light: the share of isotropic sky and of ground light that passes the
+	 * glass of a plane at a tilt — about 0.95 and, for a flat plane, nothing from the ground.
+	 *
+	 * @return {sky, ground}
+	 */
+	public static double[] diffuseModifiers(double tilt) {
+		double b = Math.toRadians(Math.max(tilt, 0.1));
+		double c1 = 4 / (3 * Math.PI);
+		double c2 = 0.5 * ANGULAR_LOSS - 0.154;
+		double sky = Math.sin(b) + (Math.PI - b - Math.sin(b)) / (1 + Math.cos(b));
+		double ground = Math.sin(b) + (b - Math.sin(b)) / (1 - Math.cos(b));
+		return new double[] { 1 - Math.exp(-(c1 + c2 * sky) * sky / ANGULAR_LOSS),
+				1 - Math.exp(-(c1 + c2 * ground) * ground / ANGULAR_LOSS) };
+	}
+
+	/**
+	 * What of the plane irradiance reaches the cells: each part reduced by the reflection at the
+	 * glass. The plane irradiance itself stays what a sensor in the plane would read.
+	 */
+	public static double effective(PlaneIrradiance plane, double cosIncidence, double tilt) {
+		double[] diffuse = diffuseModifiers(tilt);
+		return plane.beam() * incidenceModifier(cosIncidence) + plane.skyDiffuse() * diffuse[0] + plane.ground() * diffuse[1];
 	}
 
 	/** Faiman heat-loss coefficients U0 (W/m²K) and U1 (W/m³sK) per mounting. */
