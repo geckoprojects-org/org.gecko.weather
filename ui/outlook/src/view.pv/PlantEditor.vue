@@ -6,6 +6,7 @@
  */
 import { computed, reactive, toRaw } from 'vue'
 import type { Mounting, PlantProfile, SiteInfo } from '../contracts.js'
+import PlantPreview from './PlantPreview.vue'
 
 const props = defineProps<{ profile: PlantProfile; sites: SiteInfo[]; isNew?: boolean; busy?: boolean; error?: string }>()
 const emit = defineEmits<{ save: [profile: PlantProfile]; cancel: [] }>()
@@ -21,6 +22,9 @@ const MOUNTINGS: { value: Mounting; label: string }[] = [
 
 const idOk = computed(() => /^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(draft.id))
 const peak = computed(() => draft.arrays.reduce((a, r) => a + (r.peakPower ?? 0), 0))
+// the preview draws what would be saved: emptied number fields are unset, not ''. The copy is read
+// through the reactive proxy — a copy of toRaw(draft) would track nothing and never redraw.
+const preview = computed(() => clean(JSON.parse(JSON.stringify(draft)) as PlantProfile))
 
 function addArray(): void {
   draft.arrays.push({ name: `Fläche ${draft.arrays.length + 1}`, azimuth: 180, tilt: 30, peakPower: 1, moduleCount: undefined, temperatureCoefficient: -0.37, mounting: 'ROOF_MOUNTED', inverter: draft.inverters.length ? 0 : undefined })
@@ -40,8 +44,7 @@ function removeInverter(i: number): void {
 }
 
 /** v-model.number leaves '' for an emptied field; the contract wants undefined */
-function clean(): PlantProfile {
-  const p = structuredClone(toRaw(draft)) as PlantProfile
+function clean(p: PlantProfile = structuredClone(toRaw(draft)) as PlantProfile): PlantProfile {
   const n = (v: unknown) => (v === '' || v === null || (typeof v === 'number' && Number.isNaN(v)) ? undefined : (v as number))
   p.latitude = n(p.latitude)
   p.longitude = n(p.longitude)
@@ -54,6 +57,8 @@ function clean(): PlantProfile {
     a.offsetAcross = n(a.offsetAcross)
     a.offsetDown = n(a.offsetDown)
     a.landscape = a.landscape === true ? true : undefined
+    // a grid without a count says the count
+    if (a.moduleCount === undefined && a.modulesAcross && a.modulesDown) a.moduleCount = a.modulesAcross * a.modulesDown
     a.peakPower = n(a.peakPower)
     a.azimuth = n(a.azimuth)
     a.tilt = n(a.tilt)
@@ -139,6 +144,11 @@ function clean(): PlantProfile {
           </tr>
         </tbody>
       </table>
+    </fieldset>
+
+    <fieldset v-if="draft.arrays.length">
+      <legend>Vorschau</legend>
+      <PlantPreview :profile="preview" />
     </fieldset>
 
     <fieldset>

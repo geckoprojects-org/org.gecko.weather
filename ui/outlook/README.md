@@ -89,6 +89,10 @@ Every plant with a profile gets a tab of its own, reading the remote service `Pv
   profile as the XMI body (the TypeScript client sends an EObject argument that way), the service
   writes `<id>.xmi` into its plants folder and the page reloads. The same form behind "+ Anlage"
   creates a plant. With examples instead of the registry, edits last for the session.
+  A **preview** (`PlantPreview.vue`, geometry in `preview.ts`) beside the form redraws on every
+  input: the arrays from above with north up — the 3D view's layout, to hold against an aerial
+  photo — and a section along the slope with tilt, edge heights and the angle of the horizon the
+  modules face.
 - **Tiles**: the latest meter reading (PV generator), today's expected energy and what was measured
   so far, measured against expected over the complete hours with production, and house load, grid
   and battery from the latest reading. Without a meter the page says so instead of showing empty

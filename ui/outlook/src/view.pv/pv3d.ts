@@ -168,9 +168,10 @@ const GAP = 0.02
 
 /**
  * The modules as the profile lays them out: a grid of modulesAcross × modulesDown, landscape or
- * portrait, centred at the array's offsets. An array without a grid gets the schematic one — rows of
- * two, portrait — and an array without offsets goes beside the previous one with half a metre
- * between. The whole field is centred on the origin.
+ * portrait, centred at the array's offsets. An array without a grid gets the schematic one — two
+ * modules down the slope, as many across as the count needs, landscape if so laid — and an array
+ * without offsets goes beside the previous one with half a metre between. The whole field is
+ * centred on the origin.
  */
 export function layout(arrays: ProfileArray[]): { modules: ModuleRect[]; rects: ArrayRect[]; width: number; depth: number } {
   const modules: ModuleRect[] = []
@@ -181,7 +182,7 @@ export function layout(arrays: ProfileArray[]): { modules: ModuleRect[]; rects: 
     const grid = a.modulesAcross && a.modulesDown
     const down = grid ? a.modulesDown! : 2
     const cols = grid ? a.modulesAcross! : Math.ceil(count / down)
-    const landscape = grid ? a.landscape === true : false
+    const landscape = a.landscape === true
     const across = landscape ? MODULE.length : MODULE.width
     const along = landscape ? MODULE.width : MODULE.length
     const width = cols * (across + GAP) - GAP

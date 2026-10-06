@@ -97,6 +97,9 @@ describe('pv3d geometry', () => {
     const us = modules.map((m) => m.u)
     expect(Math.min(...us)).toBeCloseTo(-Math.max(...us), 5)
     expect(layout([{ name: 'x', peakPower: 0.86 }]).modules).toHaveLength(2)
+    // laid across without a grid: still schematic, but the long side across
+    const across = layout([{ name: 'x', peakPower: 1.72, moduleCount: 4, landscape: true }])
+    expect(across.modules.every((m) => m.across === 1.69 && m.down === 1.046)).toBe(true)
   })
 
   it('lays the modules out as the profile says: grids, landscape, offsets', () => {
