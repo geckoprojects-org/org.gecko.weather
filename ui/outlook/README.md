@@ -101,7 +101,7 @@ Every plant with a profile gets a tab of its own, reading the remote service `Pv
   Hover or keyboard focus on an hour shows expected DC and AC power, the measured mean, irradiance on
   the module and horizontal, cell temperature, sun position, shading and the weather source.
 - **Shading in 3D** (`PvScene.vue`, three.js): the carport with its modules as the profile says
-  (count, orientation, tilt, mounting height; the layout itself is schematic), the obstacles as
+  (count, orientation, tilt, mounting height; the layout from the profile's grid — modules across and down the slope, landscape or portrait, each array at its offsets — or schematic without one), the obstacles as
   trees standing from the profile's forest edge on, the sun of a chosen minute with real shadows
   (shadow map), the sun's path of the day; a slider runs through the day, the forest turns bare in
   the leafless season. The sun comes from the clock and the position (NOAA approximation,

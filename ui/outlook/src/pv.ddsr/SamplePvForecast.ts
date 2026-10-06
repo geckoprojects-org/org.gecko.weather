@@ -83,8 +83,8 @@ export class SamplePvForecast implements PvForecast {
       albedo: 0.2,
       systemLosses: 10,
       arrays: [
-        { name: 'Reihe', azimuth: 225, tilt: 10, peakPower: 2.58, moduleCount: 6, temperatureCoefficient: -0.27, mounting: 'ROOF_MOUNTED', inverter: 0 },
-        { name: 'Block', azimuth: 225, tilt: 10, peakPower: 4.3, moduleCount: 10, temperatureCoefficient: -0.27, mounting: 'ROOF_MOUNTED', inverter: 0 },
+        { name: 'Reihe', azimuth: 225, tilt: 10, peakPower: 2.58, moduleCount: 6, modulesAcross: 1, modulesDown: 6, landscape: true, offsetAcross: -2.95, offsetDown: -0.53, temperatureCoefficient: -0.27, mounting: 'ROOF_MOUNTED', inverter: 0 },
+        { name: 'Block', azimuth: 225, tilt: 10, peakPower: 4.3, moduleCount: 10, modulesAcross: 2, modulesDown: 5, landscape: true, offsetAcross: 0, offsetDown: 0, temperatureCoefficient: -0.27, mounting: 'ROOF_MOUNTED', inverter: 0 },
       ],
       inverters: [{ name: 'Hybrid', efficiency: 0.97 }],
       obstacles: edge.map((d, k) => ({

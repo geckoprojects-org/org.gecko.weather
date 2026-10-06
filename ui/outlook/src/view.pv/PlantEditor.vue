@@ -49,6 +49,11 @@ function clean(): PlantProfile {
   p.systemLosses = n(p.systemLosses)
   for (const a of p.arrays) {
     a.moduleCount = n(a.moduleCount)
+    a.modulesAcross = n(a.modulesAcross)
+    a.modulesDown = n(a.modulesDown)
+    a.offsetAcross = n(a.offsetAcross)
+    a.offsetDown = n(a.offsetDown)
+    a.landscape = a.landscape === true ? true : undefined
     a.peakPower = n(a.peakPower)
     a.azimuth = n(a.azimuth)
     a.tilt = n(a.tilt)
@@ -111,6 +116,29 @@ function clean(): PlantProfile {
         </tbody>
       </table>
       <button type="button" class="btn small" @click="addArray">Fläche hinzufügen</button>
+    </fieldset>
+
+    <fieldset v-if="draft.arrays.length">
+      <legend>Anordnung (nur für die 3D-Ansicht)</legend>
+      <p class="help">Vor den Modulen stehend, den Hang hinauf geschaut: „quer“ zählt die Module nebeneinander, „längs“ die hintereinander in Gefällerichtung. Der Versatz ist die Mitte der Fläche in Metern, nach rechts und hangabwärts. Leer lassen für eine schematische Anordnung.</p>
+      <table class="rows">
+        <thead><tr><th>Fläche</th><th>Module quer</th><th>Module längs</th><th>Verlegung</th><th>Versatz rechts m</th><th>Versatz hangab m</th></tr></thead>
+        <tbody>
+          <tr v-for="(a, i) in draft.arrays" :key="i">
+            <td>{{ a.name }}</td>
+            <td><input v-model.number="a.modulesAcross" type="number" min="1" step="1" class="n" /></td>
+            <td><input v-model.number="a.modulesDown" type="number" min="1" step="1" class="n" /></td>
+            <td>
+              <select v-model="a.landscape">
+                <option :value="undefined">hochkant</option>
+                <option :value="true">quer</option>
+              </select>
+            </td>
+            <td><input v-model.number="a.offsetAcross" type="number" step="0.05" class="n" /></td>
+            <td><input v-model.number="a.offsetDown" type="number" step="0.05" class="n" /></td>
+          </tr>
+        </tbody>
+      </table>
     </fieldset>
 
     <fieldset>

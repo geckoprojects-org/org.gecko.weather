@@ -92,11 +92,31 @@ describe('pv3d geometry', () => {
     const { modules, width, depth } = layout(profile.arrays)
     expect(modules).toHaveLength(16)
     expect(modules.filter((m) => m.array === 0)).toHaveLength(6)
-    expect(depth).toBeCloseTo(2 * 1.71)
-    expect(width).toBeCloseTo(8 * 1.066 + 0.5)
+    expect(depth).toBeCloseTo(2 * 1.71 - 0.02)
+    expect(width).toBeCloseTo(8 * 1.066 - 2 * 0.02 + 0.5)
     const us = modules.map((m) => m.u)
     expect(Math.min(...us)).toBeCloseTo(-Math.max(...us), 5)
     expect(layout([{ name: 'x', peakPower: 0.86 }]).modules).toHaveLength(2)
+  })
+
+  it('lays the modules out as the profile says: grids, landscape, offsets', () => {
+    // the parents' carport: a block of 2 × 5 landscape modules, beside it (left, seen from in front)
+    // a row of 1 × 6 whose lower edge lines up with the block's
+    const { modules, rects, width, depth } = layout([
+      { name: 'Reihe', azimuth: 225, tilt: 6.5, peakPower: 2.58, moduleCount: 6, modulesAcross: 1, modulesDown: 6, landscape: true, offsetAcross: -2.95, offsetDown: -0.53 },
+      { name: 'Block', azimuth: 225, tilt: 6.5, peakPower: 4.3, moduleCount: 10, modulesAcross: 2, modulesDown: 5, landscape: true, offsetAcross: 0, offsetDown: 0 },
+    ])
+    expect(modules).toHaveLength(16)
+    expect(modules.every((m) => m.across === 1.69 && m.down === 1.046)).toBe(true)
+    const [row, block] = rects
+    expect(block.width).toBeCloseTo(2 * 1.69 + 0.02)
+    expect(block.depth).toBeCloseTo(5 * 1.046 + 4 * 0.02)
+    expect(row.depth).toBeCloseTo(6 * 1.046 + 5 * 0.02)
+    expect(row.u).toBeLessThan(block.u)
+    expect(row.v + row.depth / 2).toBeCloseTo(block.v + block.depth / 2, 1)
+    expect(block.u - block.width / 2 - (row.u + row.width / 2)).toBeCloseTo(0.4, 1)
+    expect(width).toBeCloseTo(2.95 + 1.69 / 2 + block.width / 2, 2)
+    expect(depth).toBeCloseTo(row.depth)
   })
 })
 

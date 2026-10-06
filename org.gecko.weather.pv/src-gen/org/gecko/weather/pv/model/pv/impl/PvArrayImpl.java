@@ -41,6 +41,11 @@ import org.gecko.weather.pv.model.pv.PvPackage;
  *   <li>{@link org.gecko.weather.pv.model.pv.impl.PvArrayImpl#getModuleCount <em>Module Count</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.impl.PvArrayImpl#getTemperatureCoefficient <em>Temperature Coefficient</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.impl.PvArrayImpl#getMounting <em>Mounting</em>}</li>
+ *   <li>{@link org.gecko.weather.pv.model.pv.impl.PvArrayImpl#getModulesAcross <em>Modules Across</em>}</li>
+ *   <li>{@link org.gecko.weather.pv.model.pv.impl.PvArrayImpl#getModulesDown <em>Modules Down</em>}</li>
+ *   <li>{@link org.gecko.weather.pv.model.pv.impl.PvArrayImpl#isLandscape <em>Landscape</em>}</li>
+ *   <li>{@link org.gecko.weather.pv.model.pv.impl.PvArrayImpl#getOffsetAcross <em>Offset Across</em>}</li>
+ *   <li>{@link org.gecko.weather.pv.model.pv.impl.PvArrayImpl#getOffsetDown <em>Offset Down</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.impl.PvArrayImpl#getInverter <em>Inverter</em>}</li>
  * </ul>
  *
@@ -195,6 +200,142 @@ public class PvArrayImpl extends MinimalEObjectImpl.Container implements PvArray
 	 * @ordered
 	 */
 	protected Mounting mounting = MOUNTING_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getModulesAcross() <em>Modules Across</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getModulesAcross()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int MODULES_ACROSS_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getModulesAcross() <em>Modules Across</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getModulesAcross()
+	 * @generated
+	 * @ordered
+	 */
+	protected int modulesAcross = MODULES_ACROSS_EDEFAULT;
+
+	/**
+	 * This is true if the Modules Across attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean modulesAcrossESet;
+
+	/**
+	 * The default value of the '{@link #getModulesDown() <em>Modules Down</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getModulesDown()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int MODULES_DOWN_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getModulesDown() <em>Modules Down</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getModulesDown()
+	 * @generated
+	 * @ordered
+	 */
+	protected int modulesDown = MODULES_DOWN_EDEFAULT;
+
+	/**
+	 * This is true if the Modules Down attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean modulesDownESet;
+
+	/**
+	 * The default value of the '{@link #isLandscape() <em>Landscape</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isLandscape()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean LANDSCAPE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isLandscape() <em>Landscape</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isLandscape()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean landscape = LANDSCAPE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getOffsetAcross() <em>Offset Across</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOffsetAcross()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double OFFSET_ACROSS_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getOffsetAcross() <em>Offset Across</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOffsetAcross()
+	 * @generated
+	 * @ordered
+	 */
+	protected double offsetAcross = OFFSET_ACROSS_EDEFAULT;
+
+	/**
+	 * This is true if the Offset Across attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean offsetAcrossESet;
+
+	/**
+	 * The default value of the '{@link #getOffsetDown() <em>Offset Down</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOffsetDown()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double OFFSET_DOWN_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getOffsetDown() <em>Offset Down</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOffsetDown()
+	 * @generated
+	 * @ordered
+	 */
+	protected double offsetDown = OFFSET_DOWN_EDEFAULT;
+
+	/**
+	 * This is true if the Offset Down attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean offsetDownESet;
 
 	/**
 	 * The cached value of the '{@link #getInverter() <em>Inverter</em>}' reference.
@@ -419,6 +560,229 @@ public class PvArrayImpl extends MinimalEObjectImpl.Container implements PvArray
 	 * @generated
 	 */
 	@Override
+	public int getModulesAcross() {
+		return modulesAcross;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setModulesAcross(int newModulesAcross) {
+		int oldModulesAcross = modulesAcross;
+		modulesAcross = newModulesAcross;
+		boolean oldModulesAcrossESet = modulesAcrossESet;
+		modulesAcrossESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PvPackage.PV_ARRAY__MODULES_ACROSS, oldModulesAcross, modulesAcross, !oldModulesAcrossESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetModulesAcross() {
+		int oldModulesAcross = modulesAcross;
+		boolean oldModulesAcrossESet = modulesAcrossESet;
+		modulesAcross = MODULES_ACROSS_EDEFAULT;
+		modulesAcrossESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, PvPackage.PV_ARRAY__MODULES_ACROSS, oldModulesAcross, MODULES_ACROSS_EDEFAULT, oldModulesAcrossESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetModulesAcross() {
+		return modulesAcrossESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getModulesDown() {
+		return modulesDown;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setModulesDown(int newModulesDown) {
+		int oldModulesDown = modulesDown;
+		modulesDown = newModulesDown;
+		boolean oldModulesDownESet = modulesDownESet;
+		modulesDownESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PvPackage.PV_ARRAY__MODULES_DOWN, oldModulesDown, modulesDown, !oldModulesDownESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetModulesDown() {
+		int oldModulesDown = modulesDown;
+		boolean oldModulesDownESet = modulesDownESet;
+		modulesDown = MODULES_DOWN_EDEFAULT;
+		modulesDownESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, PvPackage.PV_ARRAY__MODULES_DOWN, oldModulesDown, MODULES_DOWN_EDEFAULT, oldModulesDownESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetModulesDown() {
+		return modulesDownESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isLandscape() {
+		return landscape;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setLandscape(boolean newLandscape) {
+		boolean oldLandscape = landscape;
+		landscape = newLandscape;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PvPackage.PV_ARRAY__LANDSCAPE, oldLandscape, landscape));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public double getOffsetAcross() {
+		return offsetAcross;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setOffsetAcross(double newOffsetAcross) {
+		double oldOffsetAcross = offsetAcross;
+		offsetAcross = newOffsetAcross;
+		boolean oldOffsetAcrossESet = offsetAcrossESet;
+		offsetAcrossESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PvPackage.PV_ARRAY__OFFSET_ACROSS, oldOffsetAcross, offsetAcross, !oldOffsetAcrossESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetOffsetAcross() {
+		double oldOffsetAcross = offsetAcross;
+		boolean oldOffsetAcrossESet = offsetAcrossESet;
+		offsetAcross = OFFSET_ACROSS_EDEFAULT;
+		offsetAcrossESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, PvPackage.PV_ARRAY__OFFSET_ACROSS, oldOffsetAcross, OFFSET_ACROSS_EDEFAULT, oldOffsetAcrossESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetOffsetAcross() {
+		return offsetAcrossESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public double getOffsetDown() {
+		return offsetDown;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setOffsetDown(double newOffsetDown) {
+		double oldOffsetDown = offsetDown;
+		offsetDown = newOffsetDown;
+		boolean oldOffsetDownESet = offsetDownESet;
+		offsetDownESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PvPackage.PV_ARRAY__OFFSET_DOWN, oldOffsetDown, offsetDown, !oldOffsetDownESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetOffsetDown() {
+		double oldOffsetDown = offsetDown;
+		boolean oldOffsetDownESet = offsetDownESet;
+		offsetDown = OFFSET_DOWN_EDEFAULT;
+		offsetDownESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, PvPackage.PV_ARRAY__OFFSET_DOWN, oldOffsetDown, OFFSET_DOWN_EDEFAULT, oldOffsetDownESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetOffsetDown() {
+		return offsetDownESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Inverter getInverter() {
 		if (inverter != null && inverter.eIsProxy()) {
 			InternalEObject oldInverter = (InternalEObject)inverter;
@@ -475,6 +839,16 @@ public class PvArrayImpl extends MinimalEObjectImpl.Container implements PvArray
 				return getTemperatureCoefficient();
 			case PvPackage.PV_ARRAY__MOUNTING:
 				return getMounting();
+			case PvPackage.PV_ARRAY__MODULES_ACROSS:
+				return getModulesAcross();
+			case PvPackage.PV_ARRAY__MODULES_DOWN:
+				return getModulesDown();
+			case PvPackage.PV_ARRAY__LANDSCAPE:
+				return isLandscape();
+			case PvPackage.PV_ARRAY__OFFSET_ACROSS:
+				return getOffsetAcross();
+			case PvPackage.PV_ARRAY__OFFSET_DOWN:
+				return getOffsetDown();
 			case PvPackage.PV_ARRAY__INVERTER:
 				if (resolve) return getInverter();
 				return basicGetInverter();
@@ -510,6 +884,21 @@ public class PvArrayImpl extends MinimalEObjectImpl.Container implements PvArray
 				return;
 			case PvPackage.PV_ARRAY__MOUNTING:
 				setMounting((Mounting)newValue);
+				return;
+			case PvPackage.PV_ARRAY__MODULES_ACROSS:
+				setModulesAcross((Integer)newValue);
+				return;
+			case PvPackage.PV_ARRAY__MODULES_DOWN:
+				setModulesDown((Integer)newValue);
+				return;
+			case PvPackage.PV_ARRAY__LANDSCAPE:
+				setLandscape((Boolean)newValue);
+				return;
+			case PvPackage.PV_ARRAY__OFFSET_ACROSS:
+				setOffsetAcross((Double)newValue);
+				return;
+			case PvPackage.PV_ARRAY__OFFSET_DOWN:
+				setOffsetDown((Double)newValue);
 				return;
 			case PvPackage.PV_ARRAY__INVERTER:
 				setInverter((Inverter)newValue);
@@ -547,6 +936,21 @@ public class PvArrayImpl extends MinimalEObjectImpl.Container implements PvArray
 			case PvPackage.PV_ARRAY__MOUNTING:
 				setMounting(MOUNTING_EDEFAULT);
 				return;
+			case PvPackage.PV_ARRAY__MODULES_ACROSS:
+				unsetModulesAcross();
+				return;
+			case PvPackage.PV_ARRAY__MODULES_DOWN:
+				unsetModulesDown();
+				return;
+			case PvPackage.PV_ARRAY__LANDSCAPE:
+				setLandscape(LANDSCAPE_EDEFAULT);
+				return;
+			case PvPackage.PV_ARRAY__OFFSET_ACROSS:
+				unsetOffsetAcross();
+				return;
+			case PvPackage.PV_ARRAY__OFFSET_DOWN:
+				unsetOffsetDown();
+				return;
 			case PvPackage.PV_ARRAY__INVERTER:
 				setInverter((Inverter)null);
 				return;
@@ -576,6 +980,16 @@ public class PvArrayImpl extends MinimalEObjectImpl.Container implements PvArray
 				return temperatureCoefficient != TEMPERATURE_COEFFICIENT_EDEFAULT;
 			case PvPackage.PV_ARRAY__MOUNTING:
 				return mounting != MOUNTING_EDEFAULT;
+			case PvPackage.PV_ARRAY__MODULES_ACROSS:
+				return isSetModulesAcross();
+			case PvPackage.PV_ARRAY__MODULES_DOWN:
+				return isSetModulesDown();
+			case PvPackage.PV_ARRAY__LANDSCAPE:
+				return landscape != LANDSCAPE_EDEFAULT;
+			case PvPackage.PV_ARRAY__OFFSET_ACROSS:
+				return isSetOffsetAcross();
+			case PvPackage.PV_ARRAY__OFFSET_DOWN:
+				return isSetOffsetDown();
 			case PvPackage.PV_ARRAY__INVERTER:
 				return inverter != null;
 		}
@@ -606,6 +1020,16 @@ public class PvArrayImpl extends MinimalEObjectImpl.Container implements PvArray
 		result.append(temperatureCoefficient);
 		result.append(", mounting: ");
 		result.append(mounting);
+		result.append(", modulesAcross: ");
+		if (modulesAcrossESet) result.append(modulesAcross); else result.append("<unset>");
+		result.append(", modulesDown: ");
+		if (modulesDownESet) result.append(modulesDown); else result.append("<unset>");
+		result.append(", landscape: ");
+		result.append(landscape);
+		result.append(", offsetAcross: ");
+		if (offsetAcrossESet) result.append(offsetAcross); else result.append("<unset>");
+		result.append(", offsetDown: ");
+		if (offsetDownESet) result.append(offsetDown); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

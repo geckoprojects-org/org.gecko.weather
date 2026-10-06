@@ -14,7 +14,7 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { PlantProfile, PvHourValue } from '../contracts.js'
 import { dayLabel, hourLabel, whole } from '../view.weather/weather.js'
 import { kw } from './pv.js'
-import { MODULE, beamShare, direction, ground, horizonAt, layout, leafOff, solarPosition, sunAt, trees } from './pv3d.js'
+import { beamShare, direction, ground, horizonAt, layout, leafOff, solarPosition, sunAt, trees } from './pv3d.js'
 
 /** `latitude`/`longitude`: the plant's or its site's position — the sun is computed here, not read from the hours */
 const props = defineProps<{ profile: PlantProfile; hours: PvHourValue[]; timeZone: string; now: Date; latitude?: number; longitude?: number }>()
@@ -191,7 +191,7 @@ function build(el: HTMLDivElement): void {
 }
 
 function buildPlant(): void {
-  const { modules, width, depth } = layout(props.profile.arrays)
+  const { modules, rects } = layout(props.profile.arrays)
   const first = props.profile.arrays[0]
   const azimuth = first?.azimuth ?? 180
   const tilt = first?.tilt ?? 0
@@ -205,27 +205,31 @@ function buildPlant(): void {
   const plane = new THREE.Group()
   plane.rotation.x = tilt * RAD
   field.add(plane)
-  const box = new THREE.BoxGeometry(MODULE.width, 0.04, MODULE.length)
+  const boxes = new Map<string, THREE.BoxGeometry>()
   for (const m of modules) {
-    const mesh = new THREE.Mesh(box, panel)
+    const key = `${m.across}x${m.down}`
+    if (!boxes.has(key)) boxes.set(key, new THREE.BoxGeometry(m.across, 0.04, m.down))
+    const mesh = new THREE.Mesh(boxes.get(key)!, panel)
     mesh.position.set(m.u, 0, m.v)
     mesh.castShadow = true
     mesh.receiveShadow = true
     plane.add(mesh)
   }
-  // a frame under the modules and four posts down to the ground
-  const frame = new THREE.Mesh(new THREE.BoxGeometry(width + 0.3, 0.12, depth + 0.3), steel)
-  frame.position.y = -0.1
-  frame.castShadow = true
-  plane.add(frame)
-  for (const [u, v] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
-    const local = new THREE.Vector3((u * (width + 0.1)) / 2, -0.16, (v * (depth + 0.1)) / 2)
-    plane.updateMatrixWorld(true)
-    const world = plane.localToWorld(local.clone())
-    const post = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, world.y, 10), steel)
-    post.position.set(world.x, world.y / 2, world.z)
-    post.castShadow = true
-    scene.add(post)
+  // a frame under each array and four posts down to the ground
+  plane.updateMatrixWorld(true)
+  for (const r of rects) {
+    const frame = new THREE.Mesh(new THREE.BoxGeometry(r.width + 0.3, 0.12, r.depth + 0.3), steel)
+    frame.position.set(r.u, -0.1, r.v)
+    frame.castShadow = true
+    plane.add(frame)
+    for (const [u, v] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
+      const local = new THREE.Vector3(r.u + (u * (r.width + 0.1)) / 2, -0.16, r.v + (v * (r.depth + 0.1)) / 2)
+      const world = plane.localToWorld(local.clone())
+      const post = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, world.y, 10), steel)
+      post.position.set(world.x, world.y / 2, world.z)
+      post.castShadow = true
+      scene.add(post)
+    }
   }
 }
 

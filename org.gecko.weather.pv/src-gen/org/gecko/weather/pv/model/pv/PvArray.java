@@ -37,6 +37,11 @@ import org.osgi.annotation.versioning.ProviderType;
  *   <li>{@link org.gecko.weather.pv.model.pv.PvArray#getModuleCount <em>Module Count</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.PvArray#getTemperatureCoefficient <em>Temperature Coefficient</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.PvArray#getMounting <em>Mounting</em>}</li>
+ *   <li>{@link org.gecko.weather.pv.model.pv.PvArray#getModulesAcross <em>Modules Across</em>}</li>
+ *   <li>{@link org.gecko.weather.pv.model.pv.PvArray#getModulesDown <em>Modules Down</em>}</li>
+ *   <li>{@link org.gecko.weather.pv.model.pv.PvArray#isLandscape <em>Landscape</em>}</li>
+ *   <li>{@link org.gecko.weather.pv.model.pv.PvArray#getOffsetAcross <em>Offset Across</em>}</li>
+ *   <li>{@link org.gecko.weather.pv.model.pv.PvArray#getOffsetDown <em>Offset Down</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.PvArray#getInverter <em>Inverter</em>}</li>
  * </ul>
  *
@@ -242,6 +247,239 @@ public interface PvArray extends EObject {
 	 * @generated
 	 */
 	void setMounting(Mounting value);
+
+	/**
+	 * Returns the value of the '<em><b>Modules Across</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Layout: modules side by side across the slope, along a horizontal line. With modulesDown the array is a grid; without, the 3D view arranges the modules schematically. The forecast does not use the layout.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Modules Across</em>' attribute.
+	 * @see #isSetModulesAcross()
+	 * @see #unsetModulesAcross()
+	 * @see #setModulesAcross(int)
+	 * @see org.gecko.weather.pv.model.pv.PvPackage#getPvArray_ModulesAcross()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	int getModulesAcross();
+
+	/**
+	 * Sets the value of the '{@link org.gecko.weather.pv.model.pv.PvArray#getModulesAcross <em>Modules Across</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Modules Across</em>' attribute.
+	 * @see #isSetModulesAcross()
+	 * @see #unsetModulesAcross()
+	 * @see #getModulesAcross()
+	 * @generated
+	 */
+	void setModulesAcross(int value);
+
+	/**
+	 * Unsets the value of the '{@link org.gecko.weather.pv.model.pv.PvArray#getModulesAcross <em>Modules Across</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetModulesAcross()
+	 * @see #getModulesAcross()
+	 * @see #setModulesAcross(int)
+	 * @generated
+	 */
+	void unsetModulesAcross();
+
+	/**
+	 * Returns whether the value of the '{@link org.gecko.weather.pv.model.pv.PvArray#getModulesAcross <em>Modules Across</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Modules Across</em>' attribute is set.
+	 * @see #unsetModulesAcross()
+	 * @see #getModulesAcross()
+	 * @see #setModulesAcross(int)
+	 * @generated
+	 */
+	boolean isSetModulesAcross();
+
+	/**
+	 * Returns the value of the '<em><b>Modules Down</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Layout: modules one behind the other down the slope.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Modules Down</em>' attribute.
+	 * @see #isSetModulesDown()
+	 * @see #unsetModulesDown()
+	 * @see #setModulesDown(int)
+	 * @see org.gecko.weather.pv.model.pv.PvPackage#getPvArray_ModulesDown()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	int getModulesDown();
+
+	/**
+	 * Sets the value of the '{@link org.gecko.weather.pv.model.pv.PvArray#getModulesDown <em>Modules Down</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Modules Down</em>' attribute.
+	 * @see #isSetModulesDown()
+	 * @see #unsetModulesDown()
+	 * @see #getModulesDown()
+	 * @generated
+	 */
+	void setModulesDown(int value);
+
+	/**
+	 * Unsets the value of the '{@link org.gecko.weather.pv.model.pv.PvArray#getModulesDown <em>Modules Down</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetModulesDown()
+	 * @see #getModulesDown()
+	 * @see #setModulesDown(int)
+	 * @generated
+	 */
+	void unsetModulesDown();
+
+	/**
+	 * Returns whether the value of the '{@link org.gecko.weather.pv.model.pv.PvArray#getModulesDown <em>Modules Down</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Modules Down</em>' attribute is set.
+	 * @see #unsetModulesDown()
+	 * @see #getModulesDown()
+	 * @see #setModulesDown(int)
+	 * @generated
+	 */
+	boolean isSetModulesDown();
+
+	/**
+	 * Returns the value of the '<em><b>Landscape</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Layout: the modules lie across — their long side along the horizontal, across the slope; false is portrait, the long side down the slope.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Landscape</em>' attribute.
+	 * @see #setLandscape(boolean)
+	 * @see org.gecko.weather.pv.model.pv.PvPackage#getPvArray_Landscape()
+	 * @model
+	 * @generated
+	 */
+	boolean isLandscape();
+
+	/**
+	 * Sets the value of the '{@link org.gecko.weather.pv.model.pv.PvArray#isLandscape <em>Landscape</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Landscape</em>' attribute.
+	 * @see #isLandscape()
+	 * @generated
+	 */
+	void setLandscape(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Offset Across</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Layout: the centre of the array across the slope, in m from the plant's reference — positive to the right for someone standing in front of the modules, below them, looking up at them.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Offset Across</em>' attribute.
+	 * @see #isSetOffsetAcross()
+	 * @see #unsetOffsetAcross()
+	 * @see #setOffsetAcross(double)
+	 * @see org.gecko.weather.pv.model.pv.PvPackage#getPvArray_OffsetAcross()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	double getOffsetAcross();
+
+	/**
+	 * Sets the value of the '{@link org.gecko.weather.pv.model.pv.PvArray#getOffsetAcross <em>Offset Across</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Offset Across</em>' attribute.
+	 * @see #isSetOffsetAcross()
+	 * @see #unsetOffsetAcross()
+	 * @see #getOffsetAcross()
+	 * @generated
+	 */
+	void setOffsetAcross(double value);
+
+	/**
+	 * Unsets the value of the '{@link org.gecko.weather.pv.model.pv.PvArray#getOffsetAcross <em>Offset Across</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetOffsetAcross()
+	 * @see #getOffsetAcross()
+	 * @see #setOffsetAcross(double)
+	 * @generated
+	 */
+	void unsetOffsetAcross();
+
+	/**
+	 * Returns whether the value of the '{@link org.gecko.weather.pv.model.pv.PvArray#getOffsetAcross <em>Offset Across</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Offset Across</em>' attribute is set.
+	 * @see #unsetOffsetAcross()
+	 * @see #getOffsetAcross()
+	 * @see #setOffsetAcross(double)
+	 * @generated
+	 */
+	boolean isSetOffsetAcross();
+
+	/**
+	 * Returns the value of the '<em><b>Offset Down</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Layout: the centre of the array along the slope, in m from the plant's reference — positive down the slope. Arrays of one plant share their azimuth and tilt in the 3D view.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Offset Down</em>' attribute.
+	 * @see #isSetOffsetDown()
+	 * @see #unsetOffsetDown()
+	 * @see #setOffsetDown(double)
+	 * @see org.gecko.weather.pv.model.pv.PvPackage#getPvArray_OffsetDown()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	double getOffsetDown();
+
+	/**
+	 * Sets the value of the '{@link org.gecko.weather.pv.model.pv.PvArray#getOffsetDown <em>Offset Down</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Offset Down</em>' attribute.
+	 * @see #isSetOffsetDown()
+	 * @see #unsetOffsetDown()
+	 * @see #getOffsetDown()
+	 * @generated
+	 */
+	void setOffsetDown(double value);
+
+	/**
+	 * Unsets the value of the '{@link org.gecko.weather.pv.model.pv.PvArray#getOffsetDown <em>Offset Down</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetOffsetDown()
+	 * @see #getOffsetDown()
+	 * @see #setOffsetDown(double)
+	 * @generated
+	 */
+	void unsetOffsetDown();
+
+	/**
+	 * Returns whether the value of the '{@link org.gecko.weather.pv.model.pv.PvArray#getOffsetDown <em>Offset Down</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Offset Down</em>' attribute is set.
+	 * @see #unsetOffsetDown()
+	 * @see #getOffsetDown()
+	 * @see #setOffsetDown(double)
+	 * @generated
+	 */
+	boolean isSetOffsetDown();
 
 	/**
 	 * Returns the value of the '<em><b>Inverter</b></em>' reference.

@@ -137,6 +137,11 @@ export function toPlantProfile(o: EObject): PlantProfile {
       return {
         ...toArray(a),
         moduleCount: num(a, 'moduleCount'),
+        modulesAcross: num(a, 'modulesAcross'),
+        modulesDown: num(a, 'modulesDown'),
+        landscape: text(a, 'landscape') === 'true' || undefined,
+        offsetAcross: num(a, 'offsetAcross'),
+        offsetDown: num(a, 'offsetDown'),
         temperatureCoefficient: num(a, 'temperatureCoefficient') ?? -0.37,
         mounting: mounting(a) ?? 'ROOF_MOUNTED',
         inverter: index >= 0 ? index : undefined,
@@ -196,6 +201,11 @@ export function fromPlantProfile(p: PlantProfile): EObject {
     set(o, 'tilt', a.tilt)
     set(o, 'peakPower', a.peakPower)
     set(o, 'moduleCount', a.moduleCount)
+    set(o, 'modulesAcross', a.modulesAcross)
+    set(o, 'modulesDown', a.modulesDown)
+    set(o, 'landscape', a.landscape ? true : undefined)
+    set(o, 'offsetAcross', a.offsetAcross)
+    set(o, 'offsetDown', a.offsetDown)
     set(o, 'temperatureCoefficient', a.temperatureCoefficient)
     if (a.mounting) set(o, 'mounting', mountingEnum.getEEnumLiteral(a.mounting) ?? a.mounting)
     if (a.inverter !== undefined && inverters[a.inverter]) set(o, 'inverter', inverters[a.inverter])

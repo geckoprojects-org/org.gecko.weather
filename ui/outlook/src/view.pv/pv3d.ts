@@ -147,38 +147,73 @@ export const MODULE = { width: 1.046, length: 1.69 }
 export interface ModuleRect {
   /** index of the array */
   array: number
-  /** centre in the array's own plane coordinates: u along the row, v down the slope */
+  /** centre in the plane of the modules: u across the slope (right, seen from in front), v down the slope */
   u: number
   v: number
+  /** footprint, m: across the slope and down the slope */
+  across: number
+  down: number
 }
 
+/** An array's outline in the same coordinates, for its frame */
+export interface ArrayRect {
+  array: number
+  u: number
+  v: number
+  width: number
+  depth: number
+}
+
+const GAP = 0.02
+
 /**
- * The modules in rows of two, portrait, arrays side by side along the row with half a metre
- * between them — a schematic: the profile has the count, not the layout.
+ * The modules as the profile lays them out: a grid of modulesAcross × modulesDown, landscape or
+ * portrait, centred at the array's offsets. An array without a grid gets the schematic one — rows of
+ * two, portrait — and an array without offsets goes beside the previous one with half a metre
+ * between. The whole field is centred on the origin.
  */
-export function layout(arrays: ProfileArray[]): { modules: ModuleRect[]; width: number; depth: number } {
-  const rows = 2
-  const gap = 0.5
+export function layout(arrays: ProfileArray[]): { modules: ModuleRect[]; rects: ArrayRect[]; width: number; depth: number } {
   const modules: ModuleRect[] = []
-  let u0 = 0
+  const rects: ArrayRect[] = []
+  let next = 0
   arrays.forEach((a, i) => {
     const count = a.moduleCount ?? Math.max(1, Math.round((a.peakPower ?? 0.43) / 0.43))
-    const cols = Math.ceil(count / rows)
-    for (let k = 0; k < count; k++) {
-      const c = Math.floor(k / rows)
-      const r = k % rows
-      modules.push({ array: i, u: u0 + (c + 0.5) * (MODULE.width + 0.02), v: (r + 0.5) * (MODULE.length + 0.02) })
+    const grid = a.modulesAcross && a.modulesDown
+    const down = grid ? a.modulesDown! : 2
+    const cols = grid ? a.modulesAcross! : Math.ceil(count / down)
+    const landscape = grid ? a.landscape === true : false
+    const across = landscape ? MODULE.length : MODULE.width
+    const along = landscape ? MODULE.width : MODULE.length
+    const width = cols * (across + GAP) - GAP
+    const depth = down * (along + GAP) - GAP
+    const placed = a.offsetAcross !== undefined && a.offsetDown !== undefined
+    const cu = placed ? a.offsetAcross! : next + width / 2
+    const cv = placed ? a.offsetDown! : 0
+    if (!placed) next += width + 0.5
+    const n = grid ? cols * down : count
+    for (let k = 0; k < n; k++) {
+      const c = grid ? k % cols : Math.floor(k / down)
+      const r = grid ? Math.floor(k / cols) : k % down
+      modules.push({ array: i, u: cu - width / 2 + c * (across + GAP) + across / 2, v: cv - depth / 2 + r * (along + GAP) + along / 2, across, down: along })
     }
-    u0 += cols * (MODULE.width + 0.02) + gap
+    rects.push({ array: i, u: cu, v: cv, width, depth })
   })
-  const width = Math.max(0, u0 - gap)
-  const depth = rows * (MODULE.length + 0.02)
-  // centre the field on the origin
+  if (rects.length === 0) return { modules, rects, width: 0, depth: 0 }
+  const minU = Math.min(...rects.map((r) => r.u - r.width / 2))
+  const maxU = Math.max(...rects.map((r) => r.u + r.width / 2))
+  const minV = Math.min(...rects.map((r) => r.v - r.depth / 2))
+  const maxV = Math.max(...rects.map((r) => r.v + r.depth / 2))
+  const du = (minU + maxU) / 2
+  const dv = (minV + maxV) / 2
   for (const m of modules) {
-    m.u -= width / 2
-    m.v -= depth / 2
+    m.u -= du
+    m.v -= dv
   }
-  return { modules, width, depth }
+  for (const r of rects) {
+    r.u -= du
+    r.v -= dv
+  }
+  return { modules, rects, width: maxU - minU, depth: maxV - minV }
 }
 
 /**

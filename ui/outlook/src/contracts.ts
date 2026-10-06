@@ -206,6 +206,16 @@ export type Mounting = 'ROOF_MOUNTED' | 'ROOF_INTEGRATED' | 'OPEN_RACK'
 /** One orientation of modules, as the profile has it */
 export interface ProfileArray extends ArrayInfo {
   moduleCount?: number
+  /** layout, for the 3D view only: modules side by side across the slope … */
+  modulesAcross?: number
+  /** … and one behind the other down the slope; without both the view lays them out schematically */
+  modulesDown?: number
+  /** the modules lie across: long side along the horizontal */
+  landscape?: boolean
+  /** m, centre of the array across the slope — positive to the right, seen from in front, looking up */
+  offsetAcross?: number
+  /** m, centre of the array along the slope — positive down the slope */
+  offsetDown?: number
   /** %/K of Pmax, e.g. −0.37 */
   temperatureCoefficient?: number
   mounting?: Mounting

@@ -437,8 +437,58 @@ public class PvPackageImpl extends EPackageImpl implements PvPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getPvArray_ModulesAcross() {
+		return (EAttribute)pvArrayEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPvArray_ModulesDown() {
+		return (EAttribute)pvArrayEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPvArray_Landscape() {
+		return (EAttribute)pvArrayEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPvArray_OffsetAcross() {
+		return (EAttribute)pvArrayEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPvArray_OffsetDown() {
+		return (EAttribute)pvArrayEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EReference getPvArray_Inverter() {
-		return (EReference)pvArrayEClass.getEStructuralFeatures().get(7);
+		return (EReference)pvArrayEClass.getEStructuralFeatures().get(12);
 	}
 
 	/**
@@ -1293,6 +1343,11 @@ public class PvPackageImpl extends EPackageImpl implements PvPackage {
 		createEAttribute(pvArrayEClass, PV_ARRAY__MODULE_COUNT);
 		createEAttribute(pvArrayEClass, PV_ARRAY__TEMPERATURE_COEFFICIENT);
 		createEAttribute(pvArrayEClass, PV_ARRAY__MOUNTING);
+		createEAttribute(pvArrayEClass, PV_ARRAY__MODULES_ACROSS);
+		createEAttribute(pvArrayEClass, PV_ARRAY__MODULES_DOWN);
+		createEAttribute(pvArrayEClass, PV_ARRAY__LANDSCAPE);
+		createEAttribute(pvArrayEClass, PV_ARRAY__OFFSET_ACROSS);
+		createEAttribute(pvArrayEClass, PV_ARRAY__OFFSET_DOWN);
 		createEReference(pvArrayEClass, PV_ARRAY__INVERTER);
 
 		inverterEClass = createEClass(INVERTER);
@@ -1443,6 +1498,11 @@ public class PvPackageImpl extends EPackageImpl implements PvPackage {
 		initEAttribute(getPvArray_ModuleCount(), ecorePackage.getEInt(), "moduleCount", null, 0, 1, PvArray.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPvArray_TemperatureCoefficient(), ecorePackage.getEDouble(), "temperatureCoefficient", "-0.37", 0, 1, PvArray.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPvArray_Mounting(), this.getMounting(), "mounting", null, 0, 1, PvArray.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPvArray_ModulesAcross(), ecorePackage.getEInt(), "modulesAcross", null, 0, 1, PvArray.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPvArray_ModulesDown(), ecorePackage.getEInt(), "modulesDown", null, 0, 1, PvArray.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPvArray_Landscape(), ecorePackage.getEBoolean(), "landscape", null, 0, 1, PvArray.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPvArray_OffsetAcross(), ecorePackage.getEDouble(), "offsetAcross", null, 0, 1, PvArray.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPvArray_OffsetDown(), ecorePackage.getEDouble(), "offsetDown", null, 0, 1, PvArray.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPvArray_Inverter(), this.getInverter(), null, "inverter", null, 0, 1, PvArray.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(inverterEClass, Inverter.class, "Inverter", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

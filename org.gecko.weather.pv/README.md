@@ -14,7 +14,7 @@ One `pv:Plant` XMI file per plant in the plants folder (`plantsFolder`, default
 | Element | What |
 | --- | --- |
 | `Plant` | `id`, `name`, `siteId` (the weather site feeding it — register one at the plant first), optional own `latitude`/`longitude`, `mountingHeight` (m, for obstacle angles), `albedo` (0.2), `systemLosses` (% for wiring, soiling, mismatch, ageing; 10) |
-| `PvArray` | one orientation: `azimuth` (180 = south), `tilt`, `peakPower` kWp, `moduleCount`, `temperatureCoefficient` (%/K of Pmax, data sheet), `mounting` (`ROOF_MOUNTED`, `ROOF_INTEGRATED`, `OPEN_RACK`), `inverter` |
+| `PvArray` | one orientation: `azimuth` (180 = south), `tilt`, `peakPower` kWp, `moduleCount`, `temperatureCoefficient` (%/K of Pmax, data sheet), `mounting` (`ROOF_MOUNTED`, `ROOF_INTEGRATED`, `OPEN_RACK`), `inverter`; for the 3D view only, the layout: `modulesAcross` × `modulesDown` (side by side across the slope × one behind the other down it), `landscape` (long side across), `offsetAcross`/`offsetDown` (m, the array's centre — to the right seen from in front, looking up, and down the slope) |
 | `Inverter` | `acPower` kW (output above it is clipped), `efficiency` (0.96) |
 | `Obstacle` | a forest, a house: `azimuthFrom`/`azimuthTo` (may cross north), `distance`, `height` — its top appears under atan((height − mountingHeight) / distance); `leafOffTransmittance` (0) is the share of direct sun a deciduous obstacle lets through while leafless, 15 November to 30 April — about 0.3 for a bare oak or beech edge |
 | `HorizonPoint` | a measured horizon line, interpolated; the higher of horizon and obstacles wins |

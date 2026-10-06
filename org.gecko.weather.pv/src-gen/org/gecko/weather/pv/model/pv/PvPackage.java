@@ -43,7 +43,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * @generated
  */
 @ProviderType
-@EPackage(uri = PvPackage.eNS_URI, fingerprint = "fp1:b3852456db39076955c5449f38d346c0ce42e2059ab69a0b20f6ea710d94c800", genModel = "/model/pv.genmodel", genModelSourceLocations = {"model/pv.genmodel","org.gecko.weather.pv/model/pv.genmodel"}, ecore = "/model/pv.ecore", ecoreSourceLocations = "/model/pv.ecore")
+@EPackage(uri = PvPackage.eNS_URI, fingerprint = "fp1:4225cafebddc01a493cd19dd735075a273d7871c565181862193e15fc4fcd1f0", genModel = "/model/pv.genmodel", genModelSourceLocations = {"model/pv.genmodel","org.gecko.weather.pv/model/pv.genmodel"}, ecore = "/model/pv.ecore", ecoreSourceLocations = "/model/pv.ecore")
 public interface PvPackage extends org.eclipse.emf.ecore.EPackage {
 	/**
 	 * The package name.
@@ -296,13 +296,58 @@ public interface PvPackage extends org.eclipse.emf.ecore.EPackage {
 	int PV_ARRAY__MOUNTING = 6;
 
 	/**
+	 * The feature id for the '<em><b>Modules Across</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PV_ARRAY__MODULES_ACROSS = 7;
+
+	/**
+	 * The feature id for the '<em><b>Modules Down</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PV_ARRAY__MODULES_DOWN = 8;
+
+	/**
+	 * The feature id for the '<em><b>Landscape</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PV_ARRAY__LANDSCAPE = 9;
+
+	/**
+	 * The feature id for the '<em><b>Offset Across</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PV_ARRAY__OFFSET_ACROSS = 10;
+
+	/**
+	 * The feature id for the '<em><b>Offset Down</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PV_ARRAY__OFFSET_DOWN = 11;
+
+	/**
 	 * The feature id for the '<em><b>Inverter</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PV_ARRAY__INVERTER = 7;
+	int PV_ARRAY__INVERTER = 12;
 
 	/**
 	 * The number of structural features of the '<em>Array</em>' class.
@@ -311,7 +356,7 @@ public interface PvPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PV_ARRAY_FEATURE_COUNT = 8;
+	int PV_ARRAY_FEATURE_COUNT = 13;
 
 	/**
 	 * The number of operations of the '<em>Array</em>' class.
@@ -1513,6 +1558,61 @@ public interface PvPackage extends org.eclipse.emf.ecore.EPackage {
 	EAttribute getPvArray_Mounting();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.pv.model.pv.PvArray#getModulesAcross <em>Modules Across</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Modules Across</em>'.
+	 * @see org.gecko.weather.pv.model.pv.PvArray#getModulesAcross()
+	 * @see #getPvArray()
+	 * @generated
+	 */
+	EAttribute getPvArray_ModulesAcross();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.pv.model.pv.PvArray#getModulesDown <em>Modules Down</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Modules Down</em>'.
+	 * @see org.gecko.weather.pv.model.pv.PvArray#getModulesDown()
+	 * @see #getPvArray()
+	 * @generated
+	 */
+	EAttribute getPvArray_ModulesDown();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.pv.model.pv.PvArray#isLandscape <em>Landscape</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Landscape</em>'.
+	 * @see org.gecko.weather.pv.model.pv.PvArray#isLandscape()
+	 * @see #getPvArray()
+	 * @generated
+	 */
+	EAttribute getPvArray_Landscape();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.pv.model.pv.PvArray#getOffsetAcross <em>Offset Across</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Offset Across</em>'.
+	 * @see org.gecko.weather.pv.model.pv.PvArray#getOffsetAcross()
+	 * @see #getPvArray()
+	 * @generated
+	 */
+	EAttribute getPvArray_OffsetAcross();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.pv.model.pv.PvArray#getOffsetDown <em>Offset Down</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Offset Down</em>'.
+	 * @see org.gecko.weather.pv.model.pv.PvArray#getOffsetDown()
+	 * @see #getPvArray()
+	 * @generated
+	 */
+	EAttribute getPvArray_OffsetDown();
+
+	/**
 	 * Returns the meta object for the reference '{@link org.gecko.weather.pv.model.pv.PvArray#getInverter <em>Inverter</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2592,6 +2692,46 @@ public interface PvPackage extends org.eclipse.emf.ecore.EPackage {
 		 * @generated
 		 */
 		EAttribute PV_ARRAY__MOUNTING = eINSTANCE.getPvArray_Mounting();
+
+		/**
+		 * The meta object literal for the '<em><b>Modules Across</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PV_ARRAY__MODULES_ACROSS = eINSTANCE.getPvArray_ModulesAcross();
+
+		/**
+		 * The meta object literal for the '<em><b>Modules Down</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PV_ARRAY__MODULES_DOWN = eINSTANCE.getPvArray_ModulesDown();
+
+		/**
+		 * The meta object literal for the '<em><b>Landscape</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PV_ARRAY__LANDSCAPE = eINSTANCE.getPvArray_Landscape();
+
+		/**
+		 * The meta object literal for the '<em><b>Offset Across</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PV_ARRAY__OFFSET_ACROSS = eINSTANCE.getPvArray_OffsetAcross();
+
+		/**
+		 * The meta object literal for the '<em><b>Offset Down</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PV_ARRAY__OFFSET_DOWN = eINSTANCE.getPvArray_OffsetDown();
 
 		/**
 		 * The meta object literal for the '<em><b>Inverter</b></em>' reference feature.
