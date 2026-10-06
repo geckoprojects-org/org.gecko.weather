@@ -28,8 +28,8 @@ public @interface CloudMapConfig {
 	@AttributeDefinition(description = "Folder of the run files, relative to the working directory")
 	String folder() default "data/weather/maps";
 
-	@AttributeDefinition(description = "Ascending band limits in %")
-	String breaks() default "0,25,50,75,100";
+	@AttributeDefinition(description = "Ascending band limits in %; below the first there is no band (open sky)")
+	String breaks() default "25,50,75,100";
 
 	@AttributeDefinition(description = "Source cells per map cell along each axis (3: ICON-D2's 0.02° to 0.06°)")
 	int factor() default 3;

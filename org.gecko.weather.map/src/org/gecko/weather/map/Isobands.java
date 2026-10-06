@@ -89,9 +89,12 @@ public final class Isobands {
 			}
 		}
 
-		/** Cloud cover in quarters, ICON-D2's 0.02° coarsened to 0.06°. */
+		/**
+		 * Cloud cover from a quarter up, in quarters, ICON-D2's 0.02° coarsened to 0.06°. The nearly
+		 * clear sky is no band: a map of clouds leaves it open, so the ground shows through.
+		 */
 		public static Settings cloudCover() {
-			return new Settings(new double[] { 0, 25, 50, 75, 100 }, 3, 1.0, 8);
+			return new Settings(new double[] { 25, 50, 75, 100 }, 3, 1.0, 8);
 		}
 	}
 

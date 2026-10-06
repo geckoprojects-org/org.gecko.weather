@@ -77,8 +77,8 @@ class CloudMapTest {
 	@Test
 	void aFieldBecomesOneFeaturePerBand() {
 		List<CloudBand> bands = CloudBands.of(field, Isobands.Settings.cloudCover(), "Datenbasis: Deutscher Wetterdienst");
-		assertThat(bands).hasSize(4);
-		CloudBand overcast = bands.get(3);
+		assertThat(bands).extracting(CloudBand::getLower).containsExactly(25.0, 50.0, 75.0);
+		CloudBand overcast = bands.get(2);
 		assertThat(overcast.getId()).isEqualTo("clct-2026100300-20261003T0300Z-75");
 		assertThat(overcast.getName()).isEqualTo("Bewölkung 75–100 %");
 		assertThat(overcast.getLeadHours()).isEqualTo(3);
@@ -100,8 +100,8 @@ class CloudMapTest {
 		List<CloudBand> read = files.readNewest(new GeoJsonFeatureImporter(new GeoJsonText(geojson), CloudmapPackage.eINSTANCE, null))
 				.orElseThrow();
 		assertThat(read).extracting(CloudBand::getId).containsExactlyElementsOf(bands.stream().map(CloudBand::getId).toList());
-		CloudBand a = bands.get(2);
-		CloudBand b = read.get(2);
+		CloudBand a = bands.get(1);
+		CloudBand b = read.get(1);
 		assertThat(b.getValidTime()).isEqualTo(a.getValidTime());
 		assertThat(b.getRun()).isEqualTo(a.getRun());
 		assertThat(b.getLower()).isEqualTo(a.getLower());
@@ -130,12 +130,12 @@ class CloudMapTest {
 		map.field(field);
 		assertThat(map.query(FeatureQuery.builder(collection).build()).features()).as("not before the run is complete").isEmpty();
 		map.runComplete("dwd", "ICON-D2", field.run());
-		assertThat(map.query(FeatureQuery.builder(collection).build()).features()).hasSize(4);
+		assertThat(map.query(FeatureQuery.builder(collection).build()).features()).hasSize(3);
 		assertThat(map.extent(collection)).isPresent();
 
 		CloudMapComponent restarted = new CloudMapComponent(config(folder), geojson, null, AT_FIVE);
-		assertThat(restarted.query(FeatureQuery.builder(collection).build()).features()).hasSize(4);
-		assertThat(restarted.get(collection, "clct-2026100300-20261003T0300Z-0")).isPresent();
+		assertThat(restarted.query(FeatureQuery.builder(collection).build()).features()).hasSize(3);
+		assertThat(restarted.get(collection, "clct-2026100300-20261003T0300Z-25")).isPresent();
 	}
 
 	@Test
@@ -159,7 +159,7 @@ class CloudMapTest {
 		map.field(field);
 		map.field(later);
 		map.runComplete("dwd", "ICON-D2", field.run());
-		assertThat(map.query(FeatureQuery.builder(collection).build()).features()).hasSize(4)
+		assertThat(map.query(FeatureQuery.builder(collection).build()).features()).hasSize(3)
 				.allSatisfy(f -> assertThat(((CloudBand) f).getValidTime().toInstant()).isEqualTo(field.validAt()));
 
 		CloudMapComponent early = new CloudMapComponent(config(folder), geojson, null,
@@ -186,7 +186,7 @@ class CloudMapTest {
 	}
 
 	private static Isobands.Settings settings() {
-		return new Isobands.Settings(new double[] { 0, 25, 50, 75, 100 }, 3, 1.0, 8);
+		return Isobands.Settings.cloudCover();
 	}
 
 	private static CloudMapConfig config(Path folder) {
@@ -203,7 +203,7 @@ class CloudMapTest {
 
 			@Override
 			public String breaks() {
-				return "0,25,50,75,100";
+				return "25,50,75,100";
 			}
 
 			@Override

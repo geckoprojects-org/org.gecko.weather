@@ -106,7 +106,9 @@ public class CloudMapComponent implements GridFieldListener, FeatureSource {
 		try {
 			Optional<List<CloudBand>> stored = files
 					.readNewest(new GeoJsonFeatureImporter(new GeoJsonText(geojson), CloudmapPackage.eINSTANCE, null));
-			stored.ifPresent(bands -> {
+			// a run written under other breaks keeps only the bands the configuration still has
+			double first = settings.breaks()[0];
+			stored.map(bands -> bands.stream().filter(b -> b.getLower() >= first).toList()).ifPresent(bands -> {
 				current = List.copyOf(bands);
 				LOG.log(Level.INFO, "[map] {0} cloud bands of the last run read from {1}", bands.size(), config.folder());
 			});

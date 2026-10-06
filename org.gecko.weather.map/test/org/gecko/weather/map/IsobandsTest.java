@@ -141,7 +141,7 @@ class IsobandsTest {
 
 	/** The recorded field: total cloud cover, run 2026-10-03 00 UTC, +3 h. */
 	@Test
-	void theRecordedCloudFieldMakesFourBandsOfModestSize() throws IOException {
+	void theRecordedCloudFieldMakesThreeBandsOfModestSize() throws IOException {
 		Path file = Path.of("..", "org.gecko.weather.provider.dwd.icon", "test", "fixtures",
 				"icon-d2_germany_regular-lat-lon_single-level_2026100300_003_2d_clct.grib2.bz2");
 		Grib2Field field;
@@ -152,12 +152,12 @@ class IsobandsTest {
 		long t0 = System.nanoTime();
 		List<Band> bands = Isobands.of(grid, field.data(), Settings.cloudCover());
 		long ms = (System.nanoTime() - t0) / 1_000_000;
-		assertThat(bands).hasSize(4);
+		assertThat(bands).hasSize(3);
 		int points = bands.stream().mapToInt(Band::pointCount).sum();
 		System.out.printf("clct +3h: %d ms, %s polygons, %d points (%s)%n", ms,
 				Arrays.toString(bands.stream().mapToInt(b -> b.polygons().size()).toArray()), points,
 				Arrays.toString(bands.stream().mapToInt(Band::pointCount).toArray()));
-		assertThat(bands.get(3).polygons()).isNotEmpty();
+		assertThat(bands.get(2).polygons()).isNotEmpty();
 		assertThat(points).isLessThan(200_000);
 		assertThat(field.validAt()).isEqualTo(Instant.parse("2026-10-03T03:00:00Z"));
 	}

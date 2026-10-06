@@ -47,10 +47,12 @@ public final class CloudBands {
 			.withZone(ZoneOffset.UTC);
 
 	/**
-	 * Light yellow for the nearly clear sky, then three steps of blue-grey — sunny to overcast,
-	 * lighter means more sun. The viewer of emf.ogc.features fills with a feature's color.
+	 * Three steps of blue-grey by the band's lower limit — broken, mostly cloudy, overcast; darker
+	 * means less sun. The viewer of emf.ogc.features fills with a feature's color.
 	 */
-	static final String[] COLORS = { "#fff3c4", "#cfd8dc", "#90a4ae", "#546e7a" };
+	static String color(double lower) {
+		return lower >= 75 ? "#546e7a" : lower >= 50 ? "#90a4ae" : "#cfd8dc";
+	}
 
 	private CloudBands() {
 	}
@@ -59,10 +61,9 @@ public final class CloudBands {
 		requireNonNull(field, "field");
 		List<Band> bands = Isobands.of(field.grid(), field.data(), settings);
 		List<CloudBand> out = new ArrayList<>();
-		for (int k = 0; k < bands.size(); k++) {
-			Band band = bands.get(k);
+		for (Band band : bands) {
 			if (!band.polygons().isEmpty()) {
-				out.add(feature(field, band, COLORS[Math.min(k, COLORS.length - 1)], attribution));
+				out.add(feature(field, band, color(band.lower()), attribution));
 			}
 		}
 		return out;
