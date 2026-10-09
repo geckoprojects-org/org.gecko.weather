@@ -16,7 +16,7 @@ One `pv:Plant` XMI file per plant in the plants folder (`plantsFolder`, default
 | `Plant` | `id`, `name`, `siteId` (the weather site feeding it — register one at the plant first), optional own `latitude`/`longitude`, `mountingHeight` (m, for obstacle angles), `albedo` (0.2), `systemLosses` (% for wiring, soiling, mismatch, ageing; 10) |
 | `PvArray` | one orientation: `azimuth` (180 = south), `tilt`, `peakPower` kWp, `moduleCount`, `temperatureCoefficient` (%/K of Pmax, data sheet), `mounting` (`ROOF_MOUNTED`, `ROOF_INTEGRATED`, `OPEN_RACK`), `inverter`; for the 3D view only, the layout: `modulesAcross` × `modulesDown` (side by side across the slope × one behind the other down it), `landscape` (long side across), `offsetAcross`/`offsetDown` (m, the array's centre — to the right seen from in front, looking up, and down the slope) |
 | `Inverter` | `acPower` kW (output above it is clipped), `efficiency` (0.96) |
-| `Obstacle` | a forest, a house: `azimuthFrom`/`azimuthTo` (may cross north), `distance`, `height` — its top appears under atan((height − mountingHeight) / distance); `leafOffTransmittance` (0) is the share of direct sun a deciduous obstacle lets through while leafless, 15 November to 30 April — about 0.3 for a bare oak or beech edge |
+| `Obstacle` | a forest, a house: `azimuthFrom`/`azimuthTo` (may cross north), `distance`, `height` — its top appears under atan((height − mountingHeight) / distance); `leafOffTransmittance` (0) is the share of direct sun a deciduous obstacle lets through while leafless, 15 November to 30 April — about 0.3 for a bare oak or beech edge; `crownHeight` (0) makes the edge soft: single crowns stand that many metres above `height`, and between the edge and their top the share of the sun that passes rises linearly from none to all |
 | `HorizonPoint` | a measured horizon line, interpolated; the higher of horizon and obstacles wins |
 | `Meter` | where the actual output can be read: `type` (selects the `PvMeter` reader, e.g. `fronius-solar-api`), `url` of the device, `interval` in s (60, at least 5), `enabled` |
 
@@ -39,8 +39,9 @@ Radiation values are hourly means, so the mean power of an hour in kW is its ene
 2. **Sun** in the middle of the hour (NREL SPA through `SolarService`).
 3. **Horizon** (`Horizon`): is the sun behind an obstacle or the horizon line? Asked for six sun
    positions in the hour, each weighted by how squarely it shines on the array — the sun going
-   behind a forest at 15:40 costs a third of the hour, not all or nothing. The hidden share of the
-   sky dome reduces the isotropic diffuse part.
+   behind a forest at 15:40 costs a third of the hour, not all or nothing. Among single crowns above
+   an edge part of the sun passes, the more the higher it stands. The hidden share of the sky dome
+   (closed edges only) reduces the isotropic diffuse part.
 4. **Plane irradiance** per array (`PvPhysics.plane`): beam by the angle of incidence, sky diffuse
    by **Hay–Davies** (circumsolar part follows the beam's shading), ground reflection isotropic.
 5. **Reflection at the glass** by **Martin and Ruiz** (a_r 0.16): the beam by its angle of
@@ -99,7 +100,7 @@ intervals, a failing and an unknown meter, the measured values in the outlook.
 
 ## Calibration
 
-The models are standard and uncalibrated. `systemLosses` and the obstacle heights are the knobs;
+The models are standard and uncalibrated. `systemLosses`, the obstacle heights and their crowns are the knobs;
 compare a few weeks of forecast with the inverter's measured yields and adjust them, rather than
 the physics.
 

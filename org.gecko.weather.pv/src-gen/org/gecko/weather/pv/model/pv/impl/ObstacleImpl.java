@@ -37,6 +37,7 @@ import org.gecko.weather.pv.model.pv.PvPackage;
  *   <li>{@link org.gecko.weather.pv.model.pv.impl.ObstacleImpl#getDistance <em>Distance</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.impl.ObstacleImpl#getHeight <em>Height</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.impl.ObstacleImpl#getLeafOffTransmittance <em>Leaf Off Transmittance</em>}</li>
+ *   <li>{@link org.gecko.weather.pv.model.pv.impl.ObstacleImpl#getCrownHeight <em>Crown Height</em>}</li>
  * </ul>
  *
  * @generated
@@ -161,6 +162,26 @@ public class ObstacleImpl extends MinimalEObjectImpl.Container implements Obstac
 	 * @ordered
 	 */
 	protected double leafOffTransmittance = LEAF_OFF_TRANSMITTANCE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getCrownHeight() <em>Crown Height</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCrownHeight()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double CROWN_HEIGHT_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getCrownHeight() <em>Crown Height</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCrownHeight()
+	 * @generated
+	 * @ordered
+	 */
+	protected double crownHeight = CROWN_HEIGHT_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -325,6 +346,29 @@ public class ObstacleImpl extends MinimalEObjectImpl.Container implements Obstac
 	 * @generated
 	 */
 	@Override
+	public double getCrownHeight() {
+		return crownHeight;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setCrownHeight(double newCrownHeight) {
+		double oldCrownHeight = crownHeight;
+		crownHeight = newCrownHeight;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PvPackage.OBSTACLE__CROWN_HEIGHT, oldCrownHeight, crownHeight));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case PvPackage.OBSTACLE__NAME:
@@ -339,6 +383,8 @@ public class ObstacleImpl extends MinimalEObjectImpl.Container implements Obstac
 				return getHeight();
 			case PvPackage.OBSTACLE__LEAF_OFF_TRANSMITTANCE:
 				return getLeafOffTransmittance();
+			case PvPackage.OBSTACLE__CROWN_HEIGHT:
+				return getCrownHeight();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -368,6 +414,9 @@ public class ObstacleImpl extends MinimalEObjectImpl.Container implements Obstac
 				return;
 			case PvPackage.OBSTACLE__LEAF_OFF_TRANSMITTANCE:
 				setLeafOffTransmittance((Double)newValue);
+				return;
+			case PvPackage.OBSTACLE__CROWN_HEIGHT:
+				setCrownHeight((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -399,6 +448,9 @@ public class ObstacleImpl extends MinimalEObjectImpl.Container implements Obstac
 			case PvPackage.OBSTACLE__LEAF_OFF_TRANSMITTANCE:
 				setLeafOffTransmittance(LEAF_OFF_TRANSMITTANCE_EDEFAULT);
 				return;
+			case PvPackage.OBSTACLE__CROWN_HEIGHT:
+				setCrownHeight(CROWN_HEIGHT_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -423,6 +475,8 @@ public class ObstacleImpl extends MinimalEObjectImpl.Container implements Obstac
 				return height != HEIGHT_EDEFAULT;
 			case PvPackage.OBSTACLE__LEAF_OFF_TRANSMITTANCE:
 				return leafOffTransmittance != LEAF_OFF_TRANSMITTANCE_EDEFAULT;
+			case PvPackage.OBSTACLE__CROWN_HEIGHT:
+				return crownHeight != CROWN_HEIGHT_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -449,6 +503,8 @@ public class ObstacleImpl extends MinimalEObjectImpl.Container implements Obstac
 		result.append(height);
 		result.append(", leafOffTransmittance: ");
 		result.append(leafOffTransmittance);
+		result.append(", crownHeight: ");
+		result.append(crownHeight);
 		result.append(')');
 		return result.toString();
 	}

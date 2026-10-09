@@ -94,6 +94,7 @@ export class SamplePvForecast implements PvForecast {
         distance: d,
         height: 24,
         leafOffTransmittance: 0.3,
+        crownHeight: 0,
       })),
       horizon: [],
     }

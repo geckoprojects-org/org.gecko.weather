@@ -243,6 +243,8 @@ export interface ProfileObstacle {
   height: number
   /** share of direct sun passing while leafless, 0 = opaque all year */
   leafOffTransmittance: number
+  /** m single crowns stand above the edge — a soft edge, 0 = sharp */
+  crownHeight: number
 }
 
 /** A plant's profile as stored: what is installed where, what limits it, what shades it */

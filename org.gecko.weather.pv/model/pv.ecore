@@ -181,6 +181,11 @@
         <details key="documentation" value="Share of the direct sun that passes the obstacle while it is leafless — a deciduous forest from mid-November to the end of April. 0 for an obstacle that is opaque all year (a house, conifers); about 0.3 for the edge of a bare oak or beech forest."/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="crownHeight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" defaultValueLiteral="0.0">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="How far single crowns stand above the closed edge, in m — a soft edge. From the edge (height) up to height + crownHeight the gaps widen: the share of the direct sun that passes rises linearly with the sun's elevation from none (or leafOffTransmittance while leafless) to all. 0 for a sharp edge."/>
+      </eAnnotations>
+    </eStructuralFeatures>
 </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="HorizonPoint">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">

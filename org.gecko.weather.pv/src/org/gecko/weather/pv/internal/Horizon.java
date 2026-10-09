@@ -29,7 +29,9 @@ import org.gecko.weather.pv.model.pv.Plant;
  * horizon line and from obstacles (a forest at 40 m with 25 m trees, modules at 6 m: atan(19/40) =
  * 25.4°). Sampled every degree; the higher of both wins. Also how much of the isotropic sky it hides.
  * A deciduous obstacle lets part of the direct sun through while it is leafless
- * ({@link Obstacle#getLeafOffTransmittance()}, mid-November to the end of April).
+ * ({@link Obstacle#getLeafOffTransmittance()}, mid-November to the end of April). Single crowns above
+ * an obstacle's edge ({@link Obstacle#getCrownHeight()}) make it soft: the share of the sun that
+ * passes rises linearly from the edge to the top of the crowns.
  *
  * @author Mark Hoffmann
  * @since 04.10.2026
@@ -44,18 +46,33 @@ public final class Horizon {
 	/** Last leafless day: beech leafs out early in May, oak a little later. */
 	static final MonthDay LEAF_OFF_TO = MonthDay.of(Month.APRIL, 30);
 
-	/** An obstacle that thins out in winter: its angle per azimuth (0 where it is not) and its leafless transmittance. */
-	private record Seasonal(double[] angle, double transmittance) {
+	/**
+	 * An obstacle as angles per azimuth (0 where it is not): its closed edge and the top of the
+	 * crowns above it, with what passes while it is leafless.
+	 */
+	private record Edge(double[] edge, double[] crown, double leafOff) {
+
+		/** Share of the direct sun at this position that passes this obstacle. */
+		double share(double sunElevation, int a, boolean leafless) {
+			if (sunElevation <= edge[a]) {
+				return leafless ? leafOff : 0;
+			}
+			if (sunElevation < crown[a]) {
+				double gaps = (sunElevation - edge[a]) / (crown[a] - edge[a]);
+				return leafless ? gaps + (1 - gaps) * leafOff : gaps;
+			}
+			return 1;
+		}
 	}
 
 	private final double[] elevation;
-	private final double[] opaque;
-	private final List<Seasonal> seasonal;
+	private final double[] line;
+	private final List<Edge> edges;
 
-	private Horizon(double[] elevation, double[] opaque, List<Seasonal> seasonal) {
+	private Horizon(double[] elevation, double[] line, List<Edge> edges) {
 		this.elevation = elevation;
-		this.opaque = opaque;
-		this.seasonal = seasonal;
+		this.line = line;
+		this.edges = edges;
 	}
 
 	public static Horizon of(Plant plant) {
@@ -67,30 +84,30 @@ public final class Horizon {
 				e[a] = Math.max(0, interpolate(points, a));
 			}
 		}
-		double[] opaque = e.clone();
-		List<Seasonal> seasonal = new ArrayList<>();
+		double[] line = e.clone();
+		List<Edge> edges = new ArrayList<>();
 		double height = plant.isSetMountingHeight() ? plant.getMountingHeight() : 0;
 		for (Obstacle o : plant.getObstacles()) {
 			if (o.getDistance() <= 0) {
 				continue;
 			}
 			double angle = Math.toDegrees(Math.atan2(o.getHeight() - height, o.getDistance()));
-			if (angle <= 0) {
+			double top = Math.toDegrees(Math.atan2(o.getHeight() + Math.max(0, o.getCrownHeight()) - height, o.getDistance()));
+			if (top <= 0) {
 				continue;
 			}
-			double transmittance = Math.max(0, Math.min(1, o.getLeafOffTransmittance()));
-			double[] own = transmittance > 0 ? new double[360] : opaque;
+			double[] edge = new double[360];
+			double[] crown = new double[360];
 			for (int a = 0; a < 360; a++) {
 				if (within(a, o.getAzimuthFrom(), o.getAzimuthTo())) {
-					e[a] = Math.max(e[a], angle);
-					own[a] = Math.max(own[a], angle);
+					edge[a] = Math.max(0, angle);
+					crown[a] = top;
+					e[a] = Math.max(e[a], edge[a]);
 				}
 			}
-			if (transmittance > 0) {
-				seasonal.add(new Seasonal(own, transmittance));
-			}
+			edges.add(new Edge(edge, crown, Math.max(0, Math.min(1, o.getLeafOffTransmittance()))));
 		}
-		return new Horizon(e, opaque, List.copyOf(seasonal));
+		return new Horizon(e, line, List.copyOf(edges));
 	}
 
 	/** Whether deciduous obstacles are leafless on that day. */
@@ -136,27 +153,24 @@ public final class Horizon {
 	}
 
 	/**
-	 * Share of the direct sun that reaches the plant: 1 above the horizon, 0 behind something opaque;
-	 * behind leafless deciduous obstacles the product of their transmittances.
+	 * Share of the direct sun that reaches the plant: 1 above the horizon and every crown, 0 behind the
+	 * horizon line or something opaque; behind leafless deciduous obstacles and among single crowns
+	 * the product of what each obstacle lets through.
 	 */
 	public double beamShare(double sunElevation, double sunAzimuth, LocalDate date) {
-		if (!hides(sunElevation, sunAzimuth)) {
-			return 1;
-		}
 		int a = (int) Math.round(norm(sunAzimuth)) % 360;
-		if (sunElevation <= opaque[a] || !leafOff(date)) {
+		if (sunElevation <= line[a]) {
 			return 0;
 		}
+		boolean leafless = leafOff(date);
 		double share = 1;
-		for (Seasonal s : seasonal) {
-			if (sunElevation <= s.angle()[a]) {
-				share *= s.transmittance();
-			}
+		for (Edge edge : edges) {
+			share *= edge.share(sunElevation, a, leafless);
 		}
 		return share;
 	}
 
-	/** Whether the sun at this position is hidden — by anything, leafy or not. */
+	/** Whether the sun at this position is behind a closed edge — leafy or not; the crowns above it do not count. */
 	public boolean hides(double sunElevation, double sunAzimuth) {
 		return sunElevation <= at(sunAzimuth);
 	}

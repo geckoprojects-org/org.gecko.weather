@@ -17,8 +17,8 @@ const profile: PlantProfile = {
     { name: 'B', azimuth: 225, tilt: 10, peakPower: 4.3, moduleCount: 10 },
   ],
   obstacles: [
-    { name: 'Wald', azimuthFrom: 180, azimuthTo: 190, distance: 33, height: 25, leafOffTransmittance: 0.3 },
-    { name: 'Haus', azimuthFrom: 350, azimuthTo: 10, distance: 10, height: 8, leafOffTransmittance: 0 },
+    { name: 'Wald', azimuthFrom: 180, azimuthTo: 190, distance: 33, height: 25, leafOffTransmittance: 0.3, crownHeight: 0 },
+    { name: 'Haus', azimuthFrom: 350, azimuthTo: 10, distance: 10, height: 8, leafOffTransmittance: 0, crownHeight: 0 },
   ],
   horizon: [],
 }
@@ -68,6 +68,17 @@ describe('pv3d geometry', () => {
     expect(leafOff('2026-11-14')).toBe(false)
     expect(leafOff('2026-04-30')).toBe(true)
     expect(leafOff('2026-05-01')).toBe(false)
+  })
+
+  it('lets the sun through single crowns above the edge, more the higher it stands', () => {
+    const soft = { ...profile, obstacles: [{ name: 'Wald', azimuthFrom: 200, azimuthTo: 220, distance: 30, height: 17.1, leafOffTransmittance: 0.2, crownHeight: 5 }] }
+    const edge = (Math.atan2(15, 30) * 180) / Math.PI
+    const top = (Math.atan2(20, 30) * 180) / Math.PI
+    expect(horizonAt(soft, 210).elevation).toBeCloseTo(edge)
+    expect(beamShare(soft, 210, edge - 1, '2026-10-07')).toBe(0)
+    expect(beamShare(soft, 210, (edge + top) / 2, '2026-10-07')).toBeCloseTo(0.5)
+    expect(beamShare(soft, 210, (edge + top) / 2, '2026-12-21')).toBeCloseTo(0.6)
+    expect(beamShare(soft, 210, top + 1, '2026-10-07')).toBe(1)
   })
 
   it('puts the first row of trees at the obstacle distance and the rest behind', () => {

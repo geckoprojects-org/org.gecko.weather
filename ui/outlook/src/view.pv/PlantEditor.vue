@@ -33,7 +33,7 @@ function addInverter(): void {
   draft.inverters.push({ name: `Wechselrichter ${draft.inverters.length + 1}`, acPower: undefined, efficiency: 0.96 })
 }
 function addObstacle(): void {
-  draft.obstacles.push({ name: `Hindernis ${draft.obstacles.length + 1}`, azimuthFrom: 200, azimuthTo: 240, distance: 30, height: 15, leafOffTransmittance: 0 })
+  draft.obstacles.push({ name: `Hindernis ${draft.obstacles.length + 1}`, azimuthFrom: 200, azimuthTo: 240, distance: 30, height: 15, leafOffTransmittance: 0, crownHeight: 0 })
 }
 function removeInverter(i: number): void {
   draft.inverters.splice(i, 1)
@@ -169,9 +169,9 @@ function clean(p: PlantProfile = structuredClone(toRaw(draft)) as PlantProfile):
 
     <fieldset>
       <legend>Hindernisse</legend>
-      <p class="help">Wald, Haus, Hügel: von wo bis wo am Horizont (im Uhrzeigersinn ab Nord, Süd = 180), wie weit weg, wie hoch. Laubwald lässt unbelaubt einen Teil der Sonne durch, 0 für ganzjährig dicht.</p>
+      <p class="help">Wald, Haus, Hügel: von wo bis wo am Horizont (im Uhrzeigersinn ab Nord, Süd = 180), wie weit weg, wie hoch. Laubwald lässt unbelaubt einen Teil der Sonne durch, 0 für ganzjährig dicht. Einzelne Kronen über der Kante machen sie weich: bis so viele Meter darüber kommt die Sonne zunehmend durch, 0 für eine scharfe Kante.</p>
       <table class="rows">
-        <thead><tr><th>Name</th><th>von °</th><th>bis °</th><th>Abstand m</th><th>Höhe m</th><th>Durchlass unbelaubt</th><th></th></tr></thead>
+        <thead><tr><th>Name</th><th>von °</th><th>bis °</th><th>Abstand m</th><th>Höhe m</th><th>Kronen darüber m</th><th>Durchlass unbelaubt</th><th></th></tr></thead>
         <tbody>
           <tr v-for="(b, i) in draft.obstacles" :key="i">
             <td><input v-model.trim="b.name" required /></td>
@@ -179,6 +179,7 @@ function clean(p: PlantProfile = structuredClone(toRaw(draft)) as PlantProfile):
             <td><input v-model.number="b.azimuthTo" type="number" min="0" max="360" step="1" class="n" required /></td>
             <td><input v-model.number="b.distance" type="number" min="1" step="1" class="n" required /></td>
             <td><input v-model.number="b.height" type="number" min="0" step="0.5" class="n" required /></td>
+            <td><input v-model.number="b.crownHeight" type="number" min="0" step="0.5" class="n" /></td>
             <td><input v-model.number="b.leafOffTransmittance" type="number" min="0" max="1" step="0.05" class="n" /></td>
             <td><button type="button" class="btn small" aria-label="Hindernis entfernen" @click="draft.obstacles.splice(i, 1)">–</button></td>
           </tr>

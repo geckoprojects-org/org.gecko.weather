@@ -17,7 +17,7 @@ const carport: PlantProfile = {
     { name: 'Reihe', azimuth: 225, tilt: 6.5, peakPower: 2.58, moduleCount: 6, modulesAcross: 1, modulesDown: 6, landscape: true, offsetAcross: -2.95, offsetDown: -0.53 },
     { name: 'Block', azimuth: 225, tilt: 6.5, peakPower: 4.3, moduleCount: 10, modulesAcross: 2, modulesDown: 5, landscape: true, offsetAcross: 0, offsetDown: 0 },
   ],
-  obstacles: [{ name: 'Laubwald 220-230', azimuthFrom: 220, azimuthTo: 230, distance: 32, height: 16.5, leafOffTransmittance: 0.2 }],
+  obstacles: [{ name: 'Laubwald 220-230', azimuthFrom: 220, azimuthTo: 230, distance: 32, height: 16.5, leafOffTransmittance: 0.2, crownHeight: 0 }],
   horizon: [],
 }
 

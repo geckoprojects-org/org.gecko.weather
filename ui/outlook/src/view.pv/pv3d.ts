@@ -83,12 +83,28 @@ export function leafOff(isoDate: string): boolean {
   return md >= 1115 || md <= 430
 }
 
-/** Share of the direct sun that reaches the modules, as the forecast computes it */
+/**
+ * Share of the direct sun that reaches the modules, as the forecast computes it: per obstacle none
+ * behind the edge (its leafless share in winter), rising linearly through the crowns above it, all
+ * above them; the product over the obstacles.
+ */
 export function beamShare(profile: PlantProfile, azimuth: number, elevation: number, isoDate: string): number {
   if (elevation <= 0) return 0
-  const h = horizonAt(profile, azimuth)
-  if (elevation > h.elevation) return 1
-  return leafOff(isoDate) ? h.transmittance : 0
+  if (profile.horizon.length && horizonAt({ ...profile, obstacles: [] }, azimuth).elevation >= elevation) return 0
+  const leafless = leafOff(isoDate)
+  let share = 1
+  for (const o of profile.obstacles) {
+    if (o.distance <= 0 || !within(azimuth, o.azimuthFrom, o.azimuthTo)) continue
+    const edge = Math.max(0, Math.atan2(o.height - profile.mountingHeight, o.distance) / RAD)
+    const top = Math.atan2(o.height + Math.max(0, o.crownHeight ?? 0) - profile.mountingHeight, o.distance) / RAD
+    const t = Math.max(0, Math.min(1, o.leafOffTransmittance))
+    if (elevation <= edge) share *= leafless ? t : 0
+    else if (elevation < top) {
+      const gaps = (elevation - edge) / (top - edge)
+      share *= leafless ? gaps + (1 - gaps) * t : gaps
+    }
+  }
+  return share
 }
 
 /** Small deterministic random numbers — the same forest on every render */
@@ -133,7 +149,9 @@ export function trees(profile: PlantProfile, depth = 30, spacing = 6, seed = 7):
         const az = o.azimuthFrom + (span * (k + 0.2 + 0.6 * rnd())) / n
         const dist = r === o.distance ? r + 1 : r + (rnd() - 0.5) * spacing * 0.6
         const p = ground(az, dist)
-        const height = o.height * (0.9 + 0.2 * rnd())
+        // the edge row carries the single crowns that stand above the rest
+        const above = r === o.distance && o.crownHeight > 0 ? o.crownHeight * rnd() ** 2 : 0
+        const height = o.height * (0.9 + 0.2 * rnd()) + above
         out.push({ x: p.x, z: p.z, height, crown: Math.min(5, height * 0.18) * (0.85 + 0.3 * rnd()), deciduous: o.leafOffTransmittance > 0 })
       }
     }

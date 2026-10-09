@@ -36,6 +36,7 @@ import org.osgi.annotation.versioning.ProviderType;
  *   <li>{@link org.gecko.weather.pv.model.pv.Obstacle#getDistance <em>Distance</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.Obstacle#getHeight <em>Height</em>}</li>
  *   <li>{@link org.gecko.weather.pv.model.pv.Obstacle#getLeafOffTransmittance <em>Leaf Off Transmittance</em>}</li>
+ *   <li>{@link org.gecko.weather.pv.model.pv.Obstacle#getCrownHeight <em>Crown Height</em>}</li>
  * </ul>
  *
  * @see org.gecko.weather.pv.model.pv.PvPackage#getObstacle()
@@ -191,5 +192,31 @@ public interface Obstacle extends EObject {
 	 * @generated
 	 */
 	void setLeafOffTransmittance(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Crown Height</b></em>' attribute.
+	 * The default value is <code>"0.0"</code>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * How far single crowns stand above the closed edge, in m — a soft edge. From the edge (height) up to height + crownHeight the gaps widen: the share of the direct sun that passes rises linearly with the sun's elevation from none (or leafOffTransmittance while leafless) to all. 0 for a sharp edge.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Crown Height</em>' attribute.
+	 * @see #setCrownHeight(double)
+	 * @see org.gecko.weather.pv.model.pv.PvPackage#getObstacle_CrownHeight()
+	 * @model default="0.0"
+	 * @generated
+	 */
+	double getCrownHeight();
+
+	/**
+	 * Sets the value of the '{@link org.gecko.weather.pv.model.pv.Obstacle#getCrownHeight <em>Crown Height</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Crown Height</em>' attribute.
+	 * @see #getCrownHeight()
+	 * @generated
+	 */
+	void setCrownHeight(double value);
 
 } // Obstacle

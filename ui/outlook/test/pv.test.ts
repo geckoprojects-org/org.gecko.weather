@@ -142,7 +142,7 @@ describe('plant profile round trip', () => {
         { name: 'frei', azimuth: 200, tilt: 60, peakPower: 0.43, moduleCount: 1, temperatureCoefficient: -0.35, mounting: 'ROOF_MOUNTED' as const, inverter: undefined },
       ],
       inverters: [{ name: 'Micro', acPower: 0.8, efficiency: 0.95 }],
-      obstacles: [{ name: 'Haus', azimuthFrom: 350, azimuthTo: 20, distance: 12, height: 9, leafOffTransmittance: 0 }],
+      obstacles: [{ name: 'Wald', azimuthFrom: 350, azimuthTo: 20, distance: 12, height: 9, leafOffTransmittance: 0.2, crownHeight: 3 }],
       horizon: [{ azimuth: 180, elevation: 5 }],
     }
     const plant = fromPlantProfile(profile)

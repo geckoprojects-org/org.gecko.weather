@@ -43,7 +43,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * @generated
  */
 @ProviderType
-@EPackage(uri = PvPackage.eNS_URI, fingerprint = "fp1:4225cafebddc01a493cd19dd735075a273d7871c565181862193e15fc4fcd1f0", genModel = "/model/pv.genmodel", genModelSourceLocations = {"model/pv.genmodel","org.gecko.weather.pv/model/pv.genmodel"}, ecore = "/model/pv.ecore", ecoreSourceLocations = "/model/pv.ecore")
+@EPackage(uri = PvPackage.eNS_URI, fingerprint = "fp1:cf937737361d32b39e9896efbfd3c1da3f9ed8eb8daa6be21e7cc18de46fdf34", genModel = "/model/pv.genmodel", genModelSourceLocations = {"model/pv.genmodel","org.gecko.weather.pv/model/pv.genmodel"}, ecore = "/model/pv.ecore", ecoreSourceLocations = "/model/pv.ecore")
 public interface PvPackage extends org.eclipse.emf.ecore.EPackage {
 	/**
 	 * The package name.
@@ -487,13 +487,22 @@ public interface PvPackage extends org.eclipse.emf.ecore.EPackage {
 	int OBSTACLE__LEAF_OFF_TRANSMITTANCE = 5;
 
 	/**
+	 * The feature id for the '<em><b>Crown Height</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBSTACLE__CROWN_HEIGHT = 6;
+
+	/**
 	 * The number of structural features of the '<em>Obstacle</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OBSTACLE_FEATURE_COUNT = 6;
+	int OBSTACLE_FEATURE_COUNT = 7;
 
 	/**
 	 * The number of operations of the '<em>Obstacle</em>' class.
@@ -1743,6 +1752,17 @@ public interface PvPackage extends org.eclipse.emf.ecore.EPackage {
 	EAttribute getObstacle_LeafOffTransmittance();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.pv.model.pv.Obstacle#getCrownHeight <em>Crown Height</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Crown Height</em>'.
+	 * @see org.gecko.weather.pv.model.pv.Obstacle#getCrownHeight()
+	 * @see #getObstacle()
+	 * @generated
+	 */
+	EAttribute getObstacle_CrownHeight();
+
+	/**
 	 * Returns the meta object for class '{@link org.gecko.weather.pv.model.pv.HorizonPoint <em>Horizon Point</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2832,6 +2852,14 @@ public interface PvPackage extends org.eclipse.emf.ecore.EPackage {
 		 * @generated
 		 */
 		EAttribute OBSTACLE__LEAF_OFF_TRANSMITTANCE = eINSTANCE.getObstacle_LeafOffTransmittance();
+
+		/**
+		 * The meta object literal for the '<em><b>Crown Height</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OBSTACLE__CROWN_HEIGHT = eINSTANCE.getObstacle_CrownHeight();
 
 		/**
 		 * The meta object literal for the '{@link org.gecko.weather.pv.model.pv.impl.HorizonPointImpl <em>Horizon Point</em>}' class.

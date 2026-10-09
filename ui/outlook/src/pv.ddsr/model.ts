@@ -155,6 +155,7 @@ export function toPlantProfile(o: EObject): PlantProfile {
       distance: num(b, 'distance') ?? 0,
       height: num(b, 'height') ?? 0,
       leafOffTransmittance: num(b, 'leafOffTransmittance') ?? 0,
+      crownHeight: num(b, 'crownHeight') ?? 0,
     })),
     horizon: many(o, 'horizon').map((h) => ({ azimuth: num(h, 'azimuth') ?? 0, elevation: num(h, 'elevation') ?? 0 })),
   }
@@ -219,6 +220,7 @@ export function fromPlantProfile(p: PlantProfile): EObject {
     set(o, 'distance', b.distance)
     set(o, 'height', b.height)
     set(o, 'leafOffTransmittance', b.leafOffTransmittance)
+    set(o, 'crownHeight', b.crownHeight)
     list(plant, 'obstacles').add(o)
   }
   for (const h of p.horizon) {

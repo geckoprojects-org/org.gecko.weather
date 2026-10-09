@@ -182,6 +182,32 @@ class PvPhysicsTest {
 	}
 
 	@Test
+	void singleCrownsAboveTheEdgeMakeItSoft() {
+		Plant plant = PvFactory.eINSTANCE.createPlant();
+		plant.setMountingHeight(2);
+		Obstacle forest = PvFactory.eINSTANCE.createObstacle();
+		forest.setAzimuthFrom(200);
+		forest.setAzimuthTo(220);
+		forest.setDistance(30);
+		forest.setHeight(17); // edge atan(15/30) = 26.57°
+		forest.setCrownHeight(5); // crowns up to atan(20/30) = 33.69°
+		forest.setLeafOffTransmittance(0.2);
+		plant.getObstacles().add(forest);
+		Horizon h = Horizon.of(plant);
+		LocalDate october = LocalDate.of(2026, 10, 7);
+		LocalDate december = LocalDate.of(2026, 12, 21);
+		double edge = Math.toDegrees(Math.atan2(15, 30));
+		double top = Math.toDegrees(Math.atan2(20, 30));
+		double middle = (edge + top) / 2;
+		assertThat(h.beamShare(25, 210, october)).as("behind the edge").isZero();
+		assertThat(h.beamShare(middle, 210, october)).as("halfway up the crowns").isCloseTo(0.5, within(1e-9));
+		assertThat(h.beamShare(35, 210, october)).as("above the crowns").isEqualTo(1);
+		assertThat(h.beamShare(middle, 210, december)).as("leafless crowns").isCloseTo(0.5 + 0.5 * 0.2, within(1e-9));
+		assertThat(h.at(210)).as("the crowns are no closed horizon").isCloseTo(edge, within(1e-9));
+		assertThat(h.hides(30, 210)).isFalse();
+	}
+
+	@Test
 	void theGlassReflectsFlatLight() {
 		assertThat(PvPhysics.incidenceModifier(1)).isCloseTo(1, within(1e-12));
 		assertThat(PvPhysics.incidenceModifier(Math.cos(Math.toRadians(60)))).as("Martin–Ruiz, a_r 0.16").isCloseTo(0.958, within(0.001));
