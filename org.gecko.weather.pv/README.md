@@ -43,7 +43,7 @@ Radiation values are hourly means, so the mean power of an hour in kW is its ene
    an edge part of the sun passes, the more the higher it stands. The hidden share of the sky dome
    (closed edges only) reduces the isotropic diffuse part.
 4. **Plane irradiance** per array (`PvPhysics.plane`): beam by the angle of incidence, sky diffuse
-   by **Hay–Davies** (circumsolar part follows the beam's shading), ground reflection isotropic.
+   by **Hay–Davies** (the circumsolar part stays when a forest hides the sun — behind the edge a plant still measures about all of the diffuse light), ground reflection isotropic.
 5. **Reflection at the glass** by **Martin and Ruiz** (a_r 0.16): the beam by its angle of
    incidence, sky and ground light by their diffuse approximations — what reaches the cells. The
    reported plane irradiance stays what a sensor in the plane would read.

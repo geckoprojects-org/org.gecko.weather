@@ -91,8 +91,9 @@ public final class PvPhysics {
 	 * @param directHorizontal  beam on the horizontal, W/m²
 	 * @param diffuseHorizontal diffuse on the horizontal, W/m²
 	 * @param beamShare         share of the direct sun that passes the horizon: 1 free, 0 behind
-	 *                          an obstacle (no beam, no circumsolar part), in between through a
-	 *                          leafless forest
+	 *                          an obstacle, in between through a leafless forest or single crowns.
+	 *                          The circumsolar part stays: behind a forest a plant measured about
+	 *                          all of the diffuse light, not only its isotropic part
 	 * @param skyViewLoss       share of the isotropic sky the horizon hides, 0..1
 	 */
 	public static PlaneIrradiance plane(double directHorizontal, double diffuseHorizontal, double sunElevation, double sunAzimuth,
@@ -110,7 +111,7 @@ public final class PvPhysics {
 		double anisotropy = Math.max(0, Math.min(1, dni / extraterrestrial));
 		double rb = Math.max(0, cosTheta) / Math.max(sinE, Math.cos(Math.toRadians(85)));
 		double beam = beamShare * dni * Math.max(0, cosTheta);
-		double circumsolar = beamShare * diffuseHorizontal * anisotropy * rb;
+		double circumsolar = diffuseHorizontal * anisotropy * rb;
 		double isotropic = diffuseHorizontal * (1 - anisotropy) * isotropicView;
 		return new PlaneIrradiance(beam, circumsolar + isotropic, ground);
 	}

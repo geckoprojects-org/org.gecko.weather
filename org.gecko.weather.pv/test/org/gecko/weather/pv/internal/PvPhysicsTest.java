@@ -73,7 +73,7 @@ class PvPhysicsTest {
 		PlaneIrradiance open = PvPhysics.plane(500, 100, 20, 180, 35, 180, 0.2, I0, 1, 0);
 		PlaneIrradiance blocked = PvPhysics.plane(500, 100, 20, 180, 35, 180, 0.2, I0, 0, 0);
 		assertThat(blocked.beam()).isZero();
-		assertThat(blocked.skyDiffuse()).isLessThan(open.skyDiffuse()); // the circumsolar part is gone too
+		assertThat(blocked.skyDiffuse()).isEqualTo(open.skyDiffuse()); // the bright sky around the sun stays
 		assertThat(blocked.ground()).isEqualTo(open.ground());
 		// the sun below the horizon in the middle of the hour: all of it isotropic diffuse
 		PlaneIrradiance twilight = PvPhysics.plane(5, 20, -1, 270, 0, 180, 0.2, I0, 1, 0);
