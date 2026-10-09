@@ -182,12 +182,17 @@ public final class PlantForecaster {
 		}
 		LocalDate date = t.atZone(ZoneOffset.UTC).toLocalDate();
 		double[] shares = new double[steps.length];
+		double[] circumsolar = new double[steps.length];
 		double sum = 0;
+		double circumsolarSum = 0;
 		for (int k = 0; k < steps.length; k++) {
 			shares[k] = steps[k][0] > 0 ? horizon.beamShare(steps[k][0], steps[k][1], date) : 0;
+			circumsolar[k] = steps[k][0] > 0 ? horizon.circumsolarShare(steps[k][0], steps[k][1]) : 0;
 			sum += shares[k];
+			circumsolarSum += circumsolar[k];
 		}
 		double meanShare = sum / steps.length;
+		double meanCircumsolar = circumsolarSum / steps.length;
 		// the sun set or rose within the hour is no shade
 		boolean blocked = false;
 		for (int k = 0; k < steps.length; k++) {
@@ -203,8 +208,9 @@ public final class PlantForecaster {
 		for (int k = 0; k < arrays.size(); k++) {
 			PvArray a = arrays.get(k);
 			double beamShare = beamShare(shares, steps, a, meanShare);
+			double circumsolarShare = beamShare(circumsolar, steps, a, meanCircumsolar);
 			PlaneIrradiance p = PvPhysics.plane(direct, diffuse, elevation, azimuth, a.getTilt(), a.getAzimuth(), plant.getAlbedo(), i0,
-					beamShare, skyLoss);
+					beamShare, circumsolarShare, skyLoss);
 			double tc = PvPhysics.cellTemperature(w.airTemperature(), p.total(), w.windSpeed(), heatLoss(a.getMounting()));
 			double cosTheta = PvPhysics.cosIncidence(elevation, azimuth, a.getTilt(), a.getAzimuth());
 			arrayDc[k] = PvPhysics.dcPower(a.getPeakPower(), PvPhysics.effective(p, cosTheta, a.getTilt()), tc,

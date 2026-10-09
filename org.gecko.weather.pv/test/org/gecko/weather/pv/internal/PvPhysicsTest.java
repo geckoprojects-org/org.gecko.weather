@@ -73,7 +73,10 @@ class PvPhysicsTest {
 		PlaneIrradiance open = PvPhysics.plane(500, 100, 20, 180, 35, 180, 0.2, I0, 1, 0);
 		PlaneIrradiance blocked = PvPhysics.plane(500, 100, 20, 180, 35, 180, 0.2, I0, 0, 0);
 		assertThat(blocked.beam()).isZero();
-		assertThat(blocked.skyDiffuse()).isEqualTo(open.skyDiffuse()); // the bright sky around the sun stays
+		assertThat(blocked.skyDiffuse()).isLessThan(open.skyDiffuse()); // the circumsolar part is gone too
+		PlaneIrradiance forest = PvPhysics.plane(500, 100, 20, 180, 35, 180, 0.2, I0, 0, 1, 0);
+		assertThat(forest.beam()).isZero();
+		assertThat(forest.skyDiffuse()).as("a forest leaves the bright sky around the sun").isEqualTo(open.skyDiffuse());
 		assertThat(blocked.ground()).isEqualTo(open.ground());
 		// the sun below the horizon in the middle of the hour: all of it isotropic diffuse
 		PlaneIrradiance twilight = PvPhysics.plane(5, 20, -1, 270, 0, 180, 0.2, I0, 1, 0);
@@ -172,6 +175,8 @@ class PvPhysicsTest {
 		assertThat(h.beamShare(15, 180, may)).as("leaves out again").isZero();
 		assertThat(h.beamShare(20, 205, december)).as("the house is opaque all year").isZero();
 		assertThat(h.beamShare(40, 180, october)).as("above the trees").isEqualTo(1);
+		assertThat(h.circumsolarShare(20, 180)).as("a forest leaves the aureole").isEqualTo(1);
+		assertThat(h.circumsolarShare(20, 205)).as("the house hides it").isZero();
 		assertThat(Horizon.leafOff(LocalDate.of(2026, 11, 15))).isTrue();
 		assertThat(Horizon.leafOff(LocalDate.of(2026, 11, 14))).isFalse();
 		assertThat(Horizon.leafOff(LocalDate.of(2026, 4, 30))).isTrue();

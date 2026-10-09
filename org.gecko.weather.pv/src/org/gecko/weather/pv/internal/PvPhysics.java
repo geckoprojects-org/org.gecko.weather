@@ -91,13 +91,26 @@ public final class PvPhysics {
 	 * @param directHorizontal  beam on the horizontal, W/m²
 	 * @param diffuseHorizontal diffuse on the horizontal, W/m²
 	 * @param beamShare         share of the direct sun that passes the horizon: 1 free, 0 behind
-	 *                          an obstacle, in between through a leafless forest or single crowns.
-	 *                          The circumsolar part stays: behind a forest a plant measured about
-	 *                          all of the diffuse light, not only its isotropic part
+	 *                          an obstacle, in between through a leafless forest or single crowns;
+	 *                          the circumsolar part is shaded alike
 	 * @param skyViewLoss       share of the isotropic sky the horizon hides, 0..1
 	 */
 	public static PlaneIrradiance plane(double directHorizontal, double diffuseHorizontal, double sunElevation, double sunAzimuth,
 			double tilt, double planeAzimuth, double albedo, double extraterrestrial, double beamShare, double skyViewLoss) {
+		return plane(directHorizontal, diffuseHorizontal, sunElevation, sunAzimuth, tilt, planeAzimuth, albedo, extraterrestrial,
+				beamShare, beamShare, skyViewLoss);
+	}
+
+	/**
+	 * Transposition onto a tilted plane, the circumsolar part shaded on its own.
+	 *
+	 * @param circumsolarShare share of the circumsolar sky that reaches the plane: a forest leaves
+	 *                         it, a house hides it ({@link Horizon#circumsolarShare(double, double)})
+	 * @see #plane(double, double, double, double, double, double, double, double, double, double)
+	 */
+	public static PlaneIrradiance plane(double directHorizontal, double diffuseHorizontal, double sunElevation, double sunAzimuth,
+			double tilt, double planeAzimuth, double albedo, double extraterrestrial, double beamShare, double circumsolarShare,
+			double skyViewLoss) {
 		double global = directHorizontal + diffuseHorizontal;
 		double ground = global * albedo * (1 - Math.cos(Math.toRadians(tilt))) / 2;
 		double isotropicView = (1 + Math.cos(Math.toRadians(tilt))) / 2 * (1 - skyViewLoss);
@@ -111,7 +124,7 @@ public final class PvPhysics {
 		double anisotropy = Math.max(0, Math.min(1, dni / extraterrestrial));
 		double rb = Math.max(0, cosTheta) / Math.max(sinE, Math.cos(Math.toRadians(85)));
 		double beam = beamShare * dni * Math.max(0, cosTheta);
-		double circumsolar = diffuseHorizontal * anisotropy * rb;
+		double circumsolar = circumsolarShare * diffuseHorizontal * anisotropy * rb;
 		double isotropic = diffuseHorizontal * (1 - anisotropy) * isotropicView;
 		return new PlaneIrradiance(beam, circumsolar + isotropic, ground);
 	}

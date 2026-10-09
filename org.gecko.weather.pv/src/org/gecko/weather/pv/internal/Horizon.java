@@ -31,7 +31,8 @@ import org.gecko.weather.pv.model.pv.Plant;
  * A deciduous obstacle lets part of the direct sun through while it is leafless
  * ({@link Obstacle#getLeafOffTransmittance()}, mid-November to the end of April). Single crowns above
  * an obstacle's edge ({@link Obstacle#getCrownHeight()}) make it soft: the share of the sun that
- * passes rises linearly from the edge to the top of the crowns.
+ * passes rises linearly from the edge to the top of the crowns. A forest — crowns or leafless
+ * light — leaves the bright sky around the sun to the plant; a house or a hill hides it with the sun.
  *
  * @author Mark Hoffmann
  * @since 04.10.2026
@@ -48,9 +49,9 @@ public final class Horizon {
 
 	/**
 	 * An obstacle as angles per azimuth (0 where it is not): its closed edge and the top of the
-	 * crowns above it, with what passes while it is leafless.
+	 * crowns above it, with what passes while it is leafless; a forest when it has either.
 	 */
-	private record Edge(double[] edge, double[] crown, double leafOff) {
+	private record Edge(double[] edge, double[] crown, double leafOff, boolean forest) {
 
 		/** Share of the direct sun at this position that passes this obstacle. */
 		double share(double sunElevation, int a, boolean leafless) {
@@ -105,7 +106,8 @@ public final class Horizon {
 					e[a] = Math.max(e[a], edge[a]);
 				}
 			}
-			edges.add(new Edge(edge, crown, Math.max(0, Math.min(1, o.getLeafOffTransmittance()))));
+			double leafOff = Math.max(0, Math.min(1, o.getLeafOffTransmittance()));
+			edges.add(new Edge(edge, crown, leafOff, leafOff > 0 || o.getCrownHeight() > 0));
 		}
 		return new Horizon(e, line, List.copyOf(edges));
 	}
@@ -168,6 +170,25 @@ public final class Horizon {
 			share *= edge.share(sunElevation, a, leafless);
 		}
 		return share;
+	}
+
+	/**
+	 * Share of the circumsolar sky — the bright aureole around the sun — that reaches the plant: 0
+	 * when the sun is behind the horizon line or something solid, 1 otherwise. A forest leaves it:
+	 * behind a forest edge a plant measured about all of the diffuse light, not only its isotropic
+	 * part — light scattered through and around the crowns.
+	 */
+	public double circumsolarShare(double sunElevation, double sunAzimuth) {
+		int a = (int) Math.round(norm(sunAzimuth)) % 360;
+		if (sunElevation <= line[a]) {
+			return 0;
+		}
+		for (Edge edge : edges) {
+			if (!edge.forest() && sunElevation <= edge.edge()[a]) {
+				return 0;
+			}
+		}
+		return 1;
 	}
 
 	/** Whether the sun at this position is behind a closed edge — leafy or not; the crowns above it do not count. */
