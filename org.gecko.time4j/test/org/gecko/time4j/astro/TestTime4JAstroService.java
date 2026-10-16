@@ -34,6 +34,13 @@ import org.junit.jupiter.api.Test;
  */
 class TestTime4JAstroService {
 	
+	/**
+	 * The service hands out instants; the expectations below are the wall clock at the
+	 * measured location, so the zone they are rendered in has to be fixed. With the platform
+	 * default they pass only on a machine set to German local time - the CI agent runs in UTC.
+	 */
+	private static final ZoneId LOCATION_ZONE = ZoneId.of("Europe/Berlin");
+	
 	@Test
 	void testAstroServiceNoArgs() {
 		Time4JAstrotimeService as = new Time4JAstrotimeService();
@@ -55,16 +62,16 @@ class TestTime4JAstroService {
 		loc.setLongitude(12.0859321);
 		Astrotime sunTimes = as.getSunTimes(loc, xmas);
 		assertNotNull(sunTimes);
-		LocalTime srTL = LocalDateTime.ofInstant(sunTimes.getSunriseTwilight().toInstant(), ZoneId.systemDefault()).toLocalTime();
+		LocalTime srTL = LocalDateTime.ofInstant(sunTimes.getSunriseTwilight().toInstant(), LOCATION_ZONE).toLocalTime();
 		assertEquals(7, srTL.getHour());
 		assertEquals(33, srTL.getMinute());
-		LocalTime sr = LocalDateTime.ofInstant(sunTimes.getSunrise().toInstant(), ZoneId.systemDefault()).toLocalTime();
+		LocalTime sr = LocalDateTime.ofInstant(sunTimes.getSunrise().toInstant(), LOCATION_ZONE).toLocalTime();
 		assertEquals(8, sr.getHour());
 		assertEquals(13, sr.getMinute());
-		LocalTime ss = LocalDateTime.ofInstant(sunTimes.getSunset().toInstant(), ZoneId.systemDefault()).toLocalTime();
+		LocalTime ss = LocalDateTime.ofInstant(sunTimes.getSunset().toInstant(), LOCATION_ZONE).toLocalTime();
 		assertEquals(16, ss.getHour());
 		assertEquals(9, ss.getMinute());
-		LocalTime ssTL = LocalDateTime.ofInstant(sunTimes.getSunsetTwilight().toInstant(), ZoneId.systemDefault()).toLocalTime();
+		LocalTime ssTL = LocalDateTime.ofInstant(sunTimes.getSunsetTwilight().toInstant(), LOCATION_ZONE).toLocalTime();
 		assertEquals(16, ssTL.getHour());
 		assertEquals(49, ssTL.getMinute());
 	}
@@ -81,16 +88,16 @@ class TestTime4JAstroService {
 		loc.setElevation(216);
 		Astrotime sunTimes = as.getSunTimes(loc, xmas);
 		assertNotNull(sunTimes);
-		LocalTime srTL = LocalDateTime.ofInstant(sunTimes.getSunriseTwilight().toInstant(), ZoneId.systemDefault()).toLocalTime();
+		LocalTime srTL = LocalDateTime.ofInstant(sunTimes.getSunriseTwilight().toInstant(), LOCATION_ZONE).toLocalTime();
 		assertEquals(7, srTL.getHour());
 		assertEquals(30, srTL.getMinute());
-		LocalTime sr = LocalDateTime.ofInstant(sunTimes.getSunrise().toInstant(), ZoneId.systemDefault()).toLocalTime();
+		LocalTime sr = LocalDateTime.ofInstant(sunTimes.getSunrise().toInstant(), LOCATION_ZONE).toLocalTime();
 		assertEquals(8, sr.getHour());
 		assertEquals(9, sr.getMinute());
-		LocalTime ss = LocalDateTime.ofInstant(sunTimes.getSunset().toInstant(), ZoneId.systemDefault()).toLocalTime();
+		LocalTime ss = LocalDateTime.ofInstant(sunTimes.getSunset().toInstant(), LOCATION_ZONE).toLocalTime();
 		assertEquals(16, ss.getHour());
 		assertEquals(13, ss.getMinute());
-		LocalTime ssTL = LocalDateTime.ofInstant(sunTimes.getSunsetTwilight().toInstant(), ZoneId.systemDefault()).toLocalTime();
+		LocalTime ssTL = LocalDateTime.ofInstant(sunTimes.getSunsetTwilight().toInstant(), LOCATION_ZONE).toLocalTime();
 		assertEquals(16, ssTL.getHour());
 		assertEquals(52, ssTL.getMinute());
 	}

@@ -20,6 +20,14 @@ subprojects {
     // Allow gradle to enable JUnit support in submodules
     test {
         useJUnitPlatform()
+        // Several tests assert wall clock values for German locations - sunrise and sunset
+        // times, DWD report ids - and render them through the JVM default zone, so the suite
+        // is only green on a machine set to German local time. Pin the zone rather than rely
+        // on the agent: the CI agent runs in UTC.
+        // This covers the tests only. ReportHelper formats report ids with a SimpleDateFormat
+        // that carries no zone of its own, so the ids a running service produces still depend
+        // on its platform zone - tracked as a separate issue.
+        systemProperty 'user.timezone', 'Europe/Berlin'
     }
     
 }
