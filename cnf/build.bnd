@@ -56,7 +56,18 @@ javac.target: 17
 		local = ${build}/local
 
 -plugin.1.Temp: \
+
+# Credentials for uploading to the DIM Nexus. CI injects NEXUS_USER/NEXUS_PASSWORD;
+# when they are unset bnd ignores the entry and falls back to the user settings.
+-connection-settings: \
+    server;\
+        id                  ="https://devel.data-in-motion.biz";\
+        username            ="${env;NEXUS_USER}";\
+        password            ="${env;NEXUS_PASSWORD}",\
+    -bnd,\
+    -maven
 	aQute.bnd.deployer.repository.LocalIndexedRepo; \
 		name = Temp; \
 		pretty = true; \
 		local = ${build}/cache/temp
+

@@ -38,11 +38,10 @@ pipeline  {
                 branch 'snapshot'
             }
             steps  {
-                echo "I am building on ${env.JOB_NAME}"
-                sh "./gradlew clean release -x test -x testOSGi --info --stacktrace -Dmaven.repo.local=${WORKSPACE}/.m2"
-                sh "mkdir -p $JENKINS_HOME/repo.gecko/snapshot/org.gecko.weather"
-                sh "rm -rf $JENKINS_HOME/repo.gecko/snapshot/org.gecko.weather/*"
-                sh "cp -r cnf/release/* $JENKINS_HOME/repo.gecko/snapshot/org.gecko.weather"
+                 withCredentials([usernamePassword(credentialsId: 'dim-nexus', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASSWORD')]) {
+                    echo "I am building on ${env.JOB_NAME}"
+                    sh "./gradlew clean release -x test -x testOSGi --info --stacktrace -Dmaven.repo.local=${WORKSPACE}/.m2"
+                }
             }
         }
         stage('Weather export') {
@@ -77,13 +76,13 @@ pipeline  {
             steps  {
                 echo "I am building and publishing a docker image on branch: ${env.GIT_BRANCH}"
 
-                step([$class: 'DockerBuilderPublisher',
-                      dockerFileDirectory: 'docker',
-                            cloud: 'docker',
-                            tagsString: """devel.data-in-motion.biz:6000/scj/weather:latest
-                                        devel.data-in-motion.biz:6000/scj/weather:0.1.0.${VERSION}""",
-                            pushOnSuccess: true,
-                            pushCredentialsId: 'dim-nexus'])
+                script {
+                    docker.withRegistry('https://devel.data-in-motion.biz:6000', 'dim-nexus') {
+                        def image = docker.build("devel.data-in-motion.biz:6000/scj/weather:0.1.0.${VERSION}", 'weather')
+                        image.push()
+                        image.push('latest')
+                    }
+                }
             }
         }
     }
