@@ -44,10 +44,10 @@ which released through the OSSRH staging API with `GNUPG_PASSPHRASE` and a keyri
 | | Where | What |
 | --- | --- | --- |
 | JDK | tool `OpenJDK25` | the bundles target 25 |
-| Nexus login | the agent's `~/.bnd/connection-settings.xml` or `~/.m2/settings.xml` | a `<server>` with `<id>devel.data-in-motion.biz</id>`, as for fennec-gdpr. `release.bnd` lists both files explicitly (`-bnd, -maven`) because the library's Portal settings would otherwise switch bnd's default lookup off. A CI without such files can hand the login over as `NEXUS_USERNAME`/`NEXUS_PASSWORD` instead |
+| Nexus login | the agent's `~/.bnd/connection-settings.xml` or `~/.m2/settings.xml` | a `<server>` with `<id>devel.data-in-motion.biz</id>`, as for fennec-gdpr and the old weather workspace. `release.bnd` sets `-connection-settings` itself with both files (`-bnd, -maven`), because the library's Portal settings would otherwise replace the list and switch the agent's files off. A CI without such files hands the login over as `NEXUS_USERNAME`/`NEXUS_PASSWORD` |
 | `GNUPG_PASSPHRASE` | environment of the Jenkins | the passphrase of the signing key, as the old library read it; the Jenkinsfile maps it onto the fennec library's `GPG_PASSPHRASE`. The release stage stops at once when it is empty |
 | keyring | `GNUPGHOME`, default `/var/jenkins_home/.gnupg` | the key pair; `GPG_KEY_ID` picks a key when the keyring holds several, otherwise gpg's default key signs (`gpg` line in `release.bnd`) |
-| Portal login | the agent's connection settings, or `CS_USERNAME`/`CS_PASSWORD` in the environment | a `<server>` with `<id>production.portal.central.sonatype.com</id>` — the Portal's user token. The old library's server id was `ossrh-staging-api.central.sonatype.com`; the new publisher API has its own host, so the agent's settings need the new id as well |
+| Portal login | the agent's connection settings, or `CS_USERNAME`/`CS_PASSWORD` in the environment | a `<server>` with `<id>production.portal.central.sonatype.com</id>` — the Portal's user token. The old library's server id was `ossrh-staging-api.central.sonatype.com`; the new publisher API has its own host, so the agent's file needs an entry for it. (emf.osgi uses the same variables, but from GitHub secrets under the Eclipse organisation; this workspace releases from the Jenkins, as the old weather did) |
 
 The Maven group id (`maven_group_id` in `gradle.properties`) must lie in a namespace the Portal
 account has verified, or the upload is rejected at validation.

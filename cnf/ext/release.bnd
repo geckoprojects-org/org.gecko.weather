@@ -17,16 +17,19 @@
 # '-releaserepo.nexus' suffix key: merged with the library's 'Release' that gives 'Release~',
 # a name no repository has.)
 #
-# Credentials are not in the repository. Left alone, bnd reads ~/.bnd/connection-settings.xml,
-# else ~/.m2/settings.xml — that is how fennec-gdpr publishes from the Jenkins agent, whose
-# user keeps a <server> with <id>devel.data-in-motion.biz</id> there. The library's central.bnd
-# sets '-connection-settings' to its sonatype-settings.xml on a release, which would switch
-# that default off, so the two files are listed here explicitly ('-connection-settings' is
-# merged over suffix keys; the leading '-' makes a missing file no error). The inline server
-# is a third way for a CI that hands the login over as NEXUS_USERNAME/NEXUS_PASSWORD; unset, it
-# carries no credentials and does nothing. The Portal ones come from the library's
-# sonatype-settings.xml, which reads CS_USERNAME and CS_PASSWORD; the GPG key from GPG_KEY_ID
-# and GPG_PASSPHRASE. See docs/12-build-and-release.md and the Jenkinsfile.
+# Credentials are not in the repository. They are the Jenkins agent's, as with the old DIM
+# library that released the old weather workspace: bnd reads ~/.bnd/connection-settings.xml and
+# ~/.m2/settings.xml (the leading '-' makes a missing file no error), where a <server> whose id
+# is the host carries the login — devel.data-in-motion.biz for the Nexus,
+# production.portal.central.sonatype.com for the Portal (new host: the old library spoke to
+# ossrh-staging-api.central.sonatype.com, so that entry has to be added once). The key is set
+# outright, not as a suffix, so that the library's releng/central.bnd — which would replace the
+# list with its own sonatype-settings.xml and thereby switch the agent's files off — does not
+# apply. The two inline servers are for a CI that hands the logins over in the environment
+# instead (NEXUS_USERNAME/NEXUS_PASSWORD, CS_USERNAME/CS_PASSWORD, the names emf.osgi's GitHub
+# workflows use); unset, they carry no credentials and do nothing. The GPG passphrase arrives in
+# GPG_PASSPHRASE (the Jenkinsfile maps the Jenkins' GNUPG_PASSPHRASE onto it).
+# See docs/12-build-and-release.md and the Jenkinsfile.
 
 -plugin.7.Release: \
 	aQute.bnd.repository.maven.provider.MavenBndRepository;\
@@ -36,13 +39,17 @@
 
 -releaserepo: ${if;${env;GPG_PASSPHRASE;};${if;${maven-central};Sonatype,Release;Release};Release}
 
--connection-settings.nexus: \
+-connection-settings: \
 	-bnd,\
 	-maven,\
 	server; \
 		id=devel.data-in-motion.biz; \
 		username="${env;NEXUS_USERNAME;}"; \
-		password="${env;NEXUS_PASSWORD;}"
+		password="${env;NEXUS_PASSWORD;}",\
+	server; \
+		id=production.portal.central.sonatype.com; \
+		username="${env;CS_USERNAME;}"; \
+		password="${env;CS_PASSWORD;}"
 
 # Signing, as the old DIM library did it on this Jenkins: the keyring is the agent's (the old
 # setup pointed gpg at /var/jenkins_home/.gnupg; gpg honours GNUPGHOME, which the Jenkinsfile
