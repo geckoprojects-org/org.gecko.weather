@@ -19,8 +19,10 @@ workspace only says where things go (`cnf/ext/release.bnd`):
   (`./gradlew clean build release`).
 - **The DIM Nexus** is the `Release` repository of `cnf/ext/release.bnd`, a `MavenBndRepository`
   with `dim-release` as `releaseUrl` and `dim-snapshot` as `snapshotUrl`; which one receives a
-  bundle follows from its version. It is listed through `-releaserepo.nexus`, a suffixed key that
-  bnd merges into `-releaserepo`, so it is on every release.
+  bundle follows from its version. `release.bnd` sets `-releaserepo` outright — `Release`, or
+  `Sonatype, Release` when the library has configured the Portal — so the Nexus is on every
+  release. (A suffixed `-releaserepo.nexus` would merge with the library's `Release` into
+  `Release~`, a name no repository has.)
 - **Maven Central** uses the mechanism bnd 7.4 added for the Sonatype Central Portal — the one
   that replaced OSSRH staging: a `MavenBndRepository` with `stagingUrl` on
   `production.portal.central.sonatype.com/api/v1/publisher/upload` and `sonatypeMode = autopublish`
@@ -37,7 +39,7 @@ workspace only says where things go (`cnf/ext/release.bnd`):
 | | Where | What |
 | --- | --- | --- |
 | JDK | tool `OpenJDK25` | the bundles target 25 |
-| Nexus credentials | `~/.m2/settings.xml` of the agent | a `<server>` with `<id>devel.data-in-motion.biz</id>` — read through `-connection-settings.nexus: -maven` |
+| `dim-nexus` | credential, username + password | the Nexus login; arrives as `NEXUS_USERNAME`/`NEXUS_PASSWORD` and becomes the inline `<server>` for `devel.data-in-motion.biz` in `-connection-settings.nexus`. A developer uses a `<server>` with that id in `~/.m2/settings.xml` instead |
 | `gpg-passphrase` | credential, secret text | passphrase of the signing key |
 | `gpg-key-id` | credential, secret text | the key id `gpg --local-user` signs with; the key pair must be in the agent's keyring |
 | `central-portal-token` | credential, username + password | the Portal user token (`CS_USERNAME` / `CS_PASSWORD`), read by the library's `sonatype-settings.xml` |

@@ -64,7 +64,12 @@ pipeline {
             }
             steps {
                 echo "Publishing a snapshot of ${env.BRANCH_NAME} to the DIM Nexus"
-                sh './gradlew clean build release $COMMON_ARGS'
+                // The Nexus login, handed to bnd as NEXUS_USERNAME/NEXUS_PASSWORD (cnf/ext/release.bnd).
+                withCredentials([
+                    usernamePassword(credentialsId: 'dim-nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')
+                ]) {
+                    sh './gradlew clean build release $COMMON_ARGS'
+                }
             }
         }
 
@@ -84,6 +89,7 @@ pipeline {
                 // GPG_KEY_ID has to be in the agent's gpg keyring; CS_USERNAME/CS_PASSWORD are
                 // the Portal's user token.
                 withCredentials([
+                    usernamePassword(credentialsId: 'dim-nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD'),
                     string(credentialsId: 'gpg-passphrase', variable: 'GPG_PASSPHRASE'),
                     string(credentialsId: 'gpg-key-id', variable: 'GPG_KEY_ID'),
                     usernamePassword(credentialsId: 'central-portal-token', usernameVariable: 'CS_USERNAME', passwordVariable: 'CS_PASSWORD')
