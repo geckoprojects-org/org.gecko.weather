@@ -48,8 +48,8 @@ which released through the OSSRH staging API with `GNUPG_PASSPHRASE` and a keyri
 | --- | --- | --- |
 | JDK | tool `OpenJDK25` | the bundles target 25 |
 | `dim-nexus` | Jenkins credential, username + password (the one the Docker pushes use) | the Nexus login, handed to bnd as `NEXUS_USERNAME`/`NEXUS_PASSWORD` for the inline `<server>` of `devel.data-in-motion.biz` in `release.bnd`. The public agent has no connection settings of its own; a developer keeps a `<server>` with that id in `~/.bnd/connection-settings.xml` or `~/.m2/settings.xml`, which `release.bnd` lists too |
-| `GNUPG_PASSPHRASE` | environment of the Jenkins | the passphrase of the signing key, as the old library read it; the Jenkinsfile maps it onto the fennec library's `GPG_PASSPHRASE`. The release stage stops at once when it is empty |
-| keyring | `GNUPGHOME`, default `/var/jenkins_home/.gnupg` | the key pair; `GPG_KEY_ID` picks a key when the keyring holds several, otherwise gpg's default key signs (`gpg` line in `release.bnd`) |
+| `gnupg-passphrase` | Jenkins credential, secret text | the passphrase of the signing key, bound as `GPG_PASSPHRASE`; without it the node's `GNUPG_PASSPHRASE` (the old setup's name) is used, and without that the run stays unsigned and Central is left out |
+| `gnupg-private-key` | Jenkins credential, secret file | ASCII export of the signing key pair, imported into a keyring of the run only and removed afterwards (as emf.osgi does on GitHub); without it the keyring under `GNUPGHOME`, default `/var/jenkins_home/.gnupg`, must hold the key |
 | `central-portal-token` | Jenkins credential, username + password | the Portal user token, handed over as `CS_USERNAME`/`CS_PASSWORD` for the inline `<server>` of `production.portal.central.sonatype.com` in `release.bnd`. The Jenkinsfile checks whether the credential exists and, without it, still publishes to the Nexus with a warning. (The old library's server id was `ossrh-staging-api.central.sonatype.com`; the Portal's publisher API has its own host) |
 
 The Maven group id (`maven_group_id` in `gradle.properties`) must lie in a namespace the Portal
