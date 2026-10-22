@@ -39,7 +39,7 @@ workspace only says where things go (`cnf/ext/release.bnd`):
 | | Where | What |
 | --- | --- | --- |
 | JDK | tool `OpenJDK25` | the bundles target 25 |
-| `dim-nexus` | credential, username + password | the Nexus login; arrives as `NEXUS_USERNAME`/`NEXUS_PASSWORD` and becomes the inline `<server>` for `devel.data-in-motion.biz` in `-connection-settings.nexus`. A developer uses a `<server>` with that id in `~/.m2/settings.xml` instead |
+| Nexus login | the agent's `~/.bnd/connection-settings.xml` or `~/.m2/settings.xml` | a `<server>` with `<id>devel.data-in-motion.biz</id>`, as for fennec-gdpr. `release.bnd` lists both files explicitly (`-bnd, -maven`) because the library's Portal settings would otherwise switch bnd's default lookup off. A CI without such files can hand the login over as `NEXUS_USERNAME`/`NEXUS_PASSWORD` instead |
 | `gpg-passphrase` | credential, secret text | passphrase of the signing key |
 | `gpg-key-id` | credential, secret text | the key id `gpg --local-user` signs with; the key pair must be in the agent's keyring |
 | `central-portal-token` | credential, username + password | the Portal user token (`CS_USERNAME` / `CS_PASSWORD`), read by the library's `sonatype-settings.xml` |

@@ -64,12 +64,9 @@ pipeline {
             }
             steps {
                 echo "Publishing a snapshot of ${env.BRANCH_NAME} to the DIM Nexus"
-                // The Nexus login, handed to bnd as NEXUS_USERNAME/NEXUS_PASSWORD (cnf/ext/release.bnd).
-                withCredentials([
-                    usernamePassword(credentialsId: 'dim-nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')
-                ]) {
-                    sh './gradlew clean build release $COMMON_ARGS'
-                }
+                // The Nexus login is the agent's: ~/.bnd/connection-settings.xml or
+                // ~/.m2/settings.xml with a <server> for devel.data-in-motion.biz, as fennec-gdpr.
+                sh './gradlew clean build release $COMMON_ARGS'
             }
         }
 
@@ -87,9 +84,8 @@ pipeline {
                 // Sonatype Central Portal repository, signing, '-releaserepo: Sonatype' — and
                 // cnf/ext/release.bnd keeps the Nexus beside it. The key pair named by
                 // GPG_KEY_ID has to be in the agent's gpg keyring; CS_USERNAME/CS_PASSWORD are
-                // the Portal's user token.
+                // the Portal's user token. The Nexus login is the agent's, as for the snapshot.
                 withCredentials([
-                    usernamePassword(credentialsId: 'dim-nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD'),
                     string(credentialsId: 'gpg-passphrase', variable: 'GPG_PASSPHRASE'),
                     string(credentialsId: 'gpg-key-id', variable: 'GPG_KEY_ID'),
                     usernamePassword(credentialsId: 'central-portal-token', usernameVariable: 'CS_USERNAME', passwordVariable: 'CS_PASSWORD')

@@ -17,13 +17,16 @@
 # '-releaserepo.nexus' suffix key: merged with the library's 'Release' that gives 'Release~',
 # a name no repository has.)
 #
-# Credentials are not in the repository. '-connection-settings' is merged over suffix keys, so
-# the Nexus server is added to whatever the library configures for the Portal: on Jenkins the
-# credential 'dim-nexus' arrives as NEXUS_USERNAME/NEXUS_PASSWORD (the inline server below); a
-# developer keeps a <server> with <id>devel.data-in-motion.biz</id> in ~/.m2/settings.xml, which
-# '-maven' reads. The Portal ones come from the library's sonatype-settings.xml, which reads
-# CS_USERNAME and CS_PASSWORD; the GPG key from GPG_KEY_ID and GPG_PASSPHRASE.
-# See docs/12-build-and-release.md and the Jenkinsfile.
+# Credentials are not in the repository. Left alone, bnd reads ~/.bnd/connection-settings.xml,
+# else ~/.m2/settings.xml — that is how fennec-gdpr publishes from the Jenkins agent, whose
+# user keeps a <server> with <id>devel.data-in-motion.biz</id> there. The library's central.bnd
+# sets '-connection-settings' to its sonatype-settings.xml on a release, which would switch
+# that default off, so the two files are listed here explicitly ('-connection-settings' is
+# merged over suffix keys; the leading '-' makes a missing file no error). The inline server
+# is a third way for a CI that hands the login over as NEXUS_USERNAME/NEXUS_PASSWORD; unset, it
+# carries no credentials and does nothing. The Portal ones come from the library's
+# sonatype-settings.xml, which reads CS_USERNAME and CS_PASSWORD; the GPG key from GPG_KEY_ID
+# and GPG_PASSPHRASE. See docs/12-build-and-release.md and the Jenkinsfile.
 
 -plugin.7.Release: \
 	aQute.bnd.repository.maven.provider.MavenBndRepository;\
@@ -34,6 +37,7 @@
 -releaserepo: ${if;${env;GPG_PASSPHRASE;};${if;${maven-central};Sonatype,Release;Release};Release}
 
 -connection-settings.nexus: \
+	-bnd,\
 	-maven,\
 	server; \
 		id=devel.data-in-motion.biz; \
