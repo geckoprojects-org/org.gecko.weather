@@ -6,8 +6,6 @@
 //   main              build, test, release bare-version bundles to the DIM Nexus (dim-release)
 //                     and, signed, into dist/bundles, which bnd's sonatype-upload.sh hands to the
 //                     Sonatype Central Portal as one deployment; then export the launch as a drift check
-//   sunorcloud_main   the same as main without the Nexus, to try the release before main moves
-//                     onto this history
 //
 // The mechanics live in cnf/ext/release.bnd and the fennec library (releng/*.bnd), see
 // docs/12-build-and-release.md. DO_RELEASE decides the version the bundles are built with,
@@ -157,7 +155,7 @@ pipeline {
 
         stage('Build and test') {
             when {
-                not { anyOf { branch 'main'; branch 'sunorcloud_main'; branch 'snapshot'; branch 'sunorcloud' } }
+                not { anyOf { branch 'main'; branch 'snapshot'; branch 'sunorcloud' } }
             }
             steps {
                 echo "Building ${env.BRANCH_NAME}"
@@ -189,16 +187,12 @@ pipeline {
 
         stage('Publish release') {
             when {
-                // sunorcloud_main tries the release before main moves onto this line of history
-                // (2026-10-22); take it out again afterwards.
-                anyOf { branch 'main'; branch 'sunorcloud_main' }
+                branch 'main'
             }
             environment {
                 // Bare versions, which send the Release repository to dim-release; cnf/ext/release.bnd
                 // adds Dist (dist/bundles) for the Central upload.
                 DO_RELEASE = 'true'
-                // The trial on sunorcloud_main stays off the Nexus: dim-release takes a version once.
-                NEXUS_RELEASE = "${env.BRANCH_NAME == 'sunorcloud_main' ? 'false' : 'true'}"
                 // GPG_PASSPHRASE switches signing on (the fennec library's releng/central.bnd,
                 // '-maven-release: pom, sign'). This Jenkins has carried the
                 // passphrase as GNUPG_PASSPHRASE since the old DIM library (which read exactly
@@ -216,7 +210,7 @@ pipeline {
 
         stage('Export the launch') {
             when {
-                anyOf { branch 'main'; branch 'sunorcloud_main'; branch 'snapshot'; branch 'sunorcloud' }
+                anyOf { branch 'main'; branch 'snapshot'; branch 'sunorcloud' }
             }
             steps {
                 echo "Exporting the launch of ${env.BRANCH_NAME}"

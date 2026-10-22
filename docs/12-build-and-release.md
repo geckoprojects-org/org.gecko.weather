@@ -5,7 +5,7 @@ Two builds, one of them publishes.
 | Where | On | Does | Publishes |
 | --- | --- | --- | --- |
 | **GitHub Actions** (`.github/workflows/build.yml`) | every push and pull request | licence header check, `./gradlew build` (compile, bundles, plain JUnit tests) on Temurin 25 | nothing — the pre-gate only |
-| **Jenkins** (`Jenkinsfile`) | the DIM Jenkins, every branch | the same build; on `snapshot` and `main` (and, for trying them, `sunorcloud` and `sunorcloud_main`) also `release` and the launch export | `snapshot` → DIM Nexus `dim-snapshot` **and** the Maven Central snapshot repository of the Portal; `main` → DIM Nexus `dim-release` **and** one Central Portal deployment from `dist/bundles` |
+| **Jenkins** (`Jenkinsfile`) | the DIM Jenkins, every branch | the same build; on `snapshot` and `main` (and, for trying them, `sunorcloud`) also `release` and the launch export | `snapshot` → DIM Nexus `dim-snapshot` **and** the Maven Central snapshot repository of the Portal; `main` → DIM Nexus `dim-release` **and** one Central Portal deployment from `dist/bundles` |
 
 ## How a release works
 
@@ -41,9 +41,10 @@ workspace only says where things go (`cnf/ext/release.bnd`):
   follows: `USER_MANAGED` (the default) leaves the deployment validated and waiting for *Publish*
   at `central.sonatype.com/publishing`; `AUTOMATIC` publishes it. A release on Central cannot be
   withdrawn, so the manual step stays until a release has gone through once.
-- **`NEXUS_RELEASE=false`** leaves the Nexus out of a release (`-releaserepo: Dist`). The Jenkinsfile
-  sets it on `sunorcloud_main`, the branch that tries the release: `dim-release` takes every version
-  only once.
+- **`NEXUS_RELEASE=false`** leaves the Nexus out of a release (`-releaserepo: Dist`). It is for a
+  trial of the Central upload (a branch in the release stage with `NEXUS_RELEASE = 'false'` in its
+  environment): `dim-release` takes every version only once. `sunorcloud_main` ran that way on
+  2026-10-22; the Portal validated all 18 bundles, and the deployment was dropped.
 - **Poms without dependencies.** `-maven-dependencies:` (empty) in `cnf/ext/release.bnd` stops bnd
   from listing the `-buildpath` in the poms: it holds Fennec artifacts that exist only as
   snapshots (emf.osgi 1.1.0, the KML and DWD models of fennec.models), and the Portal rejects a

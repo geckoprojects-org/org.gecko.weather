@@ -50,8 +50,8 @@ dist: ${workspace}/dist/bundles
 		noupdateOnRelease = true;\
 		name             = 'Dist'
 
-# NEXUS_RELEASE=false keeps a release off the Nexus (the Jenkinsfile sets it for the trial branch
-# sunorcloud_main, so the trial does not take a version in dim-release).
+# NEXUS_RELEASE=false keeps a release off the Nexus, for a trial of the Central upload: dim-release
+# takes every version only once (sunorcloud_main ran that way on 2026-10-22).
 -releaserepo: ${if;${env;DO_RELEASE;};${if;${env;NEXUS_RELEASE;true};Release,}Dist;${if;${env;GPG_PASSPHRASE;};${if;${maven-central};Sonatype,Release;Release};Release}}
 
 -connection-settings: \
