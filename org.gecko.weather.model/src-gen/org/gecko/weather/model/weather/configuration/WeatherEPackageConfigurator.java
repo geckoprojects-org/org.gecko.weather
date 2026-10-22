@@ -41,7 +41,7 @@ public class WeatherEPackageConfigurator implements EPackageConfigurator {
 	 * service property.
 	 * @generated
 	 */
-	public static final String FINGERPRINT = "fp1:8e4d744ba820633945789d84a2a5cf061a09bede4982acda808c5adc7cbe80ec";
+	public static final String FINGERPRINT = "fp1:6d5680855598ba247bbb178be10c47d73c565b93fe835b11bcdb71addd32c144";
 
 	private WeatherPackage ePackage;
 

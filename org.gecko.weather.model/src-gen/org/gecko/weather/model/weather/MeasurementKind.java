@@ -233,7 +233,72 @@ public enum MeasurementKind implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	SUN_AZIMUTH(19, "SUN_AZIMUTH", "SUN_AZIMUTH");
+	SUN_AZIMUTH(19, "SUN_AZIMUTH", "SUN_AZIMUTH"),
+
+	/**
+	 * The '<em><b>BATTERY LEVEL</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Station health, reported by an own station with its observations: battery state as the device reports it, 1 is fine, 0 is empty. Unit 1.
+	 * <!-- end-model-doc -->
+	 * @see #BATTERY_LEVEL_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	BATTERY_LEVEL(20, "BATTERY_LEVEL", "BATTERY_LEVEL"),
+
+	/**
+	 * The '<em><b>BATTERY VOLTAGE</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Station health: battery voltage, V.
+	 * <!-- end-model-doc -->
+	 * @see #BATTERY_VOLTAGE_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	BATTERY_VOLTAGE(21, "BATTERY_VOLTAGE", "BATTERY_VOLTAGE"),
+
+	/**
+	 * The '<em><b>CAPACITOR VOLTAGE</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Station health: voltage of the solar-charged supercapacitor that powers a WS90/WS80 by day, V.
+	 * <!-- end-model-doc -->
+	 * @see #CAPACITOR_VOLTAGE_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	CAPACITOR_VOLTAGE(22, "CAPACITOR_VOLTAGE", "CAPACITOR_VOLTAGE"),
+
+	/**
+	 * The '<em><b>SIGNAL STRENGTH</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Station health: received signal strength of the telegram at the receiver, dB (relative; rtl_433 RSSI).
+	 * <!-- end-model-doc -->
+	 * @see #SIGNAL_STRENGTH_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	SIGNAL_STRENGTH(23, "SIGNAL_STRENGTH", "SIGNAL_STRENGTH"),
+
+	/**
+	 * The '<em><b>SIGNAL NOISE RATIO</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Station health: signal-to-noise ratio of the telegram at the receiver, dB.
+	 * <!-- end-model-doc -->
+	 * @see #SIGNAL_NOISE_RATIO_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	SIGNAL_NOISE_RATIO(24, "SIGNAL_NOISE_RATIO", "SIGNAL_NOISE_RATIO");
 
 	/**
 	 * The '<em><b>AIR TEMPERATURE</b></em>' literal value.
@@ -456,6 +521,76 @@ public enum MeasurementKind implements Enumerator {
 	public static final int SUN_AZIMUTH_VALUE = 19;
 
 	/**
+	 * The '<em><b>BATTERY LEVEL</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Station health, reported by an own station with its observations: battery state as the device reports it, 1 is fine, 0 is empty. Unit 1.
+	 * <!-- end-model-doc -->
+	 * @see #BATTERY_LEVEL
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int BATTERY_LEVEL_VALUE = 20;
+
+	/**
+	 * The '<em><b>BATTERY VOLTAGE</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Station health: battery voltage, V.
+	 * <!-- end-model-doc -->
+	 * @see #BATTERY_VOLTAGE
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int BATTERY_VOLTAGE_VALUE = 21;
+
+	/**
+	 * The '<em><b>CAPACITOR VOLTAGE</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Station health: voltage of the solar-charged supercapacitor that powers a WS90/WS80 by day, V.
+	 * <!-- end-model-doc -->
+	 * @see #CAPACITOR_VOLTAGE
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int CAPACITOR_VOLTAGE_VALUE = 22;
+
+	/**
+	 * The '<em><b>SIGNAL STRENGTH</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Station health: received signal strength of the telegram at the receiver, dB (relative; rtl_433 RSSI).
+	 * <!-- end-model-doc -->
+	 * @see #SIGNAL_STRENGTH
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int SIGNAL_STRENGTH_VALUE = 23;
+
+	/**
+	 * The '<em><b>SIGNAL NOISE RATIO</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Station health: signal-to-noise ratio of the telegram at the receiver, dB.
+	 * <!-- end-model-doc -->
+	 * @see #SIGNAL_NOISE_RATIO
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int SIGNAL_NOISE_RATIO_VALUE = 24;
+
+	/**
 	 * An array of all the '<em><b>Measurement Kind</b></em>' enumerators.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -483,6 +618,11 @@ public enum MeasurementKind implements Enumerator {
 			SIGNIFICANT_WEATHER,
 			SUN_ELEVATION,
 			SUN_AZIMUTH,
+			BATTERY_LEVEL,
+			BATTERY_VOLTAGE,
+			CAPACITOR_VOLTAGE,
+			SIGNAL_STRENGTH,
+			SIGNAL_NOISE_RATIO,
 		};
 
 	/**
@@ -559,6 +699,11 @@ public enum MeasurementKind implements Enumerator {
 			case SIGNIFICANT_WEATHER_VALUE: return SIGNIFICANT_WEATHER;
 			case SUN_ELEVATION_VALUE: return SUN_ELEVATION;
 			case SUN_AZIMUTH_VALUE: return SUN_AZIMUTH;
+			case BATTERY_LEVEL_VALUE: return BATTERY_LEVEL;
+			case BATTERY_VOLTAGE_VALUE: return BATTERY_VOLTAGE;
+			case CAPACITOR_VOLTAGE_VALUE: return CAPACITOR_VOLTAGE;
+			case SIGNAL_STRENGTH_VALUE: return SIGNAL_STRENGTH;
+			case SIGNAL_NOISE_RATIO_VALUE: return SIGNAL_NOISE_RATIO;
 		}
 		return null;
 	}

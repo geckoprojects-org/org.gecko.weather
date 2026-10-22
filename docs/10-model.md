@@ -167,6 +167,9 @@ self-describing. Providers convert at mapping time; consumers never see a source
 | `UV_INDEX` | `1` | Dimensionless. |
 | `SIGNIFICANT_WEATHER` | `1` | Coded: `code` holds the WMO 4677 `ww` value, `value` is unset. |
 | `SUN_ELEVATION`, `SUN_AZIMUTH` | `deg` | Elevation above the horizon; azimuth from north, clockwise. |
+| `BATTERY_LEVEL` | `1` | Station health, from an own station: battery state as the device reports it, 1 fine, 0 empty. |
+| `BATTERY_VOLTAGE`, `CAPACITOR_VOLTAGE` | `V` | Station health: battery, and the solar-charged supercapacitor of a WS90/WS80. |
+| `SIGNAL_STRENGTH`, `SIGNAL_NOISE_RATIO` | `dB` | Station health: the telegram as the receiver saw it (rtl_433 RSSI, SNR). |
 
 ## Mapping examples
 
@@ -197,6 +200,13 @@ they exist; these rows fix the conventions.
 | SIS `SIS` | `GLOBAL_RADIATION` | `SURFACE` | `MEAN` | `PT15M` / `PT1H` | — | `W/m2` |
 | UV `uvi` | `UV_INDEX` | `SURFACE` | `MAX` | `P1D` | — | `1` |
 | computed | `SUN_ELEVATION` / `SUN_AZIMUTH` | `UNSPECIFIED` | `INSTANT` | — | — | `deg` |
+| WS90 `temperature_C` | `AIR_TEMPERATURE` | `GROUND_2M` | `INSTANT` | — | — | `Cel` |
+| WS90 `humidity` | `RELATIVE_HUMIDITY` | `GROUND_2M` | `INSTANT` | — | — | `%` |
+| WS90 `wind_avg_m_s` / `wind_max_m_s` / `wind_dir_deg` | `WIND_SPEED` / `WIND_GUST` / `WIND_DIRECTION` | `UNSPECIFIED` | `INSTANT` / `MAX` / `INSTANT` | — | — | `m/s`, `deg` |
+| WS90 `uvi` | `UV_INDEX` | `SURFACE` | `INSTANT` | — | — | `1` |
+| WS90 `light_lux` / 126.7 | `GLOBAL_RADIATION` | `SURFACE` | `INSTANT` | — | — | `W/m2` |
+| WS90 `rain_mm` (counter) | `PRECIPITATION` | `SURFACE` | `ACCUMULATED` | — | — | `mm` |
+| WS90 `battery_ok`, `battery_mV`, `supercap_V`, `rssi`, `snr` | `BATTERY_LEVEL`, `BATTERY_VOLTAGE`, `CAPACITOR_VOLTAGE`, `SIGNAL_STRENGTH`, `SIGNAL_NOISE_RATIO` | `UNSPECIFIED` | `INSTANT` | — | — | `1`, `V`, `dB` |
 
 `W1W2` (significant weather over two 3-hour intervals) is not mapped in the first version; `ww` covers
 the current interval.

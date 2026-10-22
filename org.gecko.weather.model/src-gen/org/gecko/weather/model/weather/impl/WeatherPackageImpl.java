@@ -2037,6 +2037,11 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 		addEEnumLiteral(measurementKindEEnum, MeasurementKind.SIGNIFICANT_WEATHER);
 		addEEnumLiteral(measurementKindEEnum, MeasurementKind.SUN_ELEVATION);
 		addEEnumLiteral(measurementKindEEnum, MeasurementKind.SUN_AZIMUTH);
+		addEEnumLiteral(measurementKindEEnum, MeasurementKind.BATTERY_LEVEL);
+		addEEnumLiteral(measurementKindEEnum, MeasurementKind.BATTERY_VOLTAGE);
+		addEEnumLiteral(measurementKindEEnum, MeasurementKind.CAPACITOR_VOLTAGE);
+		addEEnumLiteral(measurementKindEEnum, MeasurementKind.SIGNAL_STRENGTH);
+		addEEnumLiteral(measurementKindEEnum, MeasurementKind.SIGNAL_NOISE_RATIO);
 
 		initEEnum(levelEEnum, Level.class, "Level");
 		addEEnumLiteral(levelEEnum, Level.UNSPECIFIED);

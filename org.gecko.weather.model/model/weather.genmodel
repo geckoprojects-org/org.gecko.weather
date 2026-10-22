@@ -81,6 +81,21 @@
       <genEnumLiterals>
         <ecoreEnumLiteral href="weather.ecore#//MeasurementKind/SUN_AZIMUTH"/>
       </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//MeasurementKind/BATTERY_LEVEL"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//MeasurementKind/BATTERY_VOLTAGE"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//MeasurementKind/CAPACITOR_VOLTAGE"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//MeasurementKind/SIGNAL_STRENGTH"/>
+      </genEnumLiterals>
+      <genEnumLiterals>
+        <ecoreEnumLiteral href="weather.ecore#//MeasurementKind/SIGNAL_NOISE_RATIO"/>
+      </genEnumLiterals>
     </genEnums>
     <genEnums typeSafeEnumCompatible="false">
       <ecoreEnum href="weather.ecore#//Level"/>

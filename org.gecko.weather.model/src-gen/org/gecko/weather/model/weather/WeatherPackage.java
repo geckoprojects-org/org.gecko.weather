@@ -45,7 +45,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * @generated
  */
 @ProviderType
-@EPackage(uri = WeatherPackage.eNS_URI, fingerprint = "fp1:8e4d744ba820633945789d84a2a5cf061a09bede4982acda808c5adc7cbe80ec", genModel = "/model/weather.genmodel", genModelSourceLocations = {"model/weather.genmodel","org.gecko.weather.model/model/weather.genmodel"}, ecore = "/model/weather.ecore", ecoreSourceLocations = "/model/weather.ecore")
+@EPackage(uri = WeatherPackage.eNS_URI, fingerprint = "fp1:6d5680855598ba247bbb178be10c47d73c565b93fe835b11bcdb71addd32c144", genModel = "/model/weather.genmodel", genModelSourceLocations = {"model/weather.genmodel","org.gecko.weather.model/model/weather.genmodel"}, ecore = "/model/weather.ecore", ecoreSourceLocations = "/model/weather.ecore")
 public interface WeatherPackage extends org.eclipse.emf.ecore.EPackage {
 	/**
 	 * The package name.

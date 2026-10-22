@@ -218,6 +218,31 @@
     <eLiterals name="SIGNIFICANT_WEATHER" value="17"/>
     <eLiterals name="SUN_ELEVATION" value="18"/>
     <eLiterals name="SUN_AZIMUTH" value="19"/>
+    <eLiterals name="BATTERY_LEVEL" value="20">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Station health, reported by an own station with its observations: battery state as the device reports it, 1 is fine, 0 is empty. Unit 1."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="BATTERY_VOLTAGE" value="21">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Station health: battery voltage, V."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="CAPACITOR_VOLTAGE" value="22">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Station health: voltage of the solar-charged supercapacitor that powers a WS90/WS80 by day, V."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="SIGNAL_STRENGTH" value="23">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Station health: received signal strength of the telegram at the receiver, dB (relative; rtl_433 RSSI)."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="SIGNAL_NOISE_RATIO" value="24">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Station health: signal-to-noise ratio of the telegram at the receiver, dB."/>
+      </eAnnotations>
+    </eLiterals>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="Level">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
