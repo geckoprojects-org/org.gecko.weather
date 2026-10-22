@@ -1,9 +1,12 @@
 // The publishing pipeline. GitHub Actions (.github/workflows/build.yml) only builds and tests;
 // this is the one that publishes:
 //
+// On this line of history (sunorcloud) the release branch is sunorcloud_main, not main:
+//
 //   any other branch  build, test
-//   snapshot          build, test, release ${tstamp}-SNAPSHOT bundles to the DIM Nexus (dim-snapshot)
-//   main              build, test, release bare-version bundles to the DIM Nexus (dim-release)
+//   sunorcloud        build, test, release ${tstamp}-SNAPSHOT bundles to the DIM Nexus (dim-snapshot)
+//                     and the Portal's snapshot repository
+//   sunorcloud_main   build, test, release bare-version bundles to the DIM Nexus (dim-release)
 //                     and, signed, into dist/bundles, which bnd's sonatype-upload.sh hands to the
 //                     Sonatype Central Portal as one deployment; then export the launch as a drift check
 //
@@ -155,7 +158,7 @@ pipeline {
 
         stage('Build and test') {
             when {
-                not { anyOf { branch 'main'; branch 'snapshot'; branch 'sunorcloud' } }
+                not { anyOf { branch 'sunorcloud'; branch 'sunorcloud_main' } }
             }
             steps {
                 echo "Building ${env.BRANCH_NAME}"
@@ -165,9 +168,7 @@ pipeline {
 
         stage('Publish snapshot') {
             when {
-                // sunorcloud is in here only to try the chain before main and snapshot move onto
-                // this line of history (2026-10-22); take it out again afterwards.
-                anyOf { branch 'snapshot'; branch 'sunorcloud' }
+                branch 'sunorcloud'
             }
             environment {
                 // ${tstamp}-SNAPSHOT on every bundle, which sends the Release repository to
@@ -187,7 +188,7 @@ pipeline {
 
         stage('Publish release') {
             when {
-                branch 'main'
+                branch 'sunorcloud_main'
             }
             environment {
                 // Bare versions, which send the Release repository to dim-release; cnf/ext/release.bnd
@@ -210,7 +211,7 @@ pipeline {
 
         stage('Export the launch') {
             when {
-                anyOf { branch 'main'; branch 'snapshot'; branch 'sunorcloud' }
+                anyOf { branch 'sunorcloud'; branch 'sunorcloud_main' }
             }
             steps {
                 echo "Exporting the launch of ${env.BRANCH_NAME}"

@@ -5,7 +5,10 @@ Two builds, one of them publishes.
 | Where | On | Does | Publishes |
 | --- | --- | --- | --- |
 | **GitHub Actions** (`.github/workflows/build.yml`) | every push and pull request | licence header check, `./gradlew build` (compile, bundles, plain JUnit tests) on Temurin 25 | nothing — the pre-gate only |
-| **Jenkins** (`Jenkinsfile`) | the DIM Jenkins, every branch | the same build; on `snapshot` and `main` (and, for trying them, `sunorcloud`) also `release` and the launch export | `snapshot` → DIM Nexus `dim-snapshot` **and** the Maven Central snapshot repository of the Portal; `main` → DIM Nexus `dim-release` **and** one Central Portal deployment from `dist/bundles` |
+| **Jenkins** (`Jenkinsfile`) | the DIM Jenkins, every branch | the same build; on `sunorcloud` and `sunorcloud_main` also `release` and the launch export | `sunorcloud` → DIM Nexus `dim-snapshot` **and** the Maven Central snapshot repository of the Portal; `sunorcloud_main` → DIM Nexus `dim-release` **and** one Central Portal deployment from `dist/bundles` |
+
+On this line of history the snapshot branch is `sunorcloud` and the release branch `sunorcloud_main`;
+`main` and `snapshot` carry the older weather and do not publish from this `Jenkinsfile`.
 
 ## How a release works
 
@@ -77,5 +80,5 @@ with. Everything that can publish is on the Jenkins agent.
 
 `base-version` in `cnf/ext/fennec.bnd` is the workspace version; every bundle is
 `${base-version}.SNAPSHOT` until `DO_RELEASE` strips the qualifier. A release is therefore: bump
-`base-version`, merge to `main`, let Jenkins run. Baselining against the last release
+`base-version`, merge to `sunorcloud_main`, let Jenkins run. Baselining against the last release
 (`fennec-baselining`, `DEV-8`) stays off until there is one on the Nexus to compare with.
