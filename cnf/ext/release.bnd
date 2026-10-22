@@ -1,0 +1,30 @@
+# Where a release goes.
+#
+# The fennec library (cnf/ext/fennec.bnd, -library: fennec) brings the mechanics: DO_RELEASE
+# decides the version bnd stamps on every bundle (releng/snapshot.bnd: ${tstamp}-SNAPSHOT;
+# releng/release.bnd: the bare version), '-pom: true' and '-maven-release: pom' the Maven side,
+# and — only when GPG_PASSPHRASE is set and maven-central is true — releng/central.bnd: the
+# 'Sonatype' repository of bnd 7.4's Sonatype Central Portal support (stagingUrl =
+# production.portal.central.sonatype.com, sonatypeMode = autopublish, signed with
+# '-maven-release: pom, sign'), which then becomes '-releaserepo'.
+#
+# This workspace adds the DIM Nexus beside it. '-releaserepo' and '-connection-settings' are
+# merged over their suffixed keys, so the Nexus is listed on every release:
+#   snapshot branch (no GPG):  -releaserepo = Release            → dim-snapshot
+#   main branch (GPG + Portal): -releaserepo = Sonatype, Release → Maven Central and dim-release
+# Which Nexus URL is used follows from the version: a -SNAPSHOT goes to snapshotUrl.
+#
+# Credentials are not in the repository. The Nexus ones come from the Maven settings of whoever
+# runs the build (~/.m2/settings.xml, a <server> with <id>devel.data-in-motion.biz</id>) — that
+# is the '-maven' keyword below. The Portal ones come from the library's sonatype-settings.xml,
+# which reads CS_USERNAME and CS_PASSWORD; the GPG key from GPG_KEY_ID and GPG_PASSPHRASE.
+# See docs/12-build-and-release.md and the Jenkinsfile.
+
+-plugin.7.Release: \
+	aQute.bnd.repository.maven.provider.MavenBndRepository;\
+		releaseUrl  = https://devel.data-in-motion.biz/nexus/repository/dim-release/;\
+		snapshotUrl = https://devel.data-in-motion.biz/nexus/repository/dim-snapshot/;\
+		name        = 'Release'
+
+-releaserepo.nexus: Release
+-connection-settings.nexus: -maven
