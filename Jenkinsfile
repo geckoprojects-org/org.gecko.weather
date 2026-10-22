@@ -30,6 +30,16 @@ pipeline {
     }
 
     stages {
+        stage('Clean workspace') {
+            steps {
+                // Jenkins reuses the checkout. Projects removed from git leave their ignored
+                // bin/ and generated/ folders behind, and the bnd workspace plugin takes every
+                // root folder for a project — so stale ones get built as empty projects. Drop
+                // everything git does not track, except the workspace-local artifact cache.
+                sh 'git clean -ffdx -e .m2'
+            }
+        }
+
         stage('Build and test') {
             when {
                 not { anyOf { branch 'main'; branch 'snapshot'; branch 'sunorcloud' } }
