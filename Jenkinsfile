@@ -10,37 +10,52 @@
 // The mechanics live in cnf/ext/release.bnd and the fennec library (releng/*.bnd), see
 // docs/12-build-and-release.md. DO_RELEASE decides the version the bundles are built with,
 // so build and release share one invocation.
-// One publish for both branches. The Nexus login is the Jenkins credential dim-nexus; the
-// Maven Central login (the Portal token, CS_USERNAME/CS_PASSWORD) is the credential
-// central-portal-token when Jenkins has it — without it bnd still releases to the Nexus, and says so.
-// GPG_PASSPHRASE (set by the stage from GNUPG_PASSPHRASE) is what makes the fennec library add the
-// Sonatype repository and sign: a release goes to Maven Central, a snapshot to the Portal's
-// snapshot repository, as emf.osgi does it.
+// One publish for both branches. Everything that can publish comes from Jenkins credentials:
+//   dim-nexus              username/password  the DIM Nexus login (NEXUS_USERNAME/NEXUS_PASSWORD)
+//   central-portal-token   username/password  the Sonatype Central Portal user token (CS_USERNAME/CS_PASSWORD)
+//   gnupg-passphrase       secret text        passphrase of the signing key (GPG_PASSPHRASE)
+//   gnupg-private-key      secret file        ASCII export of the signing key pair; imported into a
+//                                             keyring of this run only and removed afterwards, as
+//                                             emf.osgi does it on GitHub. Without it, the keyring
+//                                             GNUPGHOME names (the master's) is used as it is.
+// GPG_PASSPHRASE is what makes the fennec library add the Sonatype repository and sign: a release
+// goes to Maven Central, a snapshot to the Portal's snapshot repository. A credential Jenkins does
+// not have is reported and left out; the Nexus part still runs.
 def publish() {
-    // a script-level 'def' is not visible in here (Groovy binding), so the name lives in the method
-    def PORTAL_CREDENTIAL = 'central-portal-token'
-    // What this node offers — presence only, never a value. The old DIM pipelines ran on the
-    // master (they wrote to $JENKINS_HOME and signed with /var/jenkins_home/.gnupg); on another
-    // node the master's variables, keyring and connection settings are not necessarily there.
-    def present = { name -> env."${name}" ? 'set' : 'missing' }
-    echo "publish on node '${env.NODE_NAME}': GNUPG_PASSPHRASE ${present('GNUPG_PASSPHRASE')}, GPG_PASSPHRASE ${present('GPG_PASSPHRASE')}, GPG_KEY_ID ${present('GPG_KEY_ID')}, GNUPGHOME=${env.GNUPGHOME}, CS_USERNAME ${present('CS_USERNAME')}, keyring ${fileExists("${env.GNUPGHOME}") ? 'found' : 'not found'}"
-    def creds = [usernamePassword(credentialsId: 'dim-nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]
-    def portal = false
-    try {
-        withCredentials([usernamePassword(credentialsId: PORTAL_CREDENTIAL, usernameVariable: 'CS_USERNAME', passwordVariable: 'CS_PASSWORD')]) {
-            portal = true
+    def has = { binding ->
+        try {
+            withCredentials([binding]) { }
+            return true
+        } catch (e) {
+            echo "No Jenkins credential '${binding.credentialsId}' (${e.message})"
+            return false
         }
-    } catch (e) {
-        echo "No Jenkins credential '${PORTAL_CREDENTIAL}' — nothing goes to Maven Central from this run (${e.message})"
     }
-    if (portal) {
-        creds << usernamePassword(credentialsId: PORTAL_CREDENTIAL, usernameVariable: 'CS_USERNAME', passwordVariable: 'CS_PASSWORD')
-    }
-    if (!env.GPG_PASSPHRASE) {
-        echo 'GNUPG_PASSPHRASE is not set on this Jenkins — unsigned, so nothing goes to Maven Central from this run'
-    }
+    def creds = [usernamePassword(credentialsId: 'dim-nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]
+    def portal = usernamePassword(credentialsId: 'central-portal-token', usernameVariable: 'CS_USERNAME', passwordVariable: 'CS_PASSWORD')
+    def passphrase = string(credentialsId: 'gnupg-passphrase', variable: 'GPG_PASSPHRASE')
+    def key = file(credentialsId: 'gnupg-private-key', variable: 'GNUPG_KEY_FILE')
+    if (has(portal)) creds << portal
+    if (has(passphrase)) creds << passphrase
+    else if (env.GNUPG_PASSPHRASE) echo "Signing with the GNUPG_PASSPHRASE of this node's environment"
+    else echo 'No passphrase at all - unsigned, so nothing goes to Maven Central from this run'
+    def importKey = has(key)
+    if (importKey) creds << key
+    echo "publish on node '${env.NODE_NAME}', keyring ${importKey ? 'imported for this run' : (env.GNUPGHOME + (fileExists("${env.GNUPGHOME}") ? ' (found)' : ' (not found)'))}"
     withCredentials(creds) {
-        sh './gradlew clean build release $COMMON_ARGS'
+        if (importKey) {
+            // a keyring of this run only; bnd's gpg line honours GNUPGHOME
+            withEnv(["GNUPGHOME=${env.WORKSPACE}/.gnupg-run"]) {
+                try {
+                    sh 'rm -rf "$GNUPGHOME" && mkdir -p "$GNUPGHOME" && chmod 700 "$GNUPGHOME" && gpg --batch --quiet --import "$GNUPG_KEY_FILE"'
+                    sh './gradlew clean build release $COMMON_ARGS'
+                } finally {
+                    sh 'rm -rf "$GNUPGHOME"'
+                }
+            }
+        } else {
+            sh './gradlew clean build release $COMMON_ARGS'
+        }
     }
 }
 
@@ -124,11 +139,6 @@ pipeline {
                 GNUPGHOME = "${env.GNUPGHOME ?: '/var/jenkins_home/.gnupg'}"
             }
             steps {
-                script {
-                    if (!env.GPG_PASSPHRASE) {
-                        error('GNUPG_PASSPHRASE is not set on this Jenkins — without it nothing is signed and nothing reaches Maven Central.')
-                    }
-                }
                 echo "Releasing ${env.BRANCH_NAME} to the DIM Nexus and Maven Central"
                 script { publish() }
             }
