@@ -144,7 +144,6 @@ org.eclipse.osgi-technology.rest:org.eclipse.osgitech.rest.bnd.library:1.2.3
 org.eclipse.fennec.metadata:org.eclipse.fennec.model.metadata.library.workspace:1.0.0-SNAPSHOT
 org.eclipse.fennec.codec:org.eclipse.fennec.codec.workspace.library:0.1.0-SNAPSHOT
 org.eclipse.fennec.m2x:org.eclipse.fennec.m2x.library.workspace:0.1.1-SNAPSHOT
-org.eclipse.fennec.persistence.jpa:org.eclipse.fennec.persistence.jpa.library.workspace:0.1.0-SNAPSHOT
 org.eclipse.fennec.models:org.eclipse.fennec.common.models.library:0.0.1-SNAPSHOT
 net.e175.klaus:solarpositioning:3.0.1
 org.eclipse.fennec.mcp:org.eclipse.fennec.mcp.workspace.library:0.1.0-SNAPSHOT
@@ -170,6 +169,7 @@ commons-io:commons-io:2.22.0
 # exports WeatherOutlook through it. Snapshots from Central, as in otel-demo.
 org.eclipse.fennec.services:org.eclipse.fennec.services.api:0.1.0-SNAPSHOT
 org.eclipse.fennec.services:org.eclipse.fennec.services.model:0.1.0-SNAPSHOT
+org.eclipse.fennec.services:org.eclipse.fennec.services.runtime:0.1.0-SNAPSHOT
 org.eclipse.fennec.services:org.eclipse.fennec.services.client.java:0.1.0-SNAPSHOT
 org.eclipse.fennec.services:org.eclipse.fennec.services.client.rest:0.1.0-SNAPSHOT
 org.eclipse.fennec.services:org.eclipse.fennec.services.provider.rest:0.1.0-SNAPSHOT
