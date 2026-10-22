@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Demo: the weather outlook of a site — 24 hours by the hour, two days in summary — read from the WeatherOutlook remote service through the Fennec Services registry (DDSR), in the style of xdp-ui",
+  "description": "Demo: the weather outlook of a site \u2014 24 hours by the hour, two days in summary \u2014 read from the WeatherOutlook remote service through the Fennec Services registry (DDSR), in the style of xdp-ui",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
@@ -17,12 +17,10 @@
     "@ddsr/model": "file:vendor/ddsr/ddsr-model-82e7f3b.tgz",
     "@ddsr/telemetry": "file:vendor/ddsr/ddsr-telemetry-82e7f3b.tgz",
     "@emfts/core": "0.3.0-next.1",
-    "three": "^0.180.0",
     "vue": "^3.5.13"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
-    "@types/three": "^0.180.0",
     "@vitejs/plugin-vue": "^5.2.3",
     "typescript": "~5.9.2",
     "vite": "^6.4.2",

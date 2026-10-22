@@ -1,9 +1,7 @@
-# Demo launch: the developer launch (MCP server on 8088) plus the weather outlook and the PV forecast
-# as remote services — Remote Service Admin of Fennec Services derives the WeatherOutlook contract, serves it
+# Demo launch: the developer launch (MCP server on 8088) plus the weather outlook
+# as a remote service — Remote Service Admin of Fennec Services derives the WeatherOutlook contract, serves it
 # over REST on :9093/weather and announces it to the DDSR broker. The UI under ui/outlook finds it
 # there. Needs a running broker (emf.services, port 8887); see ui/outlook/README.md.
-# On the same Jetty: the cloud cover map of org.gecko.weather.map as OGC API Features
-# (:9093/weather/ogc) with the MapLibre viewer of Fennec OGC Features (:9093/weather/ogc/viewer/).
 #
 #   ./gradlew :org.gecko.weather.runtime:resolve.demo
 #   ./gradlew :org.gecko.weather.runtime:export.demo
@@ -34,7 +32,6 @@ jersey.deps:
 	bnd.identity;id='org.gecko.weather.provider.dwd.icon',\
 	bnd.identity;id='org.gecko.weather.provider.dwd.sis',\
 	bnd.identity;id='org.gecko.weather.provider.dwd.uv',\
-	bnd.identity;id='org.gecko.weather.provider.ecowitt',\
 	bnd.identity;id='org.apache.commons.commons-io',\
 	bnd.identity;id='org.eclipse.fennec.emf.osgi.component.minimal',\
 	bnd.identity;id='net.opengis.kml.model',\
@@ -47,9 +44,6 @@ jersey.deps:
 	bnd.identity;id='slf4j.simple',\
 	bnd.identity;id='org.apache.aries.spifly.dynamic.bundle',\
 	bnd.identity;id='org.gecko.weather.outlook',\
-	bnd.identity;id='org.gecko.weather.pv',\
-	bnd.identity;id='org.gecko.weather.pv.fronius',\
-	bnd.identity;id='org.eclipse.fennec.codec',\
 	bnd.identity;id='org.gecko.weather.runtime.remote',\
 	bnd.identity;id='org.eclipse.fennec.services.rsa',\
 	bnd.identity;id='org.eclipse.fennec.services.rsa.config',\
@@ -62,15 +56,7 @@ jersey.deps:
 	bnd.identity;id='org.eclipse.fennec.services.provider.rest',\
 	bnd.identity;id='org.apache.felix.http.jetty12',\
 	bnd.identity;id='org.eclipse.parsson.jakarta.json',\
-	bnd.identity;id='org.apache.felix.configadmin.plugin.interpolation',\
-	bnd.identity;id='org.gecko.weather.map',\
-	bnd.identity;id='org.eclipse.fennec.ogc.features.runtime',\
-	bnd.identity;id='org.eclipse.fennec.ogc.features.viewer',\
-	bnd.identity;id='org.eclipse.fennec.ogc.features.source.memory',\
-	bnd.identity;id='org.eclipse.fennec.ogc.features.cql2',\
-	bnd.identity;id='org.eclipse.fennec.codec.cql2',\
-	bnd.identity;id='org.eclipse.fennec.ogc.features.geo',\
-	bnd.identity;id='org.eclipse.fennec.codec.geojson'
+	bnd.identity;id='org.apache.felix.configadmin.plugin.interpolation'
 
 -runblacklist: \
 	bnd.identity;id='org.osgi.service.cm',\
@@ -195,22 +181,4 @@ jersey.deps:
 	tools.jackson.core.jackson-core;version='[3.2.2,3.2.3)',\
 	tools.jackson.core.jackson-databind;version='[3.2.2,3.2.3)',\
 	tools.jackson.dataformat.jackson-dataformat-yaml;version='[3.2.2,3.2.3)',\
-	org.gecko.weather.pv;version=snapshot,\
-	org.gecko.weather.pv.fronius;version=snapshot,\
-	org.eclipse.fennec.codec;version='[0.1.0,0.1.1)',\
-	net.opengis.cql2.model;version='[0.1.0,0.1.1)',\
-	org.antlr.antlr4-runtime;version='[4.13.2,4.13.3)',\
-	org.eclipse.fennec.codec.cql2;version='[0.1.0,0.1.1)',\
-	org.eclipse.fennec.codec.geojson;version='[0.1.0,0.1.1)',\
-	org.eclipse.fennec.ogc.features.api;version='[0.1.0,0.1.1)',\
-	org.eclipse.fennec.ogc.features.cql2;version='[0.1.0,0.1.1)',\
-	org.eclipse.fennec.ogc.features.geo;version='[0.1.0,0.1.1)',\
-	org.eclipse.fennec.ogc.features.runtime;version='[0.1.0,0.1.1)',\
-	org.eclipse.fennec.ogc.features.source.memory;version='[0.1.0,0.1.1)',\
-	org.eclipse.fennec.ogc.features.viewer;version='[0.1.0,0.1.1)',\
-	org.gecko.weather.map;version=snapshot,\
-	org.geojson.model;version='[0.0.1,0.0.2)',\
-	org.locationtech.jts.jts-core;version='[1.20.0,1.20.1)',\
-	org.qgis.project.model;version='[0.1.0,0.1.1)',\
-	org.eclipse.fennec.services.runtime;version='[0.1.0,0.1.1)',\
-	org.gecko.weather.provider.ecowitt;version=snapshot
+	org.eclipse.fennec.services.runtime;version='[0.1.0,0.1.1)'

@@ -5,7 +5,7 @@
 /**
  * Reading answers of the remote services: an ecore registered once in the global registry, and the
  * small accessors that turn an EObject into the plain values a contract speaks. Shared by the
- * weather and the PV client.
+ * weather client.
  */
 import {
   BasicResourceSet,
