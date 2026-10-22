@@ -44,6 +44,11 @@ workspace only says where things go (`cnf/ext/release.bnd`):
 - **`NEXUS_RELEASE=false`** leaves the Nexus out of a release (`-releaserepo: Dist`). The Jenkinsfile
   sets it on `sunorcloud_main`, the branch that tries the release: `dim-release` takes every version
   only once.
+- **Poms without dependencies.** `-maven-dependencies:` (empty) in `cnf/ext/release.bnd` stops bnd
+  from listing the `-buildpath` in the poms: it holds Fennec artifacts that exist only as
+  snapshots (emf.osgi 1.1.0, the KML and DWD models of fennec.models), and the Portal rejects a
+  release that depends on a SNAPSHOT. The bundles resolve through their manifests. Back to normal
+  poms once those artifacts are released.
 - **`-pom: true`** writes the pom with the SCM, licence and developers from the library's
   `workspace.bnd`; `-sources: true` puts the sources into the bundle.
 

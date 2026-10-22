@@ -73,3 +73,10 @@ dist: ${workspace}/dist/bundles
 # --local-user is only given when a key id is set, otherwise gpg takes its default key — as the
 # old setup did.
 gpg: gpg ${if;${env;GPG_KEY_ID;};--local-user ${env;GPG_KEY_ID}} --pinentry-mode loopback --batch
+
+# Poms without <dependencies>. bnd would list the -buildpath, and that has Fennec artifacts which
+# exist only as snapshots (emf.osgi 1.1.0, the KML and DWD models), which the Central Portal
+# rejects in a release ("Dependencies to SNAPSHOT versions not allowed"). The bundles resolve
+# through their manifests anyway; set, even empty, this replaces what bnd would collect. Take it
+# out once those Fennec artifacts are released and the buildpath points at the releases.
+-maven-dependencies:
