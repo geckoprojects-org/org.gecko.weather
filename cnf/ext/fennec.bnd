@@ -27,7 +27,7 @@
 	fennecMCP,\
 	jakartaREST
 
-base-version: 1.0.0
+base-version: 0.0.1
 javac.source: 25
 javac.target: 25
 -require-bnd: "(version>=7.1.0)"
