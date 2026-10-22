@@ -165,7 +165,7 @@ Everything valuable that no longer changes the architecture. Order by whichever 
 | 4.6 | Health endpoint, metrics, jitter, failure isolation, backup/restore, upgrade path, footprint | M | `OPS-3`, `OPS-4`, `OPS-11`, `OPS-13`…`OPS-15` |
 | 4.7 | Resolve `QR-10` / `Q-A`: authentication, or a documented decision to delegate it | S–M | `QR-10` |
 | 4.8 | Site attributes for tilt and azimuth, add-on module preparation only | S | `INT-16`, `Q-J` |
-| 4.9 | **First local-station provider** — Ecowitt gateway upload (HTTP POST in the device's format) or Bresser, mapped to canonical kinds, `Origin.LOCAL_STATION`, pushed through `WeatherDataSink.append`; manual binding by device id | M | `M-17`; the own station beside the forecasts |
+| 4.9 | **First local-station provider** — Ecowitt gateway upload (HTTP POST in the device's format) or Bresser, mapped to canonical kinds, `Origin.LOCAL_STATION`, pushed through `WeatherDataSink.append`; manual binding by device id | M | `M-17`; the own station beside the forecasts — **done 2026-10-22** as `org.gecko.weather.provider.ecowitt`: WS90/WS80 over rtl_433 on an RTL-SDR stick (HTTP line stream), configured per station; gateway upload still open |
 
 ## Deferred indefinitely
 

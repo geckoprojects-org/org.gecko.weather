@@ -1,0 +1,36 @@
+Bundle-Name: Gecko Weather Provider Ecowitt
+Bundle-Description: An own Ecowitt weather station (WS90, WS80) as a local source. The station's 868 MHz \
+	telegrams are received by rtl_433 on a DVB-T stick (SDR) and served as a JSON line stream over HTTP; \
+	this bundle reads that stream into the rtl433 EMF model with the Fennec JSON codec, maps the readings \
+	to canonical kinds and pushes them through WeatherDataSink.append with Origin.LOCAL_STATION. One \
+	configuration per station says which model, which device, how it is attached and where it stands.
+
+src: src-gen,src
+
+-library: enableEMF
+
+-generate: \
+	model/rtl433.ecore; \
+		generate=fennecEMF; \
+		ecore=model/rtl433.ecore; \
+		output=src-gen
+
+-includeresource.model: model=model
+
+-buildpath: \
+	org.gecko.weather.model;version=snapshot,\
+	org.gecko.weather.api;version=snapshot,\
+	org.eclipse.fennec.codec.api;version=latest,\
+	org.osgi.service.component.annotations;version=latest,\
+	org.osgi.service.metatype.annotations;version=latest
+
+# The codec outside OSGi: CodecResourceFactory over a MetadataWhiteboard, Jackson underneath
+-testpath: \
+	org.eclipse.fennec.codec;version=latest,\
+	org.eclipse.fennec.codec.metadata;version=latest,\
+	org.eclipse.fennec.emf.osgi.metadata;version=latest,\
+	org.eclipse.fennec.emf.osgi.component.minimal;version=latest,\
+	tools.jackson.core.jackson-core;version=latest,\
+	tools.jackson.core.jackson-databind;version=latest,\
+	com.fasterxml.jackson.core.jackson-annotations;version=latest,\
+	assertj-core;version=latest

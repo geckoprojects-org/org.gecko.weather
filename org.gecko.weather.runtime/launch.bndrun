@@ -32,6 +32,8 @@
 	bnd.identity;id='org.gecko.weather.provider.dwd.icon',\
 	bnd.identity;id='org.gecko.weather.provider.dwd.sis',\
 	bnd.identity;id='org.gecko.weather.provider.dwd.uv',\
+	bnd.identity;id='org.gecko.weather.provider.ecowitt',\
+	bnd.identity;id='org.eclipse.fennec.codec',\
 	bnd.identity;id='org.apache.commons.commons-io',\
 	bnd.identity;id='org.eclipse.fennec.emf.osgi.component.minimal',\
 	bnd.identity;id='net.opengis.kml.model',\
@@ -94,4 +96,12 @@
 	slf4j.simple;version='[2.0.17,2.0.18)',\
 	org.gecko.weather.provider.dwd.sis;version=snapshot,\
 	org.gecko.weather.grib2;version=snapshot,\
-	org.gecko.weather.provider.dwd.uv;version=snapshot
+	org.gecko.weather.provider.dwd.uv;version=snapshot,\
+	com.fasterxml.jackson.core.jackson-annotations;version='[2.22.0,2.22.1)',\
+	org.eclipse.fennec.codec;version='[0.1.0,0.1.1)',\
+	org.eclipse.fennec.codec.api;version='[0.1.0,0.1.1)',\
+	org.eclipse.fennec.codec.metadata;version='[0.1.0,0.1.1)',\
+	org.eclipse.fennec.emf.osgi.metadata;version='[1.1.0,1.1.1)',\
+	org.gecko.weather.provider.ecowitt;version=snapshot,\
+	tools.jackson.core.jackson-core;version='[3.2.2,3.2.3)',\
+	tools.jackson.core.jackson-databind;version='[3.2.2,3.2.3)'
