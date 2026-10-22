@@ -11,14 +11,14 @@
 // docs/12-build-and-release.md. DO_RELEASE decides the version the bundles are built with,
 // so build and release share one invocation.
 // One publish for both branches. The Nexus login is the Jenkins credential dim-nexus; the
-// Maven Central login (the Portal token, CS_USERNAME/CS_PASSWORD) is the credential named by
-// PORTAL_CREDENTIAL when Jenkins has it — without it bnd still releases to the Nexus, and says so.
+// Maven Central login (the Portal token, CS_USERNAME/CS_PASSWORD) is the credential
+// central-portal-token when Jenkins has it — without it bnd still releases to the Nexus, and says so.
 // GPG_PASSPHRASE (set by the stage from GNUPG_PASSPHRASE) is what makes the fennec library add the
 // Sonatype repository and sign: a release goes to Maven Central, a snapshot to the Portal's
 // snapshot repository, as emf.osgi does it.
-def PORTAL_CREDENTIAL = 'central-portal-token'
-
 def publish() {
+    // a script-level 'def' is not visible in here (Groovy binding), so the name lives in the method
+    def PORTAL_CREDENTIAL = 'central-portal-token'
     def creds = [usernamePassword(credentialsId: 'dim-nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]
     def portal = false
     try {
