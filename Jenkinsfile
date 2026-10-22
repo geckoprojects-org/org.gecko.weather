@@ -32,7 +32,7 @@ pipeline {
     stages {
         stage('Build and test') {
             when {
-                not { anyOf { branch 'main'; branch 'snapshot' } }
+                not { anyOf { branch 'main'; branch 'snapshot'; branch 'sunorcloud' } }
             }
             steps {
                 echo "Building ${env.BRANCH_NAME}"
@@ -42,7 +42,9 @@ pipeline {
 
         stage('Publish snapshot') {
             when {
-                branch 'snapshot'
+                // sunorcloud is in here only to try the chain before main and snapshot move onto
+                // this line of history (2026-10-22); take it out again afterwards.
+                anyOf { branch 'snapshot'; branch 'sunorcloud' }
             }
             environment {
                 // ${tstamp}-SNAPSHOT on every bundle, which sends the Release repository to
@@ -83,7 +85,7 @@ pipeline {
 
         stage('Export the launch') {
             when {
-                anyOf { branch 'main'; branch 'snapshot' }
+                anyOf { branch 'main'; branch 'snapshot'; branch 'sunorcloud' }
             }
             steps {
                 echo "Exporting the launch of ${env.BRANCH_NAME}"
