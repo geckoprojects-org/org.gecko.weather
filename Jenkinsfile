@@ -10,30 +10,24 @@
 // The mechanics live in cnf/ext/release.bnd and the fennec library (releng/*.bnd), see
 // docs/12-build-and-release.md. DO_RELEASE decides the version the bundles are built with,
 // so build and release share one invocation.
-// One publish for both branches. Everything that can publish comes from Jenkins credentials:
-//   dim-nexus              username/password  the DIM Nexus login (NEXUS_USERNAME/NEXUS_PASSWORD)
-//   central-portal-token   username/password  the Sonatype Central Portal user token (CS_USERNAME/CS_PASSWORD)
-//   gnupg-passphrase       secret text        passphrase of the signing key (GPG_PASSPHRASE)
-//   gnupg-private-key      secret file        ASCII export of the signing key pair; imported into a
-//                                             keyring of this run only and removed afterwards, as
-//                                             emf.osgi does it on GitHub. Without it, the keyring
-//                                             GNUPGHOME names (the master's) is used as it is.
+// One publish for both branches, set up the way the old weather pipeline ran on this Jenkins:
+//   GNUPG_PASSPHRASE   environment of the Jenkins (the old DIM library read exactly this name);
+//                      the fennec library's name is GPG_PASSPHRASE, so it is mapped
+//   GNUPGHOME          the node's keyring with the signing key, /var/jenkins_home/.gnupg as before
+//   dim-nexus          Jenkins credential, username/password: the DIM Nexus login
+//   central-portal-token  Jenkins credential, username/password: the Sonatype Central Portal user
+//                      token (CS_USERNAME/CS_PASSWORD) — new, the old library spoke to OSSRH
+// Optional, for a Jenkins that keeps them as credentials instead: gnupg-passphrase (secret text)
+// and gnupg-private-key (secret file, imported into a keyring of this run).
 // GPG_PASSPHRASE is what makes the fennec library add the Sonatype repository and sign: a release
 // goes to Maven Central, a snapshot to the Portal's snapshot repository. Both targets are the
-// point of this stage, so a missing credential fails the run with its name instead of quietly
-// publishing to the Nexus alone.
+// point of this stage, so anything missing fails the run with its name.
 def publish() {
-    def missing = []
-    def found = []
-    // The binding object itself cannot be read in the sandbox (no credentialsId field), so the id
-    // travels beside it; Jenkins' own message says whether the id is unknown or of another type.
-    def has = { id, binding ->
+    def has = { binding ->
         try {
             withCredentials([binding]) { }
-            found << id
             return true
         } catch (e) {
-            missing << "${id} (${e.message})"
             return false
         }
     }
@@ -41,29 +35,51 @@ def publish() {
     def portal = usernamePassword(credentialsId: 'central-portal-token', usernameVariable: 'CS_USERNAME', passwordVariable: 'CS_PASSWORD')
     def passphrase = string(credentialsId: 'gnupg-passphrase', variable: 'GPG_PASSPHRASE')
     def key = file(credentialsId: 'gnupg-private-key', variable: 'GNUPG_KEY_FILE')
+    def problems = []
     def creds = []
-    if (has('dim-nexus', nexus)) creds << nexus
-    if (has('central-portal-token', portal)) creds << portal
-    if (has('gnupg-passphrase', passphrase)) creds << passphrase
-    if (has('gnupg-private-key', key)) creds << key
-    if (missing) {
-        error("Jenkins credentials missing on this controller: ${missing.join('; ')}. Found: ${found.join(', ') ?: 'none'}. Nothing is published until all four exist under exactly these ids and types (Manage Jenkins > Credentials): dim-nexus and central-portal-token as 'Username with password', gnupg-passphrase as 'Secret text', gnupg-private-key as 'Secret file'.")
+    if (has(nexus)) creds << nexus else problems << "Jenkins credential 'dim-nexus' (username/password, the Nexus login)"
+    if (has(portal)) creds << portal else problems << "Jenkins credential 'central-portal-token' (username/password, the Portal user token)"
+    def passphraseFrom
+    if (env.GNUPG_PASSPHRASE) {
+        passphraseFrom = 'GNUPG_PASSPHRASE of the Jenkins environment'
+    } else if (has(passphrase)) {
+        creds << passphrase
+        passphraseFrom = "Jenkins credential 'gnupg-passphrase'"
+    } else {
+        problems << "the signing passphrase: neither GNUPG_PASSPHRASE in the environment of node '${env.NODE_NAME}' nor a Jenkins credential 'gnupg-passphrase' (secret text)"
     }
-    echo "publish on node '${env.NODE_NAME}' with credentials ${found.join(', ')}; signing key imported into a keyring of this run"
+    def importKey = has(key)
+    if (importKey) creds << key
+    if (problems) {
+        error("Cannot publish to the Nexus and Maven Central - missing: ${problems.join('; ')}")
+    }
+    echo "publish on node '${env.NODE_NAME}': passphrase from ${passphraseFrom}, keyring ${importKey ? 'imported for this run' : env.GNUPGHOME}, credentials ${creds.size()}"
+    def body = {
+        // The key must be in the keyring, whichever one it is.
+        def keys = sh(returnStdout: true, script: 'gpg --batch --list-secret-keys --with-colons 2>/dev/null | grep -c "^sec" || true').trim()
+        if (keys == '0' || keys == '') {
+            error("No secret key in the keyring ${env.GNUPGHOME} on node '${env.NODE_NAME}' - the signing key has to be there, or come as the Jenkins credential 'gnupg-private-key' (secret file, ASCII export).")
+        }
+        // What bnd will release to: both names, or the run is pointless.
+        def repos = sh(returnStdout: true, script: './gradlew -q :org.gecko.weather.api:bndproperties $COMMON_ARGS 2>/dev/null | grep "^-releaserepo:" || true').trim()
+        echo "bnd ${repos}"
+        if (!repos.contains('Sonatype') || !repos.contains('Release')) {
+            error("bnd would release to '${repos}' - expected Sonatype and Release. GPG_PASSPHRASE did not reach bnd, or maven-central is off (cnf/ext/release.bnd, the fennec library's releng/central.bnd).")
+        }
+        sh './gradlew clean build release $COMMON_ARGS'
+    }
     withCredentials(creds) {
-        withEnv(["GNUPGHOME=${env.WORKSPACE}/.gnupg-run"]) {
-            try {
-                sh 'rm -rf "$GNUPGHOME" && mkdir -p "$GNUPGHOME" && chmod 700 "$GNUPGHOME" && gpg --batch --quiet --import "$GNUPG_KEY_FILE" && gpg --batch --list-secret-keys --with-colons | grep -c "^sec" | sed "s/^/secret keys in the run keyring: /"'
-                // What bnd will release to: both names, or the run is pointless.
-                def repos = sh(returnStdout: true, script: './gradlew -q :org.gecko.weather.api:bndproperties $COMMON_ARGS 2>/dev/null | grep "^-releaserepo:" || true').trim()
-                echo "bnd ${repos}"
-                if (!repos.contains('Sonatype') || !repos.contains('Release')) {
-                    error("bnd would release to '${repos}' - expected Sonatype and Release. GPG_PASSPHRASE did not reach bnd, or maven-central is off (cnf/ext/release.bnd, the fennec library's releng/central.bnd).")
+        if (importKey) {
+            withEnv(["GNUPGHOME=${env.WORKSPACE}/.gnupg-run"]) {
+                try {
+                    sh 'rm -rf "$GNUPGHOME" && mkdir -p "$GNUPGHOME" && chmod 700 "$GNUPGHOME" && gpg --batch --quiet --import "$GNUPG_KEY_FILE"'
+                    body()
+                } finally {
+                    sh 'rm -rf "$GNUPGHOME"'
                 }
-                sh './gradlew clean build release $COMMON_ARGS'
-            } finally {
-                sh 'rm -rf "$GNUPGHOME"'
             }
+        } else {
+            body()
         }
     }
 }
