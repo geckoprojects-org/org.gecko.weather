@@ -51,7 +51,7 @@ Goal: a real, green, empty workspace, so that no later increment is blocked on t
 | # | Increment | Effort | Status |
 | --- | --- | --- | --- |
 | 0.1 | bnd workspace on the Fennec `cnf` template rather than the old one; Gradle wrapper, licence config | S | **done** — template debris removed, old `weather.model` reference dropped |
-| 0.2 | Baseline: Java 21, bnd 7.4, OSGi R8 | S | **done** — [ADR-0006](adr/0006-java-baseline-toolchain.md) |
+| 0.2 | Baseline: Java 25 (raised from 21 on 2026-10-22), bnd 7.4, OSGi R8 | S | **done** — [ADR-0006](adr/0006-java-baseline-toolchain.md) |
 | 0.3 | CI: Jenkins for build/test/release, GitHub Actions as licence/build/test pre-gate | S | **done** — `DEV-8`, `C-6` |
 | 0.4 | `docs/` as the canonical documentation home | S | **done** — `DEV-12` |
 | 0.6 | Branch and coordinates | S | **done** — `sunorcloud`, group unchanged ([ADR-0001](adr/0001-greenfield-new-repository.md)) |

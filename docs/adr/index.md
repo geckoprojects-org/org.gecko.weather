@@ -26,7 +26,7 @@ One file per decision. Copy [0000-template.md](0000-template.md) to start a new 
 | [0003](0003-provider-spi.md) | Provider SPI with transport separated from decoding, streaming sink | Proposed | More interfaces than a monolithic fetcher; two very different decoder effort classes behind one interface |
 | [0004](0004-persistence-index-split.md) | Durable repository, separate rebuildable Lucene index | Proposed | Data written twice; rebuild path must be tested; **backend still open** |
 | [0005](0005-provider-neutral-model.md) | Provider-neutral model with canonical measurement kinds | Proposed | Vocabulary must be curated; adding a quantity is a core release; **declarative mechanism still open** |
-| [0006](0006-java-baseline-toolchain.md) | Java 21, bnd 7.4, OSGi R8 | Proposed | Diverges from Java 17 / bnd 7.0.0; runs a bnd **snapshot** until 7.4.0 ships |
+| [0006](0006-java-baseline-toolchain.md) | Java 25 (was 21), bnd 7.4, OSGi R8 | Proposed | Diverges from Java 17 / bnd 7.0.0; runs a bnd **snapshot** until 7.4.0 ships |
 | [0007](0007-ingest-and-scheduling.md) | Ingest runtime with conditional GET, retry, per-provider isolation | Accepted | Ingest becomes a component with its own state, not a cron method |
 | [0008](0008-rest-api-design.md) | Versioned, OpenAPI-first REST API with RFC 9457 errors | Proposed | Version segment must be honoured; no compatibility layer; timestep grouping stays hand-written |
 | [0009](0009-site-as-central-entity.md) | The site is the central entity, not the station | Accepted | Sites are state that must be stored, resolved and maintained |
@@ -34,6 +34,8 @@ One file per decision. Copy [0000-template.md](0000-template.md) to start a new 
 | [0011](0011-lineage-and-uncertainty.md) | Lineage and uncertainty as first-class model concepts | Accepted | Every value is heavier; responses are more verbose |
 | [0012](0012-fusion-and-supersession.md) | Configurable fusion, supersession instead of overwrite | Superseded by 0013 | — |
 | [0013](0013-values-per-source.md) | Values kept per source, no service-side fusion; consumers combine | Accepted | Every consumer aligns sources itself; report carries all sources' values |
+| [0014](0014-addon-extension-points.md) | Kernel exports extension points; solar, PV, meters **and the portal** are add-ons | Proposed | Three more baselined contracts; enricher ordering and recompute are the kernel's problem |
+| [0015](0015-repository-split.md) | Open workspace for weather, private workspace for the house's add-ons | Proposed | Two workspaces to keep aligned; private add-ons untestable in the open workspace |
 
 ## Decision dependencies
 
@@ -51,11 +53,23 @@ graph LR
     A1 --> A6["0006<br/>toolchain"]
     A3 --> A7["0007<br/>ingest"]
     A5 --> A8["0008<br/>REST"]
+    A13 --> A14["0014<br/>extension points"]
+    A8 --> A14
+    A14 --> A15["0015<br/>repository split"]
 ```
 
 `0009` and `0011` are the load-bearing ones: everything about accuracy follows from the site being the
 subject, and everything about trust follows from values carrying their origin. Both are also the
 hardest to retrofit, which is why they are decided first and implemented in the MVP.
+
+## Revision 2026-10-22 — the edge is the product
+
+The deployment picture was settled: a box in the house that shows its own station with no account and
+no network is the product; forecasts from a portal, solar geometry, PV, the inverter and a heat pump
+are add-ons that install into it. `0014` names the extension points this needs and moves solar out of
+the kernel; `0015` splits the private add-ons into their own workspace. `0008` stops being deferred —
+the web app and the edge-to-portal traffic need the HTTP API. The topology is in
+[../11-edge-and-addons.md](../11-edge-and-addons.md).
 
 ## Revision 2026-10-03 — a weather backend, not an energy service
 

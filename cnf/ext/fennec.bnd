@@ -28,8 +28,8 @@
 	jakartaREST
 
 base-version: 1.0.0
-javac.source: 21
-javac.target: 21
+javac.source: 25
+javac.target: 25
 -require-bnd: "(version>=7.1.0)"
 -jpms-module-info:
 

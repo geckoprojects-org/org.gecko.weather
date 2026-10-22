@@ -44,7 +44,7 @@ Requirements that keep the service changeable by one person across long gaps.
 | DEV-8 | API compatibility is enforced mechanically: bnd baselining runs in CI and fails the build on an unintended breaking change to an exported package. | Must | `V-12` |
 | DEV-9 | The runtime resolves exactly one version of each bundle. Duplicate or conflicting versions of the same artefact are a build failure, not a runtime surprise. | Must | `F-13` |
 | DEV-10 | `java.time` is used throughout. No `Date`, `Calendar` or `SimpleDateFormat` in new code, and all instants carry an explicit time zone or offset. | Should | `F-14` |
-| DEV-11 | Toolchain baseline: Java 21, bnd 7.1+, OSGi R8. | Should | [ADR-0006](adr/0006-java-baseline-toolchain.md) |
+| DEV-11 | Toolchain baseline: Java 25 (since 2026-10-22, was 21), bnd 7.1+, OSGi R8. | Should | [ADR-0006](adr/0006-java-baseline-toolchain.md) |
 | DEV-12 | Documentation lives in one place (`docs/`) with per-bundle READMEs limited to what is specific to that bundle. Naming and structure conventions are written down. | Should | `F-15` |
 | DEV-13 | Fast feedback: model generation is skippable for a normal build, and unit tests run without starting an OSGi framework. | Should | — |
 | DEV-14 | Releases go to Maven Central under `org.geckoprojects.weather` with semantic versions derived from baselining. | Should | — |

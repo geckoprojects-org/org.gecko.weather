@@ -10,7 +10,7 @@
 #               weather:values home AIR_TEMPERATURE
 
 -runfw: org.apache.felix.framework
--runee: JavaSE-21
+-runee: JavaSE-25
 -runsystemcapabilities: ${native_capability}
 -resolve.effective: active;skip:="osgi.service"
 

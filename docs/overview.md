@@ -17,6 +17,7 @@ builds on the previous.
 | **8** | **[08-mvp.md](08-mvp.md)** | **What is actually being built first — read this before the plan** |
 | **9** | **[09-source-inventory.md](09-source-inventory.md)** | Which DWD products deliver what, measured — the answer to `Q-I` |
 | **10** | **[10-model.md](10-model.md)** | The model: classes, qualifiers, canonical units, mapping conventions |
+| 11 | [11-edge-and-addons.md](11-edge-and-addons.md) | Where things run: the edge as the product, the portal and everything else as add-ons |
 | — | [adr/index.md](adr/index.md) | Architecture Decision Records, one decision per file |
 
 > **Start at `08-mvp.md`.** It is the authority on what is being built; `06-redesign-plan.md` has been
@@ -73,7 +74,7 @@ layer, OCL/QVT and a Lucene integration that Gecko did not have.
 | How do we support different sources and formats? | Provider SPI with transport separated from decoder | [ADR-0003](adr/0003-provider-spi.md) |
 | How do we get durability? | Durable repository (XMI folder now, Fennec persistence / Lucene prepared) | [ADR-0004](adr/0004-persistence-index-split.md) |
 | How do we name model concepts? | Provider-neutral, canonical measurement kinds with qualifiers | [ADR-0005](adr/0005-provider-neutral-model.md) |
-| What toolchain? | Java 21, bnd 7.4, OSGi R8 | [ADR-0006](adr/0006-java-baseline-toolchain.md) |
+| What toolchain? | Java 25, bnd 7.4, OSGi R8 | [ADR-0006](adr/0006-java-baseline-toolchain.md) |
 | How is ingest scheduled and hardened? | Ingest runtime with conditional GET, retry, per-provider isolation | [ADR-0007](adr/0007-ingest-and-scheduling.md) |
 | How is the HTTP API shaped? | **Deferred** — no API in the MVP; analysis kept | [ADR-0008](adr/0008-rest-api-design.md) |
 | What is the central domain entity? | The **site**, with persisted source bindings — not the station | [ADR-0009](adr/0009-site-as-central-entity.md) |
@@ -81,6 +82,8 @@ layer, OCL/QVT and a Lucene integration that Gecko did not have.
 | How do we keep values interpretable? | Lineage and uncertainty as first-class model concepts | [ADR-0011](adr/0011-lineage-and-uncertainty.md) |
 | ~~How are asynchronous sources combined?~~ | ~~Configurable priority, supersession instead of overwrite~~ | ~~[ADR-0012](adr/0012-fusion-and-supersession.md)~~ superseded |
 | How are several sources presented? | **Per source, not merged.** Datasets per product, replaced on refresh and archived; the consumer combines | [ADR-0013](adr/0013-values-per-source.md) |
+| How do optional modules attach? | **Extension points in the kernel**: `WeatherDataSink` in, `ReportEnricher` derived, `ObservationForwarder` out. Solar, PV, meters and the portal client are add-ons | [ADR-0014](adr/0014-addon-extension-points.md) |
+| Where does the code live? | **Open workspace** for weather including both runtimes; **private workspace** for PV, Fronius, Ochsner and the house's bndrun | [ADR-0015](adr/0015-repository-split.md) |
 
 ## Framing decisions
 
@@ -105,7 +108,8 @@ an energy tool, which it is not.
 - **European coverage is a design constraint, not a deliverable.** Provider-neutral model, canonical
   kinds, transport separated from decoding; no second national provider is built.
 - **Gridded data is core.** Subset-on-ingest: only the cells registered sites need.
-- **Solar geometry is core**, via the NREL SPA algorithm (`solarpositioning`, MIT): day events per day, elevation and azimuth per timestep. Time4J was dropped for its LGPL licence.
+- **Solar geometry is an open add-on** (revised 2026-10-22, [ADR-0014](adr/0014-addon-extension-points.md)), via the NREL SPA algorithm (`solarpositioning`, MIT): day events per day, elevation and azimuth per timestep, as a `ReportEnricher` installed on both the edge and the portal. Time4J was dropped for its LGPL licence.
+- **The edge is the product** (2026-10-22): a Raspberry Pi that receives the own station, stores and shows it with no account and no network. The portal with DWD ingest is an add-on to it, not the other way round. See [11-edge-and-addons.md](11-edge-and-addons.md).
 - **Lineage and uncertainty from the first slice.** Provenance cannot be retrofitted.
 - **Libraries that need OSGi-fication are wrapped in this workspace** and moved out later. Nothing waits
   upstream.

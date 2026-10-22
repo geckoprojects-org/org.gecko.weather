@@ -1,4 +1,6 @@
-# ADR-0006: Java 21, bnd 7.4, OSGi R8 baseline
+# ADR-0006: Java 25, bnd 7.4, OSGi R8 baseline
+
+> **2026-10-22:** raised from Java 21 to Java 25 with Gradle 9.6.1 (the first Gradle line that runs on JDK 25), in step with the HANS workspace. The reasoning below was written for 21 and holds for 25: an LTS release, the Fennec libraries build against it. `javac.source`/`javac.target` 25 in `cnf/ext/fennec.bnd`, `-runee JavaSE-25`, Eclipse metadata and CI on 25.
 
 - **Status:** Proposed
 - **Date:** 2026-07-28, revised 2026-07-29 (Fennec stack)

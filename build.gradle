@@ -1,5 +1,5 @@
 plugins {
-  id "org.sonarqube" version "6.2.0.5505"
+  id "org.sonarqube" version "7.5.0.8588"
   id 'jacoco'
   id 'java'
 }
@@ -101,7 +101,7 @@ sonarqube {
   }
 }
 
-task codeCoverageReport(type: JacocoReport) {
+tasks.register("codeCoverageReport", JacocoReport) {
     dependsOn(test)
     // Gather execution data from all subprojects for JUnit generated/jacoco/test.exec for OSGi Tests generated/tmp/testOSGi/generated/jacoco.exec
     // Latter are generated via agent in the test.bndrun
