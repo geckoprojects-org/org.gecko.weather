@@ -24,12 +24,16 @@
 // publishing to the Nexus alone.
 def publish() {
     def missing = []
-    def has = { binding ->
+    def found = []
+    // The binding object itself cannot be read in the sandbox (no credentialsId field), so the id
+    // travels beside it; Jenkins' own message says whether the id is unknown or of another type.
+    def has = { id, binding ->
         try {
             withCredentials([binding]) { }
+            found << id
             return true
         } catch (e) {
-            missing << binding.credentialsId
+            missing << "${id} (${e.message})"
             return false
         }
     }
@@ -38,15 +42,14 @@ def publish() {
     def passphrase = string(credentialsId: 'gnupg-passphrase', variable: 'GPG_PASSPHRASE')
     def key = file(credentialsId: 'gnupg-private-key', variable: 'GNUPG_KEY_FILE')
     def creds = []
-    if (has(nexus)) creds << nexus
-    if (has(portal)) creds << portal
-    if (has(passphrase)) creds << passphrase
-    def importKey = has(key)
-    if (importKey) creds << key
+    if (has('dim-nexus', nexus)) creds << nexus
+    if (has('central-portal-token', portal)) creds << portal
+    if (has('gnupg-passphrase', passphrase)) creds << passphrase
+    if (has('gnupg-private-key', key)) creds << key
     if (missing) {
-        error("Jenkins credentials missing on this controller: ${missing.join(', ')} - nothing is published until they exist under exactly these ids (Manage Jenkins > Credentials). Found: ${creds.collect { it.credentialsId }.join(', ') ?: 'none'}")
+        error("Jenkins credentials missing on this controller: ${missing.join('; ')}. Found: ${found.join(', ') ?: 'none'}. Nothing is published until all four exist under exactly these ids and types (Manage Jenkins > Credentials): dim-nexus and central-portal-token as 'Username with password', gnupg-passphrase as 'Secret text', gnupg-private-key as 'Secret file'.")
     }
-    echo "publish on node '${env.NODE_NAME}' with credentials ${creds.collect { it.credentialsId }.join(', ')}; signing key imported into a keyring of this run"
+    echo "publish on node '${env.NODE_NAME}' with credentials ${found.join(', ')}; signing key imported into a keyring of this run"
     withCredentials(creds) {
         withEnv(["GNUPGHOME=${env.WORKSPACE}/.gnupg-run"]) {
             try {
