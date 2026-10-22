@@ -10,6 +10,35 @@
 // The mechanics live in cnf/ext/release.bnd and the fennec library (releng/*.bnd), see
 // docs/12-build-and-release.md. DO_RELEASE decides the version the bundles are built with,
 // so build and release share one invocation.
+// One publish for both branches. The Nexus login is the Jenkins credential dim-nexus; the
+// Maven Central login (the Portal token, CS_USERNAME/CS_PASSWORD) is the credential named by
+// PORTAL_CREDENTIAL when Jenkins has it — without it bnd still releases to the Nexus, and says so.
+// GPG_PASSPHRASE (set by the stage from GNUPG_PASSPHRASE) is what makes the fennec library add the
+// Sonatype repository and sign: a release goes to Maven Central, a snapshot to the Portal's
+// snapshot repository, as emf.osgi does it.
+def PORTAL_CREDENTIAL = 'central-portal-token'
+
+def publish() {
+    def creds = [usernamePassword(credentialsId: 'dim-nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]
+    def portal = false
+    try {
+        withCredentials([usernamePassword(credentialsId: PORTAL_CREDENTIAL, usernameVariable: 'CS_USERNAME', passwordVariable: 'CS_PASSWORD')]) {
+            portal = true
+        }
+    } catch (e) {
+        echo "No Jenkins credential '${PORTAL_CREDENTIAL}' — nothing goes to Maven Central from this run (${e.message})"
+    }
+    if (portal) {
+        creds << usernamePassword(credentialsId: PORTAL_CREDENTIAL, usernameVariable: 'CS_USERNAME', passwordVariable: 'CS_PASSWORD')
+    }
+    if (!env.GPG_PASSPHRASE) {
+        echo 'GNUPG_PASSPHRASE is not set on this Jenkins — unsigned, so nothing goes to Maven Central from this run'
+    }
+    withCredentials(creds) {
+        sh './gradlew clean build release $COMMON_ARGS'
+    }
+}
+
 pipeline {
     agent any
 
@@ -58,22 +87,17 @@ pipeline {
             }
             environment {
                 // ${tstamp}-SNAPSHOT on every bundle, which sends the Release repository to
-                // dim-snapshot. Without GPG_PASSPHRASE the Sonatype repository is not even
-                // configured, so nothing reaches Maven Central from here.
+                // dim-snapshot and the Sonatype repository to the Portal's snapshot repository.
                 DO_RELEASE = 'false'
+                GPG_PASSPHRASE = "${env.GNUPG_PASSPHRASE ?: ''}"
+                GNUPGHOME = "${env.GNUPGHOME ?: '/var/jenkins_home/.gnupg'}"
             }
             steps {
-                echo "Publishing a snapshot of ${env.BRANCH_NAME} to the DIM Nexus"
-                // The Nexus login: the Jenkins credential dim-nexus (the one the Docker pushes
-                // use), handed to bnd as NEXUS_USERNAME/NEXUS_PASSWORD for the inline server in
-                // cnf/ext/release.bnd. The public agent (/opt/ci-public/agent) has no connection
-                // settings of its own — the run of 2026-10-22 20:54 published with the credential,
-                // the one without it got 401.
-                withCredentials([
-                    usernamePassword(credentialsId: 'dim-nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')
-                ]) {
-                    sh './gradlew clean build release $COMMON_ARGS'
-                }
+                echo "Publishing a snapshot of ${env.BRANCH_NAME} to the DIM Nexus and the Maven Central snapshots"
+                // The public agent (/opt/ci-public/agent) has no connection settings of its own:
+                // the run of 2026-10-22 20:54 published with the dim-nexus credential, the one
+                // without it got 401.
+                script { publish() }
             }
         }
 
@@ -101,15 +125,7 @@ pipeline {
                     }
                 }
                 echo "Releasing ${env.BRANCH_NAME} to the DIM Nexus and Maven Central"
-                // The Nexus login as for the snapshot. The Portal login (server id
-                // production.portal.central.sonatype.com) has to arrive as CS_USERNAME and
-                // CS_PASSWORD — from a Jenkins credential once it exists, or the agent's
-                // connection settings.
-                withCredentials([
-                    usernamePassword(credentialsId: 'dim-nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')
-                ]) {
-                    sh './gradlew clean build release $COMMON_ARGS'
-                }
+                script { publish() }
             }
         }
 
