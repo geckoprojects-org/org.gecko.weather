@@ -19,6 +19,11 @@
 def publish() {
     // a script-level 'def' is not visible in here (Groovy binding), so the name lives in the method
     def PORTAL_CREDENTIAL = 'central-portal-token'
+    // What this node offers — presence only, never a value. The old DIM pipelines ran on the
+    // master (they wrote to $JENKINS_HOME and signed with /var/jenkins_home/.gnupg); on another
+    // node the master's variables, keyring and connection settings are not necessarily there.
+    def present = { name -> env."${name}" ? 'set' : 'missing' }
+    echo "publish on node '${env.NODE_NAME}': GNUPG_PASSPHRASE ${present('GNUPG_PASSPHRASE')}, GPG_PASSPHRASE ${present('GPG_PASSPHRASE')}, GPG_KEY_ID ${present('GPG_KEY_ID')}, GNUPGHOME=${env.GNUPGHOME}, CS_USERNAME ${present('CS_USERNAME')}, keyring ${fileExists("${env.GNUPGHOME}") ? 'found' : 'not found'}"
     def creds = [usernamePassword(credentialsId: 'dim-nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]
     def portal = false
     try {
