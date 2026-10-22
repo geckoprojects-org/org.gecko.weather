@@ -30,6 +30,7 @@ import org.gecko.weather.model.weather.GridCell;
 import org.gecko.weather.model.weather.Level;
 import org.gecko.weather.model.weather.MeasuredValue;
 import org.gecko.weather.model.weather.MeasurementKind;
+import org.gecko.weather.model.weather.Origin;
 import org.gecko.weather.model.weather.Site;
 import org.gecko.weather.model.weather.SourceDataset;
 import org.gecko.weather.model.weather.Station;
@@ -39,6 +40,8 @@ import org.gecko.weather.model.weather.WeatherFactory;
 import org.gecko.weather.model.weather.WeatherReport;
 import org.gecko.weather.outlook.model.outlook.DayOutlook;
 import org.gecko.weather.outlook.model.outlook.HourOutlook;
+import org.gecko.weather.outlook.model.outlook.MeasuredPoint;
+import org.gecko.weather.outlook.model.outlook.Observation;
 import org.gecko.weather.outlook.model.outlook.Outlook;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -201,6 +204,102 @@ class OutlookBuilderTest {
 	}
 
 	// --- fixtures ----------------------------------------------------------------------------
+
+	@Test
+	void anOwnStationGivesTheObservationBesideTheForecastAndANote() {
+		SourceDataset ws90 = dataset("ecowitt", "WS90", Instant.parse("2026-10-04T06:39:00Z"));
+		ws90.setOrigin(Origin.LOCAL_STATION);
+		ws90.setStationId("75459");
+		ws90.setDistanceMeters(0);
+		Instant older = Instant.parse("2026-10-04T06:38:00Z");
+		Instant newest = Instant.parse("2026-10-04T06:39:00Z");
+		add(ws90, MeasurementKind.AIR_TEMPERATURE, Level.GROUND_2M, Statistic.INSTANT, null, older, 7.9);
+		add(ws90, MeasurementKind.AIR_TEMPERATURE, Level.GROUND_2M, Statistic.INSTANT, null, newest, 8.2);
+		add(ws90, MeasurementKind.RELATIVE_HUMIDITY, Level.GROUND_2M, Statistic.INSTANT, null, newest, 81.0);
+		add(ws90, MeasurementKind.WIND_SPEED, Level.UNSPECIFIED, Statistic.INSTANT, null, newest, 1.4);
+		add(ws90, MeasurementKind.WIND_GUST, Level.UNSPECIFIED, Statistic.MAX, Duration.ofMinutes(1), newest, 3.1);
+		add(ws90, MeasurementKind.WIND_DIRECTION, Level.UNSPECIFIED, Statistic.INSTANT, null, older, 60.0);
+		add(ws90, MeasurementKind.GLOBAL_RADIATION, Level.SURFACE, Statistic.INSTANT, null, newest, 126.1);
+		add(ws90, MeasurementKind.UV_INDEX, Level.SURFACE, Statistic.INSTANT, null, newest, 1.0);
+		add(ws90, MeasurementKind.PRECIPITATION, Level.SURFACE, Statistic.ACCUMULATED, null, newest, 12.5);
+		add(ws90, MeasurementKind.CAPACITOR_VOLTAGE, Level.UNSPECIFIED, Statistic.INSTANT, null, newest, 0.7);
+		report.getDatasets().add(0, ws90);
+
+		Outlook o = new OutlookBuilder(24, 2).build(site, Optional.of(report), BERLIN, NOW);
+
+		Observation obs = o.getObservation();
+		assertThat(obs).isNotNull();
+		assertThat(obs.getProviderId()).isEqualTo("ecowitt");
+		assertThat(obs.getProductId()).isEqualTo("WS90");
+		assertThat(obs.getStationId()).isEqualTo("75459");
+		assertThat(obs.getTime()).isEqualTo(Date.from(newest));
+		assertThat(obs.getTemperature()).as("the newest, not the older").isEqualTo(8.2);
+		assertThat(obs.getHumidity()).isEqualTo(81.0);
+		assertThat(obs.getWindSpeed()).isEqualTo(1.4);
+		assertThat(obs.getWindGust()).isEqualTo(3.1);
+		assertThat(obs.getWindDirection()).as("the only direction, older").isEqualTo(60.0);
+		assertThat(obs.getGlobalRadiation()).isEqualTo(126.1);
+		assertThat(obs.getUvIndex()).isEqualTo(1.0);
+		assertThat(obs.getRainTotal()).isEqualTo(12.5);
+		assertThat(obs.getCapacitorVoltage()).isEqualTo(0.7);
+		assertThat(obs.isSetBatteryLevel()).isFalse();
+		// the forecast is untouched: the hour still comes from MOSMIX
+		assertThat(o.getHours().get(0).getTemperature()).isEqualTo(6.0);
+		assertThat(o.getSources()).extracting(n -> n.getProductId()).containsExactly("MOSMIX_L", "ICON-D2", "UVI", "solar", "WS90");
+		assertThat(o.getSources().get(4).getProviderId()).isEqualTo("ecowitt");
+		assertThat(o.getSources().get(4).getLocation()).isEqualTo("Station 75459");
+		assertThat(o.getSources().get(4).getQuantities()).startsWith("gemessen jetzt");
+	}
+
+	@Test
+	void theLookBackStartsEarlierAndCarriesTheStationInTenMinuteSlots() {
+		SourceDataset ws90 = dataset("ecowitt", "WS90", NOW);
+		ws90.setOrigin(Origin.LOCAL_STATION);
+		ws90.setStationId("75459");
+		// one value a minute from 04:00 to now; temperature = minutes since 04:00 / 10, so slot means are easy
+		Instant from = Instant.parse("2026-10-04T04:00:00Z");
+		for (int m = 0; from.plusSeconds(m * 60L).isBefore(NOW); m++) {
+			Instant at = from.plusSeconds(m * 60L);
+			add(ws90, MeasurementKind.AIR_TEMPERATURE, Level.GROUND_2M, Statistic.INSTANT, null, at, m / 10.0);
+			add(ws90, MeasurementKind.WIND_GUST, Level.UNSPECIFIED, Statistic.MAX, Duration.ofMinutes(1), at, m % 10);
+			add(ws90, MeasurementKind.GLOBAL_RADIATION, Level.SURFACE, Statistic.INSTANT, null, at, 100.0);
+		}
+		// and one before the look-back, which must not appear
+		add(ws90, MeasurementKind.AIR_TEMPERATURE, Level.GROUND_2M, Statistic.INSTANT, null, Instant.parse("2026-10-04T03:30:00Z"), -99);
+		report.getDatasets().add(ws90);
+
+		Outlook o = new OutlookBuilder(24, 2, 2).build(site, Optional.of(report), BERLIN, NOW);
+
+		assertThat(o.getHours()).hasSize(26);
+		assertThat(o.getHours().get(0).getTime()).isEqualTo(Date.from(Instant.parse("2026-10-04T04:00:00Z")));
+		assertThat(o.getHours().get(2).getTime()).as("the current hour is third").isEqualTo(Date.from(T0));
+		assertThat(o.getHours().get(0).getTemperature()).as("what MOSMIX said for 04:00").isEqualTo(4.0);
+		// 04:00 .. 06:40 = 16 slots of ten minutes
+		assertThat(o.getMeasured()).hasSize(16);
+		MeasuredPoint first = o.getMeasured().get(0);
+		assertThat(first.getTime()).isEqualTo(Date.from(Instant.parse("2026-10-04T04:05:00Z")));
+		assertThat(first.getTemperature()).as("mean of 0.0 .. 0.9").isCloseTo(0.45, within(1e-9));
+		assertThat(first.getWindGust()).as("the slot's maximum").isEqualTo(9.0);
+		assertThat(first.getGlobalRadiation()).isEqualTo(100.0);
+		assertThat(first.isSetHumidity()).isFalse();
+		MeasuredPoint last = o.getMeasured().get(15);
+		assertThat(last.getTime()).isEqualTo(Date.from(Instant.parse("2026-10-04T06:35:00Z")));
+		assertThat(last.getTemperature()).as("06:30 .. 06:39 = minutes 150..159").isCloseTo(15.45, within(1e-9));
+		assertThat(o.getObservation().getTemperature()).isEqualTo(15.9);
+	}
+
+	@Test
+	void withoutALookBackNothingIsMeasured() {
+		Outlook o = new OutlookBuilder(24, 2).build(site, Optional.of(report), BERLIN, NOW);
+		assertThat(o.getHours().get(0).getTime()).isEqualTo(Date.from(T0));
+		assertThat(o.getMeasured()).isEmpty();
+	}
+
+	@Test
+	void withoutAnOwnStationThereIsNoObservation() {
+		Outlook o = new OutlookBuilder(24, 2).build(site, Optional.of(report), BERLIN, NOW);
+		assertThat(o.getObservation()).isNull();
+	}
 
 	private static StationBinding stationBinding(String id, int rank) {
 		StationBinding b = F.createStationBinding();

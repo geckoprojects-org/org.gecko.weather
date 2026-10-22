@@ -63,6 +63,24 @@ public interface OutlookFactory extends EFactory {
 	Outlook createOutlook();
 
 	/**
+	 * Returns a new object of class '<em>Measured Point</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Measured Point</em>'.
+	 * @generated
+	 */
+	MeasuredPoint createMeasuredPoint();
+
+	/**
+	 * Returns a new object of class '<em>Observation</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Observation</em>'.
+	 * @generated
+	 */
+	Observation createObservation();
+
+	/**
 	 * Returns a new object of class '<em>Hour Outlook</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

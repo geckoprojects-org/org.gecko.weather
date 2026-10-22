@@ -37,6 +37,7 @@ import org.gecko.weather.model.weather.DayInfo;
 import org.gecko.weather.model.weather.Level;
 import org.gecko.weather.model.weather.MeasuredValue;
 import org.gecko.weather.model.weather.MeasurementKind;
+import org.gecko.weather.model.weather.Origin;
 import org.gecko.weather.model.weather.Site;
 import org.gecko.weather.model.weather.SourceBinding;
 import org.gecko.weather.model.weather.SourceDataset;
@@ -45,6 +46,8 @@ import org.gecko.weather.model.weather.StationBinding;
 import org.gecko.weather.model.weather.WeatherReport;
 import org.gecko.weather.outlook.model.outlook.DayOutlook;
 import org.gecko.weather.outlook.model.outlook.HourOutlook;
+import org.gecko.weather.outlook.model.outlook.MeasuredPoint;
+import org.gecko.weather.outlook.model.outlook.Observation;
 import org.gecko.weather.outlook.model.outlook.Outlook;
 import org.gecko.weather.outlook.model.outlook.OutlookFactory;
 import org.gecko.weather.outlook.model.outlook.SourceNote;
@@ -63,6 +66,10 @@ import org.gecko.weather.outlook.model.outlook.SourceNote;
  * </ul>
  * Instant quantities are read at the hour's start, period quantities from the value that ends one
  * hour later — the hour from 14:00 shows the rain that falls until 15:00.
+ * <p>
+ * With {@code pastHours} the hours start before the current one: a look-back in which the own
+ * station's measurements ({@code measured}, ten-minute slots) stand beside what the sources had
+ * forecast for those hours. The forecast is not replaced by the measurement there either.
  *
  * @author Mark Hoffmann
  * @since 04.10.2026
@@ -77,15 +84,30 @@ public final class OutlookBuilder {
 	/** Sun below this is night — the upper limb at the horizon with refraction. */
 	static final double HORIZON_DEGREES = -0.833;
 
+	/** Width of one slot of the measured look-back. */
+	static final Duration SLOT = Duration.ofMinutes(10);
+
 	private final int hours;
 	private final int days;
+	private final int pastHours;
 
 	public OutlookBuilder(int hours, int days) {
-		if (hours < 1 || days < 0) {
-			throw new IllegalArgumentException("hours must be positive, days not negative");
+		this(hours, days, 0);
+	}
+
+	/**
+	 * @param hours     hours from the current full hour on
+	 * @param days      days from tomorrow on
+	 * @param pastHours hours before the current full hour the outlook starts with — the look-back in
+	 *                  which the own station's measurements stand beside what was forecast
+	 */
+	public OutlookBuilder(int hours, int days, int pastHours) {
+		if (hours < 1 || days < 0 || pastHours < 0) {
+			throw new IllegalArgumentException("hours must be positive, days and pastHours not negative");
 		}
 		this.hours = hours;
 		this.days = days;
+		this.pastHours = pastHours;
 	}
 
 	public Outlook build(Site site, Optional<WeatherReport> report, ZoneId zone, Instant now) {
@@ -107,15 +129,18 @@ public final class OutlookBuilder {
 			return outlook;
 		}
 		Sources s = new Sources(site, report.get());
-		Instant start = now.truncatedTo(ChronoUnit.HOURS);
-		for (int h = 0; h < hours; h++) {
+		Instant current = now.truncatedTo(ChronoUnit.HOURS);
+		Instant start = current.minus(HOUR.multipliedBy(pastHours));
+		for (int h = 0; h < pastHours + hours; h++) {
 			outlook.getHours().add(hour(s, start.plus(HOUR.multipliedBy(h)), report.get()));
 		}
+		outlook.getMeasured().addAll(s.measured(start, now));
 		LocalDate today = LocalDate.ofInstant(now, zone);
 		outlook.setToday(day(s, today, zone, report.get()));
 		for (int d = 1; d <= days; d++) {
 			outlook.getDays().add(day(s, today.plusDays(d), zone, report.get()));
 		}
+		s.observation().ifPresent(outlook::setObservation);
 		s.notes(outlook);
 		return outlook;
 	}
@@ -249,6 +274,7 @@ public final class OutlookBuilder {
 		private final SourceDataset icon;
 		private final SourceDataset uv;
 		private final SourceDataset solar;
+		private final SourceDataset station;
 		private final Map<String, MeasuredValue> mosmixIndex = new HashMap<>();
 		private final Map<String, MeasuredValue> iconIndex = new HashMap<>();
 		private final Map<String, MeasuredValue> solarIndex = new HashMap<>();
@@ -260,6 +286,7 @@ public final class OutlookBuilder {
 			this.icon = first(report, DWD, ICON).orElse(null);
 			this.uv = first(report, DWD, UV).orElse(null);
 			this.solar = first(report, WeatherConstants.COMPUTED_PROVIDER_ID, WeatherConstants.SOLAR_PRODUCT_ID).orElse(null);
+			this.station = ownStation(report).orElse(null);
 			index(mosmix, mosmixIndex);
 			index(icon, iconIndex);
 			index(solar, solarIndex);
@@ -275,6 +302,93 @@ public final class OutlookBuilder {
 					.filter(d -> DWD.equals(d.getProviderId()) && MOSMIX.equals(d.getProductId())).toList();
 			return station.flatMap(id -> all.stream().filter(d -> id.equals(d.getStationId())).findFirst())
 					.or(() -> all.stream().findFirst());
+		}
+
+		/** The own station's dataset: the newest one with {@code Origin.LOCAL_STATION}, if several are bound. */
+		static Optional<SourceDataset> ownStation(WeatherReport report) {
+			return report.getDatasets().stream().filter(d -> d.getOrigin() == Origin.LOCAL_STATION)
+					.max(Comparator.comparing(d -> d.getIssuedAt() == null ? Instant.MIN : d.getIssuedAt()));
+		}
+
+		/** The newest value per quantity of the own station — measured, shown beside the forecast, never merged. */
+		Optional<Observation> observation() {
+			if (station == null) {
+				return Optional.empty();
+			}
+			Observation o = OutlookFactory.eINSTANCE.createObservation();
+			o.setProviderId(station.getProviderId());
+			o.setProductId(station.getProductId());
+			o.setStationId(station.getStationId());
+			Instant[] newest = { null };
+			java.util.function.BiConsumer<MeasurementKind, java.util.function.DoubleConsumer> take = (kind, set) -> station.getValues()
+					.stream().filter(v -> v.getKind() == kind && v.isSetValue() && v.getValidAt() != null)
+					.max(Comparator.comparing(MeasuredValue::getValidAt)).ifPresent(v -> {
+						set.accept(v.getValue());
+						if (newest[0] == null || v.getValidAt().isAfter(newest[0])) {
+							newest[0] = v.getValidAt();
+						}
+					});
+			take.accept(MeasurementKind.AIR_TEMPERATURE, o::setTemperature);
+			take.accept(MeasurementKind.RELATIVE_HUMIDITY, o::setHumidity);
+			take.accept(MeasurementKind.WIND_SPEED, o::setWindSpeed);
+			take.accept(MeasurementKind.WIND_GUST, o::setWindGust);
+			take.accept(MeasurementKind.WIND_DIRECTION, o::setWindDirection);
+			take.accept(MeasurementKind.GLOBAL_RADIATION, o::setGlobalRadiation);
+			take.accept(MeasurementKind.UV_INDEX, o::setUvIndex);
+			take.accept(MeasurementKind.PRECIPITATION, o::setRainTotal);
+			take.accept(MeasurementKind.BATTERY_LEVEL, o::setBatteryLevel);
+			take.accept(MeasurementKind.CAPACITOR_VOLTAGE, o::setCapacitorVoltage);
+			take.accept(MeasurementKind.SIGNAL_STRENGTH, o::setSignalStrength);
+			if (newest[0] == null) {
+				return Optional.empty();
+			}
+			o.setTime(Date.from(newest[0]));
+			return Optional.of(o);
+		}
+
+		/** The own station's values between {@code from} and {@code to} in ten-minute slots: means, the gust its maximum. */
+		List<MeasuredPoint> measured(Instant from, Instant to) {
+			if (station == null || !to.isAfter(from)) {
+				return List.of();
+			}
+			Map<Instant, MeasuredPoint> slots = new java.util.TreeMap<>();
+			Map<Instant, Map<MeasurementKind, double[]>> sums = new HashMap<>();
+			for (MeasuredValue v : station.getValues()) {
+				Instant at = v.getValidAt();
+				if (at == null || !v.isSetValue() || at.isBefore(from) || !at.isBefore(to)) {
+					continue;
+				}
+				long slotMillis = SLOT.toMillis();
+				Instant slot = Instant.ofEpochMilli(Math.floorDiv(at.toEpochMilli(), slotMillis) * slotMillis);
+				double[] acc = sums.computeIfAbsent(slot, k -> new HashMap<>()).computeIfAbsent(v.getKind(), k -> new double[] { 0, 0, Double.NEGATIVE_INFINITY });
+				acc[0] += v.getValue();
+				acc[1]++;
+				acc[2] = Math.max(acc[2], v.getValue());
+				slots.computeIfAbsent(slot, k -> {
+					MeasuredPoint p = OutlookFactory.eINSTANCE.createMeasuredPoint();
+					p.setTime(Date.from(k.plus(SLOT.dividedBy(2))));
+					return p;
+				});
+			}
+			for (Map.Entry<Instant, MeasuredPoint> e : slots.entrySet()) {
+				Map<MeasurementKind, double[]> acc = sums.get(e.getKey());
+				MeasuredPoint p = e.getValue();
+				mean(acc, MeasurementKind.AIR_TEMPERATURE).ifPresent(p::setTemperature);
+				mean(acc, MeasurementKind.RELATIVE_HUMIDITY).ifPresent(p::setHumidity);
+				mean(acc, MeasurementKind.WIND_SPEED).ifPresent(p::setWindSpeed);
+				mean(acc, MeasurementKind.WIND_DIRECTION).ifPresent(p::setWindDirection);
+				mean(acc, MeasurementKind.GLOBAL_RADIATION).ifPresent(p::setGlobalRadiation);
+				double[] gust = acc.get(MeasurementKind.WIND_GUST);
+				if (gust != null) {
+					p.setWindGust(gust[2]);
+				}
+			}
+			return List.copyOf(slots.values());
+		}
+
+		private static Optional<Double> mean(Map<MeasurementKind, double[]> acc, MeasurementKind kind) {
+			double[] a = acc.get(kind);
+			return a == null || a[1] == 0 ? Optional.empty() : Optional.of(a[0] / a[1]);
 		}
 
 		static Optional<SourceDataset> first(WeatherReport report, String provider, String product) {
@@ -403,6 +517,9 @@ public final class OutlookBuilder {
 			}
 			if (solar != null) {
 				used.put(solar, "Sonnenstand, Sonnenauf- und -untergang");
+			}
+			if (station != null && outlook.getObservation() != null) {
+				used.put(station, "gemessen jetzt: Temperatur, Luftfeuchte, Wind, Strahlung, UV, Regenzähler");
 			}
 			for (Map.Entry<SourceDataset, String> e : used.entrySet()) {
 				SourceDataset d = e.getKey();

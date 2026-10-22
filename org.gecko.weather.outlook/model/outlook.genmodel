@@ -66,6 +66,84 @@
       <genFeatures property="None" children="true" createChild="true">
         <ecoreFeature xsi:type="ecore:EReference" href="outlook.ecore#//Outlook/sources"/>
       </genFeatures>
+      <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="outlook.ecore#//Outlook/measured"/>
+      </genFeatures>
+      <genFeatures property="None" children="true" createChild="true">
+        <ecoreFeature xsi:type="ecore:EReference" href="outlook.ecore#//Outlook/observation"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="outlook.ecore#//MeasuredPoint"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//MeasuredPoint/time"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//MeasuredPoint/temperature"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//MeasuredPoint/humidity"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//MeasuredPoint/windSpeed"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//MeasuredPoint/windGust"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//MeasuredPoint/windDirection"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//MeasuredPoint/globalRadiation"/>
+      </genFeatures>
+    </genClasses>
+    <genClasses>
+      <ecoreClass href="outlook.ecore#//Observation"/>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//Observation/time"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//Observation/providerId"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//Observation/productId"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//Observation/stationId"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//Observation/temperature"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//Observation/humidity"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//Observation/windSpeed"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//Observation/windGust"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//Observation/windDirection"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//Observation/globalRadiation"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//Observation/uvIndex"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//Observation/rainTotal"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//Observation/batteryLevel"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//Observation/capacitorVoltage"/>
+      </genFeatures>
+      <genFeatures createChild="false">
+        <ecoreFeature xsi:type="ecore:EAttribute" href="outlook.ecore#//Observation/signalStrength"/>
+      </genFeatures>
     </genClasses>
     <genClasses>
       <ecoreClass href="outlook.ecore#//HourOutlook"/>

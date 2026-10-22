@@ -91,6 +91,14 @@ public class OutlookAdapterFactory extends AdapterFactoryImpl {
 				return createOutlookAdapter();
 			}
 			@Override
+			public Adapter caseMeasuredPoint(MeasuredPoint object) {
+				return createMeasuredPointAdapter();
+			}
+			@Override
+			public Adapter caseObservation(Observation object) {
+				return createObservationAdapter();
+			}
+			@Override
 			public Adapter caseHourOutlook(HourOutlook object) {
 				return createHourOutlookAdapter();
 			}
@@ -161,6 +169,34 @@ public class OutlookAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createOutlookAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.gecko.weather.outlook.model.outlook.MeasuredPoint <em>Measured Point</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.gecko.weather.outlook.model.outlook.MeasuredPoint
+	 * @generated
+	 */
+	public Adapter createMeasuredPointAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.gecko.weather.outlook.model.outlook.Observation <em>Observation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.gecko.weather.outlook.model.outlook.Observation
+	 * @generated
+	 */
+	public Adapter createObservationAdapter() {
 		return null;
 	}
 

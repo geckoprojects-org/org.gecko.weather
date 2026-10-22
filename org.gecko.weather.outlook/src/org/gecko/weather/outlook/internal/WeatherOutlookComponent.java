@@ -59,6 +59,9 @@ public class WeatherOutlookComponent implements WeatherOutlook {
 		@AttributeDefinition(description = "Days from tomorrow on.")
 		int days() default 7;
 
+		@AttributeDefinition(description = "Hours before the current full hour the outlook starts with: the look-back in which an own station's measurements stand beside the forecast.")
+		int pastHours() default 6;
+
 		@AttributeDefinition(description = "Time zone for a site that names none.")
 		String defaultTimeZone() default "Europe/Berlin";
 	}
@@ -79,7 +82,7 @@ public class WeatherOutlookComponent implements WeatherOutlook {
 
 	@Activate
 	void activate(Config config) {
-		builder = new OutlookBuilder(config.hours(), config.days());
+		builder = new OutlookBuilder(config.hours(), config.days(), config.pastHours());
 		defaultZone = ZoneId.of(config.defaultTimeZone());
 	}
 

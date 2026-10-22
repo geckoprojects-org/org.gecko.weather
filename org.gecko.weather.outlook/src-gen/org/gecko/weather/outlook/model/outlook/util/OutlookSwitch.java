@@ -95,6 +95,18 @@ public class OutlookSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case OutlookPackage.MEASURED_POINT: {
+				MeasuredPoint measuredPoint = (MeasuredPoint)theEObject;
+				T result = caseMeasuredPoint(measuredPoint);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case OutlookPackage.OBSERVATION: {
+				Observation observation = (Observation)theEObject;
+				T result = caseObservation(observation);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case OutlookPackage.HOUR_OUTLOOK: {
 				HourOutlook hourOutlook = (HourOutlook)theEObject;
 				T result = caseHourOutlook(hourOutlook);
@@ -159,6 +171,36 @@ public class OutlookSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseOutlook(Outlook object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Measured Point</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Measured Point</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMeasuredPoint(MeasuredPoint object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Observation</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Observation</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseObservation(Observation object) {
 		return null;
 	}
 

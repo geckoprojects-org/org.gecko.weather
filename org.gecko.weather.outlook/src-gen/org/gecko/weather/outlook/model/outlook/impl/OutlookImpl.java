@@ -32,6 +32,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.gecko.weather.outlook.model.outlook.DayOutlook;
 import org.gecko.weather.outlook.model.outlook.HourOutlook;
+import org.gecko.weather.outlook.model.outlook.MeasuredPoint;
+import org.gecko.weather.outlook.model.outlook.Observation;
 import org.gecko.weather.outlook.model.outlook.Outlook;
 import org.gecko.weather.outlook.model.outlook.OutlookPackage;
 import org.gecko.weather.outlook.model.outlook.SourceNote;
@@ -54,6 +56,8 @@ import org.gecko.weather.outlook.model.outlook.SourceNote;
  *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.OutlookImpl#getToday <em>Today</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.OutlookImpl#getDays <em>Days</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.OutlookImpl#getSources <em>Sources</em>}</li>
+ *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.OutlookImpl#getMeasured <em>Measured</em>}</li>
+ *   <li>{@link org.gecko.weather.outlook.model.outlook.impl.OutlookImpl#getObservation <em>Observation</em>}</li>
  * </ul>
  *
  * @generated
@@ -218,6 +222,26 @@ public class OutlookImpl extends MinimalEObjectImpl.Container implements Outlook
 	 * @ordered
 	 */
 	protected EList<SourceNote> sources;
+
+	/**
+	 * The cached value of the '{@link #getMeasured() <em>Measured</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMeasured()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<MeasuredPoint> measured;
+
+	/**
+	 * The cached value of the '{@link #getObservation() <em>Observation</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getObservation()
+	 * @generated
+	 * @ordered
+	 */
+	protected Observation observation;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -466,6 +490,64 @@ public class OutlookImpl extends MinimalEObjectImpl.Container implements Outlook
 	 * @generated
 	 */
 	@Override
+	public EList<MeasuredPoint> getMeasured() {
+		if (measured == null) {
+			measured = new EObjectContainmentEList<MeasuredPoint>(MeasuredPoint.class, this, OutlookPackage.OUTLOOK__MEASURED);
+		}
+		return measured;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Observation getObservation() {
+		return observation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetObservation(Observation newObservation, NotificationChain msgs) {
+		Observation oldObservation = observation;
+		observation = newObservation;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, OutlookPackage.OUTLOOK__OBSERVATION, oldObservation, newObservation);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setObservation(Observation newObservation) {
+		if (newObservation != observation) {
+			NotificationChain msgs = null;
+			if (observation != null)
+				msgs = ((InternalEObject)observation).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - OutlookPackage.OUTLOOK__OBSERVATION, null, msgs);
+			if (newObservation != null)
+				msgs = ((InternalEObject)newObservation).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - OutlookPackage.OUTLOOK__OBSERVATION, null, msgs);
+			msgs = basicSetObservation(newObservation, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, OutlookPackage.OUTLOOK__OBSERVATION, newObservation, newObservation));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case OutlookPackage.OUTLOOK__HOURS:
@@ -476,6 +558,10 @@ public class OutlookImpl extends MinimalEObjectImpl.Container implements Outlook
 				return ((InternalEList<?>)getDays()).basicRemove(otherEnd, msgs);
 			case OutlookPackage.OUTLOOK__SOURCES:
 				return ((InternalEList<?>)getSources()).basicRemove(otherEnd, msgs);
+			case OutlookPackage.OUTLOOK__MEASURED:
+				return ((InternalEList<?>)getMeasured()).basicRemove(otherEnd, msgs);
+			case OutlookPackage.OUTLOOK__OBSERVATION:
+				return basicSetObservation(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -508,6 +594,10 @@ public class OutlookImpl extends MinimalEObjectImpl.Container implements Outlook
 				return getDays();
 			case OutlookPackage.OUTLOOK__SOURCES:
 				return getSources();
+			case OutlookPackage.OUTLOOK__MEASURED:
+				return getMeasured();
+			case OutlookPackage.OUTLOOK__OBSERVATION:
+				return getObservation();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -554,6 +644,13 @@ public class OutlookImpl extends MinimalEObjectImpl.Container implements Outlook
 				getSources().clear();
 				getSources().addAll((Collection<? extends SourceNote>)newValue);
 				return;
+			case OutlookPackage.OUTLOOK__MEASURED:
+				getMeasured().clear();
+				getMeasured().addAll((Collection<? extends MeasuredPoint>)newValue);
+				return;
+			case OutlookPackage.OUTLOOK__OBSERVATION:
+				setObservation((Observation)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -596,6 +693,12 @@ public class OutlookImpl extends MinimalEObjectImpl.Container implements Outlook
 			case OutlookPackage.OUTLOOK__SOURCES:
 				getSources().clear();
 				return;
+			case OutlookPackage.OUTLOOK__MEASURED:
+				getMeasured().clear();
+				return;
+			case OutlookPackage.OUTLOOK__OBSERVATION:
+				setObservation((Observation)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -628,6 +731,10 @@ public class OutlookImpl extends MinimalEObjectImpl.Container implements Outlook
 				return days != null && !days.isEmpty();
 			case OutlookPackage.OUTLOOK__SOURCES:
 				return sources != null && !sources.isEmpty();
+			case OutlookPackage.OUTLOOK__MEASURED:
+				return measured != null && !measured.isEmpty();
+			case OutlookPackage.OUTLOOK__OBSERVATION:
+				return observation != null;
 		}
 		return super.eIsSet(featureID);
 	}

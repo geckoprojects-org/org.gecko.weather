@@ -42,7 +42,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * @generated
  */
 @ProviderType
-@EPackage(uri = OutlookPackage.eNS_URI, fingerprint = "fp1:e8884841780624de5dee64196b38a6e0c19ffb72c463ffc03836fccc41153efc", genModel = "/model/outlook.genmodel", genModelSourceLocations = {"model/outlook.genmodel","org.gecko.weather.outlook/model/outlook.genmodel"}, ecore = "/model/outlook.ecore", ecoreSourceLocations = "/model/outlook.ecore")
+@EPackage(uri = OutlookPackage.eNS_URI, fingerprint = "fp1:6fe32f0fec7f647118f8586a6fad5893b1779acb92f39ff7a7f5d564728279e9", genModel = "/model/outlook.genmodel", genModelSourceLocations = {"model/outlook.genmodel","org.gecko.weather.outlook/model/outlook.genmodel"}, ecore = "/model/outlook.ecore", ecoreSourceLocations = "/model/outlook.ecore")
 public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	/**
 	 * The package name.
@@ -287,13 +287,31 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	int OUTLOOK__SOURCES = 9;
 
 	/**
+	 * The feature id for the '<em><b>Measured</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OUTLOOK__MEASURED = 10;
+
+	/**
+	 * The feature id for the '<em><b>Observation</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OUTLOOK__OBSERVATION = 11;
+
+	/**
 	 * The number of structural features of the '<em>Outlook</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OUTLOOK_FEATURE_COUNT = 10;
+	int OUTLOOK_FEATURE_COUNT = 12;
 
 	/**
 	 * The number of operations of the '<em>Outlook</em>' class.
@@ -305,6 +323,260 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	int OUTLOOK_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link org.gecko.weather.outlook.model.outlook.impl.MeasuredPointImpl <em>Measured Point</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.gecko.weather.outlook.model.outlook.impl.MeasuredPointImpl
+	 * @see org.gecko.weather.outlook.model.outlook.impl.OutlookPackageImpl#getMeasuredPoint()
+	 * @generated
+	 */
+	int MEASURED_POINT = 3;
+
+	/**
+	 * The feature id for the '<em><b>Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEASURED_POINT__TIME = 0;
+
+	/**
+	 * The feature id for the '<em><b>Temperature</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEASURED_POINT__TEMPERATURE = 1;
+
+	/**
+	 * The feature id for the '<em><b>Humidity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEASURED_POINT__HUMIDITY = 2;
+
+	/**
+	 * The feature id for the '<em><b>Wind Speed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEASURED_POINT__WIND_SPEED = 3;
+
+	/**
+	 * The feature id for the '<em><b>Wind Gust</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEASURED_POINT__WIND_GUST = 4;
+
+	/**
+	 * The feature id for the '<em><b>Wind Direction</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEASURED_POINT__WIND_DIRECTION = 5;
+
+	/**
+	 * The feature id for the '<em><b>Global Radiation</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEASURED_POINT__GLOBAL_RADIATION = 6;
+
+	/**
+	 * The number of structural features of the '<em>Measured Point</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEASURED_POINT_FEATURE_COUNT = 7;
+
+	/**
+	 * The number of operations of the '<em>Measured Point</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEASURED_POINT_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link org.gecko.weather.outlook.model.outlook.impl.ObservationImpl <em>Observation</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.gecko.weather.outlook.model.outlook.impl.ObservationImpl
+	 * @see org.gecko.weather.outlook.model.outlook.impl.OutlookPackageImpl#getObservation()
+	 * @generated
+	 */
+	int OBSERVATION = 4;
+
+	/**
+	 * The feature id for the '<em><b>Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBSERVATION__TIME = 0;
+
+	/**
+	 * The feature id for the '<em><b>Provider Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBSERVATION__PROVIDER_ID = 1;
+
+	/**
+	 * The feature id for the '<em><b>Product Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBSERVATION__PRODUCT_ID = 2;
+
+	/**
+	 * The feature id for the '<em><b>Station Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBSERVATION__STATION_ID = 3;
+
+	/**
+	 * The feature id for the '<em><b>Temperature</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBSERVATION__TEMPERATURE = 4;
+
+	/**
+	 * The feature id for the '<em><b>Humidity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBSERVATION__HUMIDITY = 5;
+
+	/**
+	 * The feature id for the '<em><b>Wind Speed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBSERVATION__WIND_SPEED = 6;
+
+	/**
+	 * The feature id for the '<em><b>Wind Gust</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBSERVATION__WIND_GUST = 7;
+
+	/**
+	 * The feature id for the '<em><b>Wind Direction</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBSERVATION__WIND_DIRECTION = 8;
+
+	/**
+	 * The feature id for the '<em><b>Global Radiation</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBSERVATION__GLOBAL_RADIATION = 9;
+
+	/**
+	 * The feature id for the '<em><b>Uv Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBSERVATION__UV_INDEX = 10;
+
+	/**
+	 * The feature id for the '<em><b>Rain Total</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBSERVATION__RAIN_TOTAL = 11;
+
+	/**
+	 * The feature id for the '<em><b>Battery Level</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBSERVATION__BATTERY_LEVEL = 12;
+
+	/**
+	 * The feature id for the '<em><b>Capacitor Voltage</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBSERVATION__CAPACITOR_VOLTAGE = 13;
+
+	/**
+	 * The feature id for the '<em><b>Signal Strength</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBSERVATION__SIGNAL_STRENGTH = 14;
+
+	/**
+	 * The number of structural features of the '<em>Observation</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBSERVATION_FEATURE_COUNT = 15;
+
+	/**
+	 * The number of operations of the '<em>Observation</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBSERVATION_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link org.gecko.weather.outlook.model.outlook.impl.HourOutlookImpl <em>Hour Outlook</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -312,7 +584,7 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @see org.gecko.weather.outlook.model.outlook.impl.OutlookPackageImpl#getHourOutlook()
 	 * @generated
 	 */
-	int HOUR_OUTLOOK = 3;
+	int HOUR_OUTLOOK = 5;
 
 	/**
 	 * The feature id for the '<em><b>Time</b></em>' attribute.
@@ -484,7 +756,7 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @see org.gecko.weather.outlook.model.outlook.impl.OutlookPackageImpl#getDayOutlook()
 	 * @generated
 	 */
-	int DAY_OUTLOOK = 4;
+	int DAY_OUTLOOK = 6;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -647,7 +919,7 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @see org.gecko.weather.outlook.model.outlook.impl.OutlookPackageImpl#getSourceNote()
 	 * @generated
 	 */
-	int SOURCE_NOTE = 5;
+	int SOURCE_NOTE = 7;
 
 	/**
 	 * The feature id for the '<em><b>Quantities</b></em>' attribute.
@@ -927,6 +1199,290 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 	 * @generated
 	 */
 	EReference getOutlook_Sources();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.gecko.weather.outlook.model.outlook.Outlook#getMeasured <em>Measured</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Measured</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.Outlook#getMeasured()
+	 * @see #getOutlook()
+	 * @generated
+	 */
+	EReference getOutlook_Measured();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link org.gecko.weather.outlook.model.outlook.Outlook#getObservation <em>Observation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Observation</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.Outlook#getObservation()
+	 * @see #getOutlook()
+	 * @generated
+	 */
+	EReference getOutlook_Observation();
+
+	/**
+	 * Returns the meta object for class '{@link org.gecko.weather.outlook.model.outlook.MeasuredPoint <em>Measured Point</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Measured Point</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.MeasuredPoint
+	 * @generated
+	 */
+	EClass getMeasuredPoint();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.MeasuredPoint#getTime <em>Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Time</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.MeasuredPoint#getTime()
+	 * @see #getMeasuredPoint()
+	 * @generated
+	 */
+	EAttribute getMeasuredPoint_Time();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.MeasuredPoint#getTemperature <em>Temperature</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Temperature</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.MeasuredPoint#getTemperature()
+	 * @see #getMeasuredPoint()
+	 * @generated
+	 */
+	EAttribute getMeasuredPoint_Temperature();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.MeasuredPoint#getHumidity <em>Humidity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Humidity</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.MeasuredPoint#getHumidity()
+	 * @see #getMeasuredPoint()
+	 * @generated
+	 */
+	EAttribute getMeasuredPoint_Humidity();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.MeasuredPoint#getWindSpeed <em>Wind Speed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Wind Speed</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.MeasuredPoint#getWindSpeed()
+	 * @see #getMeasuredPoint()
+	 * @generated
+	 */
+	EAttribute getMeasuredPoint_WindSpeed();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.MeasuredPoint#getWindGust <em>Wind Gust</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Wind Gust</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.MeasuredPoint#getWindGust()
+	 * @see #getMeasuredPoint()
+	 * @generated
+	 */
+	EAttribute getMeasuredPoint_WindGust();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.MeasuredPoint#getWindDirection <em>Wind Direction</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Wind Direction</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.MeasuredPoint#getWindDirection()
+	 * @see #getMeasuredPoint()
+	 * @generated
+	 */
+	EAttribute getMeasuredPoint_WindDirection();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.MeasuredPoint#getGlobalRadiation <em>Global Radiation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Global Radiation</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.MeasuredPoint#getGlobalRadiation()
+	 * @see #getMeasuredPoint()
+	 * @generated
+	 */
+	EAttribute getMeasuredPoint_GlobalRadiation();
+
+	/**
+	 * Returns the meta object for class '{@link org.gecko.weather.outlook.model.outlook.Observation <em>Observation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Observation</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.Observation
+	 * @generated
+	 */
+	EClass getObservation();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.Observation#getTime <em>Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Time</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.Observation#getTime()
+	 * @see #getObservation()
+	 * @generated
+	 */
+	EAttribute getObservation_Time();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.Observation#getProviderId <em>Provider Id</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Provider Id</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.Observation#getProviderId()
+	 * @see #getObservation()
+	 * @generated
+	 */
+	EAttribute getObservation_ProviderId();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.Observation#getProductId <em>Product Id</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Product Id</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.Observation#getProductId()
+	 * @see #getObservation()
+	 * @generated
+	 */
+	EAttribute getObservation_ProductId();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.Observation#getStationId <em>Station Id</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Station Id</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.Observation#getStationId()
+	 * @see #getObservation()
+	 * @generated
+	 */
+	EAttribute getObservation_StationId();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.Observation#getTemperature <em>Temperature</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Temperature</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.Observation#getTemperature()
+	 * @see #getObservation()
+	 * @generated
+	 */
+	EAttribute getObservation_Temperature();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.Observation#getHumidity <em>Humidity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Humidity</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.Observation#getHumidity()
+	 * @see #getObservation()
+	 * @generated
+	 */
+	EAttribute getObservation_Humidity();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.Observation#getWindSpeed <em>Wind Speed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Wind Speed</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.Observation#getWindSpeed()
+	 * @see #getObservation()
+	 * @generated
+	 */
+	EAttribute getObservation_WindSpeed();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.Observation#getWindGust <em>Wind Gust</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Wind Gust</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.Observation#getWindGust()
+	 * @see #getObservation()
+	 * @generated
+	 */
+	EAttribute getObservation_WindGust();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.Observation#getWindDirection <em>Wind Direction</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Wind Direction</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.Observation#getWindDirection()
+	 * @see #getObservation()
+	 * @generated
+	 */
+	EAttribute getObservation_WindDirection();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.Observation#getGlobalRadiation <em>Global Radiation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Global Radiation</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.Observation#getGlobalRadiation()
+	 * @see #getObservation()
+	 * @generated
+	 */
+	EAttribute getObservation_GlobalRadiation();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.Observation#getUvIndex <em>Uv Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Uv Index</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.Observation#getUvIndex()
+	 * @see #getObservation()
+	 * @generated
+	 */
+	EAttribute getObservation_UvIndex();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.Observation#getRainTotal <em>Rain Total</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Rain Total</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.Observation#getRainTotal()
+	 * @see #getObservation()
+	 * @generated
+	 */
+	EAttribute getObservation_RainTotal();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.Observation#getBatteryLevel <em>Battery Level</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Battery Level</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.Observation#getBatteryLevel()
+	 * @see #getObservation()
+	 * @generated
+	 */
+	EAttribute getObservation_BatteryLevel();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.Observation#getCapacitorVoltage <em>Capacitor Voltage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Capacitor Voltage</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.Observation#getCapacitorVoltage()
+	 * @see #getObservation()
+	 * @generated
+	 */
+	EAttribute getObservation_CapacitorVoltage();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.gecko.weather.outlook.model.outlook.Observation#getSignalStrength <em>Signal Strength</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Signal Strength</em>'.
+	 * @see org.gecko.weather.outlook.model.outlook.Observation#getSignalStrength()
+	 * @see #getObservation()
+	 * @generated
+	 */
+	EAttribute getObservation_SignalStrength();
 
 	/**
 	 * Returns the meta object for class '{@link org.gecko.weather.outlook.model.outlook.HourOutlook <em>Hour Outlook</em>}'.
@@ -1545,6 +2101,218 @@ public interface OutlookPackage extends org.eclipse.emf.ecore.EPackage {
 		 * @generated
 		 */
 		EReference OUTLOOK__SOURCES = eINSTANCE.getOutlook_Sources();
+
+		/**
+		 * The meta object literal for the '<em><b>Measured</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference OUTLOOK__MEASURED = eINSTANCE.getOutlook_Measured();
+
+		/**
+		 * The meta object literal for the '<em><b>Observation</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference OUTLOOK__OBSERVATION = eINSTANCE.getOutlook_Observation();
+
+		/**
+		 * The meta object literal for the '{@link org.gecko.weather.outlook.model.outlook.impl.MeasuredPointImpl <em>Measured Point</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.gecko.weather.outlook.model.outlook.impl.MeasuredPointImpl
+		 * @see org.gecko.weather.outlook.model.outlook.impl.OutlookPackageImpl#getMeasuredPoint()
+		 * @generated
+		 */
+		EClass MEASURED_POINT = eINSTANCE.getMeasuredPoint();
+
+		/**
+		 * The meta object literal for the '<em><b>Time</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MEASURED_POINT__TIME = eINSTANCE.getMeasuredPoint_Time();
+
+		/**
+		 * The meta object literal for the '<em><b>Temperature</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MEASURED_POINT__TEMPERATURE = eINSTANCE.getMeasuredPoint_Temperature();
+
+		/**
+		 * The meta object literal for the '<em><b>Humidity</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MEASURED_POINT__HUMIDITY = eINSTANCE.getMeasuredPoint_Humidity();
+
+		/**
+		 * The meta object literal for the '<em><b>Wind Speed</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MEASURED_POINT__WIND_SPEED = eINSTANCE.getMeasuredPoint_WindSpeed();
+
+		/**
+		 * The meta object literal for the '<em><b>Wind Gust</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MEASURED_POINT__WIND_GUST = eINSTANCE.getMeasuredPoint_WindGust();
+
+		/**
+		 * The meta object literal for the '<em><b>Wind Direction</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MEASURED_POINT__WIND_DIRECTION = eINSTANCE.getMeasuredPoint_WindDirection();
+
+		/**
+		 * The meta object literal for the '<em><b>Global Radiation</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MEASURED_POINT__GLOBAL_RADIATION = eINSTANCE.getMeasuredPoint_GlobalRadiation();
+
+		/**
+		 * The meta object literal for the '{@link org.gecko.weather.outlook.model.outlook.impl.ObservationImpl <em>Observation</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.gecko.weather.outlook.model.outlook.impl.ObservationImpl
+		 * @see org.gecko.weather.outlook.model.outlook.impl.OutlookPackageImpl#getObservation()
+		 * @generated
+		 */
+		EClass OBSERVATION = eINSTANCE.getObservation();
+
+		/**
+		 * The meta object literal for the '<em><b>Time</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OBSERVATION__TIME = eINSTANCE.getObservation_Time();
+
+		/**
+		 * The meta object literal for the '<em><b>Provider Id</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OBSERVATION__PROVIDER_ID = eINSTANCE.getObservation_ProviderId();
+
+		/**
+		 * The meta object literal for the '<em><b>Product Id</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OBSERVATION__PRODUCT_ID = eINSTANCE.getObservation_ProductId();
+
+		/**
+		 * The meta object literal for the '<em><b>Station Id</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OBSERVATION__STATION_ID = eINSTANCE.getObservation_StationId();
+
+		/**
+		 * The meta object literal for the '<em><b>Temperature</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OBSERVATION__TEMPERATURE = eINSTANCE.getObservation_Temperature();
+
+		/**
+		 * The meta object literal for the '<em><b>Humidity</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OBSERVATION__HUMIDITY = eINSTANCE.getObservation_Humidity();
+
+		/**
+		 * The meta object literal for the '<em><b>Wind Speed</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OBSERVATION__WIND_SPEED = eINSTANCE.getObservation_WindSpeed();
+
+		/**
+		 * The meta object literal for the '<em><b>Wind Gust</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OBSERVATION__WIND_GUST = eINSTANCE.getObservation_WindGust();
+
+		/**
+		 * The meta object literal for the '<em><b>Wind Direction</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OBSERVATION__WIND_DIRECTION = eINSTANCE.getObservation_WindDirection();
+
+		/**
+		 * The meta object literal for the '<em><b>Global Radiation</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OBSERVATION__GLOBAL_RADIATION = eINSTANCE.getObservation_GlobalRadiation();
+
+		/**
+		 * The meta object literal for the '<em><b>Uv Index</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OBSERVATION__UV_INDEX = eINSTANCE.getObservation_UvIndex();
+
+		/**
+		 * The meta object literal for the '<em><b>Rain Total</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OBSERVATION__RAIN_TOTAL = eINSTANCE.getObservation_RainTotal();
+
+		/**
+		 * The meta object literal for the '<em><b>Battery Level</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OBSERVATION__BATTERY_LEVEL = eINSTANCE.getObservation_BatteryLevel();
+
+		/**
+		 * The meta object literal for the '<em><b>Capacitor Voltage</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OBSERVATION__CAPACITOR_VOLTAGE = eINSTANCE.getObservation_CapacitorVoltage();
+
+		/**
+		 * The meta object literal for the '<em><b>Signal Strength</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OBSERVATION__SIGNAL_STRENGTH = eINSTANCE.getObservation_SignalStrength();
 
 		/**
 		 * The meta object literal for the '{@link org.gecko.weather.outlook.model.outlook.impl.HourOutlookImpl <em>Hour Outlook</em>}' class.

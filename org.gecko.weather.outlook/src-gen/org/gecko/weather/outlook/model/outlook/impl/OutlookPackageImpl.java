@@ -22,6 +22,8 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import org.gecko.weather.outlook.model.outlook.DayOutlook;
 import org.gecko.weather.outlook.model.outlook.HourOutlook;
+import org.gecko.weather.outlook.model.outlook.MeasuredPoint;
+import org.gecko.weather.outlook.model.outlook.Observation;
 import org.gecko.weather.outlook.model.outlook.Outlook;
 import org.gecko.weather.outlook.model.outlook.OutlookFactory;
 import org.gecko.weather.outlook.model.outlook.OutlookPackage;
@@ -56,6 +58,20 @@ public class OutlookPackageImpl extends EPackageImpl implements OutlookPackage {
 	 * @generated
 	 */
 	private EClass outlookEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass measuredPointEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass observationEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -326,6 +342,266 @@ public class OutlookPackageImpl extends EPackageImpl implements OutlookPackage {
 	@Override
 	public EReference getOutlook_Sources() {
 		return (EReference)outlookEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getOutlook_Measured() {
+		return (EReference)outlookEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getOutlook_Observation() {
+		return (EReference)outlookEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getMeasuredPoint() {
+		return measuredPointEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getMeasuredPoint_Time() {
+		return (EAttribute)measuredPointEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getMeasuredPoint_Temperature() {
+		return (EAttribute)measuredPointEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getMeasuredPoint_Humidity() {
+		return (EAttribute)measuredPointEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getMeasuredPoint_WindSpeed() {
+		return (EAttribute)measuredPointEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getMeasuredPoint_WindGust() {
+		return (EAttribute)measuredPointEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getMeasuredPoint_WindDirection() {
+		return (EAttribute)measuredPointEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getMeasuredPoint_GlobalRadiation() {
+		return (EAttribute)measuredPointEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getObservation() {
+		return observationEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getObservation_Time() {
+		return (EAttribute)observationEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getObservation_ProviderId() {
+		return (EAttribute)observationEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getObservation_ProductId() {
+		return (EAttribute)observationEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getObservation_StationId() {
+		return (EAttribute)observationEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getObservation_Temperature() {
+		return (EAttribute)observationEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getObservation_Humidity() {
+		return (EAttribute)observationEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getObservation_WindSpeed() {
+		return (EAttribute)observationEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getObservation_WindGust() {
+		return (EAttribute)observationEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getObservation_WindDirection() {
+		return (EAttribute)observationEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getObservation_GlobalRadiation() {
+		return (EAttribute)observationEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getObservation_UvIndex() {
+		return (EAttribute)observationEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getObservation_RainTotal() {
+		return (EAttribute)observationEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getObservation_BatteryLevel() {
+		return (EAttribute)observationEClass.getEStructuralFeatures().get(12);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getObservation_CapacitorVoltage() {
+		return (EAttribute)observationEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getObservation_SignalStrength() {
+		return (EAttribute)observationEClass.getEStructuralFeatures().get(14);
 	}
 
 	/**
@@ -778,6 +1054,34 @@ public class OutlookPackageImpl extends EPackageImpl implements OutlookPackage {
 		createEReference(outlookEClass, OUTLOOK__TODAY);
 		createEReference(outlookEClass, OUTLOOK__DAYS);
 		createEReference(outlookEClass, OUTLOOK__SOURCES);
+		createEReference(outlookEClass, OUTLOOK__MEASURED);
+		createEReference(outlookEClass, OUTLOOK__OBSERVATION);
+
+		measuredPointEClass = createEClass(MEASURED_POINT);
+		createEAttribute(measuredPointEClass, MEASURED_POINT__TIME);
+		createEAttribute(measuredPointEClass, MEASURED_POINT__TEMPERATURE);
+		createEAttribute(measuredPointEClass, MEASURED_POINT__HUMIDITY);
+		createEAttribute(measuredPointEClass, MEASURED_POINT__WIND_SPEED);
+		createEAttribute(measuredPointEClass, MEASURED_POINT__WIND_GUST);
+		createEAttribute(measuredPointEClass, MEASURED_POINT__WIND_DIRECTION);
+		createEAttribute(measuredPointEClass, MEASURED_POINT__GLOBAL_RADIATION);
+
+		observationEClass = createEClass(OBSERVATION);
+		createEAttribute(observationEClass, OBSERVATION__TIME);
+		createEAttribute(observationEClass, OBSERVATION__PROVIDER_ID);
+		createEAttribute(observationEClass, OBSERVATION__PRODUCT_ID);
+		createEAttribute(observationEClass, OBSERVATION__STATION_ID);
+		createEAttribute(observationEClass, OBSERVATION__TEMPERATURE);
+		createEAttribute(observationEClass, OBSERVATION__HUMIDITY);
+		createEAttribute(observationEClass, OBSERVATION__WIND_SPEED);
+		createEAttribute(observationEClass, OBSERVATION__WIND_GUST);
+		createEAttribute(observationEClass, OBSERVATION__WIND_DIRECTION);
+		createEAttribute(observationEClass, OBSERVATION__GLOBAL_RADIATION);
+		createEAttribute(observationEClass, OBSERVATION__UV_INDEX);
+		createEAttribute(observationEClass, OBSERVATION__RAIN_TOTAL);
+		createEAttribute(observationEClass, OBSERVATION__BATTERY_LEVEL);
+		createEAttribute(observationEClass, OBSERVATION__CAPACITOR_VOLTAGE);
+		createEAttribute(observationEClass, OBSERVATION__SIGNAL_STRENGTH);
 
 		hourOutlookEClass = createEClass(HOUR_OUTLOOK);
 		createEAttribute(hourOutlookEClass, HOUR_OUTLOOK__TIME);
@@ -874,6 +1178,34 @@ public class OutlookPackageImpl extends EPackageImpl implements OutlookPackage {
 		initEReference(getOutlook_Today(), this.getDayOutlook(), null, "today", null, 0, 1, Outlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOutlook_Days(), this.getDayOutlook(), null, "days", null, 0, -1, Outlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOutlook_Sources(), this.getSourceNote(), null, "sources", null, 0, -1, Outlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getOutlook_Measured(), this.getMeasuredPoint(), null, "measured", null, 0, -1, Outlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getOutlook_Observation(), this.getObservation(), null, "observation", null, 0, 1, Outlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(measuredPointEClass, MeasuredPoint.class, "MeasuredPoint", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getMeasuredPoint_Time(), ecorePackage.getEDate(), "time", null, 0, 1, MeasuredPoint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMeasuredPoint_Temperature(), ecorePackage.getEDouble(), "temperature", null, 0, 1, MeasuredPoint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMeasuredPoint_Humidity(), ecorePackage.getEDouble(), "humidity", null, 0, 1, MeasuredPoint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMeasuredPoint_WindSpeed(), ecorePackage.getEDouble(), "windSpeed", null, 0, 1, MeasuredPoint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMeasuredPoint_WindGust(), ecorePackage.getEDouble(), "windGust", null, 0, 1, MeasuredPoint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMeasuredPoint_WindDirection(), ecorePackage.getEDouble(), "windDirection", null, 0, 1, MeasuredPoint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMeasuredPoint_GlobalRadiation(), ecorePackage.getEDouble(), "globalRadiation", null, 0, 1, MeasuredPoint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(observationEClass, Observation.class, "Observation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getObservation_Time(), ecorePackage.getEDate(), "time", null, 0, 1, Observation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getObservation_ProviderId(), ecorePackage.getEString(), "providerId", null, 0, 1, Observation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getObservation_ProductId(), ecorePackage.getEString(), "productId", null, 0, 1, Observation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getObservation_StationId(), ecorePackage.getEString(), "stationId", null, 0, 1, Observation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getObservation_Temperature(), ecorePackage.getEDouble(), "temperature", null, 0, 1, Observation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getObservation_Humidity(), ecorePackage.getEDouble(), "humidity", null, 0, 1, Observation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getObservation_WindSpeed(), ecorePackage.getEDouble(), "windSpeed", null, 0, 1, Observation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getObservation_WindGust(), ecorePackage.getEDouble(), "windGust", null, 0, 1, Observation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getObservation_WindDirection(), ecorePackage.getEDouble(), "windDirection", null, 0, 1, Observation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getObservation_GlobalRadiation(), ecorePackage.getEDouble(), "globalRadiation", null, 0, 1, Observation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getObservation_UvIndex(), ecorePackage.getEDouble(), "uvIndex", null, 0, 1, Observation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getObservation_RainTotal(), ecorePackage.getEDouble(), "rainTotal", null, 0, 1, Observation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getObservation_BatteryLevel(), ecorePackage.getEDouble(), "batteryLevel", null, 0, 1, Observation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getObservation_CapacitorVoltage(), ecorePackage.getEDouble(), "capacitorVoltage", null, 0, 1, Observation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getObservation_SignalStrength(), ecorePackage.getEDouble(), "signalStrength", null, 0, 1, Observation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(hourOutlookEClass, HourOutlook.class, "HourOutlook", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getHourOutlook_Time(), ecorePackage.getEDate(), "time", null, 0, 1, HourOutlook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

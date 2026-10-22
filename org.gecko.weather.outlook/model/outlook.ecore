@@ -26,7 +26,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Outlook">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="The outlook for one site at one moment: hours from the current full hour on, days from tomorrow on, in the site's time zone."/>
+      <details key="documentation" value="The outlook for one site at one moment: hours from the current full hour on (preceded by a look-back of past hours when configured, so a station's measurements can stand beside what was forecast), days from tomorrow on, in the site's time zone. 'generatedAt' says where now is."/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="siteId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="siteName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -42,6 +42,56 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="days" upperBound="-1" eType="#//DayOutlook" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sources" upperBound="-1" eType="#//SourceNote" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="measured" upperBound="-1" eType="#//MeasuredPoint" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The own station's measurements over the look-back (the hours before 'generatedAt' that the outlook starts with), in ten-minute slots, oldest first. Empty without a station."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="observation" eType="#//Observation" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="What an own station at the site measured last (Origin.LOCAL_STATION), beside the forecast and never merged into it. Absent when no station is bound."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MeasuredPoint">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="What the own station measured in one ten-minute slot of the look-back: means over the slot, the gust its maximum; 'time' is the slot's middle. Units as in HourOutlook."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="time" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="temperature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="humidity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windSpeed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windGust" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windDirection" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="globalRadiation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" unsettable="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Observation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The newest value per quantity from the site's own station: measured, not forecast. 'time' is the newest of them; a quantity the station does not report is unset. Units as in HourOutlook; rainTotal is the device's running counter in mm, not an hourly sum."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="time" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="providerId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="productId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stationId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="temperature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="humidity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" unsettable="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Relative humidity, %."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windSpeed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windGust" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windDirection" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="globalRadiation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uvIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rainTotal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="batteryLevel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" unsettable="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Station health: 1 fine, 0 empty."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="capacitorVoltage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="signalStrength" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" unsettable="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="HourOutlook">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">

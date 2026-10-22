@@ -70,6 +70,8 @@ public class OutlookFactoryImpl extends EFactoryImpl implements OutlookFactory {
 			case OutlookPackage.SITE_DIRECTORY: return createSiteDirectory();
 			case OutlookPackage.SITE_ENTRY: return createSiteEntry();
 			case OutlookPackage.OUTLOOK: return createOutlook();
+			case OutlookPackage.MEASURED_POINT: return createMeasuredPoint();
+			case OutlookPackage.OBSERVATION: return createObservation();
 			case OutlookPackage.HOUR_OUTLOOK: return createHourOutlook();
 			case OutlookPackage.DAY_OUTLOOK: return createDayOutlook();
 			case OutlookPackage.SOURCE_NOTE: return createSourceNote();
@@ -109,6 +111,28 @@ public class OutlookFactoryImpl extends EFactoryImpl implements OutlookFactory {
 	public Outlook createOutlook() {
 		OutlookImpl outlook = new OutlookImpl();
 		return outlook;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public MeasuredPoint createMeasuredPoint() {
+		MeasuredPointImpl measuredPoint = new MeasuredPointImpl();
+		return measuredPoint;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Observation createObservation() {
+		ObservationImpl observation = new ObservationImpl();
+		return observation;
 	}
 
 	/**

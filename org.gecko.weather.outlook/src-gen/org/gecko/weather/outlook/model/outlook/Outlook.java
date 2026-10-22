@@ -27,7 +27,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * <!-- end-user-doc -->
  *
  * <!-- begin-model-doc -->
- * The outlook for one site at one moment: hours from the current full hour on, days from tomorrow on, in the site's time zone.
+ * The outlook for one site at one moment: hours from the current full hour on (preceded by a look-back of past hours when configured, so a station's measurements can stand beside what was forecast), days from tomorrow on, in the site's time zone. 'generatedAt' says where now is.
  * <!-- end-model-doc -->
  *
  * <p>
@@ -44,6 +44,8 @@ import org.osgi.annotation.versioning.ProviderType;
  *   <li>{@link org.gecko.weather.outlook.model.outlook.Outlook#getToday <em>Today</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.Outlook#getDays <em>Days</em>}</li>
  *   <li>{@link org.gecko.weather.outlook.model.outlook.Outlook#getSources <em>Sources</em>}</li>
+ *   <li>{@link org.gecko.weather.outlook.model.outlook.Outlook#getMeasured <em>Measured</em>}</li>
+ *   <li>{@link org.gecko.weather.outlook.model.outlook.Outlook#getObservation <em>Observation</em>}</li>
  * </ul>
  *
  * @see org.gecko.weather.outlook.model.outlook.OutlookPackage#getOutlook()
@@ -244,5 +246,45 @@ public interface Outlook extends EObject {
 	 * @generated
 	 */
 	EList<SourceNote> getSources();
+
+	/**
+	 * Returns the value of the '<em><b>Measured</b></em>' containment reference list.
+	 * The list contents are of type {@link org.gecko.weather.outlook.model.outlook.MeasuredPoint}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * The own station's measurements over the look-back (the hours before 'generatedAt' that the outlook starts with), in ten-minute slots, oldest first. Empty without a station.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Measured</em>' containment reference list.
+	 * @see org.gecko.weather.outlook.model.outlook.OutlookPackage#getOutlook_Measured()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<MeasuredPoint> getMeasured();
+
+	/**
+	 * Returns the value of the '<em><b>Observation</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * What an own station at the site measured last (Origin.LOCAL_STATION), beside the forecast and never merged into it. Absent when no station is bound.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Observation</em>' containment reference.
+	 * @see #setObservation(Observation)
+	 * @see org.gecko.weather.outlook.model.outlook.OutlookPackage#getOutlook_Observation()
+	 * @model containment="true"
+	 * @generated
+	 */
+	Observation getObservation();
+
+	/**
+	 * Sets the value of the '{@link org.gecko.weather.outlook.model.outlook.Outlook#getObservation <em>Observation</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Observation</em>' containment reference.
+	 * @see #getObservation()
+	 * @generated
+	 */
+	void setObservation(Observation value);
 
 } // Outlook

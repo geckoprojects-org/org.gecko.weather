@@ -23,6 +23,8 @@ per quantity and hour by a fixed rule and says which datasets it picked from.
 | insolation per day | the hourly global radiation summed, kWh/m² on a horizontal surface |
 | UV index | the daily maximum of the UV product |
 | sun elevation, sunrise, sunset, day length | the computed solar dataset and day events |
+| `measured` — the own station over the look-back | the `LOCAL_STATION` values of the `pastHours` before the current hour, in ten-minute slots (means, the gust its maximum); the hours list starts `pastHours` earlier too, with what the sources had forecast, so measurement and forecast can be drawn over each other |
+| `observation` — what the own station measured last | the newest value per quantity of the site's `Origin.LOCAL_STATION` dataset (Ecowitt WS90 via rtl_433), shown beside the forecast and never merged into it; absent without a station |
 
 Instant quantities are read at the hour's start, period quantities from the value ending one hour
 later: the hour from 14:00 shows the rain that falls until 15:00. Days are calendar days in the
@@ -33,7 +35,7 @@ cover only the hours the sources still have); their weather code is the most sig
 ## Configuration and launch
 
 PID `org.gecko.weather.outlook.internal.WeatherOutlookComponent` (`hours` 24, `days` 2,
-`defaultTimeZone`), and the RSA provider role `org.eclipse.fennec.services.rsa.provider` — both in
+`pastHours` 6, `defaultTimeZone`), and the RSA provider role `org.eclipse.fennec.services.rsa.provider` — both in
 `org.gecko.weather.runtime.remote`, environment-overridable. `demo.bndrun` in the runtime is the dev
 launch plus these; the UI is in [ui/outlook](../ui/outlook/README.md).
 
