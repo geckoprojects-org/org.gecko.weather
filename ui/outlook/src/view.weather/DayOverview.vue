@@ -3,11 +3,23 @@
  * The next days as tiles — the xdp tile with its metrics and foot. Three to a row from seven days
  * on, so that a week does not become a column.
  */
-import type { DayValue } from '../contracts.js'
+import { computed } from 'vue'
+import type { DayValue, SourceInfo } from '../contracts.js'
+import SourceChip from './SourceChip.vue'
 import WeatherIcon from './WeatherIcon.vue'
 import { clock, dayLabel, degrees, fixed1, kmh, skyOf, skyText, whole } from './weather.js'
 
-defineProps<{ days: DayValue[]; timeZone: string }>()
+const props = defineProps<{ days: DayValue[]; sources?: SourceInfo[]; timeZone: string }>()
+
+/** The days are forecast: one chip per provider that contributed, the measured-now note left out */
+const providers = computed(() => {
+  const seen = new Map<string, SourceInfo>()
+  for (const s of props.sources ?? []) {
+    if (s.quantities.startsWith('gemessen')) continue
+    if (!seen.has(s.providerId)) seen.set(s.providerId, s)
+  }
+  return [...seen.values()]
+})
 
 function hours(h: number | undefined): string {
   if (h === undefined) return '–'
@@ -60,6 +72,7 @@ function hours(h: number | undefined): string {
         <dt>Sonnenaufgang</dt><dd>{{ clock(d.sunrise, timeZone) }}</dd>
         <dt>Sonnenuntergang</dt><dd>{{ clock(d.sunset, timeZone) }}</dd>
         <dt>Tageslänge</dt><dd>{{ hours(d.daylightHours) }}</dd>
+        <dt v-if="providers.length">Quelle</dt><dd v-if="providers.length" class="chips"><SourceChip v-for="p in providers" :key="p.providerId" :provider-id="p.providerId" :product-id="p.productId" /></dd>
       </dl>
     </article>
   </div>
@@ -72,4 +85,5 @@ function hours(h: number | undefined): string {
 .range .min { color: var(--muted); font-size: 15px; }
 .foot dd { margin: 0; font-variant-numeric: tabular-nums; }
 .foot dt { color: var(--muted); }
+.foot .chips { display: flex; gap: 4px; }
 </style>

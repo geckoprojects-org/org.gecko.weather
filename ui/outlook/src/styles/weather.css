@@ -7,3 +7,5 @@
  */
 :root { --w-temp: #8A87E8; }
 :root[data-theme="light"] { --w-temp: #5C57C9; }
+/* The own station's measurements: the accent, which the "Station" chip wears too */
+:root { --w-station: var(--accent); }

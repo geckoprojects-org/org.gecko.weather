@@ -10,15 +10,23 @@
  *
  * The UV index has no hours: DWD publishes one maximum per day. It sits as a mark at the day's
  * solar noon, where that maximum is reached, when solar noon falls into the window.
+ *
+ * Hours before `now` are the look-back: the forecast as it was, and over it the own station's
+ * measurements as a second line in the station colour — temperature in the temperature band,
+ * global radiation in the radiation band — so the eye compares the two where both exist.
  */
 import { computed } from 'vue'
-import type { DayValue, HourValue } from '../contracts.js'
+import type { DayValue, HourValue, MeasuredPoint } from '../contracts.js'
 import { clock, degrees, fixed1, niceRange, whole } from './weather.js'
 
 const props = defineProps<{
   hours: HourValue[]
   /** today and the following days — their sun events and UV maxima are placed where they fall */
   days: DayValue[]
+  /** the own station over the look-back */
+  measured?: MeasuredPoint[]
+  /** where the look-back ends and the forecast begins */
+  now?: Date
   timeZone: string
   col: number
   active: number | null
@@ -52,8 +60,14 @@ function inWindow(t: Date | undefined): t is Date {
 
 // --- temperature band -----------------------------------------------------------------------
 
+const measuredIn = computed(() => (props.measured ?? []).filter((m) => inWindow(m.time)))
+
 const tempRange = computed(() =>
-  niceRange(props.hours.map((h) => h.temperature).filter((t): t is number => t !== undefined), 2, 6),
+  niceRange(
+    [...props.hours.map((h) => h.temperature), ...measuredIn.value.map((m) => m.temperature)].filter((t): t is number => t !== undefined),
+    2,
+    6,
+  ),
 )
 
 function yTemp(t: number): number {
@@ -74,6 +88,26 @@ const tempPath = computed(() => {
   })
   return d
 })
+
+/** A line through the measured points, broken where a slot is missing */
+function measuredPath(value: (m: MeasuredPoint) => number | undefined, y: (v: number) => number): string {
+  let d = ''
+  let pen = false
+  let last = 0
+  for (const m of measuredIn.value) {
+    const v = value(m)
+    const t = m.time.getTime()
+    if (v === undefined || (pen && t - last > 1_500_000)) pen = false
+    if (v === undefined) continue
+    d += `${pen ? 'L' : 'M'}${xOf(m.time).toFixed(1)},${y(v).toFixed(1)}`
+    pen = true
+    last = t
+  }
+  return d
+}
+
+const measuredTempPath = computed(() => measuredPath((m) => m.temperature, yTemp))
+const nowX = computed(() => (props.now && inWindow(props.now) ? xOf(props.now) : undefined))
 
 const tempGrid = computed(() => {
   const [lo, hi] = tempRange.value
@@ -97,7 +131,9 @@ const RAD_TOP = TOP + TEMP_H + GAP
 const RAD_BASE = RAD_TOP + RAD_H
 
 /** full scale in whole hundreds, at least 400 W/m² so a grey day looks grey */
-const radMax = computed(() => Math.max(400, Math.ceil(Math.max(...props.hours.map((h) => h.globalRadiation ?? 0)) / 100) * 100))
+const radMax = computed(() =>
+  Math.max(400, Math.ceil(Math.max(...props.hours.map((h) => h.globalRadiation ?? 0), ...measuredIn.value.map((m) => m.globalRadiation ?? 0)) / 100) * 100),
+)
 
 function yRad(w: number): number {
   return RAD_BASE - (RAD_H - 12) * (w / radMax.value)
@@ -144,6 +180,8 @@ const globalOnly = computed(() => {
   })
   return d
 })
+
+const measuredRadPath = computed(() => measuredPath((m) => m.globalRadiation, yRad))
 
 /** The brightest hour, labelled */
 const radPeak = computed(() => {
@@ -217,6 +255,7 @@ function anchor(x: number): 'start' | 'end' {
     aria-label="Temperatur, Niederschlag, Nacht und Sonnenzeiten der nächsten 24 Stunden"
   >
     <rect v-for="(n, k) in nights" :key="'n' + k" class="night" :x="n.x" :y="TOP - 4" :width="n.w" :height="H - TOP + 4" />
+    <rect v-if="nowX !== undefined && nowX > 0" class="past" :x="0" :y="TOP - 4" :width="nowX" :height="H - TOP + 4" />
 
     <g class="grid">
       <template v-for="g in tempGrid" :key="'g' + g">
@@ -246,10 +285,16 @@ function anchor(x: number): 'start' | 'end' {
     <path v-for="(d, k) in diffuseAreas" :key="'df' + k" class="rad diffuse" :d="d" />
     <path v-for="(d, k) in directAreas" :key="'dr' + k" class="rad direct" :d="d" />
     <path class="rad global" :d="globalOnly" />
+    <path class="line station" :d="measuredRadPath" />
     <text v-if="radPeak" class="peak" :x="xCenter(radPeak.i)" :y="yRad(radPeak.w) - 5" text-anchor="middle">{{ whole(radPeak.w) }} W/m²</text>
     <line v-if="active !== null" class="cursor" :x1="xCenter(active)" :x2="xCenter(active)" :y1="RAD_TOP" :y2="RAD_BASE" />
 
     <path class="line temp" :d="tempPath" />
+    <path class="line station" :d="measuredTempPath" />
+    <g v-if="nowX !== undefined" class="now">
+      <line :x1="nowX" :x2="nowX" :y1="TOP - 6" :y2="RAIN_BASE" />
+      <text :x="nowX + (anchor(nowX) === 'end' ? -5 : 5)" :y="TOP + 10" :text-anchor="anchor(nowX)">jetzt</text>
+    </g>
     <g v-for="e in extremes" :key="'x' + e.i" class="extreme">
       <circle :cx="xCenter(e.i)" :cy="yTemp(e.t)" r="4" />
       <text :x="xCenter(e.i)" :y="yTemp(e.t) + (e.above ? -10 : 18)" text-anchor="middle">{{ degrees(e.t) }}</text>
@@ -278,6 +323,10 @@ function anchor(x: number): 'start' | 'end' {
 <style scoped>
 svg { display: block; overflow: visible; }
 .night { fill: color-mix(in srgb, var(--ink) 4%, transparent); }
+.past { fill: color-mix(in srgb, var(--ink) 3%, transparent); }
+.line.station { stroke: var(--w-station); stroke-width: 2; }
+.now line { stroke: var(--ink-2); stroke-width: 1.2; }
+.now text { font-size: 11px; font-weight: 600; fill: var(--ink-2); }
 .grid line { stroke: var(--line); stroke-width: 1; }
 .grid .separator { stroke: var(--line-2); stroke-dasharray: 2 3; }
 .grid .baseline { stroke: var(--line-2); }

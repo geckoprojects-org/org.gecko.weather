@@ -59,6 +59,11 @@ and `org.gecko.weather.pv/model/pv.ecore`, the files the Java side is generated 
 ## What the page shows
 
 - **Today** in one line above the hours: sunrise, sunset, day length, UV maximum and when it is reached.
+- **Look-back**, six hours by default (`WEATHER_OUTLOOK_PAST_HOURS`): the columns start before
+  now, showing what was forecast for those hours, and the meteogram draws the own station's
+  measurements over it as a second line in the station colour — temperature and global radiation,
+  ten-minute means — with a "jetzt" mark where the forecast begins. The hour tooltip adds the
+  measured values under the forecast ones. The page reads itself anew every minute while visible.
 - **24 hours** as columns: time, sky icon (WMO `ww` first, cloud cover for the sky codes, moon at
   night), temperature; below, on the same columns, a **meteogram** — temperature, radiation,
   precipitation, night, sun and UV in one picture without a second y-axis: three bands in one frame,
@@ -71,6 +76,14 @@ and `org.gecko.weather.pv/model/pv.ecore`, the files the Java side is generated 
   focus on an hour shows all its values.
 - **Seven days** as xdp tiles, three to a row: high/low, precipitation, sunshine, **insolation in kWh/m²**, UV maximum, mean cloud cover,
   strongest gust, sunrise, sunset, day length.
+- **Now**, when the site has an own weather station (Ecowitt WS90 over rtl_433): what it measured
+  last — temperature, humidity, wind and gusts, radiation, UV — in one row, and the forecast's
+  current hour in the row below, so measurement and forecast stand side by side and neither
+  replaces the other. The row says how old the measurement is and greys out when the station has
+  been silent for ten minutes; a weak battery is called out.
+- **Source chips** on everything: "Station" (own station), "DWD" (the weather service's products),
+  "berechnet" (sun position, computed here). On the now-row, in the hour tooltip's foot (which
+  product gave which quantities), on every day tile and in the sources list.
 - **Sources**: which dataset each group of quantities came from, how far away, when it was issued.
 - Colours: the xdp series colours `--s2` (radiation, amber, in two steps for direct/diffuse) and
   `--s1` (precipitation, teal), plus a violet for temperature (`src/styles/weather.css`); the triple

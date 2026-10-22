@@ -10,12 +10,52 @@
  * one could only get by hovering. Hover or focus on a column shows all of its values at once.
  */
 import { computed, ref } from 'vue'
-import type { DayValue, HourValue } from '../contracts.js'
+import type { DayValue, HourValue, MeasuredPoint, SourceInfo } from '../contracts.js'
 import Meteogram from './Meteogram.vue'
+import SourceChip from './SourceChip.vue'
 import WeatherIcon from './WeatherIcon.vue'
 import { compass, degrees, fixed1, hourLabel, isMidnight, kmh, shortDay, skyOf, skyText, whole } from './weather.js'
 
-const props = defineProps<{ hours: HourValue[]; today?: DayValue; days: DayValue[]; timeZone: string }>()
+const props = defineProps<{
+  hours: HourValue[]
+  today?: DayValue
+  days: DayValue[]
+  sources?: SourceInfo[]
+  /** the own station over the look-back */
+  measured?: MeasuredPoint[]
+  /** where the look-back ends */
+  now?: Date
+  timeZone: string
+}>()
+
+const HOUR_MS = 3_600_000
+
+/** Hours before now are the look-back */
+function isPast(h: HourValue): boolean {
+  return !!props.now && h.time.getTime() + HOUR_MS <= props.now.getTime()
+}
+
+/** The station's slots inside an hour, folded to one row of values */
+function measuredIn(h: HourValue): { temperature?: number; humidity?: number; windSpeed?: number; windGust?: number; globalRadiation?: number } | undefined {
+  const from = h.time.getTime()
+  const slots = (props.measured ?? []).filter((m) => m.time.getTime() >= from && m.time.getTime() < from + HOUR_MS)
+  if (slots.length === 0) return undefined
+  const mean = (pick: (m: MeasuredPoint) => number | undefined) => {
+    const v = slots.map(pick).filter((x): x is number => x !== undefined)
+    return v.length ? v.reduce((a, b) => a + b, 0) / v.length : undefined
+  }
+  const gusts = slots.map((m) => m.windGust).filter((x): x is number => x !== undefined)
+  return {
+    temperature: mean((m) => m.temperature),
+    humidity: mean((m) => m.humidity),
+    windSpeed: mean((m) => m.windSpeed),
+    windGust: gusts.length ? Math.max(...gusts) : undefined,
+    globalRadiation: mean((m) => m.globalRadiation),
+  }
+}
+
+/** The forecast's sources for the tooltip foot — the measured-now note is not one of them */
+const forecastSources = computed(() => (props.sources ?? []).filter((s) => !s.quantities.startsWith('gemessen')))
 
 /** Width of one hour */
 const COL = 56
@@ -47,8 +87,10 @@ const tooltipRows = computed(() => {
   const h = hovered.value
   if (!h) return []
   const split = h.directRadiation !== undefined && h.diffuseRadiation !== undefined
+  const m = measuredIn(h)
   return [
     { label: 'Temperatur', value: `${degrees(h.temperature)}C`, key: 'line temp' },
+    ...(m?.temperature !== undefined ? [{ label: 'gemessen', value: `${degrees(m.temperature)}C`, key: 'line station', sub: true }] : []),
     { label: 'Taupunkt', value: `${degrees(h.dewPoint)}C`, sub: true },
     { label: 'Strahlung global', value: `${whole(h.globalRadiation)} W/m²`, key: split ? '' : 'dash' },
     ...(split
@@ -57,11 +99,15 @@ const tooltipRows = computed(() => {
           { label: 'diffus', value: `${whole(h.diffuseRadiation)} W/m²`, key: 'box diffuse', sub: true },
         ]
       : []),
+    ...(m?.globalRadiation !== undefined ? [{ label: 'gemessen', value: `${whole(m.globalRadiation)} W/m²`, key: 'line station', sub: true }] : []),
     { label: 'Niederschlag', value: `${fixed1(h.precipitation)} mm`, key: 'box rain' },
     { label: 'Wahrscheinlichkeit', value: `${whole(h.precipitationProbability)} %`, sub: true },
     { label: 'Bewölkung', value: `${whole(h.cloudCover)} %` },
     { label: 'Wind', value: `${kmh(h.windSpeed)} km/h ${compass(h.windDirection)}`.trim() },
     { label: 'Böen', value: `${kmh(h.windGust)} km/h`, sub: true },
+    ...(m?.windSpeed !== undefined
+      ? [{ label: 'gemessen', value: `${kmh(m.windSpeed)} km/h, Böen ${kmh(m.windGust)} km/h`, key: 'line station', sub: true }]
+      : []),
     { label: 'Sonnenhöhe', value: `${whole(h.sunElevation)}°` },
     { label: 'Azimut', value: `${whole(h.sunAzimuth)}°`, sub: true },
   ] as { label: string; value: string; key?: string; sub?: boolean }[]
@@ -99,7 +145,7 @@ const tooltipLeft = computed(() => {
           type="button"
           role="listitem"
           class="cell time"
-          :class="{ night: !h.daylight }"
+          :class="{ night: !h.daylight, past: isPast(h) }"
           :aria-label="`${hourLabel(h.time, timeZone)}: ${skyText(skyOf(h.weatherCode, h.cloudCover))}, ${degrees(h.temperature)}, ${fixed1(h.precipitation)} mm, Wind ${kmh(h.windSpeed)} km/h`"
           @focus="active = i"
           @blur="active = null"
@@ -113,12 +159,13 @@ const tooltipLeft = computed(() => {
       </div>
 
       <div class="row temp" aria-hidden="true">
-        <span v-for="(h, i) in hours" :key="'v' + i" class="cell value">{{ degrees(h.temperature) }}</span>
+        <span v-for="(h, i) in hours" :key="'v' + i" class="cell value" :class="{ past: isPast(h) }">{{ degrees(h.temperature) }}</span>
       </div>
 
       <figure class="chart">
         <figcaption class="legend">
           <span><i class="key line temp" />Temperatur · °C</span>
+          <span v-if="measured?.length"><i class="key line station" />Station · gemessen, Temperatur und Strahlung</span>
           <span class="group">Strahlung · W/m², Stundenmittel:
             <span><i class="key box direct" />direkt</span>
             <span><i class="key box diffuse" />diffus</span>
@@ -128,7 +175,7 @@ const tooltipLeft = computed(() => {
           <span><i class="key night" />Nacht</span>
           <span><i class="key uv" />UV-Index, Tagesmaximum</span>
         </figcaption>
-        <Meteogram :hours="hours" :days="sunDays" :time-zone="timeZone" :col="COL" :active="active" />
+        <Meteogram :hours="hours" :days="sunDays" :measured="measured" :now="now" :time-zone="timeZone" :col="COL" :active="active" />
       </figure>
 
       <div class="row prob" aria-hidden="true">
@@ -159,6 +206,12 @@ const tooltipLeft = computed(() => {
             <dd :class="{ sub: row.sub }">{{ row.value }}</dd>
           </template>
         </dl>
+        <div v-if="forecastSources.length" class="tt-sources">
+          <div v-for="s in forecastSources" :key="s.productId + s.location" class="tt-source">
+            <SourceChip :provider-id="s.providerId" :product-id="s.productId" :location="s.location" />
+            <span>{{ s.productId }} · {{ s.quantities }}</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -187,6 +240,8 @@ const tooltipLeft = computed(() => {
   cursor: default;
 }
 .time.night, .sky .night { color: var(--muted); }
+.time.past { color: var(--muted); }
+.temp .value.past { color: var(--ink-2); font-weight: 500; }
 .sky .cell { color: var(--ink-2); display: grid; place-items: center; height: 34px; }
 .temp .value { font-size: 15px; font-weight: 600; color: var(--ink); padding: 2px 0 0; }
 .value.small { font-size: 12px; color: var(--ink-2); display: flex; justify-content: center; align-items: center; gap: 3px; }
@@ -213,6 +268,7 @@ const tooltipLeft = computed(() => {
 .key.line { width: 14px; height: 2px; border-radius: 1px; }
 .key.box { width: 10px; height: 10px; border-radius: 2px; }
 .key.temp { background: var(--w-temp); }
+.key.station { background: var(--w-station); }
 .key.direct { background: var(--s2); }
 .key.diffuse { background: color-mix(in srgb, var(--s2) 42%, var(--surface)); }
 .key.dash { width: 14px; height: 0; border-top: 2px dashed var(--s2); }
@@ -229,6 +285,9 @@ const tooltipLeft = computed(() => {
   pointer-events: none;
 }
 
+.tt-sources { margin-top: 8px; padding-top: 6px; border-top: 1px solid var(--line); display: grid; gap: 4px; }
+.tt-source { display: flex; gap: 8px; align-items: center; color: var(--muted); font-size: 11.5px; }
+.tt-source span { white-space: normal; }
 .tooltip {
   position: absolute;
   top: 56px;

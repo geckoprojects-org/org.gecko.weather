@@ -4,9 +4,47 @@
  */
 import { describe, expect, it } from 'vitest'
 import { SampleWeatherOutlook } from '../src/weather.ddsr/SampleWeatherOutlook.js'
-import { compass, dayLabel, degrees, hourLabel, kmh, niceRange, skyOf } from '../src/view.weather/weather.js'
+import { ago, compass, dayLabel, degrees, hourLabel, kmh, niceRange, skyOf, sourceKind, sourceLabel } from '../src/view.weather/weather.js'
 
 describe('weather view helpers', () => {
+  it('names the source behind a provider', () => {
+    expect(sourceLabel('ecowitt')).toBe('Station')
+    expect(sourceKind('ecowitt')).toBe('station')
+    expect(sourceLabel('dwd')).toBe('DWD')
+    expect(sourceLabel('gecko')).toBe('berechnet')
+    expect(sourceLabel('beispiel')).toBe('Beispiel')
+    expect(sourceLabel('someone')).toBe('someone')
+    expect(sourceKind('someone')).toBe('other')
+  })
+
+  it('says how old a measurement is', () => {
+    const now = new Date('2026-10-22T14:30:00Z')
+    expect(ago(new Date('2026-10-22T14:29:40Z'), now)).toBe('gerade eben')
+    expect(ago(new Date('2026-10-22T14:27:00Z'), now)).toBe('vor 3 min')
+    expect(ago(new Date('2026-10-22T11:30:00Z'), now)).toBe('vor 3 h')
+    expect(ago(new Date('2026-10-19T14:30:00Z'), now)).toBe('vor 3 Tagen')
+    expect(ago(undefined, now)).toBe('–')
+  })
+
+  it('the examples carry an observation from a station', async () => {
+    const o = await new SampleWeatherOutlook(() => new Date('2026-10-22T14:30:00Z')).outlook()
+    expect(o.observation?.providerId).toBe('ecowitt')
+    expect(o.observation?.temperature).toBeCloseTo((o.hours[6].temperature ?? 0) + 0.6, 5)
+    expect(o.sources.some((s) => s.providerId === 'ecowitt')).toBe(true)
+  })
+
+  it('the examples start six hours back with the station measured in ten-minute slots', async () => {
+    const now = new Date('2026-10-22T14:30:00Z')
+    const o = await new SampleWeatherOutlook(() => now).outlook()
+    expect(o.hours).toHaveLength(30)
+    expect(o.hours[0].time.toISOString()).toBe('2026-10-22T08:00:00.000Z')
+    expect(o.hours[6].time.toISOString()).toBe('2026-10-22T14:00:00.000Z')
+    expect(o.measured).toHaveLength(39)
+    expect(o.measured[0].time.toISOString()).toBe('2026-10-22T08:05:00.000Z')
+    expect(o.measured[38].time.getTime()).toBeLessThan(now.getTime() + 300_000)
+    expect(o.measured.every((m) => m.temperature !== undefined && m.globalRadiation !== undefined)).toBe(true)
+  })
+
   it('chooses the icon by ww first, cloud cover for the sky codes', () => {
     expect(skyOf(95, 10)).toBe('thunder')
     expect(skyOf(71, 100)).toBe('snow')
@@ -43,8 +81,9 @@ describe('weather view helpers', () => {
     const sample = new SampleWeatherOutlook(() => new Date('2026-10-04T06:40:00Z'))
     const o = await sample.outlook()
     expect(sample.examples).toBe(true)
-    expect(o.hours).toHaveLength(24)
+    expect(o.hours).toHaveLength(30)
     expect(o.days).toHaveLength(7)
-    expect(o.hours[0].time.toISOString()).toBe('2026-10-04T06:00:00.000Z')
+    expect(o.hours[0].time.toISOString()).toBe('2026-10-04T00:00:00.000Z')
+    expect(o.hours[6].time.toISOString()).toBe('2026-10-04T06:00:00.000Z')
   })
 })

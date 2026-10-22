@@ -113,3 +113,56 @@ export function niceRange(values: number[], step: number, minSpan: number): [num
   }
   return [lo, hi]
 }
+
+/** The kind of source a provider is — what the chip says and how it is coloured */
+export type SourceKind = 'station' | 'dwd' | 'computed' | 'example' | 'other'
+
+export function sourceKind(providerId: string): SourceKind {
+  switch (providerId) {
+    case 'ecowitt':
+    case 'bresser':
+      return 'station'
+    case 'dwd':
+      return 'dwd'
+    case 'gecko':
+      return 'computed'
+    case 'beispiel':
+      return 'example'
+    default:
+      return 'other'
+  }
+}
+
+/** "Station", "DWD", "berechnet" — the short word for the chip */
+export function sourceLabel(providerId: string): string {
+  switch (sourceKind(providerId)) {
+    case 'station':
+      return 'Station'
+    case 'dwd':
+      return 'DWD'
+    case 'computed':
+      return 'berechnet'
+    case 'example':
+      return 'Beispiel'
+    default:
+      return providerId
+  }
+}
+
+/** "vor 2 min", "gerade eben", "vor 3 h" — how old a measurement is */
+export function ago(d: Date | undefined, now: Date = new Date()): string {
+  if (!d || Number.isNaN(d.getTime())) return '–'
+  const s = Math.max(0, Math.round((now.getTime() - d.getTime()) / 1000))
+  if (s < 45) return 'gerade eben'
+  const m = Math.round(s / 60)
+  if (m < 60) return `vor ${m} min`
+  const h = Math.round(m / 60)
+  if (h < 48) return `vor ${h} h`
+  return `vor ${Math.round(h / 24)} Tagen`
+}
+
+/** "16:45:12" — for the stamp that moves every minute */
+export function clockSeconds(d: Date | undefined, timeZone: string): string {
+  if (!d || Number.isNaN(d.getTime())) return '–'
+  return new Intl.DateTimeFormat('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone }).format(d)
+}

@@ -19,7 +19,8 @@ export interface SiteInfo {
 
 /**
  * One hour from `time`. Instant quantities are the values at `time`, period quantities those of
- * the hour that starts there. Missing means no source had the value.
+ * the hour that starts there. Missing means no source had the value. Hours before `generatedAt`
+ * are the look-back: what was forecast for them, with the station's measurements in `measured`.
  */
 export interface HourValue {
   time: Date
@@ -73,6 +74,44 @@ export interface DayValue {
   daylightHours?: number
 }
 
+/**
+ * What the site's own station measured last — beside the forecast, never merged into it. Absent
+ * without a station. Units as in HourValue; rainTotal is the device's running counter in mm.
+ */
+export interface ObservationValue {
+  /** when the newest of these values was measured */
+  time: Date
+  providerId: string
+  productId: string
+  stationId?: string
+  temperature?: number
+  /** relative humidity, % */
+  humidity?: number
+  windSpeed?: number
+  windGust?: number
+  windDirection?: number
+  /** W/m² on a horizontal surface, now */
+  globalRadiation?: number
+  uvIndex?: number
+  rainTotal?: number
+  /** station health: 1 fine, 0 empty */
+  batteryLevel?: number
+  capacitorVoltage?: number
+  signalStrength?: number
+}
+
+/** The own station in one ten-minute slot of the look-back: means, the gust its maximum */
+export interface MeasuredPoint {
+  /** the slot's middle */
+  time: Date
+  temperature?: number
+  humidity?: number
+  windSpeed?: number
+  windGust?: number
+  windDirection?: number
+  globalRadiation?: number
+}
+
 /** Where a group of quantities came from */
 export interface SourceInfo {
   quantities: string
@@ -95,6 +134,10 @@ export interface OutlookSnapshot {
   today?: DayValue
   days: DayValue[]
   sources: SourceInfo[]
+  /** the own station's newest values, when one is bound to the site */
+  observation?: ObservationValue
+  /** the own station over the look-back — the hours before `generatedAt` that `hours` starts with */
+  measured: MeasuredPoint[]
 }
 
 /** What the weather view asks; one implementation reads the registry, one makes up examples. */

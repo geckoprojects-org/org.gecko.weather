@@ -15,6 +15,9 @@ const OUTLOOK = `<?xml version="1.0" encoding="UTF-8"?>
   <today date="2026-10-04" uvIndexMax="2.0" sunrise="2026-10-04T05:15:00.000+0000" sunset="2026-10-04T16:45:00.000+0000" solarNoon="2026-10-04T11:00:00.000+0000"/>
   <days date="2026-10-05" temperatureMin="0.0" temperatureMax="23.0" insolation="2.5" uvIndexMax="2.7" sunrise="2026-10-05T05:17:00.000+0000" sunset="2026-10-05T16:43:00.000+0000" daylightHours="11.4"/>
   <sources quantities="Bewölkung" providerId="dwd" productId="ICON-D2" location="Zelle 884,393" distanceMeters="1112.0" issuedAt="2026-10-04T00:00:00.000+0000"/>
+  <measured time="2026-10-04T04:05:00.000+0000" temperature="0.45" windGust="9.0" globalRadiation="100.0"/>
+  <measured time="2026-10-04T04:15:00.000+0000" temperature="1.45"/>
+  <observation time="2026-10-04T06:39:00.000+0000" providerId="ecowitt" productId="WS90" stationId="75459" temperature="8.2" humidity="81.0" windSpeed="1.4" windGust="3.1" windDirection="60.0" globalRadiation="126.1" uvIndex="1.0" rainTotal="12.5" capacitorVoltage="0.7"/>
 </outlook:Outlook>`
 
 const SITES = `<?xml version="1.0" encoding="UTF-8"?>
@@ -63,6 +66,27 @@ describe('outlook model', () => {
     expect(o.days[0].sunrise?.toISOString()).toBe('2026-10-05T05:17:00.000Z')
     expect(o.sources[0].productId).toBe('ICON-D2')
     expect(o.sources[0].distanceMeters).toBe(1112)
+    expect(o.observation?.time.toISOString()).toBe('2026-10-04T06:39:00.000Z')
+    expect(o.observation?.providerId).toBe('ecowitt')
+    expect(o.observation?.stationId).toBe('75459')
+    expect(o.observation?.temperature).toBe(8.2)
+    expect(o.observation?.humidity).toBe(81)
+    expect(o.observation?.windGust).toBe(3.1)
+    expect(o.observation?.rainTotal).toBe(12.5)
+    expect(o.observation?.capacitorVoltage).toBe(0.7)
+    expect(o.observation?.batteryLevel).toBeUndefined()
+    expect(o.measured).toHaveLength(2)
+    expect(o.measured[0].time.toISOString()).toBe('2026-10-04T04:05:00.000Z')
+    expect(o.measured[0].temperature).toBe(0.45)
+    expect(o.measured[0].windGust).toBe(9)
+    expect(o.measured[0].globalRadiation).toBe(100)
+    expect(o.measured[1].globalRadiation).toBeUndefined()
+  })
+
+  it('has no observation without a station', () => {
+    const bare = toSnapshot(load(OUTLOOK.replace(/<observation[^>]*>/, '').replace(/<measured[^>]*>/g, '')))
+    expect(bare.observation).toBeUndefined()
+    expect(bare.measured).toEqual([])
   })
 
   it('reads the site directory and refuses the wrong root', () => {

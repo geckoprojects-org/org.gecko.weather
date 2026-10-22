@@ -9,7 +9,7 @@
  * imported raw and registered once in the global EPackage registry (see ../emf.ts).
  */
 import type { EObject, EPackage } from '@emfts/core'
-import type { DayValue, HourValue, OutlookSnapshot, SiteInfo, SourceInfo } from '../contracts.js'
+import type { DayValue, HourValue, MeasuredPoint, ObservationValue, OutlookSnapshot, SiteInfo, SourceInfo } from '../contracts.js'
 import { date, expect, flag, many, num, one, registerPackage, text } from '../emf.js'
 
 import ecoreXml from '../../../../org.gecko.weather.outlook/model/outlook.ecore?raw'
@@ -74,10 +74,43 @@ function toSource(o: EObject): SourceInfo {
   }
 }
 
+function toMeasured(o: EObject): MeasuredPoint {
+  return {
+    time: date(o, 'time') ?? new Date(NaN),
+    temperature: num(o, 'temperature'),
+    humidity: num(o, 'humidity'),
+    windSpeed: num(o, 'windSpeed'),
+    windGust: num(o, 'windGust'),
+    windDirection: num(o, 'windDirection'),
+    globalRadiation: num(o, 'globalRadiation'),
+  }
+}
+
+function toObservation(o: EObject): ObservationValue {
+  return {
+    time: date(o, 'time') ?? new Date(NaN),
+    providerId: text(o, 'providerId') ?? '',
+    productId: text(o, 'productId') ?? '',
+    stationId: text(o, 'stationId'),
+    temperature: num(o, 'temperature'),
+    humidity: num(o, 'humidity'),
+    windSpeed: num(o, 'windSpeed'),
+    windGust: num(o, 'windGust'),
+    windDirection: num(o, 'windDirection'),
+    globalRadiation: num(o, 'globalRadiation'),
+    uvIndex: num(o, 'uvIndex'),
+    rainTotal: num(o, 'rainTotal'),
+    batteryLevel: num(o, 'batteryLevel'),
+    capacitorVoltage: num(o, 'capacitorVoltage'),
+    signalStrength: num(o, 'signalStrength'),
+  }
+}
+
 /** The `Outlook` EObject as the plain values the contract speaks */
 export function toSnapshot(outlook: EObject): OutlookSnapshot {
   expect(outlook, 'Outlook')
   const today = one(outlook, 'today')
+  const observation = one(outlook, 'observation')
   return {
     siteId: text(outlook, 'siteId') ?? '',
     siteName: text(outlook, 'siteName') ?? text(outlook, 'siteId') ?? '',
@@ -89,6 +122,8 @@ export function toSnapshot(outlook: EObject): OutlookSnapshot {
     today: today ? toDay(today) : undefined,
     days: many(outlook, 'days').map(toDay),
     sources: many(outlook, 'sources').map(toSource),
+    observation: observation ? toObservation(observation) : undefined,
+    measured: many(outlook, 'measured').map(toMeasured),
   }
 }
 
