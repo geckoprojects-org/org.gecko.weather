@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
-# Taken unchanged from bndtools/bnd (.github/scripts/sonatype-status.sh, Apache-2.0 OR EPL-2.0);
-# the bnd docs, chapter 'Sonatype Central Portal Publishing', describe the workflow.
+# Taken from bndtools/bnd (.github/scripts/sonatype-status.sh, Apache-2.0 OR EPL-2.0); the bnd
+# docs, chapter 'Sonatype Central Portal Publishing', describe the workflow. One change: the
+# Portal's status endpoint is a POST (Publisher API docs); bnd's GET was answered with HTTP 500
+# (weather Jenkins, sunorcloud_main #1, 2026-10-22).
 # -------------------------------------------------------------------------
 # sonatype-status.sh – Check Sonatype Central Portal deployment status
 # and optionally clean up the local release directory.
@@ -83,7 +85,7 @@ echo "Checking release deployment status ..."
 echo "  Deployment ID: ${DEPLOYMENT_ID}"
 echo "  Status URL: ${STATUS_URL}"
 
-STATUS_RESPONSE=$(curl -sS \
+STATUS_RESPONSE=$(curl -sS -X POST \
 	-H "Authorization: Bearer ${SONATYPE_BEARER}" \
 	"${STATUS_URL}?id=${DEPLOYMENT_ID}" 2>&1) || true
 

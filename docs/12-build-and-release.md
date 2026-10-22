@@ -34,7 +34,7 @@ workspace only says where things go (`cnf/ext/release.bnd`):
   workspace), so bnd writes there the jar, `-sources`, `-javadoc` and pom of every bundle, each
   signed (`-maven-release: pom, sign` from `releng/central.bnd`). The Jenkinsfile's
   `centralUpload()` then checks that every jar has its `.asc`, runs
-  `.github/scripts/sonatype-upload.sh` (taken unchanged from bnd), which zips the directory and
+  `.github/scripts/sonatype-upload.sh` (taken from bnd, as is `sonatype-status.sh`, whose status request had to become a POST), which zips the directory and
   posts it to the Portal's publisher API as one deployment, and polls
   `.github/scripts/sonatype-status.sh` until the Portal has validated it. The bearer token is
   `base64(user:password)` of the `central-portal-token`. `SONATYPE_PUBLISHING_TYPE` decides what

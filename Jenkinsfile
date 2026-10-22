@@ -114,10 +114,11 @@ def centralUpload() {
             --name "${JOB_BASE_NAME} #${BUILD_NUMBER} $(git rev-parse --short HEAD)" dist/bundles
         # 0: validated or published, 2: still in progress, anything else: failed.
         for i in $(seq 1 90); do
+            sleep 10
             rc=0
             .github/scripts/sonatype-status.sh dist/bundles || rc=$?
             [ "$rc" -eq 2 ] || exit "$rc"
-            sleep 20
+            sleep 10
         done
         echo "The Portal did not finish validating within 30 minutes; see central.sonatype.com/publishing" >&2
         exit 1
