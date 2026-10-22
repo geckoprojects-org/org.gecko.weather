@@ -4,8 +4,10 @@
 //   any other branch  build, test
 //   snapshot          build, test, release ${tstamp}-SNAPSHOT bundles to the DIM Nexus (dim-snapshot)
 //   main              build, test, release bare-version bundles to the DIM Nexus (dim-release)
-//                     and to Maven Central through the Sonatype Central Portal (bnd 7.4,
-//                     autopublish), signed; then export the launch as a drift check
+//                     and, signed, into dist/bundles, which bnd's sonatype-upload.sh hands to the
+//                     Sonatype Central Portal as one deployment; then export the launch as a drift check
+//   sunorcloud_main   the same as main without the Nexus, to try the release before main moves
+//                     onto this history
 //
 // The mechanics live in cnf/ext/release.bnd and the fennec library (releng/*.bnd), see
 // docs/12-build-and-release.md. DO_RELEASE decides the version the bundles are built with,
@@ -19,9 +21,9 @@
 //                      token (CS_USERNAME/CS_PASSWORD) — new, the old library spoke to OSSRH
 // Optional, for a Jenkins that keeps them as credentials instead: gnupg-passphrase (secret text)
 // and gnupg-private-key (secret file, imported into a keyring of this run).
-// GPG_PASSPHRASE is what makes the fennec library add the Sonatype repository and sign: a release
-// goes to Maven Central, a snapshot to the Portal's snapshot repository. Both targets are the
-// point of this stage, so anything missing fails the run with its name.
+// GPG_PASSPHRASE is what makes the fennec library add the Sonatype repository and sign: a snapshot
+// goes to the Portal's snapshot repository, a release is uploaded by centralUpload(). Both targets
+// are the point of this stage, so anything missing fails the run with its name.
 def publish() {
     def has = { binding ->
         try {
@@ -60,13 +62,21 @@ def publish() {
         if (keys == '0' || keys == '') {
             error("No secret key in the keyring ${env.GNUPGHOME} on node '${env.NODE_NAME}' - the signing key has to be there, or come as the Jenkins credential 'gnupg-private-key' (secret file, ASCII export).")
         }
-        // What bnd will release to: both names, or the run is pointless.
+        // What bnd will release to: both names, or the run is pointless. A snapshot goes to the
+        // Portal's snapshot repository and the Nexus, a release to the Nexus and dist/bundles,
+        // which the upload below hands to the Portal.
+        def release = env.DO_RELEASE == 'true'
+        def expected = release ? (env.NEXUS_RELEASE == 'false' ? ['Dist'] : ['Release', 'Dist']) : ['Sonatype', 'Release']
         def repos = sh(returnStdout: true, script: './gradlew -q :org.gecko.weather.api:bndproperties $COMMON_ARGS 2>/dev/null | grep "^-releaserepo:" || true').trim()
         echo "bnd ${repos}"
-        if (!repos.contains('Sonatype') || !repos.contains('Release')) {
-            error("bnd would release to '${repos}' - expected Sonatype and Release. GPG_PASSPHRASE did not reach bnd, or maven-central is off (cnf/ext/release.bnd, the fennec library's releng/central.bnd).")
+        if (!expected.every { repos.contains(it) }) {
+            error("bnd would release to '${repos}' - expected ${expected.join(' and ')}. DO_RELEASE or GPG_PASSPHRASE did not reach bnd, or maven-central is off (cnf/ext/release.bnd, the fennec library's releng/central.bnd).")
         }
+        sh 'rm -rf dist'
         sh './gradlew clean build release $COMMON_ARGS'
+        if (release) {
+            centralUpload()
+        }
     }
     withCredentials(creds) {
         if (importKey) {
@@ -82,6 +92,36 @@ def publish() {
             body()
         }
     }
+}
+
+// The Maven Central half of a release, the way bnd releases itself (bnd docs, 'Sonatype Central
+// Portal Publishing'): bnd has written the signed release into dist/bundles; the scripts bnd
+// ships upload that directory as one deployment and follow it until the Portal has validated it.
+// SONATYPE_PUBLISHING_TYPE USER_MANAGED (the default) leaves the validated deployment waiting
+// for 'Publish' at central.sonatype.com/publishing; AUTOMATIC publishes it right away.
+def centralUpload() {
+    def jars = sh(returnStdout: true, script: 'find dist/bundles -name "*.jar" | wc -l').trim()
+    def signed = sh(returnStdout: true, script: 'find dist/bundles -name "*.jar.asc" | wc -l').trim()
+    echo "dist/bundles: ${jars} jars, ${signed} signatures"
+    if (jars == '0' || jars != signed) {
+        error("dist/bundles holds ${jars} jars and ${signed} signatures - the Portal would reject the deployment. Nothing was uploaded to Maven Central.")
+    }
+    // The Portal's bearer token is base64(username:password) of the user token.
+    sh '''#!/bin/bash
+        set -euo pipefail
+        export SONATYPE_BEARER=$(printf '%s:%s' "$CS_USERNAME" "$CS_PASSWORD" | base64 -w0)
+        .github/scripts/sonatype-upload.sh --publishing-type "${SONATYPE_PUBLISHING_TYPE:-USER_MANAGED}" \
+            --name "${JOB_BASE_NAME} #${BUILD_NUMBER} $(git rev-parse --short HEAD)" dist/bundles
+        # 0: validated or published, 2: still in progress, anything else: failed.
+        for i in $(seq 1 90); do
+            rc=0
+            .github/scripts/sonatype-status.sh dist/bundles || rc=$?
+            [ "$rc" -eq 2 ] || exit "$rc"
+            sleep 20
+        done
+        echo "The Portal did not finish validating within 30 minutes; see central.sonatype.com/publishing" >&2
+        exit 1
+    '''
 }
 
 pipeline {
@@ -116,7 +156,7 @@ pipeline {
 
         stage('Build and test') {
             when {
-                not { anyOf { branch 'main'; branch 'snapshot'; branch 'sunorcloud' } }
+                not { anyOf { branch 'main'; branch 'sunorcloud_main'; branch 'snapshot'; branch 'sunorcloud' } }
             }
             steps {
                 echo "Building ${env.BRANCH_NAME}"
@@ -148,14 +188,18 @@ pipeline {
 
         stage('Publish release') {
             when {
-                branch 'main'
+                // sunorcloud_main tries the release before main moves onto this line of history
+                // (2026-10-22); take it out again afterwards.
+                anyOf { branch 'main'; branch 'sunorcloud_main' }
             }
             environment {
-                // Bare versions, which send the Release repository to dim-release.
+                // Bare versions, which send the Release repository to dim-release; cnf/ext/release.bnd
+                // adds Dist (dist/bundles) for the Central upload.
                 DO_RELEASE = 'true'
-                // GPG_PASSPHRASE switches the fennec library's releng/central.bnd on: the
-                // Sonatype Central Portal repository, signing, '-releaserepo: Sonatype' — and
-                // cnf/ext/release.bnd keeps the Nexus beside it. This Jenkins has carried the
+                // The trial on sunorcloud_main stays off the Nexus: dim-release takes a version once.
+                NEXUS_RELEASE = "${env.BRANCH_NAME == 'sunorcloud_main' ? 'false' : 'true'}"
+                // GPG_PASSPHRASE switches signing on (the fennec library's releng/central.bnd,
+                // '-maven-release: pom, sign'). This Jenkins has carried the
                 // passphrase as GNUPG_PASSPHRASE since the old DIM library (which read exactly
                 // that); the fennec library's name is GPG_PASSPHRASE, so it is mapped here.
                 GPG_PASSPHRASE = "${env.GNUPG_PASSPHRASE ?: ''}"
@@ -171,7 +215,7 @@ pipeline {
 
         stage('Export the launch') {
             when {
-                anyOf { branch 'main'; branch 'snapshot'; branch 'sunorcloud' }
+                anyOf { branch 'main'; branch 'sunorcloud_main'; branch 'snapshot'; branch 'sunorcloud' }
             }
             steps {
                 echo "Exporting the launch of ${env.BRANCH_NAME}"
