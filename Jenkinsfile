@@ -77,21 +77,27 @@ pipeline {
             environment {
                 // Bare versions, which send the Release repository to dim-release.
                 DO_RELEASE = 'true'
-            }
-            steps {
-                echo "Releasing ${env.BRANCH_NAME} to the DIM Nexus and Maven Central"
                 // GPG_PASSPHRASE switches the fennec library's releng/central.bnd on: the
                 // Sonatype Central Portal repository, signing, '-releaserepo: Sonatype' — and
-                // cnf/ext/release.bnd keeps the Nexus beside it. The key pair named by
-                // GPG_KEY_ID has to be in the agent's gpg keyring; CS_USERNAME/CS_PASSWORD are
-                // the Portal's user token. The Nexus login is the agent's, as for the snapshot.
-                withCredentials([
-                    string(credentialsId: 'gpg-passphrase', variable: 'GPG_PASSPHRASE'),
-                    string(credentialsId: 'gpg-key-id', variable: 'GPG_KEY_ID'),
-                    usernamePassword(credentialsId: 'central-portal-token', usernameVariable: 'CS_USERNAME', passwordVariable: 'CS_PASSWORD')
-                ]) {
-                    sh './gradlew clean build release $COMMON_ARGS'
+                // cnf/ext/release.bnd keeps the Nexus beside it. This Jenkins has carried the
+                // passphrase as GNUPG_PASSPHRASE since the old DIM library (which read exactly
+                // that); the fennec library's name is GPG_PASSPHRASE, so it is mapped here.
+                GPG_PASSPHRASE = "${env.GNUPG_PASSPHRASE ?: ''}"
+                // The keyring the old setup signed with; gpg reads GNUPGHOME natively. Set the
+                // variable on the agent to use another one.
+                GNUPGHOME = "${env.GNUPGHOME ?: '/var/jenkins_home/.gnupg'}"
+            }
+            steps {
+                script {
+                    if (!env.GPG_PASSPHRASE) {
+                        error('GNUPG_PASSPHRASE is not set on this Jenkins — without it nothing is signed and nothing reaches Maven Central.')
+                    }
                 }
+                echo "Releasing ${env.BRANCH_NAME} to the DIM Nexus and Maven Central"
+                // The Portal login (server id production.portal.central.sonatype.com) comes from
+                // the agent's connection settings like the Nexus login, or as CS_USERNAME and
+                // CS_PASSWORD in the environment, which the library's sonatype-settings.xml reads.
+                sh './gradlew clean build release $COMMON_ARGS'
             }
         }
 

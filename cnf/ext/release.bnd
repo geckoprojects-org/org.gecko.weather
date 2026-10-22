@@ -43,3 +43,11 @@
 		id=devel.data-in-motion.biz; \
 		username="${env;NEXUS_USERNAME;}"; \
 		password="${env;NEXUS_PASSWORD;}"
+
+# Signing, as the old DIM library did it on this Jenkins: the keyring is the agent's (the old
+# setup pointed gpg at /var/jenkins_home/.gnupg; gpg honours GNUPGHOME, which the Jenkinsfile
+# sets), the passphrase arrives in GPG_PASSPHRASE (the library's name; the Jenkinsfile maps the
+# old GNUPG_PASSPHRASE onto it). The library's own gpg line insists on GPG_KEY_ID; here the
+# --local-user is only given when a key id is set, otherwise gpg takes its default key — as the
+# old setup did.
+gpg: gpg ${if;${env;GPG_KEY_ID;};--local-user ${env;GPG_KEY_ID}} --pinentry-mode loopback --batch
