@@ -64,9 +64,16 @@ pipeline {
             }
             steps {
                 echo "Publishing a snapshot of ${env.BRANCH_NAME} to the DIM Nexus"
-                // The Nexus login is the agent's: ~/.bnd/connection-settings.xml or
-                // ~/.m2/settings.xml with a <server> for devel.data-in-motion.biz, as fennec-gdpr.
-                sh './gradlew clean build release $COMMON_ARGS'
+                // The Nexus login: the Jenkins credential dim-nexus (the one the Docker pushes
+                // use), handed to bnd as NEXUS_USERNAME/NEXUS_PASSWORD for the inline server in
+                // cnf/ext/release.bnd. The public agent (/opt/ci-public/agent) has no connection
+                // settings of its own — the run of 2026-10-22 20:54 published with the credential,
+                // the one without it got 401.
+                withCredentials([
+                    usernamePassword(credentialsId: 'dim-nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')
+                ]) {
+                    sh './gradlew clean build release $COMMON_ARGS'
+                }
             }
         }
 
@@ -94,10 +101,15 @@ pipeline {
                     }
                 }
                 echo "Releasing ${env.BRANCH_NAME} to the DIM Nexus and Maven Central"
-                // The Portal login (server id production.portal.central.sonatype.com) comes from
-                // the agent's connection settings like the Nexus login, or as CS_USERNAME and
-                // CS_PASSWORD in the environment, which the library's sonatype-settings.xml reads.
-                sh './gradlew clean build release $COMMON_ARGS'
+                // The Nexus login as for the snapshot. The Portal login (server id
+                // production.portal.central.sonatype.com) has to arrive as CS_USERNAME and
+                // CS_PASSWORD — from a Jenkins credential once it exists, or the agent's
+                // connection settings.
+                withCredentials([
+                    usernamePassword(credentialsId: 'dim-nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')
+                ]) {
+                    sh './gradlew clean build release $COMMON_ARGS'
+                }
             }
         }
 
