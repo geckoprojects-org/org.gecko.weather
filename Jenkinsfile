@@ -19,42 +19,48 @@
 //                                             emf.osgi does it on GitHub. Without it, the keyring
 //                                             GNUPGHOME names (the master's) is used as it is.
 // GPG_PASSPHRASE is what makes the fennec library add the Sonatype repository and sign: a release
-// goes to Maven Central, a snapshot to the Portal's snapshot repository. A credential Jenkins does
-// not have is reported and left out; the Nexus part still runs.
+// goes to Maven Central, a snapshot to the Portal's snapshot repository. Both targets are the
+// point of this stage, so a missing credential fails the run with its name instead of quietly
+// publishing to the Nexus alone.
 def publish() {
+    def missing = []
     def has = { binding ->
         try {
             withCredentials([binding]) { }
             return true
         } catch (e) {
-            echo "No Jenkins credential '${binding.credentialsId}' (${e.message})"
+            missing << binding.credentialsId
             return false
         }
     }
-    def creds = [usernamePassword(credentialsId: 'dim-nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]
+    def nexus = usernamePassword(credentialsId: 'dim-nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')
     def portal = usernamePassword(credentialsId: 'central-portal-token', usernameVariable: 'CS_USERNAME', passwordVariable: 'CS_PASSWORD')
     def passphrase = string(credentialsId: 'gnupg-passphrase', variable: 'GPG_PASSPHRASE')
     def key = file(credentialsId: 'gnupg-private-key', variable: 'GNUPG_KEY_FILE')
+    def creds = []
+    if (has(nexus)) creds << nexus
     if (has(portal)) creds << portal
     if (has(passphrase)) creds << passphrase
-    else if (env.GNUPG_PASSPHRASE) echo "Signing with the GNUPG_PASSPHRASE of this node's environment"
-    else echo 'No passphrase at all - unsigned, so nothing goes to Maven Central from this run'
     def importKey = has(key)
     if (importKey) creds << key
-    echo "publish on node '${env.NODE_NAME}', keyring ${importKey ? 'imported for this run' : (env.GNUPGHOME + (fileExists("${env.GNUPGHOME}") ? ' (found)' : ' (not found)'))}"
+    if (missing) {
+        error("Jenkins credentials missing on this controller: ${missing.join(', ')} - nothing is published until they exist under exactly these ids (Manage Jenkins > Credentials). Found: ${creds.collect { it.credentialsId }.join(', ') ?: 'none'}")
+    }
+    echo "publish on node '${env.NODE_NAME}' with credentials ${creds.collect { it.credentialsId }.join(', ')}; signing key imported into a keyring of this run"
     withCredentials(creds) {
-        if (importKey) {
-            // a keyring of this run only; bnd's gpg line honours GNUPGHOME
-            withEnv(["GNUPGHOME=${env.WORKSPACE}/.gnupg-run"]) {
-                try {
-                    sh 'rm -rf "$GNUPGHOME" && mkdir -p "$GNUPGHOME" && chmod 700 "$GNUPGHOME" && gpg --batch --quiet --import "$GNUPG_KEY_FILE"'
-                    sh './gradlew clean build release $COMMON_ARGS'
-                } finally {
-                    sh 'rm -rf "$GNUPGHOME"'
+        withEnv(["GNUPGHOME=${env.WORKSPACE}/.gnupg-run"]) {
+            try {
+                sh 'rm -rf "$GNUPGHOME" && mkdir -p "$GNUPGHOME" && chmod 700 "$GNUPGHOME" && gpg --batch --quiet --import "$GNUPG_KEY_FILE" && gpg --batch --list-secret-keys --with-colons | grep -c "^sec" | sed "s/^/secret keys in the run keyring: /"'
+                // What bnd will release to: both names, or the run is pointless.
+                def repos = sh(returnStdout: true, script: './gradlew -q :org.gecko.weather.api:bndproperties $COMMON_ARGS 2>/dev/null | grep "^-releaserepo:" || true').trim()
+                echo "bnd ${repos}"
+                if (!repos.contains('Sonatype') || !repos.contains('Release')) {
+                    error("bnd would release to '${repos}' - expected Sonatype and Release. GPG_PASSPHRASE did not reach bnd, or maven-central is off (cnf/ext/release.bnd, the fennec library's releng/central.bnd).")
                 }
+                sh './gradlew clean build release $COMMON_ARGS'
+            } finally {
+                sh 'rm -rf "$GNUPGHOME"'
             }
-        } else {
-            sh './gradlew clean build release $COMMON_ARGS'
         }
     }
 }
