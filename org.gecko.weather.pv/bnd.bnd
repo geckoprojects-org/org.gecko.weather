@@ -18,11 +18,12 @@ src: src-gen,src
 
 -buildpath: \
 	org.gecko.weather.model;version=snapshot,\
-	org.gecko.weather.api;version=snapshot,\
+	org.gecko.weather.api;version=snapshot;,\
 	org.osgi.service.component.annotations;version=latest,\
 	org.osgi.service.metatype.annotations;version=latest
 
 -testpath: \
 	assertj-core;version=latest,\
-	org.gecko.weather.solar;version=snapshot,\
+	org.gecko.weather.api;version=snapshot,\
+	org.gecko.weather.solar;version=snapshot;packages='*',\
 	solarpositioning-osgi;version=latest
